@@ -1,0 +1,35 @@
+name "dialect"
+description "IRC parsing library"
+authors "JR"
+copyright "Copyright © 2019, JR"
+license "MIT"
+targetType "library"
+dflags "-dip25" "-dip1008"
+//dflags "-preview=dip25" "-preview=dip1008"
+libs "phobos2" platform="posix-dmd"
+
+x:ddoxTool "scod"
+
+sourcePaths "source"
+importPaths "source"
+
+dependency "lu:core" version="*"
+
+configuration "rich" {
+    versions "RichClient" "FlagUpdatedClient"
+}
+
+configuration "twitch" {
+    versions "RichClient" "FlagUpdatedClient" "TwitchSupport"
+}
+
+configuration "simple" {
+    // Mustn't be empty
+    targetType "library"
+}
+
+configuration "unittest" {
+    versions "RichClient" "FlagUpdatedClient" "TwitchSupport"
+    sourcePaths "source" "tests"
+    importPaths "source" "tests"
+}
