@@ -1,4 +1,4 @@
-# dialect
+# dialect [![CircleCI Linux/OSX](https://img.shields.io/circleci/project/github/zorael/dialect/master.svg?maxAge=3600&logo=circleci)](https://circleci.com/gh/zorael/dialect) [![Travis Linux/OSX and documentation](https://img.shields.io/travis/zorael/dialect/master.svg?maxAge=3600&logo=travis)](https://travis-ci.org/zorael/dialect) [![Windows](https://img.shields.io/appveyor/ci/zorael/dialect/master.svg?maxAge=3600&logo=appveyor)](https://ci.appveyor.com/project/zorael/dialect) [![GitHub commits since last release](https://img.shields.io/github/commits-since/zorael/dialect/v0.0.1.svg?maxAge=3600&logo=github)](https://github.com/zorael/dialect/compare/v0.0.1...master)
 
 IRC parsing library. Used in the [kameloso bot](https://github.com/zorael/kameloso).
 
@@ -168,3 +168,7 @@ See the `/tests` directory for more example parses.
 
 * set up CIs
 * investigate `@nogc`
+
+# License
+
+This project is licensed under the **MIT** license - see the [LICENSE](LICENSE) file for details.
