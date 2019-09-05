@@ -13,7 +13,7 @@ x:ddoxTool "scod"
 sourcePaths "source"
 importPaths "source"
 
-dependency "lu:core" version="*"
+dependency "lu:core" version="~>0.0.2"
 
 configuration "rich" {
     versions "RichClient" "FlagUpdatedClient"
