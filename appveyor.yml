@@ -95,8 +95,10 @@ test_script:
  - echo %PATH%
  - '%DC% --version'
  - dub test --arch=%Darch% --compiler=%DC%
- #- dub test --arch=%Darch% --compiler=%DC% :core
- - dub build --arch=%Darch% --compiler=%DC% -b plain
- #- dub build --arch=%Darch% --compiler=%DC% -b plain :core
- - dub build --arch=%Darch% --compiler=%DC% -b release
- #- dub build --arch=%Darch% --compiler=%DC% -b release :core
+ - dub test --arch=%Darch% --compiler=%DC% -c simple
+ - dub build --arch=%Darch% --compiler=%DC% -b plain -c rich
+ - dub build --arch=%Darch% --compiler=%DC% -b plain -c twitch
+ - dub build --arch=%Darch% --compiler=%DC% -b plain -c simple
+ - dub build --arch=%Darch% --compiler=%DC% -b release -c rich
+ - dub build --arch=%Darch% --compiler=%DC% -b release -c twitch
+ - dub build --arch=%Darch% --compiler=%DC% -b release -c simple

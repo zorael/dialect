@@ -19,17 +19,20 @@ install_deps() {
 
 build() {
     time dub test
-    time dub test :core
+    time dub test -c simple
 
-    time dub build -b plain
-    time dub build -b plain :core
+    time dub build -b plain -c rich
+    time dub build -b plain -c twitch
+    time dub build -b plain -c simple
 
-    time dub build -b release
-    time dub build -b release :core
+    time dub build -b release -c rich
+    time dub build -b release -c twitch
+    time dub build -b release -c simple
 }
 
 # execution start
 
+git branch
 [[ "$(git branch 2>&1 | grep gh-pages)" ]] && exit 0
 
 case "$1" in
