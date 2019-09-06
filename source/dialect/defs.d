@@ -2424,3 +2424,122 @@ struct IRCChannel
         assert((sink.data == "#channel u:3 m:asdf+3"), sink.data);
     }
 }
+
+
+// IRCClient
+/++
+ +  Aggregate collecting all the relevant settings, options and state needed for
+ +  an IRC client.
+ +
+ +  Many fields are transient and unfit to be saved to disk, and some are simply
+ +  too sensitive for it.
+ +/
+struct IRCClient
+{
+    version(RichClient)
+    {
+        import lu.core.uda : CannotContainComments, Hidden, Separator, Unconfigurable;
+
+        /// Client nickname.
+        string nickname; // = "kameloso";
+
+        /// Client "user" or full name.
+        string user; // = "kameloso!";
+
+        /// Client IDENT identifier.
+        string ident; // = "NaN";
+
+        /// Client GECOS/"real name".
+        string realName;
+
+        /// Default reason given when quitting without specifying one.
+        string quitReason;
+
+        /// Username to use for services account.
+        string account;
+
+        version(TwitchSupport)
+        {
+            /++
+                The Twitch colour to assign to our nickname.
+
+                "Normal users can choose between Blue, Coral, DodgerBlue,
+                SpringGreen, YellowGreen, Green, OrangeRed, Red, GoldenRod,
+                HotPink, CadetBlue, SeaGreen, Chocolate, BlueViolet, and Firebrick.
+                Twitch Turbo users can use any Hex value (i.e: #000000)."
+            +/
+            @CannotContainComments
+            string colour;
+        }
+
+        @Hidden
+        {
+            /// Password for services account.
+            string password;
+
+            /// Login `PASS`, different from `SASL` and services.
+            string pass;
+        }
+
+        @Separator(",")
+        @Separator(" ")
+        {
+            /// The nickname services accounts of the bot's *administrators*.
+            string[] admins;
+
+            /// List of homes, where the bot should be active.
+            @CannotContainComments
+            string[] homes;
+
+            /// Currently inhabited channels (though not necessarily homes).
+            @CannotContainComments
+            string[] channels;
+        }
+
+        @Unconfigurable
+        {
+            /// The current `IRCServer` we're connected to.
+            IRCServer server;
+
+            /// The original client nickname before connecting, in case it changed.
+            string origNickname;
+
+            version(TwitchSupport)
+            {
+                /// The Twitch display name or alias of the bot.
+                string alias_;
+            }
+
+            /// The current modechars active on the client (e.g. "ix");
+            string modes;
+
+            version(FlagUpdatedClient)
+            {
+                /// Whether or not the client was altered.
+                bool updated;
+            }
+        }
+    }
+    else
+    {
+        // Minimal client for library use.
+
+        /// Client nickname.
+        string nickname;
+
+        /// The current `IRCServer` we're connected to.
+        IRCServer server;
+
+        /// The original client nickname before connecting, in case it changed.
+        string origNickname;
+
+        /// The current modechars active on the client (e.g. "ix");
+        string modes;
+
+        version(FlagUpdatedClient)
+        {
+            /// Whether or not the client was altered.
+            bool updated;
+        }
+    }
+}

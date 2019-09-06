@@ -72,7 +72,7 @@
 module dialect.parsing;
 
 import dialect.defs;
-import dialect.common : IRCClient, IRCParseException;
+import dialect.common : IRCParseException;
 import lu.core.string : contains, nom;
 
 package:
