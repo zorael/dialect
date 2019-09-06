@@ -6,7 +6,7 @@
  +  applicable to be used as a header. Some methods are included though, like
  +  some `toString`s and `opEqual`s.
  +
- +  The only kameloso dependency should be `lu.core.uda`.
+ +  The only dependency should be `lu.core.uda`.
  +/
 module dialect.defs;
 
@@ -2336,13 +2336,7 @@ struct IRCChannel
     /// Array of all `Mode`s that are not simply represented in `modechars`.
     Mode[] modes;
 
-    /++
-     +  Associative array of all the nicknames inhabiting the channel.
-     +
-     +  These are not `IRCUser`s; those are kept in the `users` associative array of
-     +  `kameloso.plugins.common.IRCPluginState.users`. The keys here are merely
-     +  keys to that array.
-     +/
+    /// Associative array of all the nicknames inhabiting the channel.
     bool[string] users;
 
     /++

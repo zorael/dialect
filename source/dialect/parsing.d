@@ -2299,7 +2299,7 @@ struct IRCParser
 
     alias Daemon = IRCServer.Daemon;
 
-    /// The current `dialect.common.IRCClient` with all the state needed for parsing.
+    /// The current `dialect.defs.IRCClient` with all the state needed for parsing.
     IRCClient client;
 
     /// An `dialect.defs.IRCEvent.Type[1024]` reverse lookup table for fast numeric lookups.
@@ -2322,7 +2322,7 @@ struct IRCParser
         return .toIRCEvent(this, raw);
     }
 
-    /// Create a new `IRCParser` with the passed `dialect.common.IRCClient` as base.
+    /// Create a new `IRCParser` with the passed `dialect.defs.IRCClient` as base.
     this(IRCClient client) pure
     {
         this.client = client;
