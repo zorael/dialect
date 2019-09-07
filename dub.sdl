@@ -15,21 +15,23 @@ importPaths "source"
 
 dependency "lu:core" version="~>0.0.2"
 
-configuration "rich" {
-    versions "RichClient" "FlagUpdatedClient"
-}
-
-configuration "twitch" {
-    versions "RichClient" "FlagUpdatedClient" "TwitchSupport"
-}
+versions "FlagUpdatedClient"
 
 configuration "simple" {
     // Mustn't be empty
     targetType "library"
 }
 
+configuration "rich" {
+    versions "RichClient"
+}
+
+configuration "twitch" {
+    versions "RichClient" "TwitchSupport"
+}
+
 configuration "unittest" {
-    versions "RichClient" "FlagUpdatedClient" "TwitchSupport"
+    versions "RichClient" "TwitchSupport"
     sourcePaths "source" "tests"
     importPaths "source" "tests"
 }
