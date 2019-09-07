@@ -1119,7 +1119,7 @@ struct IRCUser
      +      `true` if the sender nickname and/or address looks to be a server's,
      +      `false` if not.
      +/
-    bool isServer() pure @property const
+    bool isServer() pure @property const @safe
     {
         import std.string : indexOf;
         return !nickname.length && (address.indexOf('.') != -1);
@@ -2256,7 +2256,7 @@ struct IRCChannel
          +  Returns:
          +      `true` if the `Mode`s match, `false` if not.
          +/
-        bool opEquals(const Mode that) pure nothrow @safe const
+        bool opEquals(const Mode that) pure nothrow const
         {
             // Ignore exemptions when comparing Modes
             immutable charMatch = (this.modechar == that.modechar);
