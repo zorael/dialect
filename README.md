@@ -68,7 +68,7 @@ struct IRCServer
 
 struct IRCClient
 {
-    version(RichClient)  // dub configuration "rich" (default)
+    version(RichClient)  // dub configuration "rich"
     {
         string nickname;
         string user;
@@ -88,7 +88,7 @@ struct IRCClient
 
         // More internals
     }
-    else  // dub configuration "simple"
+    else  // dub configuration "simple" (default)
     {
         string nickname;
         IRCServer server;
