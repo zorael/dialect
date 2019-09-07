@@ -38,10 +38,9 @@ struct IRCEvent
      +  - https://www.alien.net.au/irc/irc2numerics.html
      +  - https://defs.ircdocs.horse
      +
-     +  Some are outright fabrications of ours, like `Type.CHAN` and `Type.QUERY`, to make
-     +  things easier for plugins. These are not prefixed with `RPL_` and `ERR_`
-     +  (but not all such are made up, like `Type.AWAY` and `Type.CHGHOST` that are properly
-     +  `Type.AWAY` and `Type.CHGHOST`).
+     +  Some are outright fabrications of ours, like `Type.CHAN` and `Type.QUERY`.
+     +  These are not prefixed with `RPL_` and `ERR_` (but not all such are made up,
+     +  like `Type.AWAY` and `Type.CHGHOST` that are properly `Type.AWAY` and `Type.CHGHOST`).
      +/
     enum Type
     {

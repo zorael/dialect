@@ -1074,7 +1074,6 @@ void parseSpecialcases(ref IRCParser parser, ref IRCEvent event, ref string slic
             if (slice.contains(" :"))
             {
                 // Banned
-                // Whether or not it's a tempban or a permban is decided in the Twitch plugin
                 event.channel = slice.nom(" :");
                 event.target.nickname = slice;
             }

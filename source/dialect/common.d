@@ -190,9 +190,7 @@ auto typenumsOf(const IRCServer.Daemon daemon) pure nothrow @nogc
  +  Judges whether or not the sender of an `dialect.defs.IRCEvent` is *special*.
  +
  +  Special senders include services and staff, administrators and the like. The
- +  use of this is contested and the notion may be removed at a later date. For
- +  now, the only thing it does is add an asterisk to the sender's nickname, in
- +  the `kameloso.plugins.printer.PrinterPlugin` output.
+ +  use of this is contested and the notion may be removed at a later date.
  +
  +  Params:
  +      parser = Reference to the current `dialect.parsing.IRCParser`.
