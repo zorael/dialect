@@ -2505,12 +2505,6 @@ struct IRCClient
 
             /// The current modechars active on the client (e.g. "ix");
             string modes;
-
-            version(FlagUpdatedClient)
-            {
-                /// Whether or not the client was altered.
-                bool updated;
-            }
         }
     }
     else
@@ -2528,11 +2522,11 @@ struct IRCClient
 
         /// The current modechars active on the client (e.g. "ix");
         string modes;
+    }
 
-        version(FlagUpdatedClient)
-        {
-            /// Whether or not the client was altered.
-            bool updated;
-        }
+    version(FlagUpdatedClient)
+    {
+        /// Whether or not the client was altered.
+        bool updated;
     }
 }

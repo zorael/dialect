@@ -81,29 +81,24 @@ struct IRCClient
 
         IRCServer server;
 
-        version(TwitchSupport)
+        version(TwitchSupport)  // dub configuration "twitch"
         {
             string colour;
         }
 
-        version(FlagUpdatedClient)
-        {
-            bool updated;
-        }
-
         // More internals
     }
-    else  // dub configuration "plain"
+    else  // dub configuration "simple"
     {
         string nickname;
         IRCServer server;
 
-        version(FlagUpdatedClient)
-        {
-            bool updated;
-        }
-
         // More internals
+    }
+
+    version(FlagUpdatedClient)
+    {
+        bool updated;
     }
 }
 
