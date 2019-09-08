@@ -2,16 +2,17 @@
  +  Functions related to parsing IRC events.
  +
  +  IRC events come in very heterogeneous forms along the lines of:
+ +
  +      `:sender.address.tld TYPE [args...] :content`
+ +
+ +      `:sender!~ident@address.tld 123 [args...] :content`
  +
  +  The number and syntax of arguments for types vary wildly. As such, one
  +  common parsing routine can't be used; there are simply too many exceptions.
- +  The beginning `:sender.address` is *almost* always the same form, but only
+ +  The beginning `:sender.address.tld` is *almost* always the same form, but only
  +  almost. It's guaranteed to be followed by the type however, which come either in
- +  alphanumeric name (e.g. `dialect.defs.IRCEvent.Type.PRIVMSG`,
- +  `dialect.defs.IRCEvent.Type.INVITE`,
- +  `dialect.defs.IRCEvent.Type.MODE`, ...), or in numeric form of 001 to
- +  999 inclusive.
+ +  alphanumeric name (e.g. `PRIVMSG`, `INVITE`, `MODE`, ...), or in numeric form
+ +  of 001 to 999 inclusive.
  +
  +  What we can do then is to parse this type, and interpret the arguments following
  +  as befits it.

@@ -1,9 +1,7 @@
 /++
- +  Functions needed to parse raw IRC event strings into
- +  `dialect.defs.IRCEvent`s.
+ +  Helper functions needed to parse raw IRC event strings into `dialect.defs.IRCEvent`s.
  +
- +  These are largely helpers; consider `isValidNickname`, `isValidChannel` and
- +  `matchesByMask`.
+ +  Also things that don't belong anywhere else.
  +/
 module dialect.common;
 
@@ -417,8 +415,7 @@ unittest
 
 // isFromAuthService
 /++
- +  Looks at an `dialect.defs.IRCEvent` and judges whether or not it is
- +  from nickname services.
+ +  Inspects an `dialect.defs.IRCEvent` and judges whether or not it is from services.
  +
  +  Example:
  +  ---
@@ -666,7 +663,7 @@ unittest
 
 // isValidNickname
 /++
- +  Checks if a string *looks* like a nickname.
+ +  Examines a string and judges whether or not it *looks* like a nickname.
  +
  +  It only looks for invalid characters in the name as well as it length.
  +
@@ -753,7 +750,7 @@ unittest
 
 // isValidNicknameCharacter
 /++
- +  Determines whether or not a passed `char` can be part of a nickname.
+ +  Returns whether or not a passed `char` can be part of a nickname.
  +
  +  The IRC standard describes nicknames as being a string of any of the
  +  following characters:
@@ -1009,11 +1006,11 @@ unittest
 
 // setMode
 /++
- +  Sets a new or removes a `dialect.defs.Mode`.
+ +  Sets a new or removes a `dialect.defs.IRCChannel.Mode`.
  +
- +  `dialect.defs.Mode`s that are merely a character in `modechars` are simply removed if
+ +  `dialect.defs.IRCChannel.Mode`s that are merely a character in `modechars` are simply removed if
  +   the *sign* of the mode change is negative, whereas a more elaborate
- +  `dialect.defs.Mode` in the `modes` array are only replaced or removed if they match a
+ +  `dialect.defs.IRCChannel.Mode` in the `modes` array are only replaced or removed if they match a
  +   comparison test.
  +
  +  Several modes can be specified at once, including modes that take a
@@ -1561,13 +1558,13 @@ unittest
 /// Certain characters that signal specific meaning in an IRC context.
 enum IRCControlCharacter
 {
-    ctcp = 1,
-    bold = 2,
-    colour = 3,
-    reset = 15,
-    invert = 22,
-    italics = 29,
-    underlined = 31,
+    ctcp = 1,       /// Client-to-client Protocol marker.
+    bold = 2,       /// Bold text.
+    colour = 3,     /// Colour marker.
+    reset = 15,     /// Colour/formatting reset marker.
+    invert = 22,    /// Inverse text marker.
+    italics = 29,   /// Italics marker.
+    underlined = 31,/// Underscore marker.
 }
 
 

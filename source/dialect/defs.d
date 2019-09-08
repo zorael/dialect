@@ -1,8 +1,8 @@
 /++
- +  Definitions of struct aggregates used throughout the program, representing
+ +  Definitions of struct aggregates used throughout the library, representing
  +  `IRCEvent`s and thereto related objects like `IRCServer` and `IRCUser`.
  +
- +  Things related to being a bot do not belong here; what's here should only be
+ +  Things related to actually parsing IRC do not belong here; what's here should only be
  +  applicable to be used as a header. Some methods are included though, like
  +  some `toString`s and `opEqual`s.
  +
@@ -36,6 +36,7 @@ struct IRCEvent
      +  Taken from https://tools.ietf.org/html/rfc1459 with many additions.
      +
      +  - https://www.alien.net.au/irc/irc2numerics.html
+     +
      +  - https://defs.ircdocs.horse
      +
      +  Some are outright fabrications of ours, like `Type.CHAN` and `Type.QUERY`.
@@ -75,14 +76,14 @@ struct IRCEvent
         SELFKICK,   /// You were kicked.
         TOPIC,      /// Someone changed channel topic.
         CAP,        /// CAPability exchange during connect.
-        CTCP_VERSION,/// Something requested bot version info.
+        CTCP_VERSION,/// Something requested your version info.
         CTCP_TIME,  /// Something requested your time.
         CTCP_PING,  /// Something pinged you.
-        CTCP_CLIENTINFO,/// Something asked what CTCP events the bot can handle.
+        CTCP_CLIENTINFO,/// Something asked what CTCP events the client can handle.
         CTCP_DCC,   /// Something requested a DCC connection (chat, file transfer).
-        CTCP_SOURCE,/// Something requested an URL to the bot source code.
-        CTCP_USERINFO,/// Something requested the nickname and user of the bot.
-        CTCP_FINGER,/// Someone requested miscellaneous info about the bot.
+        CTCP_SOURCE,/// Something requested an URL to the client source code.
+        CTCP_USERINFO,/// Something requested the nickname and user of the client.
+        CTCP_FINGER,/// Someone requested miscellaneous info about the client.
         CTCP_LAG,   /// Something requested LAG info?
         CTCP_AVATAR,/// Someone requested an avatar image.
         CTCP_SLOTS, /// Someone broadcast their file transfer slots.
@@ -838,10 +839,10 @@ struct IRCEvent
     /// The channel the event transpired in, or is otherwise related to.
     string channel;
 
-    /// The target of the event. May be a nickname or a channel.
+    /// The target user of the event.
     IRCUser target;
 
-    /// The main body of the event.
+    /// The main body of text of the event.
     string content;
 
     /// The auxiliary storage, containing type-specific extra bits of information.
@@ -867,7 +868,7 @@ struct IRCEvent
 
     version(TwitchSupport)
     {
-        /// The Twitch emotes in the message.
+        /// The Twitch emotes in the message, if any.
         string emotes;
 
         /// The Twitch ID of this message.
@@ -880,7 +881,7 @@ struct IRCEvent
 /++
  +  Aggregate of all information and state pertaining to the connected IRC
  +  server. Some fields are transient on a per-connection basis and should not
- +  be saved to the configuration file.
+ +  be serialised.
  +/
 struct IRCServer
 {
@@ -946,7 +947,7 @@ struct IRCServer
     /// Server address (or IP).
     string address;
 
-    /// The port to connect to, usually 6667-6669.
+    /// The port to connect to, usually `6667`-`6669`.
     ushort port;
 
     @Unconfigurable
@@ -966,7 +967,7 @@ struct IRCServer
         /// Max nickname length as per IRC specs, but not the de facto standard.
         uint maxNickLength = 9;
 
-        /// Max channel name length as per IRC specs.
+        /// Max channel name length as per IRC specs, or as reported.
         uint maxChannelLength = 200;
 
         /++
@@ -984,10 +985,10 @@ struct IRCServer
         /// D = Mode that changes a setting and never has a parameter.
         string dModes; // = "CFLMPQScgimnprstz";
 
-        /// Prefix characters by mode character; o by @, v by +, etc.
+        /// Prefix characters by mode character; `o` by `@`, `v` by `+`, etc.
         char[char] prefixchars;
 
-        /// Character channel mode prefixes (o,v,h,...)
+        /// Character channel mode prefixes (`o`, `v`, `h`, ...)
         string prefixes;
 
         /++
@@ -996,7 +997,7 @@ struct IRCServer
          +/
         string chantypes = "#";
 
-        /// The current case mapping.
+        /// The current case mapping, dictating how case-insensitivity works.
         CaseMapping caseMapping;
 
         /// `EXTBAN` prefix character.
@@ -1016,8 +1017,10 @@ struct IRCServer
 
 // IRCUser
 /++
- +  An aggregate of fields representing a single user on IRC. Instances of these
- +  should not survive a disconnect and reconnect; they are on a per-connection basis.
+ +  An aggregate of fields representing a single user on IRC.
+ +
+ +  Instances of these should not survive a disconnect and reconnect; they are
+ +  transient on a per-connection basis and should not be serialised.
  +/
 struct IRCUser
 {
@@ -1026,12 +1029,12 @@ struct IRCUser
     /// Classifiers; roles which a user is one of.
     enum Class
     {
-        unset,
-        anyone,
-        blacklist,
-        whitelist,
-        admin,
-        special,
+        unset,      /// Unknown, yet to be determined.
+        anyone,     /// Any user.
+        blacklist,  /// A blacklisted user.
+        whitelist,  /// A whitelisted user.
+        admin,      /// An administrator, in a bot-like context.
+        special,    /// Special; like staff.
     }
 
     /// The user's nickname.
@@ -1059,10 +1062,10 @@ struct IRCUser
     {
         // Twitch has some extra features.
 
-        /// The badges this user has.
+        /// The Twitch badges this user has.
         string badges;
 
-        /// The colour (RRGGBB) to tint the user's nickname with.
+        /// The Twitch colour (RRGGBB) to tint the user's nickname with.
         string colour;
     }
 
@@ -1112,7 +1115,7 @@ struct IRCUser
     }
 
     /++
-     +  Guesses that a sender is a server.
+     +  Makes an educated guess that a sender is a server.
      +
      +  Returns:
      +      `true` if the sender nickname and/or address looks to be a server's,
@@ -2422,10 +2425,13 @@ struct IRCChannel
 // IRCClient
 /++
  +  Aggregate collecting all the relevant settings, options and state needed for
- +  an IRC client.
+ +  a connection to an IRC server.
  +
  +  Many fields are transient and unfit to be saved to disk, and some are simply
  +  too sensitive for it.
+ +
+ +  Moreover, many of the members in the RichClient build are tailored toward building
+ +  a bot. Build the "simple" build configuration to opt out of them.
  +/
 struct IRCClient
 {
@@ -2436,7 +2442,7 @@ struct IRCClient
         /// Client nickname.
         string nickname; // = "kameloso";
 
-        /// Client "user" or full name.
+        /// Client "user".
         string user; // = "kameloso!";
 
         /// Client IDENT identifier.
@@ -2477,14 +2483,14 @@ struct IRCClient
         @Separator(",")
         @Separator(" ")
         {
-            /// The nickname services accounts of the bot's *administrators*.
+            /// The nickname services accounts of *administrators*, in a bot-like context.
             string[] admins;
 
-            /// List of homes, where the bot should be active.
+            /// List of homes, in a bot-like context.
             @CannotContainComments
             string[] homes;
 
-            /// Currently inhabited channels (though not necessarily homes).
+            /// Currently inhabited non-home channels.
             @CannotContainComments
             string[] channels;
         }
@@ -2499,7 +2505,7 @@ struct IRCClient
 
             version(TwitchSupport)
             {
-                /// The Twitch display name or alias of the bot.
+                /// Our Twitch display name or alias.
                 string alias_;
             }
 
@@ -2526,7 +2532,7 @@ struct IRCClient
 
     version(FlagUpdatedClient)
     {
-        /// Whether or not the client was altered.
+        /// Whether or not the client was altered during parsing.
         bool updated;
     }
 }
