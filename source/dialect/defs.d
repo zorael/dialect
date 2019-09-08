@@ -2529,7 +2529,11 @@ struct IRCClient
 
     version(FlagUpdatedClient)
     {
-        /// Whether or not the client was altered during parsing.
-        bool updated;
+        @Hidden
+        @Unconfigurable
+        {
+            /// Whether or not the client was altered during parsing.
+            bool updated;
+        }
     }
 }
