@@ -2451,10 +2451,7 @@ struct IRCClient
         /// Client GECOS/"real name".
         string realName;
 
-        /// Default reason given when quitting without specifying one.
-        string quitReason;
-
-        /// Username to use for services account.
+        /// Username to use as services account login name.
         string account;
 
         version(TwitchSupport)
