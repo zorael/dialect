@@ -154,10 +154,6 @@ IRCEvent toIRCEvent(ref IRCParser parser, const string raw)
     event.content = event.content.strippedRight;
     event.channel = event.channel.toLower;
 
-    // Final pass: sanity check. This verifies some fields and gives
-    // meaningful error messages if something doesn't look right.
-    parser.postparseSanityCheck(event);
-
     return event;
 }
 
@@ -2328,6 +2324,10 @@ struct IRCParser
         {
             postprocessor.postprocess(this, event);
         }
+
+        // Final pass: sanity check. This verifies some fields and gives
+        // meaningful error messages if something doesn't look right.
+        postparseSanityCheck(this, event);
 
         return event;
     }
