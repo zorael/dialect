@@ -1808,3 +1808,13 @@ unittest
         assert((lowercase == "^{0v0}^"), lowercase);
     }
 }
+
+
+// Postprocessor
+/++
+ +  Postprocessor interface for concrete postprocessors to inherit from.
+ +/
+interface Postprocessor
+{
+    void postprocess(ref IRCParser, ref IRCEvent);
+}

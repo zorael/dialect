@@ -31,6 +31,10 @@ configuration "twitch" {
     versions "RichClient" "TwitchSupport"
 }
 
+configuration "dev" {
+    versions "RichClient" "TwitchSupport" "TwitchWarnings"
+}
+
 configuration "unittest" {
     versions "RichClient" "TwitchSupport"
     sourcePaths "source" "tests"

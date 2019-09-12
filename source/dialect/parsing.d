@@ -73,7 +73,7 @@
 module dialect.parsing;
 
 import dialect.defs;
-import dialect.common : IRCParseException;
+import dialect.common : IRCParseException, Postprocessor;
 import lu.string : contains, nom;
 
 package:
@@ -153,10 +153,6 @@ IRCEvent toIRCEvent(ref IRCParser parser, const string raw)
     // Final cosmetic touches
     event.content = event.content.strippedRight;
     event.channel = event.channel.toLower;
-
-    // Final pass: sanity check. This verifies some fields and gives
-    // meaningful error messages if something doesn't look right.
-    parser.postparseSanityCheck(event);
 
     return event;
 }
@@ -2305,6 +2301,8 @@ struct IRCParser
     /// An `dialect.defs.IRCEvent.Type[1024]` reverse lookup table for fast numeric lookups.
     IRCEvent.Type[1024] typenums = Typenums.base;
 
+    Postprocessor[] postprocessors;
+
     // toIRCEvent
     /++
      +  Parses an IRC string into an `dialect.defs.IRCEvent`.
@@ -2319,17 +2317,46 @@ struct IRCParser
      +/
     IRCEvent toIRCEvent(const string raw)
     {
-        return .toIRCEvent(this, raw);
+        IRCEvent event = .toIRCEvent(this, raw);
+
+        // Let postprocessors alter the event
+        foreach (postprocessor; postprocessors)
+        {
+            postprocessor.postprocess(this, event);
+        }
+
+        // Final pass: sanity check. This verifies some fields and gives
+        // meaningful error messages if something doesn't look right.
+        postparseSanityCheck(this, event);
+
+        return event;
     }
 
     /// Create a new `IRCParser` with the passed `dialect.defs.IRCClient` as base.
     this(IRCClient client) pure
     {
         this.client = client;
+        initPostprocessors();
     }
 
     /// Disallow copying of this struct.
     @disable this(this);
+
+    /++
+     +  Initialises defined postprocessors.
+     +/
+    void initPostprocessors() pure nothrow
+    {
+        import dialect.postprocessors : EnabledPostprocessors;
+
+        assert(!postprocessors.length, "Tried to double-init postprocessors");
+        postprocessors.reserve(EnabledPostprocessors.length);
+
+        foreach (Postprocessor; EnabledPostprocessors)
+        {
+            postprocessors ~= new Postprocessor;
+        }
+    }
 }
 
 unittest
