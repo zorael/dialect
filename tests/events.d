@@ -1,4 +1,4 @@
-import lu.core.conv : Enum;
+import lu.conv : Enum;
 import dialect;
 import std.conv : to;
 

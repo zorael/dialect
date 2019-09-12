@@ -10,7 +10,7 @@ import dialect.parsing;
 
 public:
 
-import lu.core.string : contains, nom;
+import lu.string : contains, nom;
 
 @safe:
 
@@ -38,7 +38,7 @@ import lu.core.string : contains, nom;
  +/
 auto typenumsOf(const IRCServer.Daemon daemon) pure nothrow @nogc
 {
-    import lu.core.meld : MeldingStrategy, meldInto;
+    import lu.meld : MeldingStrategy, meldInto;
     import std.typecons : Flag, No, Yes;
 
     /// https://upload.wikimedia.org/wikipedia/commons/d/d5/IRCd_software_implementations3.svg
@@ -199,7 +199,7 @@ auto typenumsOf(const IRCServer.Daemon daemon) pure nothrow @nogc
  +/
 bool isSpecial(const ref IRCParser parser, const IRCEvent event) pure
 {
-    import lu.core.string : sharedDomains;
+    import lu.string : sharedDomains;
     import std.uni : toLower;
 
     with (event)
@@ -435,7 +435,7 @@ unittest
  +/
 bool isFromAuthService(const ref IRCParser parser, const IRCEvent event) pure
 {
-    import lu.core.string : sharedDomains;
+    import lu.string : sharedDomains;
     import std.uni : toLower;
 
     with (event)
@@ -589,7 +589,7 @@ bool isValidChannel(const string channel, const IRCServer server) pure @nogc
 in (channel.length, "Tried to determine whether a channel was valid but no channel was given")
 do
 {
-    import lu.core.string : beginsWithOneOf;
+    import lu.string : beginsWithOneOf;
     import std.string : representation;
 
     /++
@@ -1039,7 +1039,7 @@ unittest
 void setMode(ref IRCChannel channel, const string signedModestring,
     const string data, IRCServer server) pure
 {
-    import lu.core.string : beginsWith;
+    import lu.string : beginsWith;
     import std.array : array;
     import std.algorithm.iteration : splitter;
     import std.range : StoppingPolicy, retro, zip;

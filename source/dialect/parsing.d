@@ -74,7 +74,7 @@ module dialect.parsing;
 
 import dialect.defs;
 import dialect.common : IRCParseException;
-import lu.core.string : contains, nom;
+import lu.string : contains, nom;
 
 package:
 
@@ -101,7 +101,7 @@ package:
  +/
 IRCEvent toIRCEvent(ref IRCParser parser, const string raw)
 {
-    import lu.core.string : strippedRight;
+    import lu.string : strippedRight;
     import std.datetime.systime : Clock;
     import std.uni : toLower;
 
@@ -278,7 +278,7 @@ void parseBasic(ref IRCParser parser, ref IRCEvent event) pure
         break;
 
     default:
-        import lu.core.string : beginsWith;
+        import lu.string : beginsWith;
 
         if (event.raw.beginsWith("NOTICE"))
         {
@@ -303,7 +303,7 @@ void parseBasic(ref IRCParser parser, ref IRCEvent event) pure
 ///
 unittest
 {
-    import lu.core.conv : Enum;
+    import lu.conv : Enum;
     import std.conv : to;
 
     IRCParser parser;
@@ -388,7 +388,7 @@ void parsePrefix(ref IRCParser parser, ref IRCEvent event, ref string slice) pur
 ///
 unittest
 {
-    import lu.core.conv : Enum;
+    import lu.conv : Enum;
     import std.conv : to;
 
     IRCParser parser;
@@ -495,7 +495,7 @@ void parseTypestring(ref IRCParser parser, ref IRCEvent event, ref string slice)
     {
         try
         {
-            import lu.core.conv : Enum;
+            import lu.conv : Enum;
             event.type = Enum!(IRCEvent.Type).fromString(typestring);
         }
         catch (ConvException e)
@@ -508,7 +508,7 @@ void parseTypestring(ref IRCParser parser, ref IRCEvent event, ref string slice)
 ///
 unittest
 {
-    import lu.core.conv : Enum;
+    import lu.conv : Enum;
     import std.conv : to;
 
     IRCParser parser;
@@ -577,7 +577,7 @@ unittest
  +/
 void parseSpecialcases(ref IRCParser parser, ref IRCEvent event, ref string slice) pure
 {
-    import lu.core.string : beginsWith;
+    import lu.string : beginsWith;
     import std.conv : to;
     import std.typecons : Flag, No, Yes;
 
@@ -620,7 +620,7 @@ void parseSpecialcases(ref IRCParser parser, ref IRCEvent event, ref string slic
 
         if (slice.contains(' '))
         {
-            import lu.core.string : unquoted;
+            import lu.string : unquoted;
 
             event.channel = slice.nom(" :");
             event.content = slice;
@@ -647,7 +647,7 @@ void parseSpecialcases(ref IRCParser parser, ref IRCEvent event, ref string slic
         break;
 
     case QUIT:
-        import lu.core.string : unquoted;
+        import lu.string : unquoted;
 
         // :g7zon!~gertsson@178.174.245.107 QUIT :Client Quit
         event.type = (event.sender.nickname == client.nickname) ? SELFQUIT : QUIT;
@@ -742,7 +742,7 @@ void parseSpecialcases(ref IRCParser parser, ref IRCEvent event, ref string slic
             event.aux = hg[1..$];
         }
 
-        import lu.core.string : strippedLeft;
+        import lu.string : strippedLeft;
         slice.nom(' ');  // hopcount
         event.content = slice.strippedLeft;
         break;
@@ -865,7 +865,7 @@ void parseSpecialcases(ref IRCParser parser, ref IRCEvent event, ref string slic
         break;
 
     case RPL_WHOISUSER: // 311
-        import lu.core.string : strippedLeft;
+        import lu.string : strippedLeft;
 
         // :orwell.freenode.net 311 kameloso^ kameloso ~NaN ns3363704.ip-94-23-253.eu * : kameloso
         slice.nom(' ');  // bot nickname
@@ -1207,7 +1207,7 @@ void parseSpecialcases(ref IRCParser parser, ref IRCEvent event, ref string slic
         break;
 
     case RPL_WHOWASUSER: // 314
-        import lu.core.string : stripped;
+        import lu.string : stripped;
 
         // :irc.uworld.se 314 kameloso^^ kameloso ~NaN C2802314.E23AD7D8.E9841504.IP * : kameloso!
         slice.nom(' '); // bot nickname
@@ -1272,7 +1272,7 @@ void parseSpecialcases(ref IRCParser parser, ref IRCEvent event, ref string slic
  +/
 void parseGeneralCases(ref IRCParser parser, ref IRCEvent event, ref string slice) pure
 {
-    import lu.core.string : beginsWithOneOf;
+    import lu.string : beginsWithOneOf;
 
     if (slice.contains(" :"))
     {
@@ -1586,7 +1586,7 @@ void postparseSanityCheck(const ref IRCParser parser, ref IRCEvent event)
  +/
 void onNotice(ref IRCParser parser, ref IRCEvent event, ref string slice) pure
 {
-    import lu.core.string : beginsWith, beginsWithOneOf;
+    import lu.string : beginsWith, beginsWithOneOf;
     import std.typecons : Flag, No, Yes;
 
     // :ChanServ!ChanServ@services. NOTICE kameloso^ :[##linux-overflow] Make sure your nick is registered, then please try again to join ##linux.
@@ -1798,8 +1798,8 @@ void onPRIVMSG(const ref IRCParser parser, ref IRCEvent event, ref string slice)
 
         foreach (immutable type; EnumMembers!(IRCEvent.Type))
         {
-            import lu.core.conv : Enum;
-            import lu.core.string : beginsWith;
+            import lu.conv : Enum;
+            import lu.string : beginsWith;
 
             //enum typestring = type.to!string;
             enum typestring = Enum!(IRCEvent.Type).toString(type);
@@ -1857,7 +1857,7 @@ void onMode(ref IRCParser parser, ref IRCEvent event, ref string slice) pure
     }
     else
     {
-        import lu.core.string : beginsWith;
+        import lu.string : beginsWith;
         import std.string : representation;
 
         // :kameloso^ MODE kameloso^ :+i
@@ -1974,7 +1974,7 @@ unittest
  +/
 void onISUPPORT(ref IRCParser parser, ref IRCEvent event, ref string slice) pure
 {
-    import lu.core.conv : Enum;
+    import lu.conv : Enum;
     import std.algorithm.iteration : splitter;
     import std.conv : ConvException, to;
 
@@ -2334,7 +2334,7 @@ struct IRCParser
 
 unittest
 {
-    import lu.core.meld : MeldingStrategy, meldInto;
+    import lu.meld : MeldingStrategy, meldInto;
 
     IRCParser parser;
 

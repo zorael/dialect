@@ -6,11 +6,11 @@
  +  applicable to be used as a header. Some methods are included though, like
  +  some `toString`s and `opEqual`s.
  +
- +  The only dependency should be `lu.core.uda`.
+ +  The only dependency should be `lu.uda`.
  +/
 module dialect.defs;
 
-import lu.core.uda;
+import lu.uda;
 
 import std.range.primitives : isOutputRange;
 
@@ -2437,7 +2437,7 @@ struct IRCClient
 {
     version(RichClient)
     {
-        import lu.core.uda : CannotContainComments, Hidden, Separator, Unconfigurable;
+        import lu.uda : CannotContainComments, Hidden, Separator, Unconfigurable;
 
         /// Client nickname.
         string nickname; // = "kameloso";
