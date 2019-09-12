@@ -1812,7 +1812,7 @@ unittest
 
 // Postprocessor
 /++
- +  FIXME
+ +  Postprocessor interface for concrete postprocessors to inherit from.
  +/
 interface Postprocessor
 {

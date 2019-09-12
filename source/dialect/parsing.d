@@ -2343,7 +2343,7 @@ struct IRCParser
     @disable this(this);
 
     /++
-     +  FIXME
+     +  Initialises defined postprocessors.
      +/
     void initPostprocessors() pure nothrow
     {
