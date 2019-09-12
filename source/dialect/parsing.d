@@ -154,12 +154,6 @@ IRCEvent toIRCEvent(ref IRCParser parser, const string raw)
     event.content = event.content.strippedRight;
     event.channel = event.channel.toLower;
 
-    // Let postprocessors alter the event
-    foreach (postprocessor; parser.postprocessors)
-    {
-        postprocessor.postprocess(parser, event);
-    }
-
     // Final pass: sanity check. This verifies some fields and gives
     // meaningful error messages if something doesn't look right.
     parser.postparseSanityCheck(event);
@@ -2327,7 +2321,15 @@ struct IRCParser
      +/
     IRCEvent toIRCEvent(const string raw)
     {
-        return .toIRCEvent(this, raw);
+        IRCEvent event = .toIRCEvent(this, raw);
+
+        // Let postprocessors alter the event
+        foreach (postprocessor; postprocessors)
+        {
+            postprocessor.postprocess(this, event);
+        }
+
+        return event;
     }
 
     /// Create a new `IRCParser` with the passed `dialect.defs.IRCClient` as base.
