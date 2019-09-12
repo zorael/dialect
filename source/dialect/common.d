@@ -1808,3 +1808,40 @@ unittest
         assert((lowercase == "^{0v0}^"), lowercase);
     }
 }
+
+
+// Postprocessor
+/++
+ +  FIXME
+ +/
+interface Postprocessor
+{
+    void postprocess(ref IRCParser, ref IRCEvent);
+}
+
+
+// PostprocessorImpl
+/++
+ +  FIXME
+ +/
+mixin template PostprocessorImpl(bool debug_ = false, string module_ = __MODULE__)
+{
+    public void postprocess(ref IRCParser parser, ref IRCEvent event)
+    {
+        static if (__traits(compiles, .postprocess))
+        {
+            import lu.traits : TakesParams;
+
+            static if (TakesParams!(.postprocess, IRCEvent))
+            {
+                pragma(inline)
+                .postprocess(parser, event);
+            }
+        }
+        else
+        {
+            static assert(0, "Postprocessor for " ~ module_ ~
+                " is missing a .postprocess(ref IRCEvent)");
+        }
+    }
+}
