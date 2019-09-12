@@ -114,7 +114,7 @@ struct IRCParser
 
 > This assumes you have a program set up to read information from an IRC server. This is not a bot framework; for that you're better off with the full [kameloso](https://github.com/zorael/kameloso) and writing a plugin that suits your needs.
 
-Instantiate an `IRCParser` and configure its members, notably its `.client`. Read a string from the server and parse it with `IRCParser.toIRCEvent(string)`.
+Instantiate an `IRCParser` with an `IRCClient` (via constructor), and configure its members. Read a string from the server and parse it with `IRCParser.toIRCEvent(string)`.
 
 ```d
 IRCParser parser;
