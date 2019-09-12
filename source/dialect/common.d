@@ -1816,5 +1816,8 @@ unittest
  +/
 interface Postprocessor
 {
+    /++
+     +  Postprocesses an `dialect.defs.IRCEvent`.
+     +/
     void postprocess(ref IRCParser, ref IRCEvent);
 }

@@ -2301,6 +2301,10 @@ struct IRCParser
     /// An `dialect.defs.IRCEvent.Type[1024]` reverse lookup table for fast numeric lookups.
     IRCEvent.Type[1024] typenums = Typenums.base;
 
+    /++
+     +  Array of active `dialect.common.Postprocessor`s, to be iterated through
+     +  and processed after parsing is complete.
+     +/
     Postprocessor[] postprocessors;
 
     // toIRCEvent
