@@ -74,7 +74,6 @@ struct IRCClient
         string user;
         string ident;
         string realName;
-        string quitReason;
         string account;
         string password;
         string pass;
@@ -165,8 +164,7 @@ See the `/tests` directory for more example parses.
 
 # Roadmap
 
-* investigate `@nogc`
-* fix AppVeyor failing to build `lu:core`
+* nothing right now, ideas needed
 
 # License
 
