@@ -4,6 +4,8 @@ IRC parsing library with support for a wide variety of server daemons.
 
 Note that while IRC is standardised, servers still come in [many flavours](https://upload.wikimedia.org/wikipedia/commons/thumb/d/d5/IRCd_software_implementations3.svg/1533px-IRCd_software_implementations3.svg.png), some of which [outright conflict](http://defs.ircdocs.horse/defs/numerics.html) with others. If something doesn't immediately work, generally it's because we simply haven't encountered that type of event before, and so no rules for how to parse it have yet been written.
 
+Used in the [kameloso](https://github.com/zorael/kameloso) bot. However, while `dialect` unavoidably caters to its needs it is independent from it. Likely some remnants of code that violate separation of concern still exist, and they are to be considered bugs.
+
 **Please report bugs. Unreported bugs can only be fixed by accident.**
 
 # What it looks like
