@@ -48,7 +48,7 @@ struct IRCUser
     string ident;
     string address;
     string account;
-    long lastWhois;
+    long lastWhois;  // BUG, does not belong in a bot-agnostic library
 
     version(TwitchSupport)
     {
@@ -70,44 +70,20 @@ struct IRCServer
 
 struct IRCClient
 {
-    version(RichClient)  // dub configuration "rich"
-    {
-        string nickname;
-        string user;
-        string ident;
-        string realName;
-        string account;
-        string password;
-        string pass;
+    string nickname;
+    string user;
+    string ident;
+    string realName;
+    IRCServer server;
 
-        IRCServer server;
-
-        version(TwitchSupport)  // dub configuration "twitch"
-        {
-            string colour;
-        }
-
-        // More internals
-    }
-    else  // dub configuration "simple" (default)
-    {
-        string nickname;
-        IRCServer server;
-
-        // More internals
-    }
-
-    version(FlagUpdatedClient)
-    {
-        bool updated;
-    }
+    // More internals
 }
 
 struct IRCParser
 {
     IRCClient client;
 
-    IRCEvent toIRCEvent(const string) { ... }  // <--
+    IRCEvent toIRCEvent(const string);  // <--
 }
 ```
 
@@ -166,7 +142,7 @@ See the `/tests` directory for more example parses.
 
 # Roadmap
 
-* nothing right now, ideas needed
+* remove final non-bot-agnostic remnants
 
 # License
 
