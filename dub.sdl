@@ -5,7 +5,6 @@ copyright "Copyright © 2019, JR"
 license "MIT"
 targetType "library"
 dflags "-dip25" "-dip1008"
-//dflags "-preview=dip25" "-preview=dip1008"
 libs "phobos2" platform="posix-dmd"
 
 x:ddoxTool "scod"
@@ -23,20 +22,16 @@ configuration "simple" {
     targetType "library"
 }
 
-configuration "rich" {
-    versions "RichClient"
-}
-
 configuration "twitch" {
-    versions "RichClient" "TwitchSupport"
+    versions "TwitchSupport"
 }
 
 configuration "dev" {
-    versions "RichClient" "TwitchSupport" "TwitchWarnings"
+    versions "TwitchSupport" "TwitchWarnings"
 }
 
 configuration "unittest" {
-    versions "RichClient" "TwitchSupport"
+    versions "TwitchSupport"
     sourcePaths "source" "tests"
     importPaths "source" "tests"
 }
