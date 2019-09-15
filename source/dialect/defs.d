@@ -2427,60 +2427,37 @@ struct IRCChannel
  +  Aggregate collecting all the relevant settings, options and state needed for
  +  a connection to an IRC server.
  +
- +  Many fields are transient and unfit to be saved to disk, and some are simply
- +  too sensitive for it.
- +
- +  Moreover, many of the members in the RichClient build are tailored toward building
- +  a bot. Build the "simple" build configuration to opt out of them.
+ +  Many fields are transient and unfit to be saved to disk.
  +/
 struct IRCClient
 {
-    version(RichClient)
+    import lu.uda : CannotContainComments, Hidden, Separator, Unconfigurable;
+
+    /// Client nickname.
+    string nickname; // = "kameloso";
+
+    /// Client "user".
+    string user; // = "kameloso!";
+
+    /// Client IDENT identifier.
+    string ident; // = "NaN";
+
+    /// Client GECOS/"real name".
+    string realName;
+
+    @Unconfigurable
     {
-        import lu.uda : CannotContainComments, Hidden, Separator, Unconfigurable;
-
-        /// Client nickname.
-        string nickname; // = "kameloso";
-
-        /// Client "user".
-        string user; // = "kameloso!";
-
-        /// Client IDENT identifier.
-        string ident; // = "NaN";
-
-        /// Client GECOS/"real name".
-        string realName;
-
-        @Unconfigurable
-        {
-            /// The current `IRCServer` we're connected to.
-            IRCServer server;
-
-            /// The original client nickname before connecting, in case it changed.
-            string origNickname;
-
-            version(TwitchSupport)
-            {
-                /// Our Twitch display name or alias.
-                string alias_;
-            }
-
-            /// The current modechars active on the client (e.g. "ix");
-            string modes;
-        }
-    }
-    else
-    {
-        // Minimal client for library use.
-
-        /// Client nickname.
-        string nickname;
-
         /// The current `IRCServer` we're connected to.
         IRCServer server;
 
         /// The original client nickname before connecting, in case it changed.
         string origNickname;
+
+        version(TwitchSupport)
+        {
+            /// Our Twitch display name or alias.
+            string alias_;
+        }
 
         /// The current modechars active on the client (e.g. "ix");
         string modes;
