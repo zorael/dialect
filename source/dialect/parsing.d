@@ -2361,6 +2361,9 @@ struct IRCParser
             postprocessors ~= new Postprocessor;
         }
     }
+
+    /// Whether or not parsing updated its internal `IRCClient`.
+    bool clientUpdated;
 }
 
 unittest
