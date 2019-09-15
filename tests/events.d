@@ -176,10 +176,10 @@ unittest
         }
     }
 
-    with (parser.client)
+    with (parser)
     {
-        assert(updated);
-        assert((server.resolvedAddress == "irc.portlane.se"), server.resolvedAddress);
+        assert(clientUpdated);
+        assert((client.server.resolvedAddress == "irc.portlane.se"), client.server.resolvedAddress);
     }
 }
 
