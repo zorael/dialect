@@ -1,15 +1,9 @@
 /++
- +  The Twitch Support service post-processes `dialect.defs.IRCEvent`s after
- +  they are parsed but before they are sent to the plugins for handling, and
- +  deals with Twitch-specifics. Those include extracting the colour someone's
- +  name should be printed in, their alias/"display name" (generally their
- +  nickname cased), converting the event to some event types unique to Twitch, etc.
- +
- +  It has no bot commands and no event handlers; it only post-processes events.
- +
- +  It is useless on other servers but crucial on Twitch itself. Even enabled
- +  it won't slow the bot down though, as the very fist thing it does is to
- +  verify that it is on a Twitch server, and aborts and returns if not.
+ +  The Twitch postprocessor processes `dialect.defs.IRCEvent`s after
+ +  they are parsed, and deals with Twitch-specifics. Those include extracting
+ +  the colour someone's name should be printed in, their alias/"display name"
+ +  (generally their nickname cased), converting the event to some event types
+ +  unique to Twitch, etc.
  +/
 module dialect.postprocessors.twitch;
 
