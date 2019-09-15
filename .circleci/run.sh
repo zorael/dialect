@@ -33,7 +33,7 @@ build() {
 # execution start
 
 git branch
-[[ "$(git branch 2>&1 | grep gh-pages)" ]] && exit 0
+[[ "$(git branch 2>&1 grep "* gh-pages")" ]] && exit 0
 
 case "$1" in
     install-deps)
