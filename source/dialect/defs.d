@@ -2451,47 +2451,6 @@ struct IRCClient
         /// Client GECOS/"real name".
         string realName;
 
-        /// Username to use as services account login name.
-        string account;
-
-        version(TwitchSupport)
-        {
-            /++
-                The Twitch colour to assign to our nickname.
-
-                "Normal users can choose between Blue, Coral, DodgerBlue,
-                SpringGreen, YellowGreen, Green, OrangeRed, Red, GoldenRod,
-                HotPink, CadetBlue, SeaGreen, Chocolate, BlueViolet, and Firebrick.
-                Twitch Turbo users can use any Hex value (i.e: #000000)."
-            +/
-            @CannotContainComments
-            string colour;
-        }
-
-        @Hidden
-        {
-            /// Password for services account.
-            string password;
-
-            /// Login `PASS`, different from `SASL` and services.
-            string pass;
-        }
-
-        @Separator(",")
-        @Separator(" ")
-        {
-            /// The nickname services accounts of *administrators*, in a bot-like context.
-            string[] admins;
-
-            /// List of homes, in a bot-like context.
-            @CannotContainComments
-            string[] homes;
-
-            /// Currently inhabited non-home channels.
-            @CannotContainComments
-            string[] channels;
-        }
-
         @Unconfigurable
         {
             /// The current `IRCServer` we're connected to.
@@ -2525,15 +2484,5 @@ struct IRCClient
 
         /// The current modechars active on the client (e.g. "ix");
         string modes;
-    }
-
-    version(FlagUpdatedClient)
-    {
-        @Hidden
-        @Unconfigurable
-        {
-            /// Whether or not the client was altered during parsing.
-            bool updated;
-        }
     }
 }
