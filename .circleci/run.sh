@@ -19,15 +19,15 @@ install_deps() {
 
 build() {
     time dub test
-    time dub test -c simple
+    time dub test -c library
 
-    time dub build -b plain -c rich
+    time dub build -b plain -c dev
     time dub build -b plain -c twitch
-    time dub build -b plain -c simple
+    time dub build -b plain -c library
 
-    time dub build -b release -c rich
+    time dub build -b release -c dev
     time dub build -b release -c twitch
-    time dub build -b release -c simple
+    time dub build -b release -c library
 }
 
 # execution start
