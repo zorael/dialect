@@ -865,7 +865,7 @@ user-type                          ""
                     // Also store the alias in the IRCClient, for highlighting purposes
                     // *ASSUME* it never changes during runtime.
                     parser.client.alias_ = alias_;
-                    parser.client.updated = true;
+                    parser.clientUpdated = true;
                 }
             }
             else

@@ -638,7 +638,7 @@ void parseSpecialcases(ref IRCParser parser, ref IRCEvent event, ref string slic
         {
             event.type = SELFNICK;
             client.nickname = event.target.nickname;
-            version(FlagUpdatedClient) client.updated = true;
+            version(FlagUpdatedClient) parser.clientUpdated = true;
         }
         break;
 
@@ -1225,7 +1225,7 @@ void parseSpecialcases(ref IRCParser parser, ref IRCEvent event, ref string slic
         slice.nom(" :");
         event.content = slice;
         parser.client.server.resolvedAddress = event.sender.address;
-        version(FlagUpdatedClient) parser.client.updated = true;
+        version(FlagUpdatedClient) parser.clientUpdated = true;
         break;
 
     case SPAMFILTERLIST: // 941
@@ -1611,7 +1611,7 @@ void onNotice(ref IRCParser parser, ref IRCEvent event, ref string slice) pure
             // This is where we catch the resolved address
             assert(!event.sender.nickname.length, "Unexpected nickname: " ~ event.sender.nickname);
             client.server.resolvedAddress = event.sender.address;
-            version(FlagUpdatedClient) client.updated = true;
+            version(FlagUpdatedClient) parser.clientUpdated = true;
         }
 
         if (!event.sender.isServer && parser.isFromAuthService(event))
@@ -1914,7 +1914,7 @@ void onMode(ref IRCParser parser, ref IRCEvent event, ref string slice) pure
                 .idup;
         }
 
-        version(FlagUpdatedClient) parser.client.updated = true;
+        version(FlagUpdatedClient) parser.clientUpdated = true;
     }
 }
 
@@ -2071,7 +2071,7 @@ void onISUPPORT(ref IRCParser parser, ref IRCEvent event, ref string slice) pure
                 }
 
                 parser.client.server.daemonstring = value;
-                version(FlagUpdatedClient) parser.client.updated = true;
+                version(FlagUpdatedClient) parser.clientUpdated = true;
                 break;
 
             case "NICKLEN":
@@ -2108,7 +2108,7 @@ void onISUPPORT(ref IRCParser parser, ref IRCEvent event, ref string slice) pure
             }
         }
 
-        version(FlagUpdatedClient) parser.client.updated = true;
+        version(FlagUpdatedClient) parser.clientUpdated = true;
     }
     catch (ConvException e)
     {
@@ -2210,7 +2210,7 @@ void onMyInfo(ref IRCParser parser, ref IRCEvent event, ref string slice) pure
                 maxNickLength = 25;
             }
 
-            version(FlagUpdatedClient) parser.client.updated = true;
+            version(FlagUpdatedClient) parser.clientUpdated = true;
             return;
         }
     }
@@ -2278,7 +2278,7 @@ void onMyInfo(ref IRCParser parser, ref IRCEvent event, ref string slice) pure
         parser.typenums = typenumsOf(daemon);
         parser.client.server.daemon = daemon;
         parser.client.server.daemonstring = daemonstring;
-        version(FlagUpdatedClient) parser.client.updated = true;
+        version(FlagUpdatedClient) parser.clientUpdated = true;
     }
 }
 
