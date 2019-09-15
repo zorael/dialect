@@ -17,7 +17,7 @@ dependency "lu:meld" version="~>0.1.0"
 
 versions "FlagUpdatedClient"
 
-configuration "simple" {
+configuration "library" {
     // Mustn't be empty
     targetType "library"
 }
