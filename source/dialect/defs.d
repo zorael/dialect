@@ -1052,8 +1052,12 @@ struct IRCUser
     /// Services account name (to `NickServ`, `AuthServ`, `Q`, etc).
     string account;
 
-    /// Timestamp when the user was last `WHOIS`ed, so it's not done too often.
-    long lastWhois;
+    /// Timestamp when the user was last modified.
+    long updated;
+
+    /// Deprecated alias to `IRCUser.updated`.
+    deprecated("Use `.updated`")
+    alias lastWhois = updated;
 
     /// User classifier.
     Class class_;
