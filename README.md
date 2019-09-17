@@ -15,7 +15,7 @@ API documentation can be found [here](https://zorael.github.io/dialect).
 ```d
 struct IRCEvent
 {
-    enum Type { ... }
+    enum Type { ... }  // large enum of IRC event types
 
     Type type;
     string raw;
@@ -48,7 +48,7 @@ struct IRCUser
     string ident;
     string address;
     string account;
-    long lastWhois;  // BUG, does not belong in a bot-agnostic library
+    long updated;
 
     version(TwitchSupport)
     {
@@ -57,13 +57,26 @@ struct IRCUser
     }
 }
 
+struct IRCChannel
+{
+    struct Mode { ... }
+
+    string name;
+    Mode[] modes
+    string modechars;
+    string topic;
+    string[][char] mods;
+    bool[string] users;
+}
+
 struct IRCServer
 {
     enum Daemon { ... }
-    enum CaseMapping { ... }
+    enum CaseMapping { ... }  // types of case-sensitivity
 
     string address;
     ushort port;
+    Daemon daemon;
 
     // More internals
 }
