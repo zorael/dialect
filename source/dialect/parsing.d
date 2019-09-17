@@ -151,7 +151,6 @@ IRCEvent toIRCEvent(ref IRCParser parser, const string raw)
     parser.parseSpecialcases(event, slice);
 
     // Final cosmetic touches
-    event.content = event.content.strippedRight;
     event.channel = event.channel.toLower;
 
     return event;
