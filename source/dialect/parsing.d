@@ -2322,15 +2322,15 @@ struct IRCParser
     {
         IRCEvent event = .toIRCEvent(this, raw);
 
-        // Let postprocessors alter the event
+        // Final pass: sanity check. This verifies some fields and gives
+        // meaningful error messages if something doesn't look right.
+        postparseSanityCheck(this, event);
+
+        // Epilogue: let postprocessors alter the event
         foreach (postprocessor; postprocessors)
         {
             postprocessor.postprocess(this, event);
         }
-
-        // Final pass: sanity check. This verifies some fields and gives
-        // meaningful error messages if something doesn't look right.
-        postparseSanityCheck(this, event);
 
         return event;
     }
