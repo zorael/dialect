@@ -127,7 +127,7 @@ IRCEvent toIRCEvent(ref IRCParser parser, const string raw)
             // Get rid of the prepended @
             string newRaw = event.raw[1..$];
             immutable tags = newRaw.nom(' ');
-            event = parser.toIRCEvent(newRaw);
+            event = .toIRCEvent(parser, newRaw);
             event.tags = tags;
             return event;
         }
