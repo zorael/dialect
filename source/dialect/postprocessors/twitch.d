@@ -889,21 +889,18 @@ user-type                          ""
 
             if (!value.length) break;
 
+            immutable message = value
+                .decodeIRCv3String
+                .strippedRight
+                .escapeControlCharacters!(Yes.remove);
+
             if (event.type == Type.TWITCH_RITUAL)
             {
-                event.aux = value
-                    .decodeIRCv3String
-                    .strippedRight
-                    .escapeControlCharacters!(Yes.remove);
-                break;
+                event.aux = message;
             }
-
-            if (!event.content.length)
+            else if (!event.content.length)
             {
-                event.content = value
-                    .decodeIRCv3String
-                    .strippedRight
-                    .escapeControlCharacters!(Yes.remove);
+                event.content = message;
             }
             break;
 
