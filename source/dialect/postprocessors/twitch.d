@@ -1298,7 +1298,7 @@ final class TwitchPostprocessor : Postprocessor
 
         with (IRCEvent.Type)
         {
-            if ((event.type == CLEARCHAT) && event.target.nickname.length && event.sender.isServer)
+            if ((event.type == CLEARCHAT) && event.target.nickname.length)
             {
                 // Stay CLEARCHAT if no target nickname
                 event.type = (event.count > 0) ? TWITCH_TIMEOUT : TWITCH_BAN;
