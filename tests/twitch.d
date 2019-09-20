@@ -175,7 +175,7 @@ unittest
         with (IRCEvent.Type)
         with (event)
         {
-            assert((type == CLEARCHAT), Enum!(IRCEvent.Type).toString(type));
+            assert((type == TWITCH_BAN), Enum!(IRCEvent.Type).toString(type));
             assert((sender.address == "tmi.twitch.tv"), sender.address);
             assert((sender.class_ == IRCUser.Class.special), Enum!(IRCUser.Class).toString(sender.class_));
             assert((channel == "#channel"), channel);
