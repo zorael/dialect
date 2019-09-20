@@ -854,6 +854,8 @@ user-type                          ""
                     IRCUser.Class.admin : IRCUser.Class.unset;
                 event.target.alias_ = alias_;
                 event.target.address = string.init;
+                event.sender.colour = string.init;
+                event.sender.badges = string.init;
 
                 if (!parser.client.alias_.length)
                 {
