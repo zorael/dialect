@@ -850,7 +850,8 @@ user-type                          ""
                 // so expose the display name in event.target and let Persistence store it.
                 event.target = event.sender;  // get badges etc
                 event.target.nickname = parser.client.nickname;
-                event.target.class_ = IRCUser.Class.admin;
+                event.target.class_ = (event.type == Type.GLOBALUSERSTATE) ?
+                    IRCUser.Class.admin : IRCUser.Class.unset;
                 event.target.alias_ = alias_;
                 event.target.address = string.init;
 
