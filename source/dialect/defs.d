@@ -112,7 +112,7 @@ struct IRCEvent
         WHISPER,          /// Twitch private query message.
         TWITCH_NOTICE,    /// Twitch generic server notice, see `event.aux`.
         TWITCH_ERROR,     /// Twitch generic error, see `event.aux`.
-        TWITCH_TIMEOUT,   /// Twitch temporary ban (seconds in `aux`).
+        TWITCH_TIMEOUT,   /// Twitch temporary ban (seconds in `count`).
         TWITCH_BAN,       /// Twitch permanent ban.
         TWITCH_SUB,       /// Twitch subscription event, including resubs.
         TWITCH_CHEER,     /// Twitch "bits" donation.
