@@ -7,6 +7,7 @@ version(TwitchSupport):
 unittest
 {
     IRCParser parser;
+    parser.initPostprocessors();
 
     with (parser.client)
     {
