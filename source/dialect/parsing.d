@@ -2291,8 +2291,6 @@ struct IRCParser
 {
     @safe:
 
-    alias Daemon = IRCServer.Daemon;
-
     /// The current `dialect.defs.IRCClient` with all the state needed for parsing.
     IRCClient client;
 
