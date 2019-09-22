@@ -99,17 +99,14 @@ package:
  +
  +  Throws: `dialect.common.IRCParseException` if an empty string was passed.
  +/
-IRCEvent toIRCEvent(ref IRCParser parser, const string raw)
+IRCEvent toIRCEvent(ref IRCParser parser, const string raw) pure
 {
     import lu.string : strippedRight;
-    import std.datetime.systime : Clock;
     import std.uni : toLower;
 
     if (!raw.length) throw new IRCParseException("Tried to parse empty string");
 
     IRCEvent event;
-
-    event.time = Clock.currTime.toUnixTime;
 
     // We don't need to .idup here; it has already been done in the Generator
     // when yielding
