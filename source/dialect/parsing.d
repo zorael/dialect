@@ -210,7 +210,7 @@ unittest
  +
  +  Throws: `dialect.common.IRCParseException` if an unknown type was encountered.
  +/
-void parseBasic(ref IRCParser parser, ref IRCEvent event) pure
+void parseBasic(ref IRCParser parser, ref IRCEvent event) pure @nogc
 {
     string slice = event.raw;
     string typestring;
@@ -1265,7 +1265,7 @@ void parseSpecialcases(ref IRCParser parser, ref IRCEvent event, ref string slic
  +      event = Reference to the `dialect.defs.IRCEvent` to continue working on.
  +      slice = Reference to the slice of the raw IRC string.
  +/
-void parseGeneralCases(ref IRCParser parser, ref IRCEvent event, ref string slice) pure
+void parseGeneralCases(ref IRCParser parser, ref IRCEvent event, ref string slice) pure @nogc
 {
     import lu.string : beginsWithOneOf;
 
@@ -1492,7 +1492,7 @@ void parseGeneralCases(ref IRCParser parser, ref IRCEvent event, ref string slic
  +      parser = Reference to the current `IRCParser`.
  +      event = Reference to the `dialect.defs.IRCEvent` to continue working on.
  +/
-void postparseSanityCheck(const ref IRCParser parser, ref IRCEvent event)
+void postparseSanityCheck(const ref IRCParser parser, ref IRCEvent event) pure nothrow
 {
     import std.array : Appender;
 
@@ -2338,7 +2338,7 @@ struct IRCParser
     }
 
     /// Create a new `IRCParser` with the passed `dialect.defs.IRCClient` as base.
-    this(IRCClient client) pure
+    this(IRCClient client) pure nothrow
     {
         this.client = client;
         initPostprocessors();
