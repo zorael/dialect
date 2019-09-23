@@ -310,7 +310,7 @@ bool isSpecial(const ref IRCParser parser, const IRCEvent event) pure
  +  Returns:
  +      A decoded string without `\s` in it.
  +/
-string decodeIRCv3String(const string line)
+string decodeIRCv3String(const string line) pure nothrow
 {
     import std.array : Appender;
     import std.string : representation;
@@ -585,7 +585,7 @@ unittest
  +  Returns:
  +      `true` if the string content is judged to be a channel, `false` if not.
  +/
-bool isValidChannel(const string channel, const IRCServer server) pure @nogc
+bool isValidChannel(const string channel, const IRCServer server) pure nothrow @nogc
 in (channel.length, "Tried to determine whether a channel was valid but no channel was given")
 do
 {
@@ -836,7 +836,7 @@ unittest
  +      True if `haystack` contains `needle` in such a way that it is guaranteed
  +      to not be a different nickname.
  +/
-bool containsNickname(const string haystack, const string needle) pure
+bool containsNickname(const string haystack, const string needle) pure nothrow @nogc
 {
     import std.string : indexOf;
 
@@ -1513,7 +1513,8 @@ final class IRCParseException : Exception
      +  Create a new `IRCParseException`, without attaching an
      +  `dialect.defs.IRCEvent`.
      +/
-    this(const string message, const string file = __FILE__, const size_t line = __LINE__) pure
+    this(const string message, const string file = __FILE__,
+        const size_t line = __LINE__) pure nothrow @nogc
     {
         super(message, file, line);
     }
@@ -1522,7 +1523,8 @@ final class IRCParseException : Exception
      +  Create a new `IRCParseException`, attaching an
      +  `dialect.defs.IRCEvent` to it.
      +/
-    this(const string message, const IRCEvent event, const string file = __FILE__, const size_t line = __LINE__) pure
+    this(const string message, const IRCEvent event, const string file = __FILE__,
+        const size_t line = __LINE__) pure nothrow @nogc
     {
         this.event = event;
         super(message, file, line);
@@ -1725,7 +1727,7 @@ unittest
  +      The passed `name` string with uppercase characters replaced as per
  +      the case mappings.
  +/
-auto toLowerCase(const string name, IRCServer.CaseMapping caseMapping) nothrow pure
+auto toLowerCase(const string name, IRCServer.CaseMapping caseMapping) pure nothrow
 {
     import std.string : representation;
     import std.uni : toLower;
