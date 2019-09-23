@@ -485,7 +485,8 @@ void parseTypestring(ref IRCParser parser, ref IRCEvent event, ref string slice)
         }
         catch (ConvException e)
         {
-            throw new IRCParseException(e.msg, event, e.file, e.line);
+            throw new IRCParseException("Unknown typestring " ~ typestring,
+                event, e.file, e.line);
         }
     }
 }
