@@ -106,6 +106,8 @@ struct IRCParser
 
 Instantiate an `IRCParser` with an `IRCClient` (via constructor), and configure its members. Read a string from the server and parse it with `IRCParser.toIRCEvent(string)`.
 
+Parsing is `@safe` with `IRCParser.toIRCEvent(string)`. It's additionally `pure` with `.toIRCEvent(IRCParser, string)` instead, but then you opt out on some features, including postprocessing (Twitch support so far). It uses exceptions to signal errors during parsing, so it's not `nothrow`. Some parts of it create new strings, so it can't be `@nogc`.
+
 ```d
 IRCParser parser;
 
