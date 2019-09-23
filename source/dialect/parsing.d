@@ -469,19 +469,12 @@ void parseTypestring(ref IRCParser parser, ref IRCEvent event, ref string slice)
 
     if ((typestring[0] >= '0') && (typestring[0] <= '9'))
     {
-        try
-        {
-            immutable number = typestring.to!uint;
-            event.num = number;
-            event.type = parser.typenums[number];
+        immutable number = typestring.to!uint;
+        event.num = number;
+        event.type = parser.typenums[number];
 
-            alias T = IRCEvent.Type;
-            event.type = (event.type == T.UNSET) ? T.NUMERIC : event.type;
-        }
-        catch (ConvException e)
-        {
-            throw new IRCParseException(e.msg, event, e.file, e.line);
-        }
+        alias T = IRCEvent.Type;
+        event.type = (event.type == T.UNSET) ? T.NUMERIC : event.type;
     }
     else
     {
