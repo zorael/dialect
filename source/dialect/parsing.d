@@ -99,7 +99,7 @@ package:
  +
  +  Throws: `dialect.common.IRCParseException` if an empty string was passed.
  +/
-IRCEvent toIRCEvent(ref IRCParser parser, const string raw) pure
+public IRCEvent toIRCEvent(ref IRCParser parser, const string raw) pure
 {
     import lu.string : strippedRight;
     import std.uni : toLower;
