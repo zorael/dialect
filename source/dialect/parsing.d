@@ -1478,12 +1478,9 @@ void parseGeneralCases(ref IRCParser parser, ref IRCEvent event, ref string slic
 
 // postparseSanityCheck
 /++
- +  Checks for some specific erroneous edge cases in an
- +  `dialect.defs.IRCEvent`, complains about all of them and corrects some.
+ +  Checks for some specific erroneous edge cases in an `dialect.defs.IRCEvent`.
  +
- +  If version `PrintSanityFailures` it will print warning messages to the
- +  screen, otherwise it will throw an `dialect.common.IRCParseException` instead. It will save
- +  the error messages in `event.errors` in either case.
+ +  Descriptions of the errors are stored in `event.errors`.
  +
  +  Params:
  +      parser = Reference to the current `IRCParser`.
@@ -1521,50 +1518,11 @@ void postparseSanityCheck(const ref IRCParser parser, ref IRCEvent event) pure n
         sink.put("Channel is not a channel");
     }
 
-    if (event.target.nickname == parser.client.nickname)
-    {
-        with (IRCEvent.Type)
-        switch (event.type)
-        {
-        case MODE:
-        case QUERY:
-        case JOIN:
-        case SELFNICK:
-        case RPL_WHOREPLY:
-        case RPL_WHOISUSER:
-        case RPL_WHOISCHANNELS:
-        case RPL_WHOISSERVER:
-        case RPL_WHOISHOST:
-        case RPL_WHOISIDLE:
-        case RPL_LOGGEDIN:
-        case RPL_WHOISACCOUNT:
-        case RPL_WHOISREGNICK:
-        case RPL_ENDOFWHOIS:
-        case RPL_WELCOME:
-        case CLEARCHAT:
-        case CLEARMSG:
-            // Keep bot's nickname as target for these event types.
-            break;
-
-        default:
-            event.target.nickname = string.init;
-            break;
-        }
-    }
-
-    if (event.target.nickname == "*")
-    {
-        // Some events have an asterisk in what we consider the target nickname field. Sometimes.
-        // [loggedin] wolfe.freenode.net (*): "You are now logged in as kameloso." (#900)
-        // Clear it if so, since it conveys no information we care about.
-        // It does not appear to be wholly reproducible, suggesting there's more to it.
-        event.target.nickname = string.init;
-    }
-
     if (!sink.data.length) return;
 
     event.errors = sink.data;
 }
+
 
 // onNotice
 /++
