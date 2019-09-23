@@ -1566,11 +1566,12 @@ void onNotice(ref IRCParser parser, ref IRCEvent event, ref string slice) pure
 
         if (!event.sender.isServer && parser.isFromAuthService(event))
         {
-            import std.uni : toLower;
+            import std.algorithm.searching : canFind;
+            import std.uni : asLowerCase;
 
             //event.sender.class_ = IRCUser.Class.special; // by definition
 
-            if (event.content.toLower.contains("/msg nickserv identify"))
+            if (event.content.asLowerCase.canFind("/msg nickserv identify"))
             {
                 event.type = IRCEvent.Type.AUTH_CHALLENGE;
                 return;
