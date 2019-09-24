@@ -246,7 +246,7 @@ user-type                          ""
                 version(TwitchWarnings)
                 {
                     import std.stdio : writeln;
-                    writeln(event.raw, '$');
+                    writeln('@', event.tags, ' ', event.raw, '$');
                     printTags(tagRange);
                 }
                 goto case "subgift";
@@ -497,7 +497,7 @@ room-id                            "39298218"
                 version(TwitchWarnings)
                 {
                     import std.stdio : writeln;
-                    writeln(event.raw, '$');
+                    writeln('@', event.tags, ' ', event.raw, '$');
                     printTags(tagRange);
                 }
                 break;
@@ -537,7 +537,7 @@ room-id                            "60056333"
                 version(TwitchWarnings)
                 {
                     import std.stdio : writeln;
-                    writeln(event.raw, '$');
+                    writeln('@', event.tags, ' ', event.raw, '$');
                     printTags(tagRange);
                 }
                 goto case "giftpaidupgrade";
@@ -802,7 +802,7 @@ user-type                          ""
                     {
                         import std.stdio : writeln;
                         writeln("msg-id ", value, " overwrote an aux: ", event.aux);
-                        writeln(event.raw, '$');
+                        writeln('@', event.tags, ' ', event.raw, '$');
                         printTags(tagRange, event.aux);
                     }
                 }
@@ -825,7 +825,7 @@ user-type                          ""
                     import std.algorithm.iteration : joiner;
                     import std.stdio : writeln;
                     writeln("Unknown Twitch msg-id: ", value);
-                    writeln(event.raw, '$');
+                    writeln('@', event.tags, ' ', event.raw, '$');
                     printTags(tagRange);
                 }
                 break;
@@ -991,7 +991,7 @@ room-id             "31457014"
                 {
                     import std.stdio : writeln;
                     writeln(key, " overwrote a count: ", event.count);
-                    writeln(event.raw, '$');
+                    writeln('@', event.tags, ' ', event.raw, '$');
                     printTags(tagRange, event.count.to!string);
                 }
             }
@@ -1019,7 +1019,7 @@ room-id             "31457014"
                 {
                     import std.stdio : writeln;
                     writeln(key, " overwrote an aux: ", event.aux);
-                    writeln(event.raw, '$');
+                    writeln('@', event.tags, ' ', event.raw, '$');
                     printTags(tagRange, event.aux);
                 }
             }
@@ -1073,7 +1073,7 @@ room-id             "31457014"
                 {
                     import std.stdio : writeln;
                     writeln(key, " overwrote a count: ", event.count);
-                    writeln(event.raw, '$');
+                    writeln('@', event.tags, ' ', event.raw, '$');
                     printTags(tagRange, event.count.to!string);
                 }
             }
@@ -1100,7 +1100,7 @@ room-id             "31457014"
                 {
                     import std.stdio : writeln;
                     writeln(key, " overwrote an altcount: ", event.altcount);
-                    writeln(event.raw, '$');
+                    writeln('@', event.tags, ' ', event.raw, '$');
                     printTags(tagRange, event.altcount.to!string);
                 }
             }
@@ -1261,7 +1261,7 @@ room-id             "31457014"
                 import std.stdio : writefln, writeln;
 
                 writefln("Unknown Twitch tag: %s = %s", key, value);
-                writeln(event.raw, '$');
+                writeln('@', event.tags, ' ', event.raw, '$');
                 printTags(tagRange);
             }
             break;
