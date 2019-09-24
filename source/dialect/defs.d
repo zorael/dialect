@@ -1071,6 +1071,12 @@ struct IRCUser
         /// The Twitch colour (RRGGBB) to tint the user's nickname with.
         string colour;
     }
+    else
+    {
+        /// Deprecated remnant of when `alias_` wasn't versioned TwitchSupport
+        deprecated("Version your code to use dialect build config `twitch`")
+        string alias_;
+    }
 
     /// Create a new `IRCUser` based on a `*!*@*` mask string.
     this(string userstring) pure
