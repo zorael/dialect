@@ -59,7 +59,7 @@ void parseTwitchTags(ref IRCParser parser, ref IRCEvent event)
     {
         import lu.string : contains, nom;
 
-        immutable key = tag.nom("=");
+        immutable key = tag.nom('=');
         immutable value = tag;
 
         version(TwitchWarnings)
