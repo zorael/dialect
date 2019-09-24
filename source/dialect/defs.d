@@ -1024,8 +1024,6 @@ struct IRCServer
  +/
 struct IRCUser
 {
-    @safe:
-
     /// Classifiers; roles which a user is one of.
     enum Class
     {
@@ -1131,7 +1129,7 @@ struct IRCUser
      +      `true` if the sender nickname and/or address looks to be a server's,
      +      `false` if not.
      +/
-    bool isServer() pure @property const @safe
+    bool isServer() const @property pure nothrow @nogc
     {
         import std.string : indexOf;
         return !nickname.length && (address.indexOf('.') != -1);
@@ -1168,7 +1166,7 @@ struct IRCUser
      +  Returns:
      +      `true` if the users match, `false` if not.
      +/
-    bool opEquals(const IRCUser that) pure nothrow @safe const
+    bool opEquals(const IRCUser that) const pure nothrow @nogc
     {
         return (this.nickname == that.nickname) &&
             (this.ident == that.ident) && (this.address == that.address);
@@ -1180,7 +1178,7 @@ struct IRCUser
      +  Returns:
      +      A hash.
      +/
-    size_t toHash() pure nothrow @safe const
+    size_t toHash() const pure nothrow
     {
         return (nickname ~ ident ~ address).hashOf;
     }
@@ -2230,7 +2228,7 @@ struct IRCChannel
          +  Returns:
          +      `true` if the `Mode`s match, `false` if not.
          +/
-        bool opEquals(const Mode that) pure nothrow const
+        bool opEquals(const Mode that) const pure nothrow @nogc
         {
             // Ignore exemptions when comparing Modes
             immutable charMatch = (this.modechar == that.modechar);
@@ -2250,7 +2248,7 @@ struct IRCChannel
          +  Returns:
          +      A hash.
          +/
-        size_t toHash() pure nothrow @safe const
+        size_t toHash() const pure nothrow
         {
             import std.conv : text;
 
