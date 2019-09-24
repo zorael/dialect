@@ -3,10 +3,9 @@
  +  `IRCEvent`s and thereto related objects like `IRCServer` and `IRCUser`.
  +
  +  Things related to actually parsing IRC do not belong here; what's here should only be
- +  applicable to be used as a header. Some methods are included though, like
- +  some `toString`s and `opEqual`s.
+ +  applicable to be used as a header.
  +
- +  The only dependency should be `lu.uda`.
+ +  The only lu dependency should be `lu.uda`.
  +/
 module dialect.defs;
 
@@ -1178,44 +1177,6 @@ struct IRCUser
     {
         return (nickname ~ ident ~ address).hashOf;
     }
-
-    /++
-     +  Formats this `IRCUser` into a humanly-readable string, for use when
-     +  e.g. printing all users to the local terminal.
-     +
-     +  Params:
-     +      sink = Reference to the output range to write the string to.
-     +/
-    void toString(Sink)(auto ref Sink sink) const
-    if (isOutputRange!(Sink, char[]))
-    {
-        import std.format : formattedWrite;
-
-        sink.formattedWrite("%s/%s[%s]!%s@%s (%s)",
-            nickname,
-            alias_.length ? alias_ : "-",
-            account,
-            ident,
-            address,
-            class_
-        );
-    }
-
-    ///
-    unittest
-    {
-        import std.array : Appender;
-
-        Appender!string sink;
-
-        IRCUser user = IRCUser("nickname!ident@address.tld");
-        user.alias_ = "alias";
-        user.account = "account";
-        user.class_ = Class.whitelist;
-        user.toString(sink);
-
-        assert((sink.data == "nickname/alias[account]!ident@address.tld (whitelist)"), sink.data);
-    }
 }
 
 
@@ -2289,45 +2250,6 @@ struct IRCChannel
             scope(failure) assert(0, "Logic error, could not get user.hashOf.text in Mode.toHash");
             return (modechar ~ data ~ user.hashOf.text ~ channel ~ negated ? "negated" : "not").hashOf;
         }
-
-        /++
-         +  Formats this `Mode` into a humanly-readable string, for use when
-         +  e.g. printing all channels (with their Modes) to the local terminal.
-         +
-         +  Params:
-         +      sink = Reference to the output range to write the string to.
-         +/
-        void toString(Sink)(auto ref Sink sink) const
-        if (isOutputRange!(Sink, char[]))
-        {
-            import std.format : formattedWrite;
-
-            sink.formattedWrite("%c%c %s!%s@%s^%d %s (%s)",
-                negated ? '-' : '+',
-                modechar,
-                user.nickname.length ? user.nickname : "*",
-                user.ident.length ? user.ident : "*",
-                user.address.length ? user.address : "*",
-                exceptions.length,
-                channel.length ? channel : "#*",
-                data.length ? data : "*");
-        }
-
-        ///
-        unittest
-        {
-            import std.array : Appender;
-
-            Appender!string sink;
-
-            Mode mode;
-            mode.user = IRCUser("nickname!~ident@address.tld");
-            mode.data = "data";
-            mode.modechar = 'k';
-            mode.toString(sink);
-
-            assert((sink.data == "+k nickname!~ident@address.tld^0 #* (data)"), sink.data);
-        }
     }
 
     /// The channel name.
@@ -2384,45 +2306,6 @@ struct IRCChannel
 
     /// When the channel was created, expressed in UNIX time.
     long created;
-
-    /++
-     +  Formats this `IRCChannel` into a humanly-readable string, for use when
-     +  e.g. printing all channels to the local terminal.
-     +
-     +  Params:
-     +      sink = Reference to the output range to write the string to.
-     +/
-    void toString(Sink)(auto ref Sink sink) const
-    if (isOutputRange!(Sink, char[]))
-    {
-        import std.format : formattedWrite;
-
-        sink.formattedWrite("%s u:%d m:%s+%d",
-            name,
-            users.length,
-            modechars,
-            modes.length,
-        );
-    }
-
-    ///
-    unittest
-    {
-        import std.array : Appender;
-
-        Appender!string sink;
-
-        IRCChannel channel;
-        channel.name = "#channel";
-        channel.users["abc"] = true;
-        channel.users["def"] = true;
-        channel.users["ghi"] = true;
-        channel.modechars = "asdf";
-        channel.modes.length = 3;
-        channel.toString(sink);
-
-        assert((sink.data == "#channel u:3 m:asdf+3"), sink.data);
-    }
 }
 
 
