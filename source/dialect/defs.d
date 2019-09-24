@@ -17,6 +17,7 @@ final:
 @safe:
 pure:
 nothrow:
+@nogc:
 
 
 // IRCEvent
