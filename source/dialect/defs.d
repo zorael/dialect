@@ -1040,9 +1040,6 @@ struct IRCUser
     /// The user's nickname.
     string nickname;
 
-    /// The alternate "display name" of the user, such as those on Twitch.
-    string alias_;
-
     /// The user's IDENT identification.
     string ident;
 
@@ -1065,6 +1062,9 @@ struct IRCUser
     version(TwitchSupport)
     {
         // Twitch has some extra features.
+
+        /// The alternate "display name" of the user.
+        string alias_;
 
         /// The Twitch badges this user has.
         string badges;
