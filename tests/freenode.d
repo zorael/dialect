@@ -24,7 +24,7 @@ unittest
     server.daemon = IRCServer.Daemon.ircdseven;
     */
 
-    with (parser.client)
+    with (parser)
     {
         assert((server.daemonstring == "ircd-seven-1.1.7"), server.daemonstring);
         assert((server.daemon == IRCServer.Daemon.ircdseven), Enum!(IRCServer.Daemon).toString(server.daemon));
@@ -47,7 +47,7 @@ unittest
     server.caseMapping = IRCServer.CaseMapping.rfc1459;
     */
 
-    with (parser.client)
+    with (parser)
     {
         assert((server.daemonstring == "freenode"), server.daemonstring);
         assert((server.caseMapping == IRCServer.CaseMapping.rfc1459), Enum!(IRCServer.CaseMapping).toString(server.caseMapping));
@@ -72,7 +72,7 @@ unittest
     server.extbanTypes = "jrxz";
     */
 
-    with (parser.client)
+    with (parser)
     {
         assert((server.maxNickLength == 16), server.maxNickLength.to!string);
         assert((server.maxChannelLength == 50), server.maxChannelLength.to!string);
@@ -341,7 +341,7 @@ unittest
 unittest
 {
     IRCParser parser;
-    with (parser.client)
+    with (parser)
     {
         server.address = "irc.freenode.net";
         server.daemon = IRCServer.Daemon.ircdseven;
@@ -354,7 +354,7 @@ unittest
         server.prefixes = "ov";
     }
 
-    parser.typenums = typenumsOf(parser.client.server.daemon);
+    parser.typenums = typenumsOf(parser.server.daemon);
 
     {
         immutable event = parser.toIRCEvent(":nick!~identh@unaffiliated/nick JOIN #freenode login :realname");
@@ -867,7 +867,7 @@ unittest
             assert((content == "EXCEPTS INVEX MODES=eIbq,k,flj,CFLMPQScgimnprstz CHANLIMIT=#:120 PREFIX=(ov)@+ MAXLIST=bqeI:100 MODES=4 NETWORK=freenode STATUSMSG=@+ CALLERID=g CASEMAPPING=rfc1459"), content);
             assert((num == 5), num.to!string);
         }
-        assert((parser.client.server.network == "freenode"), parser.client.server.network);
+        assert((parser.server.network == "freenode"), parser.server.network);
     }
     {
         immutable event = parser.toIRCEvent(":asimov.freenode.net 004 kameloso^ asimov.freenode.net ircd-seven-1.1.4 DOQRSZaghilopswz CFILMPQSbcefgijklmnopqrstvz bkloveqjfI");
@@ -881,8 +881,8 @@ unittest
             assert((aux == "ircd-seven-1.1.4"), aux);
             assert((num == 4), num.to!string);
         }
-        assert(parser.client.server.daemon == IRCServer.daemon.ircdseven);
-        assert(parser.client.server.daemonstring == "ircd-seven-1.1.4");
+        assert(parser.server.daemon == IRCServer.daemon.ircdseven);
+        assert(parser.server.daemonstring == "ircd-seven-1.1.4");
     }
     {
         immutable event = parser.toIRCEvent(":asimov.freenode.net 333 kameloso^ #garderoben klarrt!~bsdrouter@h150n13-aahm-a11.ias.bredband.telia.com 1476294377");

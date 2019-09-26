@@ -25,7 +25,7 @@ unittest
     server.daemonstring = "1.5.24/uk_UA.KOI8-U";
     */
 
-    with (parser.client)
+    with (parser)
     {
         assert((server.daemon == IRCServer.Daemon.unknown), Enum!(IRCServer.Daemon).toString(server.daemon));
         assert((server.daemonstring == "1.5.24/uk_UA.KOI8-U"), server.daemonstring);
@@ -54,7 +54,7 @@ unittest
     server.chantypes = "#&!+";
     */
 
-    with (parser.client)
+    with (parser)
     {
         assert((server.daemon == IRCServer.Daemon.rusnet), Enum!(IRCServer.Daemon).toString(server.daemon));
         assert((server.daemonstring == "RusNet"), server.daemonstring);

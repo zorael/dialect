@@ -25,7 +25,7 @@ unittest
     server.daemonstring = "InspIRCd-2.0";
     */
 
-    with (parser.client)
+    with (parser)
     {
         assert((server.daemon == IRCServer.Daemon.inspircd), Enum!(IRCServer.Daemon).toString(server.daemon));
         assert((server.daemonstring == "InspIRCd-2.0"), server.daemonstring);
@@ -55,7 +55,7 @@ unittest
     server.invexChar = 'I';
     */
 
-    with (parser.client)
+    with (parser)
     {
         assert((server.maxChannelLength == 64), server.maxChannelLength.to!string);
         assert((server.aModes == "Ibe"), server.aModes);
@@ -87,7 +87,7 @@ unittest
     server.prefixes = "qaohv";
     */
 
-    with (parser.client)
+    with (parser)
     {
         assert((server.network == "irchighway"), server.network);
         assert((server.daemonstring == "irchighway"), server.daemonstring);

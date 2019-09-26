@@ -9,6 +9,7 @@ unittest
     IRCParser parser;
     parser.initPostprocessors();
 
+    with (parser)
     with (parser.client)
     {
         nickname = "kameloso";
@@ -27,7 +28,7 @@ unittest
         }
     }
 
-    with (parser.client)
+    with (parser)
     {
         assert((server.daemon == IRCServer.Daemon.twitch), Enum!(IRCServer.Daemon).toString(server.daemon));
         assert((server.network == "Twitch"), server.network);
@@ -220,6 +221,7 @@ unittest
     IRCParser parser;
     parser.initPostprocessors();
 
+    with (parser)
     with (parser.client)
     {
         nickname = "zorael";
@@ -239,7 +241,7 @@ unittest
         server.prefixes = "ov";
     }
 
-    parser.typenums = typenumsOf(parser.client.server.daemon);
+    parser.typenums = typenumsOf(parser.server.daemon);
 
     {
         immutable event = parser.toIRCEvent("@badge-info=;badges=;color=#5F9EA0;display-name=Zorael;emote-sets=0,185411,771823,1511983;user-id=22216721;user-type= :tmi.twitch.tv GLOBALUSERSTATE");

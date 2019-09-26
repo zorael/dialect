@@ -25,7 +25,7 @@ unittest
     server.daemonstring = "2.11.2p3";
     */
 
-    with (parser.client)
+    with (parser)
     {
         assert((server.daemon == IRCServer.Daemon.unknown), Enum!(IRCServer.Daemon).toString(server.daemon));
         assert((server.daemonstring == "2.11.2p3"), server.daemonstring);
@@ -52,7 +52,7 @@ unittest
     server.chantypes = "#&!+";
     */
 
-    with (parser.client)
+    with (parser)
     {
         assert((server.maxNickLength == 15), server.maxNickLength.to!string);
         assert((server.maxChannelLength == 50), server.maxChannelLength.to!string);
@@ -82,7 +82,7 @@ unittest
     server.invexChar = 'I';
     */
 
-    with (parser.client)
+    with (parser)
     {
         assert((server.daemon == IRCServer.Daemon.ircnet), Enum!(IRCServer.Daemon).toString(server.daemon));
         assert((server.network == "IRCnet"), server.network);

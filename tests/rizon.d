@@ -35,7 +35,7 @@ unittest
     server.daemonstring = "plexus-4(hybrid-8.1.20)";
     */
 
-    with (parser.client)
+    with (parser)
     {
         assert((server.daemon == IRCServer.Daemon.hybrid), Enum!(IRCServer.Daemon).toString(server.daemon));
         assert((server.daemonstring == "plexus-4(hybrid-8.1.20)"), server.daemonstring);
@@ -64,7 +64,7 @@ unittest
     server.invexChar = 'I';
     */
 
-    with (parser.client)
+    with (parser)
     {
         assert((server.daemon == IRCServer.Daemon.rizon), Enum!(IRCServer.Daemon).toString(server.daemon));
         assert((server.network == "Rizon"), server.network);
@@ -95,7 +95,7 @@ unittest
     server.dModes = "BCMNORScimnpstz";
     */
 
-    with (parser.client)
+    with (parser)
     {
         assert((server.maxChannelLength == 50), server.maxChannelLength.to!string);
         assert((server.aModes == "beI"), server.aModes);

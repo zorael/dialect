@@ -25,7 +25,7 @@ unittest
     server.daemonstring = "hybrid-7.2.2+oftc1.7.3";
     */
 
-    with (parser.client)
+    with (parser)
     {
         assert((server.daemon == IRCServer.Daemon.hybrid), Enum!(IRCServer.Daemon).toString(server.daemon));
         assert((server.daemonstring == "hybrid-7.2.2+oftc1.7.3"), server.daemonstring);
@@ -50,7 +50,7 @@ unittest
     server.caseMapping = IRCServer.CaseMapping.rfc1459;
     */
 
-    with (parser.client)
+    with (parser)
     {
         assert((server.network == "OFTC"), server.network);
         assert((server.daemonstring == "OFTC"), server.daemonstring);
@@ -79,7 +79,7 @@ unittest
     server.invexChar = 'I';
     */
 
-    with (parser.client)
+    with (parser)
     {
         assert((server.maxChannelLength == 50), server.maxChannelLength.to!string);
         assert((server.aModes == "eIqb"), server.aModes);

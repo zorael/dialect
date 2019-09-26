@@ -25,7 +25,7 @@ unittest
     server.daemonstring = "u2.10.12.18(gs2)";
     */
 
-    with (parser.client)
+    with (parser)
     {
         assert((server.daemon == IRCServer.Daemon.u2), Enum!(IRCServer.Daemon).toString(server.daemon));
         assert((server.daemonstring == "u2.10.12.18(gs2)"), server.daemonstring);
@@ -47,7 +47,7 @@ unittest
     server.maxNickLength = 30;
     */
 
-    with (parser.client)
+    with (parser)
     {
         assert((server.maxNickLength == 30), server.maxNickLength.to!string);
     }
@@ -74,7 +74,7 @@ unittest
     server.caseMapping = IRCServer.CaseMapping.rfc1459;
     */
 
-    with (parser.client)
+    with (parser)
     {
         assert((server.network == "GameSurge"), server.network);
         assert((server.daemonstring == "GameSurge"), server.daemonstring);

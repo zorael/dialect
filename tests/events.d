@@ -139,8 +139,8 @@ unittest
 
     immutable daemon = IRCServer.Daemon.inspircd;
     parser.typenums = typenumsOf(daemon);
-    parser.client.server.daemon = daemon;
-    parser.client.server.daemonstring = "inspircd";
+    parser.server.daemon = daemon;
+    parser.server.daemonstring = "inspircd";
 
     {
         immutable event = parser.toIRCEvent(":cadance.canternet.org 953 kameloso^ #flerrp :End of channel exemptchanops list");
@@ -178,8 +178,8 @@ unittest
 
     with (parser)
     {
-        assert(clientUpdated);
-        assert((client.server.resolvedAddress == "irc.portlane.se"), client.server.resolvedAddress);
+        assert(serverUpdated);
+        assert((server.resolvedAddress == "irc.portlane.se"), server.resolvedAddress);
     }
 }
 
@@ -189,7 +189,7 @@ unittest
     IRCParser parser;
     parser.client.nickname = "kameloso";  // Because we removed the default value
 
-    with (parser.client)
+    with (parser)
     {
         server.address = "efnet.port80.se";
     }
@@ -207,7 +207,7 @@ unittest
         }
     }
 
-    with (parser.client)
+    with (parser)
     {
         assert((server.daemon == IRCServer.Daemon.ratbox), Enum!(IRCServer.Daemon).toString(server.daemon));
         assert((server.daemonstring == "ircd-ratbox-3.0.9"), server.daemonstring);
@@ -225,7 +225,7 @@ unittest
         }
     }
 
-    with (parser.client)
+    with (parser)
     {
         assert((server.network == "EFnet"), server.network);
         assert((server.daemonstring == "EFnet"), server.daemonstring);
@@ -245,7 +245,7 @@ unittest
     IRCParser parser;
     parser.client.nickname = "kameloso";  // Because we removed the default value
 
-    with (parser.client)
+    with (parser)
     {
         server.address = "bitcoin.uk.eu.dal.net";
     }
@@ -261,7 +261,7 @@ unittest
         }
     }
 
-    with (parser.client)
+    with (parser)
     {
         assert((server.resolvedAddress == "bitcoin.uk.eu.dal.net"), server.resolvedAddress);
     }
@@ -279,7 +279,7 @@ unittest
         }
     }
 
-    with (parser.client)
+    with (parser)
     {
         assert((server.daemon == IRCServer.Daemon.bahamut), Enum!(IRCServer.Daemon).toString(server.daemon));
         assert((server.daemonstring == "bahamut-2.1.4"), server.daemonstring);
@@ -297,7 +297,7 @@ unittest
         }
     }
 
-    with (parser.client)
+    with (parser)
     {
         assert((server.network == "DALnet"), server.network);
         assert((server.daemonstring == "DALnet"), server.daemonstring);
@@ -319,7 +319,7 @@ unittest
         }
     }
 
-    with (parser.client)
+    with (parser)
     {
         assert((server.aModes == "beI"), server.aModes);
         assert((server.bModes == "k"), server.bModes);
@@ -377,7 +377,7 @@ unittest
     IRCParser parser;
     parser.client.nickname = "kameloso";  // Because we removed the default value
 
-    with (parser.client)
+    with (parser)
     {
         server.address = "irc.geekshed.net";
     }
@@ -393,7 +393,7 @@ unittest
         }
     }
 
-    with (parser.client)
+    with (parser)
     {
         assert((server.resolvedAddress == "fe-00107.GeekShed.net"), server.resolvedAddress);
     }
@@ -422,7 +422,7 @@ unittest
         }
     }
 
-    with (parser.client)
+    with (parser)
     {
         assert((server.daemon == IRCServer.Daemon.unreal), Enum!(IRCServer.Daemon).toString(server.daemon));
         assert((server.daemonstring == "Unreal3.2.10.3-gs"), server.daemonstring);
@@ -440,7 +440,7 @@ unittest
         }
     }
 
-    with (parser.client)
+    with (parser)
     {
         assert((server.maxNickLength == 30), server.maxNickLength.to!string);
         assert((server.maxChannelLength == 32), server.maxChannelLength.to!string);
@@ -458,7 +458,7 @@ unittest
         }
     }
 
-    with (parser.client)
+    with (parser)
     {
         assert((server.network == "GeekShed"), server.network);
         assert((server.daemonstring == "GeekShed"), server.daemonstring);

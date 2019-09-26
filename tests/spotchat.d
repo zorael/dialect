@@ -25,7 +25,7 @@ unittest
     server.daemonstring = "InspIRCd-2.0";
     */
 
-    with (parser.client)
+    with (parser)
     {
         assert((server.daemon == IRCServer.Daemon.inspircd), Enum!(IRCServer.Daemon).toString(server.daemon));
         assert((server.daemonstring == "InspIRCd-2.0"), server.daemonstring);
@@ -55,7 +55,7 @@ unittest
     server.invexChar = 'I';
     */
 
-    with (parser.client)
+    with (parser)
     {
         assert((server.maxChannelLength == 64), server.maxChannelLength.to!string);
         assert((server.aModes == "Ibeg"), server.aModes);
@@ -87,7 +87,7 @@ unittest
     server.prefixes = "Yqaohv";
     */
 
-    with (parser.client)
+    with (parser)
     {
         assert((server.network == "SpotChat"), server.network);
         assert((server.daemonstring == "SpotChat"), server.daemonstring);
@@ -177,7 +177,7 @@ unittest
     IRCParser parser;
     parser.client.nickname = "kameloso";  // Because we removed the default value
 
-    with (parser.client)
+    with (parser)
     {
         server.daemon = IRCServer.Daemon.inspircd;
         server.network = "SpotChat";
@@ -199,7 +199,7 @@ unittest
     }
 
     /*
-    with (parser.client)
+    with (parser)
     {
         server.maxChannelLength = 64;
         server.aModes = "Ibeg";
@@ -210,7 +210,7 @@ unittest
     }
     */
 
-    with (parser.client)
+    with (parser)
     {
         assert((server.maxChannelLength == 64), server.maxChannelLength.to!string);
         assert((server.aModes == "Ibeg"), server.aModes);
