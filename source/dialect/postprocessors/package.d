@@ -56,12 +56,13 @@ import std.meta : AliasSeq;
 
 version(TwitchSupport)
 {
-    mixin(tryImportMixin("dialect.postprocessors.twitch", "TwitchPostprocessor"));
+    //mixin(tryImportMixin("dialect.postprocessors.twitch", "TwitchPostprocessor"));
+    import dialect.postprocessors.twitch : TwitchPostprocessor;
 }
 else
 {
     // Non-twitch build but we still need the alias for `EnabledPostprocessors` below.
-    public alias TwitchPostprocessor = AliasSeq!();
+    alias TwitchPostprocessor = AliasSeq!();
 }
 
 
