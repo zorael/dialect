@@ -289,6 +289,30 @@ bool isSpecial(const ref IRCParser parser, const IRCUser sender) pure
 }
 
 
+// isSpecial
+/++
+ +  Judges whether or not the sender of an `dialect.defs.IRCEvent` is *special*.
+ +
+ +  Special senders include services and staff, administrators and the like. The
+ +  use of this is contested and the notion may be removed at a later date.
+ +
+ +  Deprecated oveload that takes an `dialect.defs.IRCEvent` instead of the real
+ +  overload that takes an `dialect.defs.IRCUser`.
+ +
+ +  Params:
+ +      parser = Reference to the current `dialect.parsing.IRCParser`.
+ +      event = `dialect.defs.IRCEvent` to examine.
+ +
+ +  Returns:
+ +      `true` if it passes the special checks, `false` if not.
+ +/
+deprecated("Use the `isSpecial(IRCParser, IRCUser)` overload")
+bool isSpecial(const ref IRCParser parser, const IRCEvent event) pure
+{
+    return isSpecial(parser, event.sender);
+}
+
+
 // decodeIRCv3String
 /++
  +  Decodes an IRCv3 tag string, replacing some characters.
