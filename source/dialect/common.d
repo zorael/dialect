@@ -415,12 +415,12 @@ unittest
 
 // isFromAuthService
 /++
- +  Inspects an `dialect.defs.IRCEvent` and judges whether or not it is from services.
+ +  Inspects an `dialect.defs.IRCUser` and judges whether or not it is services.
  +
  +  Example:
  +  ---
- +  IRCEvent event;
- +  if (parser.isFromAuthService(event))
+ +  IRCUser user;
+ +  if (parser.isFromAuthService(user))
  +  {
  +      // ...
  +  }
@@ -428,18 +428,19 @@ unittest
  +
  +  Params:
  +      parser = Reference to the current `dialect.parsing.IRCParser`.
- +      event = `dialect.defs.IRCEvent` to examine.
+ +      sender = `dialect.defs.IRCUser` to examine.
  +
  +  Returns:
- +      `true` if the sender is judged to be from nickname services, `false` if not.
+ +      `true` if the `sender` is judged to be from nickname services, `false` if not.
  +/
-bool isFromAuthService(const ref IRCParser parser, const IRCEvent event) pure
+bool isFromAuthService(const ref IRCParser parser, const IRCUser sender) pure
 {
     import lu.string : sharedDomains;
     import std.uni : toLower;
 
-    with (event)
-    switch (event.sender.nickname.toLower)
+    immutable lowerNickname = sender.nickname.toLower;
+
+    switch (lowerNickname)
     {
     case "nickserv":
     case "saslserv":
@@ -461,8 +462,7 @@ bool isFromAuthService(const ref IRCParser parser, const IRCEvent event) pure
         }
         break;
 
-    case "global":
-    case "chanserv":
+    /*case "chanserv":
     case "operserv":
     case "memoserv":
     case "hostserv":
@@ -475,10 +475,11 @@ bool isFromAuthService(const ref IRCParser parser, const IRCEvent event) pure
     case "helpserv":
     case "statserv":
     case "userserv":
+    case "spamserv":*/
+    case "global":
     case "alis":
     case "chanfix":
     case "c":
-    case "spamserv":
     case "services.":
         // Known services that are not nickname services
         return false;
@@ -492,9 +493,15 @@ bool isFromAuthService(const ref IRCParser parser, const IRCEvent event) pure
         return ((sender.ident == "AuthServ") && (sender.address == "Services.GameSurge.net"));
 
     default:
+        import std.algorithm.searching : endsWith;
+
         if (sender.address.contains("/staff/"))
         {
             // Staff notice
+            return false;
+        }
+        else if (lowerNickname.endsWith("serv"))
+        {
             return false;
         }
 
@@ -505,8 +512,8 @@ bool isFromAuthService(const ref IRCParser parser, const IRCEvent event) pure
         return false;
     }
 
-    if ((sharedDomains(event.sender.address, parser.server.address) >= 2) ||
-        (sharedDomains(event.sender.address, parser.server.resolvedAddress) >= 2))
+    if ((sharedDomains(sender.address, parser.server.address) >= 2) ||
+        (sharedDomains(sender.address, parser.server.resolvedAddress) >= 2))
     {
         return true;
     }
