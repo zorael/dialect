@@ -2293,7 +2293,19 @@ struct IRCParser
         return event;
     }
 
+    /++
+     +  Create a new `IRCParser` with the passed `dialect.defs.IRCClient` and
+     +  `dialect.defs.IRCServer` as base context for parsing.
+     +/
+    this(IRCClient client, IRCServer server) pure nothrow
+    {
+        this.client = client;
+        this.server = server;
+        initPostprocessors();
+    }
+
     /// Create a new `IRCParser` with the passed `dialect.defs.IRCClient` as base.
+    deprecated("Use the `IRCParser(IRCClient, IRCServer)` overload")
     this(IRCClient client) pure nothrow
     {
         this.client = client;
