@@ -237,8 +237,7 @@ bool isSpecial(const ref IRCParser parser, const IRCEvent event) pure
             }
             break;
 
-        case "global":
-        case "chanserv":
+        /*case "chanserv":
         case "operserv":
         case "memoserv":
         case "hostserv":
@@ -251,10 +250,11 @@ bool isSpecial(const ref IRCParser parser, const IRCEvent event) pure
         case "helpserv":
         case "statserv":
         case "userserv":
+        case "spamserv":*/
+        case "global":
         case "alis":
         case "chanfix":
         case "c":
-        case "spamserv":
         case "services.":
             // Known services that are not nickname services
             return true;
@@ -268,7 +268,8 @@ bool isSpecial(const ref IRCParser parser, const IRCEvent event) pure
             return ((sender.ident == "AuthServ") && (sender.address == "Services.GameSurge.net"));
 
         default:
-            break;
+            import std.algorithm.searching : endsWith;
+            return service.endsWith("serv");
         }
 
         if ((parser.server.daemon != IRCServer.Daemon.twitch) &&
