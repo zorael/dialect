@@ -2319,10 +2319,13 @@ struct IRCParser
         }
     }
 
-    version(FlagUpdatedClient)
+    version(FlagAsUpdated)
     {
         /// Whether or not parsing updated its internal `IRCClient`.
         bool clientUpdated;
+
+        /// Whether or not parsing updated its internal `IRCServer`.
+        bool serverUpdated;
     }
 }
 
