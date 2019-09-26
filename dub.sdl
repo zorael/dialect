@@ -15,7 +15,7 @@ importPaths "source"
 dependency "lu:core" version="~>0.1.0"
 dependency "lu:meld" version="~>0.1.0"
 
-versions "FlagUpdatedClient"
+versions "FlagAsUpdated"
 
 configuration "library" {
     // Mustn't be empty
