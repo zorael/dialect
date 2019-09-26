@@ -4,7 +4,9 @@ IRC parsing library with support for a wide variety of server daemons.
 
 Note that while IRC is standardised, servers still come in [many flavours](https://upload.wikimedia.org/wikipedia/commons/thumb/d/d5/IRCd_software_implementations3.svg/1533px-IRCd_software_implementations3.svg.png), some of which [outright conflict](http://defs.ircdocs.horse/defs/numerics.html) with others. If something doesn't immediately work, generally it's because we simply haven't encountered that type of event before, and so no rules for how to parse it have yet been written.
 
-Used in the [kameloso](https://github.com/zorael/kameloso) bot. However, while dialect unavoidably caters to its needs it is independent from it. Likely some remnants of code that violate separation of concern still exist, and they are to be considered bugs.
+Used in the [kameloso](https://github.com/zorael/kameloso) bot. However, while dialect unavoidably caters to its needs, it is independent from it. Likely some remnants of code that violate separation of concern still exist, and they are to be considered bugs.
+
+It uses exceptions to signal errors during parsing, so it's not `nothrow`. Some parts of it create new strings, so it can't be `@nogc`. It is however `pure` and `@safe` with the standard "library" build configuration.
 
 **Please report bugs. Unreported bugs can only be fixed by accident.**
 
@@ -20,8 +22,8 @@ struct IRCEvent
     Type type;
     string raw;
     IRCUser sender;
-    string channel;
     IRCUser target;
+    string channel;
     string content;
     string aux;
     string tags;
@@ -40,14 +42,10 @@ struct IRCEvent
 
 struct IRCUser
 {
-    enum Class { ... }
-
-    Class class_;
     string nickname;
     string ident;
     string address;
     string account;
-    long updated;
 
     version(TwitchSupport)
     {
@@ -72,11 +70,9 @@ struct IRCChannel
 struct IRCServer
 {
     enum Daemon { ... }
-    enum CaseMapping { ... }  // types of case-sensitivity
 
     string address;
     ushort port;
-    Daemon daemon;
 
     // More internals
 }
@@ -87,7 +83,6 @@ struct IRCClient
     string user;
     string ident;
     string realName;
-    IRCServer server;
 
     // More internals
 }
@@ -95,6 +90,7 @@ struct IRCClient
 struct IRCParser
 {
     IRCClient client;
+    IRCServer server;
 
     IRCEvent toIRCEvent(const string);  // <--
 }
@@ -102,14 +98,21 @@ struct IRCParser
 
 # How to use
 
-> This assumes you have a program set up to read information from an IRC server. This is not a bot framework; for that you're better off with the full [kameloso](https://github.com/zorael/kameloso) and writing a plugin that suits your needs.
+> This assumes you have a program set up to read from an IRC server. This is not a bot framework; for that you're better off with the full [kameloso](https://github.com/zorael/kameloso) and writing a plugin that suits your needs.
 
-Instantiate an `IRCParser` with an `IRCClient` (via constructor), and configure its members. Read a string from the server and parse it with `IRCParser.toIRCEvent(string)`.
-
-Parsing is `@safe` with `IRCParser.toIRCEvent(string)`. It's additionally `pure` with `.toIRCEvent(IRCParser, string)` instead, but then you opt out on some features, including postprocessing (Twitch support so far). It uses exceptions to signal errors during parsing, so it's not `nothrow`. Some parts of it create new strings, so it can't be `@nogc`.
+* Instantiate an `IRCClient` and configure its members. (required for context when parsing)
+* Instantiate an `IRCServer` and configure its members. (it may work without but just give it a host address)
+* Instantiate an `IRCParser` with your client and server via constructor. Pass it by `ref` if passed around between functions.
+* Read a string from the server and parse it into an `IRCEvent` with `yourParser.toIRCEvent(string)`.
 
 ```d
-IRCParser parser;
+IRCClient client;
+client.nickname = "...";
+
+IRCServer server;
+server.address = "...";
+
+IRCParser parser = IRCParser(client, server);
 
 string fromServer = ":zorael!~NaN@address.tld MODE #channel +v nickname";
 IRCEvent event = parser.toIRCEvent(fromServer);
@@ -140,16 +143,21 @@ with (event2)
     assert(num == 435);
 }
 
-string furtherFromServer = ":kameloso^!~ident@81-233-105-99-no80.tbcn.telia.com NICK :kameloso_";
-IRCEvent event3 = parser.toIRCEvent(furtherFromServer);
+// Requires Twitch support via build configuration "twitch"
+string fullExample = "@badge-info=subscriber/15;badges=subscriber/12;color=;display-name=SomeoneOnTwitch;emotes=;flags=;id=d6729804-2bf3-495d-80ce-a2fe8ed00a26;login=someoneontwitch;mod=0;msg-id=submysterygift;msg-param-mass-gift-count=1;msg-param-origin-id=49\\s9d\\s3e\\s68\\sca\\s26\\se9\\s2a\\s6e\\s44\\sd4\\s60\\s9b\\s3d\\saa\\sb9\\s4c\\sad\\s43\\s5c;msg-param-sender-count=4;msg-param-sub-plan=1000;room-id=71092938;subscriber=1;system-msg=someoneOnTwitch\\sis\\sgifting\\s1\\sTier\\s1\\sSubs\\sto\\sxQcOW's\\scommunity!\\sThey've\\sgifted\\sa\\stotal\\sof\\s4\\sin\\sthe\\schannel!;tmi-sent-ts=1569013433362;user-id=224578549;user-type= :tmi.twitch.tv USERNOTICE #xqcow"
+IRCEvent event4 = parser.toIRCEvent(fullExample);
 
-with (event3)
+with (event)
 {
-    assert(type == IRCEvent.Type.NICK);
-    assert(sender.nickname == "kameloso^");
-    assert(sender.ident == "~ident");
-    assert(sender.address == "81-233-105-99-no80.tbcn.telia.com");
-    assert(target.nickname = "kameloso_");
+    assert(type == IRCEvent.Type.TWITCH_BULKGIFT);
+    assert(sender.nickname == "someoneontwitch");
+    assert(sender.alias_ == "SomeoneOnTwitch");
+    assert(sender.badges == "subscriber/12");
+    assert(channel == "#xqcow");
+    assert(content == "SomeoneOnTwitch is gifting 1 Tier 1 Subs to xQcOW's community! They've gifted a total of 4 in the channel!");
+    assert(aux == "1000");
+    assert(count == 1);
+    assert(altcount == 4);
 }
 ```
 
