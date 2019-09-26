@@ -2271,7 +2271,7 @@ struct IRCParser
      +  Returns:
      +      A complete `dialect.defs.IRCEvent`.
      +/
-    IRCEvent toIRCEvent(const string raw)
+    auto toIRCEvent(const string raw)
     {
         IRCEvent event = .toIRCEvent(this, raw);
 
@@ -2279,10 +2279,15 @@ struct IRCParser
         // meaningful error messages if something doesn't look right.
         postparseSanityCheck(this, event);
 
-        // Epilogue: let postprocessors alter the event
-        foreach (postprocessor; postprocessors)
+        import dialect.postprocessors : EnabledPostprocessors;
+
+        static if (EnabledPostprocessors.length)
         {
-            postprocessor.postprocess(this, event);
+            // Epilogue: let postprocessors alter the event
+            foreach (postprocessor; postprocessors)
+            {
+                postprocessor.postprocess(this, event);
+            }
         }
 
         return event;
