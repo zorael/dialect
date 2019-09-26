@@ -2339,9 +2339,6 @@ struct IRCClient
 
     @Unconfigurable
     {
-        /// The current `IRCServer` we're connected to.
-        IRCServer server;
-
         /// The original client nickname before connecting, in case it changed.
         string origNickname;
 
