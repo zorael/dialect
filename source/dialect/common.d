@@ -185,24 +185,23 @@ auto typenumsOf(const IRCServer.Daemon daemon) pure nothrow @nogc
 
 // isSpecial
 /++
- +  Judges whether or not the sender of an `dialect.defs.IRCEvent` is *special*.
+ +  Judges whether or not an `dialect.defs.IRCUser` is *special*.
  +
  +  Special senders include services and staff, administrators and the like. The
  +  use of this is contested and the notion may be removed at a later date.
  +
  +  Params:
  +      parser = Reference to the current `dialect.parsing.IRCParser`.
- +      event =  `dialect.defs.IRCEvent` to examine.
+ +      sender = `dialect.defs.IRCUser` to examine.
  +
  +  Returns:
  +      `true` if it passes the special checks, `false` if not.
  +/
-bool isSpecial(const ref IRCParser parser, const IRCEvent event) pure
+bool isSpecial(const ref IRCParser parser, const IRCUser sender) pure
 {
     import lu.string : sharedDomains;
     import std.uni : toLower;
 
-    with (event)
     with (parser)
     {
         if (sender.isServer || (sender.address.length &&
@@ -213,7 +212,7 @@ bool isSpecial(const ref IRCParser parser, const IRCEvent event) pure
             return true;
         }
 
-        immutable service = event.sender.nickname.toLower;
+        immutable service = sender.nickname.toLower;
 
         switch (service)
         {
@@ -273,12 +272,12 @@ bool isSpecial(const ref IRCParser parser, const IRCEvent event) pure
         }
 
         if ((parser.server.daemon != IRCServer.Daemon.twitch) &&
-            ((sharedDomains(event.sender.address, parser.server.address) >= 2) ||
-            (sharedDomains(event.sender.address, parser.server.resolvedAddress) >= 2)))
+            ((sharedDomains(sender.address, parser.server.address) >= 2) ||
+            (sharedDomains(sender.address, parser.server.resolvedAddress) >= 2)))
         {
             return true;
         }
-        else if (event.sender.address.contains("/staff/"))
+        else if (sender.address.contains("/staff/"))
         {
             return true;
         }
