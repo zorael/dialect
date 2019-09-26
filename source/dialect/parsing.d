@@ -1564,7 +1564,7 @@ void onNotice(ref IRCParser parser, ref IRCEvent event, ref string slice) pure
             version(FlagAsUpdated) parser.serverUpdated = true;
         }
 
-        if (!event.sender.isServer && parser.isFromAuthService(event))
+        if (!event.sender.isServer && parser.isFromAuthService(event.sender))
         {
             import std.algorithm.searching : canFind;
             import std.uni : asLowerCase;

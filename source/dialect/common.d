@@ -533,7 +533,7 @@ unittest
         raw = ":Q!TheQBot@CServe.quakenet.org NOTICE kameloso :You are now logged in as kameloso.";
         string slice = raw[1..$];  // mutable
         parser.parsePrefix(e1, slice);
-        assert(parser.isFromAuthService(e1));
+        assert(parser.isFromAuthService(e1.sender));
     }
 
     IRCEvent e2;
@@ -542,7 +542,7 @@ unittest
         raw = ":NickServ!NickServ@services. NOTICE kameloso :This nickname is registered.";
         string slice = raw[1..$];
         parser.parsePrefix(e2, slice);
-        assert(parser.isFromAuthService(e2));
+        assert(parser.isFromAuthService(e2.sender));
     }
 
     IRCEvent e3;
@@ -553,7 +553,7 @@ unittest
         raw = ":NickServ!service@rizon.net NOTICE kameloso^^ :nick, type /msg NickServ IDENTIFY password. Otherwise,";
         string slice = raw[1..$];
         parser.parsePrefix(e3, slice);
-        assert(parser.isFromAuthService(e3));
+        assert(parser.isFromAuthService(e3.sender));
     }
 
     // Enabling this stops us from being alerted of unknown services
@@ -563,7 +563,7 @@ unittest
         raw = ":zorael!~NaN@ns3363704.ip-94-23-253.eu PRIVMSG kameloso^ :sudo privmsg zorael :derp";
         string slice = raw[1..$];
         parser.parsePrefix(e4, slice);
-        assert(!parser.isFromAuthService(e4));
+        assert(!parser.isFromAuthService(e4.sender));
     }*/
 }
 
