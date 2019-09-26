@@ -206,8 +206,8 @@ bool isSpecial(const ref IRCParser parser, const IRCEvent event) pure
     with (parser)
     {
         if (sender.isServer || (sender.address.length &&
-            ((sender.address == client.server.address) ||
-            (sender.address == client.server.resolvedAddress) ||
+            ((sender.address == server.address) ||
+            (sender.address == server.resolvedAddress) ||
             (sender.address == "services."))))
         {
             return true;
@@ -271,9 +271,9 @@ bool isSpecial(const ref IRCParser parser, const IRCEvent event) pure
             break;
         }
 
-        if ((parser.client.server.daemon != IRCServer.Daemon.twitch) &&
-            ((sharedDomains(event.sender.address, parser.client.server.address) >= 2) ||
-            (sharedDomains(event.sender.address, parser.client.server.resolvedAddress) >= 2)))
+        if ((parser.server.daemon != IRCServer.Daemon.twitch) &&
+            ((sharedDomains(event.sender.address, parser.server.address) >= 2) ||
+            (sharedDomains(event.sender.address, parser.server.resolvedAddress) >= 2)))
         {
             return true;
         }
@@ -505,8 +505,8 @@ bool isFromAuthService(const ref IRCParser parser, const IRCEvent event) pure
         return false;
     }
 
-    if ((sharedDomains(event.sender.address, parser.client.server.address) >= 2) ||
-        (sharedDomains(event.sender.address, parser.client.server.resolvedAddress) >= 2))
+    if ((sharedDomains(event.sender.address, parser.server.address) >= 2) ||
+        (sharedDomains(event.sender.address, parser.server.resolvedAddress) >= 2))
     {
         return true;
     }
@@ -541,8 +541,8 @@ unittest
     IRCEvent e3;
     with (e3)
     {
-        parser.client.server.address = "irc.rizon.net";
-        parser.client.server.resolvedAddress = "irc.uworld.se";
+        parser.server.address = "irc.rizon.net";
+        parser.server.resolvedAddress = "irc.uworld.se";
         raw = ":NickServ!service@rizon.net NOTICE kameloso^^ :nick, type /msg NickServ IDENTIFY password. Otherwise,";
         string slice = raw[1..$];
         parser.parsePrefix(e3, slice);

@@ -862,7 +862,7 @@ user-type                          ""
                     // Also store the alias in the IRCClient, for highlighting purposes
                     // *ASSUME* it never changes during runtime.
                     parser.client.alias_ = alias_;
-                    version(FlagUpdatedClient) parser.clientUpdated = true;
+                    version(FlagAsUpdated) parser.clientUpdated = true;
                 }
             }
             else
@@ -1295,7 +1295,7 @@ final class TwitchPostprocessor : Postprocessor
      +/
     void postprocess(ref IRCParser parser, ref IRCEvent event)
     {
-        if (parser.client.server.daemon != IRCServer.Daemon.twitch) return;
+        if (parser.server.daemon != IRCServer.Daemon.twitch) return;
 
         parser.parseTwitchTags(event);
 

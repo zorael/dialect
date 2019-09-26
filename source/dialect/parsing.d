@@ -288,7 +288,7 @@ void parseBasic(ref IRCParser parser, ref IRCEvent event) pure @nogc
     }
 
     // All but PING and PONG are sender-less.
-    if (!event.sender.address) event.sender.address = parser.client.server.address;
+    if (!event.sender.address) event.sender.address = parser.server.address;
     event.sender.class_ = IRCUser.Class.special;
 }
 
@@ -628,7 +628,7 @@ void parseSpecialcases(ref IRCParser parser, ref IRCEvent event, ref string slic
         {
             event.type = SELFNICK;
             client.nickname = event.target.nickname;
-            version(FlagUpdatedClient) parser.clientUpdated = true;
+            version(FlagAsUpdated) parser.clientUpdated = true;
         }
         break;
 
@@ -1214,8 +1214,8 @@ void parseSpecialcases(ref IRCParser parser, ref IRCEvent event, ref string slic
         // :irc.portlane.se 020 * :Please wait while we process your connection.
         slice.nom(" :");
         event.content = slice;
-        parser.client.server.resolvedAddress = event.sender.address;
-        version(FlagUpdatedClient) parser.clientUpdated = true;
+        parser.server.resolvedAddress = event.sender.address;
+        version(FlagAsUpdated) parser.serverUpdated = true;
         break;
 
     case SPAMFILTERLIST: // 941
@@ -1275,7 +1275,7 @@ void parseGeneralCases(ref IRCParser parser, ref IRCEvent event, ref string slic
                 // More than one target, first is bot
                 // Can't use isChan here since targets may contain spaces
 
-                if (targets.beginsWithOneOf(parser.client.server.chantypes))
+                if (targets.beginsWithOneOf(parser.server.chantypes))
                 {
                     // More than one target, first is bot
                     // Second target is/begins with a channel
@@ -1293,7 +1293,7 @@ void parseGeneralCases(ref IRCParser parser, ref IRCEvent event, ref string slic
                         // More than one target, first is bot
                         // Only one second
 
-                        if (targets.beginsWithOneOf(parser.client.server.chantypes))
+                        if (targets.beginsWithOneOf(parser.server.chantypes))
                         {
                             // First is bot, second is channel
                             event.channel = targets;
@@ -1332,7 +1332,7 @@ void parseGeneralCases(ref IRCParser parser, ref IRCEvent event, ref string slic
                     {
                         // Only one second target
 
-                        if (targets.beginsWithOneOf(parser.client.server.chantypes))
+                        if (targets.beginsWithOneOf(parser.server.chantypes))
                         {
                             // Second is a channel
                             event.channel = targets;
@@ -1354,7 +1354,7 @@ void parseGeneralCases(ref IRCParser parser, ref IRCEvent event, ref string slic
             {
                 // More than one target, first is not bot
 
-                if (firstTarget.beginsWithOneOf(parser.client.server.chantypes))
+                if (firstTarget.beginsWithOneOf(parser.server.chantypes))
                 {
                     // First target is a channel
                     // Assume second is a nickname
@@ -1370,7 +1370,7 @@ void parseGeneralCases(ref IRCParser parser, ref IRCEvent event, ref string slic
                 }
             }
         }
-        else if (targets.beginsWithOneOf(parser.client.server.chantypes))
+        else if (targets.beginsWithOneOf(parser.server.chantypes))
         {
             // Only one target, it is a channel
             event.channel = targets;
@@ -1389,7 +1389,7 @@ void parseGeneralCases(ref IRCParser parser, ref IRCEvent event, ref string slic
             // More than one target
             immutable target = slice.nom(' ');
 
-            if (target.beginsWithOneOf(parser.client.server.chantypes))
+            if (target.beginsWithOneOf(parser.server.chantypes))
             {
                 // More than one target, first is a channel
                 // Assume second is content
@@ -1411,7 +1411,7 @@ void parseGeneralCases(ref IRCParser parser, ref IRCEvent event, ref string slic
                     // :irc.run.net 367 kameloso #Help *!*@broadband-5-228-255-*.moscow.rt.ru
                     // :irc.atw-inter.net 344 kameloso #debian.de towo!towo@littlelamb.szaf.org
 
-                    if (slice.beginsWithOneOf(parser.client.server.chantypes))
+                    if (slice.beginsWithOneOf(parser.server.chantypes))
                     {
                         // Second target is channel
                         event.channel = slice.nom(' ');
@@ -1448,7 +1448,7 @@ void parseGeneralCases(ref IRCParser parser, ref IRCEvent event, ref string slic
         {
             // Only one target
 
-            if (slice.beginsWithOneOf(parser.client.server.chantypes))
+            if (slice.beginsWithOneOf(parser.server.chantypes))
             {
                 // Target is a channel
                 event.channel = slice;
@@ -1492,14 +1492,14 @@ void postparseSanityCheck(const ref IRCParser parser, ref IRCEvent event) pure n
         sink.put("Spaces in target nickname or channel");
     }
 
-    if (event.target.nickname.length && parser.client.server.chantypes.contains(event.target.nickname[0]))
+    if (event.target.nickname.length && parser.server.chantypes.contains(event.target.nickname[0]))
     {
         if (sink.data.length) sink.put(". ");
         sink.put("Target nickname is a channel");
     }
 
     if (event.channel.length &&
-        !parser.client.server.chantypes.contains(event.channel[0]) &&
+        !parser.server.chantypes.contains(event.channel[0]) &&
         (event.type != IRCEvent.Type.ERR_NOSUCHCHANNEL) &&
         (event.type != IRCEvent.Type.RPL_ENDOFWHO) &&
         (event.type != IRCEvent.Type.RPL_NAMREPLY) &&
@@ -1543,7 +1543,7 @@ void onNotice(ref IRCParser parser, ref IRCEvent event, ref string slice) pure
     immutable channelOrNickname = slice.nom!(Yes.inherit)(" :");
     event.content = slice;
 
-    if (channelOrNickname.length && channelOrNickname.beginsWithOneOf(parser.client.server.chantypes))
+    if (channelOrNickname.length && channelOrNickname.beginsWithOneOf(parser.server.chantypes))
     {
         event.channel = channelOrNickname;
     }
@@ -1556,12 +1556,12 @@ void onNotice(ref IRCParser parser, ref IRCEvent event, ref string slice) pure
 
         if (!event.content.length) return;
 
-        if (!client.server.resolvedAddress.length && event.content.beginsWith("***"))
+        if (!server.resolvedAddress.length && event.content.beginsWith("***"))
         {
             // This is where we catch the resolved address
             assert(!event.sender.nickname.length, "Unexpected nickname: " ~ event.sender.nickname);
-            client.server.resolvedAddress = event.sender.address;
-            version(FlagUpdatedClient) parser.clientUpdated = true;
+            server.resolvedAddress = event.sender.address;
+            version(FlagAsUpdated) parser.serverUpdated = true;
         }
 
         if (!event.sender.isServer && parser.isFromAuthService(event))
@@ -1681,7 +1681,7 @@ void onPRIVMSG(const ref IRCParser parser, ref IRCEvent event, ref string slice)
         (common requested cap: znc.in/self-message)
      */
 
-    if (target.isValidChannel(parser.client.server))
+    if (target.isValidChannel(parser.server))
     {
         // :zorael!~NaN@ns3363704.ip-94-23-253.eu PRIVMSG #flerrp :test test content
         event.type = (event.sender.nickname == parser.client.nickname) ?
@@ -1783,7 +1783,7 @@ void onMode(ref IRCParser parser, ref IRCEvent event, ref string slice) pure
 
     immutable target = slice.nom(' ');
 
-    if (target.isValidChannel(parser.client.server))
+    if (target.isValidChannel(parser.server))
     {
         event.channel = target;
 
@@ -1865,7 +1865,7 @@ void onMode(ref IRCParser parser, ref IRCEvent event, ref string slice) pure
                 .idup;
         }
 
-        version(FlagUpdatedClient) parser.clientUpdated = true;
+        version(FlagAsUpdated) parser.clientUpdated = true;
     }
 }
 
@@ -1948,7 +1948,7 @@ void onISUPPORT(ref IRCParser parser, ref IRCEvent event, ref string slice) pure
 
             /// http://www.irc.org/tech_docs/005.html
 
-            with (parser.client.server)
+            with (parser.server)
             switch (key)
             {
             case "PREFIX":
@@ -2005,24 +2005,24 @@ void onISUPPORT(ref IRCParser parser, ref IRCEvent event, ref string slice) pure
                     // daemonstring like "1.5.24/uk_UA.KOI8-U", so fake the daemon
                     // here.
                     parser.typenums = typenumsOf(IRCServer.Daemon.rusnet);
-                    parser.client.server.daemon = IRCServer.Daemon.rusnet;
+                    parser.server.daemon = IRCServer.Daemon.rusnet;
                 }
                 else if (value == "IRCnet")
                 {
                     // Likewise IRCnet only advertises the daemon version and not
                     // the daemon name.
                     parser.typenums = typenumsOf(IRCServer.Daemon.ircnet);
-                    parser.client.server.daemon = IRCServer.Daemon.ircnet;
+                    parser.server.daemon = IRCServer.Daemon.ircnet;
                 }
                 else if (value == "Rizon")
                 {
                     // Rizon reports hybrid but actually has some extras
                     parser.typenums = typenumsOf(IRCServer.Daemon.rizon);
-                    parser.client.server.daemon = IRCServer.Daemon.rizon;
+                    parser.server.daemon = IRCServer.Daemon.rizon;
                 }
 
-                parser.client.server.daemonstring = value;
-                version(FlagUpdatedClient) parser.clientUpdated = true;
+                parser.server.daemonstring = value;
+                version(FlagAsUpdated) parser.serverUpdated = true;
                 break;
 
             case "NICKLEN":
@@ -2059,7 +2059,7 @@ void onISUPPORT(ref IRCParser parser, ref IRCEvent event, ref string slice) pure
             }
         }
 
-        version(FlagUpdatedClient) parser.clientUpdated = true;
+        version(FlagAsUpdated) parser.serverUpdated = true;
     }
     catch (ConvException e)
     {
@@ -2132,12 +2132,12 @@ void onMyInfo(ref IRCParser parser, ref IRCEvent event, ref string slice) pure
     // :asimov.freenode.net 004 kameloso^ asimov.freenode.net ircd-seven-1.1.4 DOQRSZaghilopswz CFILMPQSbcefgijklmnopqrstvz bkloveqjfI
     // :tmi.twitch.tv 004 zorael :-
 
-    /*if (parser.client.server.daemon != IRCServer.Daemon.init)
+    /*if (parser.server.daemon != IRCServer.Daemon.init)
     {
         // Daemon remained from previous connects.
         // Trust that the typenums did as well.
         import std.stdio;
-        debug writeln("RETURNING BECAUSE NON-INIT DAEMON: ", parser.client.server.daemon);
+        debug writeln("RETURNING BECAUSE NON-INIT DAEMON: ", parser.server.daemon);
         return;
     }*/
 
@@ -2146,12 +2146,12 @@ void onMyInfo(ref IRCParser parser, ref IRCEvent event, ref string slice) pure
     version(TwitchSupport)
     {
         import std.algorithm.searching : endsWith;
-        if ((slice == ":-") && (parser.client.server.address.endsWith(".twitch.tv")))
+        if ((slice == ":-") && (parser.server.address.endsWith(".twitch.tv")))
         {
             parser.typenums = typenumsOf(IRCServer.Daemon.twitch);
 
             // Twitch doesn't seem to support any modes other than normal prefix op
-            with (parser.client.server)
+            with (parser.server)
             {
                 daemon = IRCServer.Daemon.twitch;
                 daemonstring = "Twitch";
@@ -2161,7 +2161,7 @@ void onMyInfo(ref IRCParser parser, ref IRCEvent event, ref string slice) pure
                 maxNickLength = 25;
             }
 
-            version(FlagUpdatedClient) parser.clientUpdated = true;
+            version(FlagAsUpdated) parser.serverUpdated = true;
             return;
         }
     }
@@ -2200,7 +2200,7 @@ void onMyInfo(ref IRCParser parser, ref IRCEvent event, ref string slice) pure
         }
         else if (daemonstringLower.contains("hybrid"))
         {
-            if (parser.client.server.address.contains(".rizon."))
+            if (parser.server.address.contains(".rizon."))
             {
                 daemon = rizon;
             }
@@ -2227,9 +2227,9 @@ void onMyInfo(ref IRCParser parser, ref IRCEvent event, ref string slice) pure
         }
 
         parser.typenums = typenumsOf(daemon);
-        parser.client.server.daemon = daemon;
-        parser.client.server.daemonstring = daemonstring;
-        version(FlagUpdatedClient) parser.clientUpdated = true;
+        parser.server.daemon = daemon;
+        parser.server.daemonstring = daemonstring;
+        version(FlagAsUpdated) parser.serverUpdated = true;
     }
 }
 
