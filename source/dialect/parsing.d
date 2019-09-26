@@ -2244,8 +2244,11 @@ struct IRCParser
 {
     @safe:
 
-    /// The current `dialect.defs.IRCClient` with all the state needed for parsing.
+    /// The current `dialect.defs.IRCClient` with all the context needed for parsing.
     IRCClient client;
+
+    /// The current  dialect.defs.IRCServer` with all the context needed for parsing.
+    IRCServer server;
 
     /// An `dialect.defs.IRCEvent.Type[1024]` reverse lookup table for fast numeric lookups.
     IRCEvent.Type[1024] typenums = Typenums.base;
