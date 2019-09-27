@@ -1065,7 +1065,7 @@ struct IRCUser
         string displayName;
 
         /// Deprecated alias kept as transition.
-        deprecated("Use `displayName`")
+        deprecated("Use `.displayName`")
         alias alias_ = displayName;
 
         /// The Twitch badges this user has.
@@ -1077,7 +1077,7 @@ struct IRCUser
     else
     {
         /// Deprecated remnant of when `displayName` was `alias_` and wasn't versioned TwitchSupport
-        deprecated("Version your code to use dialect build config \"twitch\" and use `displayName`")
+        deprecated("Version your code to use dialect build config \"twitch\" and use `.displayName`")
         string alias_;
     }
 
