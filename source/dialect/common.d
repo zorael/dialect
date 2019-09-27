@@ -437,27 +437,27 @@ unittest
 }
 
 
-// isFromAuthService
+// isAuthService
 /++
  +  Inspects an `dialect.defs.IRCUser` and judges whether or not it is services.
  +
  +  Example:
  +  ---
  +  IRCUser user;
- +  if (parser.isFromAuthService(user))
+ +  if (user.isAuthService(parser))
  +  {
  +      // ...
  +  }
  +  ---
  +
  +  Params:
- +      parser = Reference to the current `dialect.parsing.IRCParser`.
  +      sender = `dialect.defs.IRCUser` to examine.
+ +      parser = Reference to the current `dialect.parsing.IRCParser`.
  +
  +  Returns:
  +      `true` if the `sender` is judged to be from nickname services, `false` if not.
  +/
-bool isFromAuthService(const ref IRCParser parser, const IRCUser sender) pure
+bool isAuthService(const IRCUser sender, const ref IRCParser parser) pure
 {
     import lu.string : sharedDomains;
     import std.uni : toLower;
@@ -615,10 +615,10 @@ unittest
  +  Returns:
  +      `true` if the `sender` is judged to be from nickname services, `false` if not.
  +/
-deprecated("Use the `isFromAuthService(IRCParser, IRCUser)` overload")
+deprecated("Use `isAuthService(IRCUser, IRCParser)`")
 bool isFromAuthService(const ref IRCParser parser, const IRCEvent event) pure
 {
-    return isFromAuthService(parser, event.sender);
+    return isAuthService(event.sender, parser);
 }
 
 
