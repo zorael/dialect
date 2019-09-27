@@ -191,13 +191,13 @@ auto typenumsOf(const IRCServer.Daemon daemon) pure nothrow @nogc
  +  use of this is contested and the notion may be removed at a later date.
  +
  +  Params:
- +      parser = Reference to the current `dialect.parsing.IRCParser`.
  +      sender = `dialect.defs.IRCUser` to examine.
+ +      parser = Reference to the current `dialect.parsing.IRCParser`.
  +
  +  Returns:
  +      `true` if it passes the special checks, `false` if not.
  +/
-bool isSpecial(const ref IRCParser parser, const IRCUser sender) pure
+bool isSpecial(const IRCUser sender, const ref IRCParser parser) pure
 {
     import lu.string : sharedDomains;
     import std.uni : toLower;
@@ -306,10 +306,10 @@ bool isSpecial(const ref IRCParser parser, const IRCUser sender) pure
  +  Returns:
  +      `true` if it passes the special checks, `false` if not.
  +/
-deprecated("Use the `isSpecial(IRCParser, IRCUser)` overload")
+deprecated("Use the `isSpecial(IRCUser, IRCParser)` overload")
 bool isSpecial(const ref IRCParser parser, const IRCEvent event) pure
 {
-    return isSpecial(parser, event.sender);
+    return isSpecial(event.sender, parser);
 }
 
 
