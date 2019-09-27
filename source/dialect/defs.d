@@ -2327,7 +2327,7 @@ struct IRCChannel
  +/
 struct IRCClient
 {
-    import lu.uda : CannotContainComments, Hidden, Separator, Unconfigurable;
+    import lu.uda : Unconfigurable;
 
     /// Client nickname.
     string nickname; // = "kameloso";
