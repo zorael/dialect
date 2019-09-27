@@ -1550,7 +1550,7 @@ void onNotice(ref IRCParser parser, ref IRCEvent event, ref string slice) pure
 
     with (parser)
     {
-        import dialect.common : isFromAuthService, isSpecial, isValidChannel;
+        import dialect.common : isAuthService, isSpecial, isValidChannel;
 
         if (parser.isSpecial(event.sender)) event.sender.class_ = IRCUser.Class.special;
 
@@ -1564,7 +1564,7 @@ void onNotice(ref IRCParser parser, ref IRCEvent event, ref string slice) pure
             version(FlagAsUpdated) parser.serverUpdated = true;
         }
 
-        if (!event.sender.isServer && parser.isFromAuthService(event.sender))
+        if (!event.sender.isServer && event.sender.isAuthService(parser))
         {
             import std.algorithm.searching : canFind;
             import std.uni : asLowerCase;
