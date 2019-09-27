@@ -251,7 +251,7 @@ unittest
             assert((sender.address == "tmi.twitch.tv"), sender.address);
             assert((sender.class_ == IRCUser.Class.special), Enum!(IRCUser.Class).toString(sender.class_));
             assert((target.nickname == "zorael"), target.nickname);
-            assert((target.alias_ == "Zorael"), target.alias_);
+            assert((target.displayName == "Zorael"), target.displayName);
             assert((target.class_ == IRCUser.Class.admin), Enum!(IRCUser.Class).toString(target.class_));
             assert((target.badges == "*"), target.badges);
             assert((target.colour == "5F9EA0"), target.colour);
@@ -261,7 +261,7 @@ unittest
 
     with (parser.client)
     {
-        assert((alias_ == "Zorael"), alias_);
+        assert((displayName == "Zorael"), displayName);
     }
 
     {
@@ -298,7 +298,7 @@ unittest
             assert((sender.class_ == IRCUser.Class.special), Enum!(IRCUser.Class).toString(sender.class_));
             assert((channel == "#kameboto"), channel);
             assert((target.nickname == "zorael"), target.nickname);
-            assert((target.alias_ == "Zorael"), target.alias_);
+            assert((target.displayName == "Zorael"), target.displayName);
             assert((target.class_ == IRCUser.Class.unset), Enum!(IRCUser.Class).toString(target.class_));
             assert((target.badges == "moderator/1"), target.badges);
             assert((target.colour == "5F9EA0"), target.colour);
@@ -311,7 +311,7 @@ unittest
         {
             assert((type == IRCEvent.Type.CHAN), Enum!(IRCEvent.Type).toString(type));
             assert((sender.nickname == "rezel02"), sender.nickname);
-            assert((sender.alias_ == "今伊勢"), sender.alias_);
+            assert((sender.displayName == "今伊勢"), sender.displayName);
             assert((sender.ident == "rezel02"), sender.ident);
             assert((sender.address == "rezel02.tmi.twitch.tv"), sender.address);
             assert((sender.account == "rezel02"), sender.account);
@@ -364,7 +364,7 @@ unittest
         {
             assert((type == IRCEvent.Type.CHAN), Enum!(IRCEvent.Type).toString(type));
             assert((sender.nickname == "gunnrysgt_buck"), sender.nickname);
-            assert((sender.alias_ == "GunnrySGT_Buck"), sender.alias_);
+            assert((sender.displayName == "GunnrySGT_Buck"), sender.displayName);
             assert((sender.ident == "gunnrysgt_buck"), sender.ident);
             assert((sender.address == "gunnrysgt_buck.tmi$twitch.tv"), sender.address);
             assert((sender.account == "gunnrysgt_buck"), sender.account);
@@ -383,7 +383,7 @@ unittest
         {
             assert((type == IRCEvent.Type.TWITCH_SUB), Enum!(IRCEvent.Type).toString(type));
             assert((sender.nickname == "iamslower"), sender.nickname);
-            assert((sender.alias_ == "IamSlower"), sender.alias_);
+            assert((sender.displayName == "IamSlower"), sender.displayName);
             assert((sender.account == "iamslower"), sender.account);
             assert((sender.badges == "subscriber/0,premium/1"), sender.badges);
             assert((sender.colour == "19B336"), sender.colour);
@@ -401,13 +401,13 @@ unittest
         {
             assert((type == IRCEvent.Type.TWITCH_SUBGIFT), Enum!(IRCEvent.Type).toString(type));
             assert((sender.nickname == "nappy5074"), sender.nickname);
-            assert((sender.alias_ == "nappy5074"), sender.alias_);
+            assert((sender.displayName == "nappy5074"), sender.displayName);
             assert((sender.account == "nappy5074"), sender.account);
             assert((sender.badges == "subscriber/12,sub-gifter/500"), sender.badges);
             assert((sender.colour == "0000FF"), sender.colour);
             assert((channel == "#chocotaco"), channel);
             assert((target.nickname == "buffalo_bison"), target.nickname);
-            assert((target.alias_ == "buffalo_bison"), target.alias_);
+            assert((target.displayName == "buffalo_bison"), target.displayName);
             assert((content == "nappy5074 gifted a Tier 1 sub to buffalo_bison!"), content);
             assert((aux == "1000"), aux);
             assert((tags == `badge-info=subscriber/15;badges=subscriber/12,sub-gifter/500;color=#0000FF;display-name=nappy5074;emotes=;flags=;id=f5446beb-bc54-472c-9539-e495a1250a30;login=nappy5074;mod=0;msg-id=subgift;msg-param-months=6;msg-param-origin-id=da\s39\sa3\see\s5e\s6b\s4b\s0d\s32\s55\sbf\sef\s95\s60\s18\s90\saf\sd8\s07\s09;msg-param-recipient-display-name=buffalo_bison;msg-param-recipient-id=141870891;msg-param-recipient-user-name=buffalo_bison;msg-param-sender-count=0;msg-param-sub-plan-name=Channel\sSubscription\s(chocotaco);msg-param-sub-plan=1000;room-id=69906737;subscriber=1;system-msg=nappy5074\sgifted\sa\sTier\s1\ssub\sto\sbuffalo_bison!;tmi-sent-ts=1569005845776;user-id=230054092;user-type=`), tags);
@@ -420,7 +420,7 @@ unittest
         {
             assert((type == IRCEvent.Type.TWITCH_BULKGIFT), Enum!(IRCEvent.Type).toString(type));
             assert((sender.nickname == "nappy5074"), sender.nickname);
-            assert((sender.alias_ == "nappy5074"), sender.alias_);
+            assert((sender.displayName == "nappy5074"), sender.displayName);
             assert((sender.account == "nappy5074"), sender.account);
             assert((sender.badges == "subscriber/12,sub-gifter/500"), sender.badges);
             assert((sender.colour == "0000FF"), sender.colour);
@@ -439,7 +439,7 @@ unittest
         {
             assert((type == IRCEvent.Type.TWITCH_SUB), Enum!(IRCEvent.Type).toString(type));
             assert((sender.nickname == "noahxcite"), sender.nickname);
-            assert((sender.alias_ == "Noahxcite"), sender.alias_);
+            assert((sender.displayName == "Noahxcite"), sender.displayName);
             assert((sender.account == "noahxcite"), sender.account);
             assert((sender.badges == "subscriber/9,premium/1"), sender.badges);
             assert((channel == "#chocotaco"), channel);
@@ -456,7 +456,7 @@ unittest
         {
             assert((type == IRCEvent.Type.TWITCH_BULKGIFT), Enum!(IRCEvent.Type).toString(type));
             assert((sender.nickname == "acul1992"), sender.nickname);
-            assert((sender.alias_ == "acul1992"), sender.alias_);
+            assert((sender.displayName == "acul1992"), sender.displayName);
             assert((sender.account == "acul1992"), sender.account);
             assert((sender.badges == "subscriber/6,premium/1"), sender.badges);
             assert((channel == "#chocotaco"), channel);
@@ -474,7 +474,7 @@ unittest
         {
             assert((type == IRCEvent.Type.TWITCH_SUB), Enum!(IRCEvent.Type).toString(type));
             assert((sender.nickname == "poggyfifty"), sender.nickname);
-            assert((sender.alias_ == "PoggyFifty"), sender.alias_);
+            assert((sender.displayName == "PoggyFifty"), sender.displayName);
             assert((sender.account == "poggyfifty"), sender.account);
             assert((sender.badges == "subscriber/9,bits/100"), sender.badges);
             assert((sender.colour == "2B22B2"), sender.colour);
@@ -493,7 +493,7 @@ unittest
         {
             assert((type == IRCEvent.Type.TWITCH_CHEER), Enum!(IRCEvent.Type).toString(type));
             assert((sender.nickname == "expressrr"), sender.nickname);
-            assert((sender.alias_ == "eXpressRR"), sender.alias_);
+            assert((sender.displayName == "eXpressRR"), sender.displayName);
             assert((sender.ident == "expressrr"), sender.ident);
             assert((sender.address == "expressrr.tmi.twitch.tv"), sender.address);
             assert((sender.account == "expressrr"), sender.account);
@@ -526,7 +526,7 @@ unittest
         {
             assert((type == IRCEvent.Type.TWITCH_SUBUPGRADE), Enum!(IRCEvent.Type).toString(type));
             assert((sender.nickname == "burakk1912"), sender.nickname);
-            assert((sender.alias_ == "burakk1912"), sender.alias_);
+            assert((sender.displayName == "burakk1912"), sender.displayName);
             assert((sender.account == "burakk1912"), sender.account);
             assert((sender.badges == "subscriber/0,premium/1"), sender.badges);
             assert((sender.colour == "9ACD32"), sender.colour);
@@ -543,13 +543,13 @@ unittest
         {
             assert((type == IRCEvent.Type.TWITCH_GIFTCHAIN), Enum!(IRCEvent.Type).toString(type));
             assert((sender.nickname == "wait"), sender.nickname);
-            assert((sender.alias_ == "WaIt"), sender.alias_);
+            assert((sender.displayName == "WaIt"), sender.displayName);
             assert((sender.account == "wait"), sender.account);
             assert((sender.badges == "subscriber/0"), sender.badges);
             assert((sender.colour == "7F7F7F"), sender.colour);
             assert((channel == "#chocotaco"), channel);
             assert((target.nickname == "fuzwuz"), target.nickname);
-            assert((target.alias_ == "fuzwuz"), target.alias_);
+            assert((target.displayName == "fuzwuz"), target.displayName);
             assert((content == "WaIt is continuing the Gift Sub they got from fuzwuz!"), content);
             assert((tags == "badge-info=subscriber/2;badges=subscriber/0;color=#7F7F7F;display-name=WaIt;emotes=;flags=;id=16df867b-4cd0-450d-9bd5-f30f4c8a1781;login=wait;mod=0;msg-id=giftpaidupgrade;msg-param-sender-login=fuzwuz;msg-param-sender-name=fuzwuz;room-id=69906737;subscriber=1;system-msg=WaIt\\sis\\scontinuing\\sthe\\sGift\\sSub\\sthey\\sgot\\sfrom\\sfuzwuz!;tmi-sent-ts=1569010405948;user-id=48663198;user-type="), tags);
             assert((id == "16df867b-4cd0-450d-9bd5-f30f4c8a1781"), id);
@@ -622,7 +622,7 @@ unittest
         {
             assert((type == IRCEvent.Type.TWITCH_RITUAL), Enum!(IRCEvent.Type).toString(type));
             assert((sender.nickname == "travslaps"), sender.nickname);
-            assert((sender.alias_ == "travslaps"), sender.alias_);
+            assert((sender.displayName == "travslaps"), sender.displayName);
             assert((sender.account == "travslaps"), sender.account);
             assert((sender.badges == "premium/1"), sender.badges);
             assert((sender.colour == "67B222"), sender.colour);
@@ -651,7 +651,7 @@ unittest
         {
             assert((type == IRCEvent.Type.TWITCH_BULKGIFT), Enum!(IRCEvent.Type).toString(type));
             assert((sender.nickname == "tayk47_mom"), sender.nickname);
-            assert((sender.alias_ == "tayk47_mom"), sender.alias_);
+            assert((sender.displayName == "tayk47_mom"), sender.displayName);
             assert((sender.account == "tayk47_mom"), sender.account);
             assert((sender.badges == "subscriber/12"), sender.badges);
             assert((channel == "#xqcow"), channel);

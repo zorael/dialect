@@ -49,7 +49,7 @@ struct IRCUser
 
     version(TwitchSupport)
     {
-        string alias_;
+        string displayName;
         string badges;
         string colour;
     }
@@ -151,7 +151,7 @@ with (event)
 {
     assert(type == IRCEvent.Type.TWITCH_BULKGIFT);
     assert(sender.nickname == "someoneontwitch");
-    assert(sender.alias_ == "SomeoneOnTwitch");
+    assert(sender.displayName == "SomeoneOnTwitch");
     assert(sender.badges == "subscriber/12");
     assert(channel == "#xqcow");
     assert(content == "SomeoneOnTwitch is gifting 1 Tier 1 Subs to xQcOW's community! They've gifted a total of 4 in the channel!");
