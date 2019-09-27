@@ -1098,7 +1098,7 @@ unittest
  +      server = The current `dialect.defs.IRCServer` with all its settings.
  +/
 void setMode(ref IRCChannel channel, const string signedModestring,
-    const string data, IRCServer server) pure
+    const string data, const IRCServer server) pure
 {
     import lu.string : beginsWith;
     import std.array : array;
@@ -1668,7 +1668,7 @@ enum IRCControlCharacter
  +      `true` if the `dialect.defs.IRCUser`s are deemed to match, `false` if not.
  +/
 auto matchesByMask(const IRCUser this_, const IRCUser that,
-    IRCServer.CaseMapping caseMapping = IRCServer.CaseMapping.rfc1459) pure nothrow
+    const IRCServer.CaseMapping caseMapping = IRCServer.CaseMapping.rfc1459) pure nothrow
 {
     // unpatternedGlobMatch
     /++
@@ -1788,7 +1788,7 @@ unittest
  +      The passed `name` string with uppercase characters replaced as per
  +      the case mappings.
  +/
-auto toLowerCase(const string name, IRCServer.CaseMapping caseMapping) pure nothrow
+auto toLowerCase(const string name, const IRCServer.CaseMapping caseMapping) pure nothrow
 {
     import std.string : representation;
     import std.uni : toLower;
