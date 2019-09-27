@@ -374,7 +374,7 @@ void parsePrefix(ref IRCParser parser, ref IRCEvent event, ref string slice) pur
     }
 
     import dialect.common : isSpecial;
-    if (parser.isSpecial(event.sender)) event.sender.class_ = IRCUser.Class.special;
+    if (event.sender.isSpecial(parser)) event.sender.class_ = IRCUser.Class.special;
 }
 
 ///
@@ -1552,7 +1552,7 @@ void onNotice(ref IRCParser parser, ref IRCEvent event, ref string slice) pure
     {
         import dialect.common : isAuthService, isSpecial, isValidChannel;
 
-        if (parser.isSpecial(event.sender)) event.sender.class_ = IRCUser.Class.special;
+        if (event.sender.isSpecial(parser)) event.sender.class_ = IRCUser.Class.special;
 
         if (!event.content.length) return;
 
