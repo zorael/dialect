@@ -1480,7 +1480,7 @@ void parseGeneralCases(ref IRCParser parser, ref IRCEvent event, ref string slic
  +      parser = Reference to the current `IRCParser`.
  +      event = Reference to the `dialect.defs.IRCEvent` to continue working on.
  +/
-void postparseSanityCheck(const ref IRCParser parser, ref IRCEvent event) pure nothrow
+public void postparseSanityCheck(const ref IRCParser parser, ref IRCEvent event) pure nothrow
 {
     import std.array : Appender;
 
