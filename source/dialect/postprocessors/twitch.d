@@ -238,7 +238,7 @@ user-type                          ""
                 {
                     // Make anonymous gifts detectable by no nickname.
                     event.sender.nickname = string.init;
-                    event.sender.alias_ = string.init;
+                    event.sender.displayName = string.init;
                 }
                 break;
 
@@ -529,7 +529,7 @@ room-id                            "60056333"
                 {
                     // Make anonymous gifts detectable by no nickname.
                     event.sender.nickname = string.init;
-                    event.sender.alias_ = string.init;
+                    event.sender.displayName = string.init;
                 }
                 break;
 
@@ -841,7 +841,7 @@ user-type                          ""
 
             if (!value.length) break;
 
-            immutable alias_ = value.contains('\\') ? decodeIRCv3String(value).strippedRight : value;
+            immutable displayName = value.contains('\\') ? decodeIRCv3String(value).strippedRight : value;
 
             if ((event.type == Type.USERSTATE) || (event.type == Type.GLOBALUSERSTATE))
             {
@@ -852,23 +852,23 @@ user-type                          ""
                 event.target.nickname = parser.client.nickname;
                 event.target.class_ = (event.type == Type.GLOBALUSERSTATE) ?
                     IRCUser.Class.admin : IRCUser.Class.unset;
-                event.target.alias_ = alias_;
+                event.target.displayName = displayName;
                 event.target.address = string.init;
                 event.sender.colour = string.init;
                 event.sender.badges = string.init;
 
-                if (!parser.client.alias_.length)
+                if (!parser.client.displayName.length)
                 {
                     // Also store the alias in the IRCClient, for highlighting purposes
                     // *ASSUME* it never changes during runtime.
-                    parser.client.alias_ = alias_;
+                    parser.client.displayName = displayName;
                     version(FlagAsUpdated) parser.clientUpdated = true;
                 }
             }
             else
             {
                 // The display name of the sender.
-                event.sender.alias_ = alias_;
+                event.sender.displayName = displayName;
             }
             break;
 
@@ -916,7 +916,7 @@ user-type                          ""
         case "msg-param-recipient-display-name":
         case "msg-param-sender-name":
             // In a GIFTCHAIN the display name of the one who started the gift sub train?
-            event.target.alias_ = value;
+            event.target.displayName = value;
             break;
 
         case "msg-param-recipient-user-name":
@@ -927,7 +927,7 @@ user-type                          ""
 
         case "msg-param-displayName":
             // RAID; sender alias and thus raiding channel cased
-            event.sender.alias_ = value;
+            event.sender.displayName = value;
             break;
 
         case "msg-param-login":
@@ -1314,12 +1314,12 @@ final class TwitchPostprocessor : Postprocessor
             // displayed name/alias is sent separately as a "display-name" IRCv3 tag
             event.sender.account = event.sender.nickname;
         }
-        else if (event.sender.alias_.length)
+        else if (event.sender.displayName.length)
         {
             // If no nickname yet an alias, it may be an anonymous subgift/bulkgift
             // where the msg-id appeared before the display-name in the tags.
             // Clear it.
-            event.sender.alias_ = string.init;
+            event.sender.displayName = string.init;
         }
     }
 }

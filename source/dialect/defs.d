@@ -1062,7 +1062,11 @@ struct IRCUser
         // Twitch has some extra features.
 
         /// The alternate "display name" of the user.
-        string alias_;
+        string displayName;
+
+        /// Deprecated alias kept as transition.
+        deprecated("Use `displayName`")
+        alias alias_ = displayName;
 
         /// The Twitch badges this user has.
         string badges;
@@ -1072,8 +1076,8 @@ struct IRCUser
     }
     else
     {
-        /// Deprecated remnant of when `alias_` wasn't versioned TwitchSupport
-        deprecated("Version your code to use dialect build config `twitch`")
+        /// Deprecated remnant of when `displayName` was `alias_` and wasn't versioned TwitchSupport
+        deprecated("Version your code to use dialect build config \"twitch\" and use `displayName`")
         string alias_;
     }
 
@@ -2345,7 +2349,7 @@ struct IRCClient
         version(TwitchSupport)
         {
             /// Our Twitch display name or alias.
-            string alias_;
+            string displayName;
         }
 
         /// The current modechars active on the client (e.g. "ix");
