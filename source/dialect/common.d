@@ -307,7 +307,7 @@ unittest
     }
     {
         IRCUser user;
-        user.nickname = "services.";
+        user.address = "services.";
         assert(user.isSpecial(parser));
     }
     {
