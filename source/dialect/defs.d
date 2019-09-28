@@ -11,8 +11,6 @@ module dialect.defs;
 
 import lu.uda;
 
-import std.range.primitives : isOutputRange;
-
 final:
 @safe:
 pure:
