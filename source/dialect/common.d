@@ -259,6 +259,11 @@ bool isSpecial(const IRCUser sender, const ref IRCParser parser) pure
         // Unknown ident/address, drop to after switch
         break;
 
+    case "ChanServ":
+        if ((sender.ident == "service") && (sender.address == "RusNet")) return true;
+        // Unknown ChanServ, drop to after switch
+        break;
+
     default:
         // Drop down
         break;
