@@ -236,8 +236,11 @@ bool isSpecial(const IRCUser sender, const ref IRCParser parser) pure
             // Unknown address, drop to after switch
             break;
 
-        /*case "services":
-        case "service":
+        case "services":
+            if (sender.address == "services.host") return true;  // SwiftIRC
+            break;
+
+        /*case "service":
             // known idents, drop to after switch for address
             break;*/
 
@@ -547,8 +550,11 @@ bool isAuthService(const IRCUser sender, const ref IRCParser parser) pure
             // Unknown address, drop to after switch
             break;
 
-        /*case "services":
-        case "service":
+        case "services":
+            if (sender.address == "services.host") return true;  // SwiftIRC
+            break;
+
+        /*case "service":
             // known idents, drop to after switch for address
             break;*/
 
