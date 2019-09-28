@@ -2263,7 +2263,10 @@ struct IRCParser
     /++
      +  Parses an IRC string into an `dialect.defs.IRCEvent`.
      +
-     +  Proxies the call to the top-level `toIRCEvent(IRCParser, string)`.
+     +  The return type is kept as `auto` to infer purity. It will be `pure` if
+     +  there are no postprocessors available, and merely `@safe` if there are.
+     +
+     +  Proxies the call to the top-level `.toIRCEvent(IRCParser, string)`.
      +
      +  Params:
      +      raw = Raw IRC string as received from a server.
