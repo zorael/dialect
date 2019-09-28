@@ -256,6 +256,7 @@ bool isSpecial(const IRCUser sender, const ref IRCParser parser) pure
         case "c":
         case "services.":
             // Known services that are not nickname services
+            // BUG? We may need to go by more than nickname
             return true;
 
         case "q":
@@ -268,7 +269,8 @@ bool isSpecial(const IRCUser sender, const ref IRCParser parser) pure
 
         default:
             import std.algorithm.searching : endsWith;
-            return service.endsWith("serv");
+            if (service.endsWith("serv")) return true;
+            break;
         }
 
         if ((parser.server.daemon != IRCServer.Daemon.twitch) &&
