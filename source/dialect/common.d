@@ -1180,7 +1180,7 @@ void setMode(ref IRCChannel channel, const string signedModestringRaw,
 
     if (!modecharArray.length) return;
 
-    auto datalines = data.splitter(" ").array.retro;
+    auto datalines = data.strippedRight.splitter(" ").array.retro;
     auto moderange = modecharArray.retro;
     auto ziprange = zip(StoppingPolicy.longest, moderange, datalines);
 
