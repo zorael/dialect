@@ -501,6 +501,9 @@ unittest
 /++
  +  Inspects an `dialect.defs.IRCUser` and judges whether or not it is services.
  +
+ +  Much of this is duplicated in `isSpecial`, but it is hard to break out, as
+ +  their default cases differ.
+ +
  +  Example:
  +  ---
  +  IRCUser user;
@@ -519,83 +522,59 @@ unittest
  +/
 bool isAuthService(const IRCUser sender, const ref IRCParser parser) pure
 {
-    import lu.string : sharedDomains;
-    import std.uni : toLower;
+    if (parser.server.daemon == IRCServer.Daemon.twitch) return false;
 
-    immutable lowerNickname = sender.nickname.toLower;
-
-    switch (lowerNickname)
+    switch (sender.nickname)
     {
+    case "NickServ":
     case "nickserv":
+    case "NICKSERV":
+    case "SaslServ":
     case "saslserv":
         switch (sender.ident)
         {
         case "NickServ":
+        case "nickserv":
+        case "NICKSERV":
         case "SaslServ":
+        case "saslserv":
             if (sender.address == "services.") return true;
+            // Unknown address, drop to after switch
             break;
 
-        case "services":
+        /*case "services":
         case "service":
-            // known idents, drop to after switch
-            break;
+            // known idents, drop to after switch for address
+            break;*/
 
         default:
-            // Unknown ident, try the generic address check after the switch
+            // Unknown ident, drop to after switch
             break;
         }
         break;
 
-    /*case "chanserv":
-    case "operserv":
-    case "memoserv":
-    case "hostserv":
-    case "botserv":
-    case "infoserv":
-    case "reportserv":
-    case "moraleserv":
-    case "gameserv":
-    case "groupserv":
-    case "helpserv":
-    case "statserv":
-    case "userserv":
-    case "spamserv":*/
-    case "global":
-    case "alis":
-    case "chanfix":
-    case "c":
-    case "services.":
-        // Known services that are not nickname services
-        // BUG? We may need to go by more than nickname
-        return false;
-
-    case "q":
+    case "Q":
         // :Q!TheQBot@CServe.quakenet.org NOTICE kameloso :You are now logged in as kameloso.
+        // Seems to be QuakeNet-specific
         return ((sender.ident == "TheQBot") && (sender.address == "CServe.quakenet.org"));
 
+    case "AuthServ":
     case "authserv":
         // :AuthServ!AuthServ@Services.GameSurge.net NOTICE kameloso :Could not find your account
-        return ((sender.ident == "AuthServ") && (sender.address == "Services.GameSurge.net"));
+        if ((sender.ident == "AuthServ") && (sender.address == "Services.GameSurge.net")) return true;
+        // Unknown ident/address, drop to after switch
+        break;
 
     default:
-        /*import std.algorithm.searching : endsWith;
-
-        if (sender.address.contains("/staff/"))
-        {
-            // Staff notice
-            return false;
-        }
-        else if (lowerNickname.endsWith("serv"))
-        {
-            return false;
-        }*/
-
-        // Not a known nick registration nick
-        /*logger.warningf("Unknown nickname service nick: %s!%s@%s",
-            sender.nickname, sender.ident, sender.address);
-        printObject(event);*/
+        // Unknown nickname
         return false;
     }
+
+    import lu.string : sharedDomains;
+    import std.uni : toLower;
+
+    // We're here if nick nickserv/sasl and unknown ident, or authserv and not gamesurge
+    // As such, no need to be as strict as isSpecial is
 
     immutable lowerAddress = sender.address.toLower;
 
