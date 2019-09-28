@@ -565,6 +565,7 @@ bool isAuthService(const IRCUser sender, const ref IRCParser parser) pure
     case "c":
     case "services.":
         // Known services that are not nickname services
+        // BUG? We may need to go by more than nickname
         return false;
 
     case "q":
@@ -576,7 +577,7 @@ bool isAuthService(const IRCUser sender, const ref IRCParser parser) pure
         return ((sender.ident == "AuthServ") && (sender.address == "Services.GameSurge.net"));
 
     default:
-        import std.algorithm.searching : endsWith;
+        /*import std.algorithm.searching : endsWith;
 
         if (sender.address.contains("/staff/"))
         {
@@ -586,7 +587,7 @@ bool isAuthService(const IRCUser sender, const ref IRCParser parser) pure
         else if (lowerNickname.endsWith("serv"))
         {
             return false;
-        }
+        }*/
 
         // Not a known nick registration nick
         /*logger.warningf("Unknown nickname service nick: %s!%s@%s",
