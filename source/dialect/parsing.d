@@ -1217,11 +1217,20 @@ void parseSpecialcases(ref IRCParser parser, ref IRCEvent event, ref string slic
     case RPL_BANLIST: // 367
         // :siren.de.SpotChat.org 941 kameloso #linuxmint-help spotify.com/album Butterfly 1513796216
         // ":kornbluth.freenode.net 367 kameloso #flerrp harbl!harbl@snarbl.com zorael!~NaN@2001:41d0:2:80b4:: 1513899521"
+        // :irc.run.net 367 kameloso #politics *!*@broadband-46-242-*.ip.moscow.rt.ru
         slice.nom(' '); // bot nickname
         event.channel = slice.nom(' ');
-        event.content = slice.nom(' ');
-        event.aux = slice.nom(' ');  // nickname that set the mode
-        event.count = slice.to!int;
+
+        if (slice.contains(' '))
+        {
+            event.content = slice.nom(' ');
+            event.aux = slice.nom(' ');  // nickname that set the mode
+            event.count = slice.to!int;
+        }
+        else
+        {
+            event.content = slice;
+        }
         break;
 
     default:
