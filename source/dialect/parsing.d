@@ -2317,10 +2317,11 @@ struct IRCParser
      +  Initialises defined postprocessors.
      +/
     void initPostprocessors() pure nothrow
+    in (!postprocessors.length, "Tried to double-init postprocessors")
+    do
     {
         import dialect.postprocessors : EnabledPostprocessors;
 
-        assert(!postprocessors.length, "Tried to double-init postprocessors");
         postprocessors.reserve(EnabledPostprocessors.length);
 
         foreach (Postprocessor; EnabledPostprocessors)
