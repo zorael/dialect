@@ -91,6 +91,7 @@ struct IRCParser
 {
     IRCClient client;
     IRCServer server;
+    this(IRCClient, IRCServer);
 
     IRCEvent toIRCEvent(const string);  // <--
 }
@@ -165,7 +166,7 @@ See the [`/tests`](/tests) directory for more example parses.
 
 # Roadmap
 
-* remove final non-bot-agnostic remnants
+* detect and remove final non-bot-agnostic remnants
 
 # License
 
