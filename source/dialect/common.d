@@ -273,9 +273,11 @@ bool isSpecial(const IRCUser sender, const ref IRCParser parser) pure
             break;
         }
 
+        immutable lowerAddress = sender.address.toLower;
+
         if ((parser.server.daemon != IRCServer.Daemon.twitch) &&
-            ((sharedDomains(sender.address, parser.server.address) >= 2) ||
-            (sharedDomains(sender.address, parser.server.resolvedAddress) >= 2)))
+            ((sharedDomains(lowerAddress, parser.server.address) >= 2) ||
+            (sharedDomains(lowerAddress, parser.server.resolvedAddress.toLower) >= 2)))
         {
             return true;
         }
@@ -538,8 +540,10 @@ bool isAuthService(const IRCUser sender, const ref IRCParser parser) pure
         return false;
     }
 
-    if ((sharedDomains(sender.address, parser.server.address) >= 2) ||
-        (sharedDomains(sender.address, parser.server.resolvedAddress) >= 2))
+    immutable lowerAddress = sender.address.toLower;
+
+    if ((sharedDomains(lowerAddress, parser.server.address) >= 2) ||
+        (sharedDomains(lowerAddress, parser.server.resolvedAddress.toLower) >= 2))
     {
         return true;
     }
