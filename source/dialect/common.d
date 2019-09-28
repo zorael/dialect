@@ -190,6 +190,9 @@ auto typenumsOf(const IRCServer.Daemon daemon) pure nothrow @nogc
  +  Special senders include services and staff, administrators and the like. The
  +  use of this is contested and the notion may be removed at a later date.
  +
+ +  Much of this is duplicated in `isAuthService`, but it is hard to break out, as
+ +  their default cases differ.
+ +
  +  Params:
  +      sender = `dialect.defs.IRCUser` to examine.
  +      parser = Reference to the current `dialect.parsing.IRCParser`.
@@ -199,96 +202,94 @@ auto typenumsOf(const IRCServer.Daemon daemon) pure nothrow @nogc
  +/
 bool isSpecial(const IRCUser sender, const ref IRCParser parser) pure
 {
-    import lu.string : sharedDomains;
-    import std.uni : toLower;
+    import std.algorithm.comparison : equal;
+    import std.uni : asLowerCase;
 
-    with (parser)
+    if (parser.server.daemon == IRCServer.Daemon.twitch)
     {
-        if (sender.isServer || (sender.address.length &&
-            ((sender.address == server.address) ||
-            (sender.address == server.resolvedAddress) ||
-            (sender.address == "services."))))
-        {
-            return true;
-        }
+        return (sender.nickname == "jtv");
+    }
 
-        immutable service = sender.nickname.toLower;
+    if (sender.isServer || (sender.address.length &&
+        ((sender.address == parser.server.address) ||
+        (sender.address == "services.") ||
+        sender.address.equal(parser.server.resolvedAddress.asLowerCase))))
+    {
+        return true;
+    }
 
-        switch (service)
+    switch (sender.nickname)
+    {
+    case "NickServ":
+    case "nickserv":
+    case "NICKSERV":
+    case "SaslServ":
+    case "saslserv":
+        switch (sender.ident)
         {
+        case "NickServ":
         case "nickserv":
+        case "NICKSERV":
+        case "SaslServ":
         case "saslserv":
-            switch (sender.ident)
-            {
-            case "NickServ":
-            case "SaslServ":
-                if (sender.address == "services.") return true;
-                break;
-
-            case "services":
-            case "service":
-                // known idents, drop to after switch
-                break;
-
-            default:
-                // Unknown ident, try the generic address check after the switch
-                break;
-            }
+            if (sender.address == "services.") return true;
+            // Unknown address, drop to after switch
             break;
 
-        /*case "chanserv":
-        case "operserv":
-        case "memoserv":
-        case "hostserv":
-        case "botserv":
-        case "infoserv":
-        case "reportserv":
-        case "moraleserv":
-        case "gameserv":
-        case "groupserv":
-        case "helpserv":
-        case "statserv":
-        case "userserv":
-        case "spamserv":*/
-        case "global":
-        case "alis":
-        case "chanfix":
-        case "c":
-        case "services.":
-            // Known services that are not nickname services
-            // BUG? We may need to go by more than nickname
-            return true;
-
-        case "q":
-            // :Q!TheQBot@CServe.quakenet.org NOTICE kameloso :You are now logged in as kameloso.
-            return ((sender.ident == "TheQBot") && (sender.address == "CServe.quakenet.org"));
-
-        case "authserv":
-            // :AuthServ!AuthServ@Services.GameSurge.net NOTICE kameloso :Could not find your account
-            return ((sender.ident == "AuthServ") && (sender.address == "Services.GameSurge.net"));
+        /*case "services":
+        case "service":
+            // known idents, drop to after switch for address
+            break;*/
 
         default:
-            import std.algorithm.searching : endsWith;
-            if (service.endsWith("serv")) return true;
+            // Unknown ident, drop to after switch
             break;
         }
+        break;
 
-        immutable lowerAddress = sender.address.toLower;
+    case "Q":
+        // :Q!TheQBot@CServe.quakenet.org NOTICE kameloso :You are now logged in as kameloso.
+        // Seems to be QuakeNet-specific
+        return ((sender.ident == "TheQBot") && (sender.address == "CServe.quakenet.org"));
 
-        if ((parser.server.daemon != IRCServer.Daemon.twitch) &&
-            ((sharedDomains(lowerAddress, parser.server.address) >= 2) ||
-            (sharedDomains(lowerAddress, parser.server.resolvedAddress.toLower) >= 2)))
-        {
-            return true;
-        }
-        else if (sender.address.contains("/staff/"))
-        {
-            return true;
-        }
-        else
+    case "AuthServ":
+    case "authserv":
+        // :AuthServ!AuthServ@Services.GameSurge.net NOTICE kameloso :Could not find your account
+        if ((sender.ident == "AuthServ") && (sender.address == "Services.GameSurge.net")) return true;
+        // Unknown ident/address, drop to after switch
+        break;
+
+    default:
+        // Drop down
+        break;
+    }
+
+    import lu.string : contains, sharedDomains;
+    import std.algorithm.searching : endsWith;
+    import std.uni : toLower;
+
+    immutable lowerAddress = sender.address.toLower;
+
+    if ((sharedDomains(lowerAddress, parser.server.address) >= 2) ||
+        (sharedDomains(lowerAddress, parser.server.resolvedAddress.toLower) >= 2))
+    {
+        if ((parser.server.network == "OFTC") && (sender.address.endsWith(".user.oftc.net") ||
+            sender.address.contains("tor-irc")))
         {
             return false;
         }
+        else
+        {
+            return true;
+        }
+    }
+    else if (sender.address.contains("/staff/"))
+    {
+        return true;
+    }
+    else
+    {
+        return false;
     }
 }
 
