@@ -1192,6 +1192,13 @@ void setMode(ref IRCChannel channel, const string signedModestringRaw,
         immutable modechar = signedModechar.modechar;
         immutable sign = signedModechar.sign;
 
+        if ((sign != '+') && (sign != '-'))
+        {
+            // Ward against stack corruption
+            // immutable(SignedModechar)('ÿ', 'ÿ')
+            continue;
+        }
+
         IRCChannel.Mode newMode;
         newMode.modechar = modechar;
 
