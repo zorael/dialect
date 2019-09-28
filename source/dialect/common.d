@@ -252,8 +252,10 @@ bool isSpecial(const IRCUser sender, const ref IRCParser parser) pure
 
     case "Q":
         // :Q!TheQBot@CServe.quakenet.org NOTICE kameloso :You are now logged in as kameloso.
-        // Seems to be QuakeNet-specific
-        return ((sender.ident == "TheQBot") && (sender.address == "CServe.quakenet.org"));
+        // :Q!services@swiftirc.net NOTICE kameloso^ :[#rot] 4Reign of Terror
+        if ((sender.ident == "TheQBot") && (sender.address == "CServe.quakenet.org")) return true;
+        //else if ((sender.ident == "services") && (sender.address == "swiftirc.net")) return true;
+        break;
 
     case "AuthServ":
     case "authserv":
@@ -566,8 +568,10 @@ bool isAuthService(const IRCUser sender, const ref IRCParser parser) pure
 
     case "Q":
         // :Q!TheQBot@CServe.quakenet.org NOTICE kameloso :You are now logged in as kameloso.
-        // Seems to be QuakeNet-specific
-        return ((sender.ident == "TheQBot") && (sender.address == "CServe.quakenet.org"));
+        // :Q!services@swiftirc.net NOTICE kameloso^ :[#rot] 4Reign of Terror
+        if ((sender.ident == "TheQBot") && (sender.address == "CServe.quakenet.org")) return true;
+        //else if ((sender.ident == "services") && (sender.address == "swiftirc.net")) return true;
+        break;
 
     case "AuthServ":
     case "authserv":
