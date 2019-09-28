@@ -101,9 +101,6 @@ package:
  +/
 public IRCEvent toIRCEvent(ref IRCParser parser, const string raw) pure
 {
-    import lu.string : strippedRight;
-    import std.uni : toLower;
-
     if (!raw.length) throw new IRCParseException("Tried to parse empty string");
 
     IRCEvent event;
@@ -148,6 +145,7 @@ public IRCEvent toIRCEvent(ref IRCParser parser, const string raw) pure
     parser.parseSpecialcases(event, slice);
 
     // Final cosmetic touches
+    import std.uni : toLower;
     event.channel = event.channel.toLower;
 
     return event;
@@ -296,7 +294,6 @@ void parseBasic(ref IRCParser parser, ref IRCEvent event) pure @nogc
 unittest
 {
     import lu.conv : Enum;
-    import std.conv : to;
 
     IRCParser parser;
 
@@ -381,7 +378,6 @@ void parsePrefix(ref IRCParser parser, ref IRCEvent event, ref string slice) pur
 unittest
 {
     import lu.conv : Enum;
-    import std.conv : to;
 
     IRCParser parser;
 
@@ -1550,7 +1546,7 @@ void onNotice(ref IRCParser parser, ref IRCEvent event, ref string slice) pure
 
     with (parser)
     {
-        import dialect.common : isAuthService, isSpecial, isValidChannel;
+        import dialect.common : isAuthService, isSpecial;
 
         if (event.sender.isSpecial(parser)) event.sender.class_ = IRCUser.Class.special;
 
