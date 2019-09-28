@@ -63,19 +63,17 @@ void parseTwitchTags(ref IRCParser parser, ref IRCEvent event)
         immutable value = tag;
 
         version(TwitchWarnings)
+        static void printTags(typeof(tagRange) tagRange, const string highlight = string.init)
         {
-            static void printTags(typeof(tagRange) tagRange, const string highlight = string.init)
+            foreach (immutable tagline; tagRange)
             {
-                foreach (immutable tagline; tagRange)
-                {
-                    import std.stdio : writef, writeln;
+                import std.stdio : writef, writeln;
 
-                    string slice = tagline;  // mutable
-                    immutable key = slice.nom('=');
+                string slice = tagline;  // mutable
+                immutable key = slice.nom('=');
 
-                    writef(`%-35s"%s"`, key, slice);
-                    writeln((highlight.length && (slice == highlight)) ? " <-- !" : string.init);
-                }
+                writef(`%-35s"%s"`, key, slice);
+                writeln((highlight.length && (slice == highlight)) ? " <-- !" : string.init);
             }
         }
 
