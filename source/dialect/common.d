@@ -292,6 +292,61 @@ bool isSpecial(const IRCUser sender, const ref IRCParser parser) pure
     }
 }
 
+///
+unittest
+{
+    IRCParser parser;
+
+    {
+        IRCUser user;
+        user.nickname = "NickServ";
+        user.ident = "NickServ";
+        user.address = "services.";
+        assert(user.isSpecial(parser));
+    }
+    {
+        IRCUser user;
+        user.nickname = "services.";
+        assert(user.isSpecial(parser));
+    }
+    {
+        IRCUser user;
+        user.nickname = "Joe";
+        user.ident = "~Joe";
+        user.address = "/staff/joe";
+        assert(user.isSpecial(parser));
+    }
+    {
+        IRCUser user;
+        user.nickname = "Boo";
+        user.ident = "~blah";
+        user.address = "asdf.asdf.net";
+        assert(!user.isSpecial(parser));
+    }
+    {
+        IRCUser user;
+        user.nickname = "Q";
+        user.ident = "TheQBot";
+        user.address = "CServe.quakenet.org";
+        assert(user.isSpecial(parser));
+    }
+    {
+        IRCUser user;
+        user.nickname = "AuthServ";
+        user.ident = "AuthServ";
+        user.address = "Services.GameSurge.net";
+        assert(user.isSpecial(parser));
+    }
+    {
+        parser.server.address = "irc.freenode.net";
+        IRCUser user;
+        user.nickname = "harbl";
+        user.ident = "~snarbl";
+        user.address = "staff.freenode.net";
+        assert(user.isSpecial(parser));
+    }
+}
+
 
 // isSpecial
 /++
