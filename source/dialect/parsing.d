@@ -605,8 +605,7 @@ void parseSpecialcases(ref IRCParser parser, ref IRCEvent event, ref string slic
             import lu.string : unquoted;
 
             event.channel = slice.nom(" :");
-            event.content = slice;
-            event.content = event.content.unquoted;
+            event.content = slice.unquoted;
         }
         else
         {
