@@ -1172,7 +1172,7 @@ void setMode(ref IRCChannel channel, const string signedModestringRaw,
         {
             nextSign = c;
         }
-        else
+        else if (((c >= 'A') && (c <= 'Z')) || ((c >= 'a') && (c <= 'z')))
         {
             modecharArray ~= SignedModechar(nextSign, c);
         }
