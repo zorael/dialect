@@ -532,12 +532,27 @@ room-id                            "60056333"
                 break;
 
             case "anongiftpaidupgrade":
-                version(TwitchWarnings)
-                {
-                    import std.stdio : writeln;
-                    writeln('@', event.tags, ' ', event.raw, '$');
-                    printTags(tagRange);
-                }
+/+
+@badge-info=subscriber/1;badges=subscriber/0,turbo/1;color=#FF0000;display-name=BlackCore900;emotes=;flags=;id=99b46653-6c93-4ea7-ae28-9a0cc1b98124;login=blackcore900;mod=0;msg-id=anon
+giftpaidupgrade;room-id=23528098;subscriber=1;system-msg=BlackCore900\sis\scontinuing\sthe\sGift\sSub\sthey\sgot\sfrom\san\sanonymous\suser!;tmi-sent-ts=1569641163030;user-id=53872581;
+user-type= :tmi.twitch.tv USERNOTICE #avoidingthepuddle$
+badge-info                         "subscriber/1"
+badges                             "subscriber/0,turbo/1"
+color                              "#FF0000"
+display-name                       "BlackCore900"
+emotes                             ""
+flags                              ""
+id                                 "99b46653-6c93-4ea7-ae28-9a0cc1b98124"
+login                              "blackcore900"
+mod                                "0"
+msg-id                             "anongiftpaidupgrade"
+room-id                            "23528098"
+subscriber                         "1"
+system-msg                         "BlackCore900\sis\scontinuing\sthe\sGift\sSub\sthey\sgot\sfrom\san\sanonymous\suser!"
+tmi-sent-ts                        "1569641163030"
+user-id                            "53872581"
+user-type                          ""
++/
                 goto case "giftpaidupgrade";
 
             case "primepaidupgrade":
