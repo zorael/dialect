@@ -820,7 +820,6 @@ user-type                          ""
 
                 version(TwitchWarnings)
                 {
-                    import std.algorithm.iteration : joiner;
                     import std.stdio : writeln;
                     writeln("Unknown Twitch msg-id: ", value);
                     writeln('@', event.tags, ' ', event.raw, '$');
@@ -1255,7 +1254,6 @@ room-id             "31457014"
         default:
             version(TwitchWarnings)
             {
-                import std.algorithm.iteration : joiner;
                 import std.stdio : writefln, writeln;
 
                 writefln("Unknown Twitch tag: %s = %s", key, value);
