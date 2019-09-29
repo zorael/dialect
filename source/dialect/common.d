@@ -280,10 +280,8 @@ bool isSpecial(const IRCUser sender, const ref IRCParser parser) pure
     import std.algorithm.searching : endsWith;
     import std.uni : toLower;
 
-    immutable lowerAddress = sender.address.toLower;
-
-    if ((sharedDomains(lowerAddress, parser.server.address) >= 2) ||
-        (sharedDomains(lowerAddress, parser.server.resolvedAddress.toLower) >= 2))
+    if ((sharedDomains(sender.address, parser.server.address) >= 2) ||
+        (sharedDomains(sender.address, parser.server.resolvedAddress)))
     {
         if ((parser.server.network == "OFTC") && (sender.address.endsWith(".user.oftc.net") ||
             sender.address.contains("tor-irc")))
@@ -298,6 +296,22 @@ bool isSpecial(const IRCUser sender, const ref IRCParser parser) pure
     else if (sender.address.contains("/staff/"))
     {
         return true;
+    }
+
+    immutable lowerAddress = sender.address.toLower;
+
+    if ((sharedDomains(lowerAddress, parser.server.address) >= 2) ||
+        (sharedDomains(lowerAddress, parser.server.resolvedAddress.toLower) >= 2))
+    {
+        if ((parser.server.network == "OFTC") && (sender.address.endsWith(".user.oftc.net") ||
+            sender.address.contains("tor-irc")))
+        {
+            return false;
+        }
+        else
+        {
+            return true;
+        }
     }
     else
     {
@@ -592,8 +606,14 @@ bool isAuthService(const IRCUser sender, const ref IRCParser parser) pure
     import lu.string : sharedDomains;
     import std.uni : toLower;
 
-    // We're here if nick nickserv/sasl and unknown ident, or authserv and not gamesurge
+    // We're here if nick nickserv/sasl/etc and unknown ident, or server mismatch
     // As such, no need to be as strict as isSpecial is
+
+    if ((sharedDomains(sender.address, parser.server.address) >= 2) ||
+        (sharedDomains(sender.address, parser.server.resolvedAddress)))
+    {
+        return true;
+    }
 
     immutable lowerAddress = sender.address.toLower;
 
