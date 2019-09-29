@@ -1135,6 +1135,8 @@ unittest
  +  `data` argument, assuming they are in the proper order (where the
  +  `data`-taking modes are at the end of the string).
  +
+ +  Care has to be taken not to have trailing spaces in the arguments.
+ +
  +  Example:
  +  ---
  +  IRCChannel channel;
@@ -1188,7 +1190,7 @@ void setMode(ref IRCChannel channel, const string signedModestring,
 
     if (!modecharArray.length) return;
 
-    auto datalines = data.strippedRight.splitter(" ").array.retro;
+    auto datalines = data.splitter(" ").array.retro;
     auto moderange = modecharArray.retro;
     auto ziprange = zip(StoppingPolicy.longest, moderange, datalines);
 
