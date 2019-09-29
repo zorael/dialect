@@ -559,7 +559,7 @@ unittest
  +/
 void parseSpecialcases(ref IRCParser parser, ref IRCEvent event, ref string slice) pure
 {
-    import lu.string : beginsWith;
+    import lu.string : beginsWith, strippedRight;
     import std.conv : to;
     import std.typecons : Flag, No, Yes;
 
@@ -646,6 +646,7 @@ void parseSpecialcases(ref IRCParser parser, ref IRCEvent event, ref string slic
         break;
 
     case MODE:
+        slice = slice.strippedRight;  // RusNet has trailing spaces
         parser.onMode(event, slice);
         break;
 
@@ -690,7 +691,7 @@ void parseSpecialcases(ref IRCParser parser, ref IRCEvent event, ref string slic
         slice.nom(' ');  // bot nickname
         slice.nom(' ');
         event.channel = slice.nom(" :");
-        event.content = slice;  // .strippedRight;
+        event.content = slice.strippedRight;
         break;
 
     case RPL_WHOREPLY: // 352
@@ -1010,7 +1011,7 @@ void parseSpecialcases(ref IRCParser parser, ref IRCEvent event, ref string slic
         }
 
         event.aux = slice.nom(" :");
-        event.content = slice;
+        event.content = slice.strippedRight;
         break;
 
     case RPL_UMODEGMSG:
@@ -1136,11 +1137,11 @@ void parseSpecialcases(ref IRCParser parser, ref IRCEvent event, ref string slic
         {
             event.aux = slice.nom(' ');
             //event.content = slice.nom(' ');
-            event.content = slice;
+            event.content = slice.strippedRight;
         }
         else
         {
-            event.aux = slice;
+            event.aux = slice.strippedRight;
         }
         break;
 
@@ -1469,7 +1470,8 @@ void parseGeneralCases(ref IRCParser parser, ref IRCEvent event, ref string slic
     if (!event.content.length && (slice != event.channel) &&
         (slice != event.target.nickname))
     {
-        event.content = slice;
+        import lu.string : strippedRight;
+        event.content = slice.strippedRight;
     }
 }
 
