@@ -1148,22 +1148,20 @@ unittest
  +
  +  Params:
  +      channel = `dialect.defs.IRCChannel` whose modes are being set.
- +      signedModestringRaw = String of the raw mode command, including the
+ +      signedModestring = String of the raw mode command, including the
  +          prefixing sign (+ or -).
  +      data = Appendix to the signed modestring; arguments to the modes that
  +          are being set.
  +      server = The current `dialect.defs.IRCServer` with all its settings.
  +/
-void setMode(ref IRCChannel channel, const string signedModestringRaw,
+void setMode(ref IRCChannel channel, const string signedModestring,
     const string data, const IRCServer server) pure
 {
-    import lu.string : beginsWith, strippedRight;
+    import lu.string : beginsWith;
     import std.array : array;
     import std.algorithm.iteration : splitter;
     import std.range : StoppingPolicy, retro, zip;
     import std.string : representation;
-
-    immutable signedModestring = signedModestringRaw.strippedRight;
 
     if (!signedModestring.length) return;
 
