@@ -1592,6 +1592,7 @@ void onNotice(ref IRCParser parser, ref IRCEvent event, ref string slice) pure
                 quakenet = "You are now logged in as",
                 gamesurge = "I recognize you.",
                 dalnet = "Password accepted for",
+                oftc = "You are successfully identified as",
             }
 
             with (event)
@@ -1600,6 +1601,7 @@ void onNotice(ref IRCParser parser, ref IRCEvent event, ref string slice) pure
                 if ((content.beginsWith(freenode)) ||
                     (content.beginsWith(quakenet)) || // also Freenode SASL
                     (content.beginsWith(dalnet)) ||
+                    (content.beginsWith(oftc)) ||
                     (content == rizon) ||
                     (content == gamesurge))
                 {
@@ -1616,7 +1618,7 @@ void onNotice(ref IRCParser parser, ref IRCEvent event, ref string slice) pure
                 quakenet = "Username or password incorrect.",
                 freenodeInvalid = "is not a registered nickname.",
                 freenodeRejected = "Invalid password for",
-                dalnet = "is not registered.",
+                dalnet = "is not registered.",  // also OFTC
                 unreal = "isn't registered.",
                 gamesurge = "Could not find your account -- did you register yet?",
             }
