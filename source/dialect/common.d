@@ -218,39 +218,50 @@ bool isSpecial(const IRCUser sender, const ref IRCParser parser) pure
         return true;
     }
 
+    top:
     switch (sender.nickname)
     {
     case "NickServ":
-    case "nickserv":
-    case "NICKSERV":
     case "SaslServ":
-    case "saslserv":
         switch (sender.ident)
         {
         case "NickServ":
-        case "nickserv":
-        case "NICKSERV":
         case "SaslServ":
-        case "saslserv":
             if (sender.address == "services.") return true;
             // Unknown address, drop to after switch
-            break;
+            break top;
 
         case "services":
-            if (sender.address == "services.host") return true;  // SwiftIRC
-            // Unknown address, drop to after switch
-            break;
+            switch (sender.address)
+            {
+            case "services.host":  // SwiftIRC
+            case "geekshed.net":
+            case "services.irchighway.net":
+            case "services.oftc.net":
+                return true;
+
+            default:
+                // Unknown address, drop to after switch
+                break top;
+            }
 
         case "service":
-            if (sender.address == "RusNet") return true;
-            // Unknown address, drop to after switch
-            break;
+            switch (sender.address)
+            {
+            case "RusNet":
+            case "dal.net":
+            case "rizon.net":
+                return true;
+
+            default:
+                // Unknown address, drop to after switch
+                break top;
+            }
 
         default:
             // Unknown ident, drop to after switch
-            break;
+            break top;
         }
-        break;
 
     case "Q":
         // :Q!TheQBot@CServe.quakenet.org NOTICE kameloso :You are now logged in as kameloso.
@@ -541,39 +552,50 @@ bool isAuthService(const IRCUser sender, const ref IRCParser parser) pure
 {
     if (parser.server.daemon == IRCServer.Daemon.twitch) return false;
 
+    top:
     switch (sender.nickname)
     {
     case "NickServ":
-    case "nickserv":
-    case "NICKSERV":
     case "SaslServ":
-    case "saslserv":
         switch (sender.ident)
         {
         case "NickServ":
-        case "nickserv":
-        case "NICKSERV":
         case "SaslServ":
-        case "saslserv":
             if (sender.address == "services.") return true;
             // Unknown address, drop to after switch
-            break;
+            break top;
 
         case "services":
-            if (sender.address == "services.host") return true;  // SwiftIRC
-            // Unknown address, drop to after switch
-            break;
+            switch (sender.address)
+            {
+            case "services.host":  // SwiftIRC
+            case "geekshed.net":
+            case "services.irchighway.net":
+            case "services.oftc.net":
+                return true;
+
+            default:
+                // Unknown address, drop to after switch
+                break top;
+            }
 
         case "service":
-            if (sender.address == "RusNet") return true;
-            // Unknown address, drop to after switch
-            break;
+            switch (sender.address)
+            {
+            case "RusNet":
+            case "dal.net":
+            case "rizon.net":
+                return true;
+
+            default:
+                // Unknown address, drop to after switch
+                break top;
+            }
 
         default:
             // Unknown ident, drop to after switch
-            break;
+            break top;
         }
-        break;
 
     case "Q":
         // :Q!TheQBot@CServe.quakenet.org NOTICE kameloso :You are now logged in as kameloso.
