@@ -276,9 +276,18 @@ bool isSpecial(const IRCUser sender, const ref IRCParser parser) pure
         break;
     }
 
-    import lu.string : contains, sharedDomains;
+    import lu.string : contains, origSharedDomains = sharedDomains;
     import std.algorithm.searching : endsWith;
-    import std.uni : toLower;
+    import std.typecons : Flag, No, Yes;
+
+    static if (__traits(compiles, origSharedDomains!(No.caseSensitive)(string.init, string.init)))
+    {
+        alias sharedDomains = origSharedDomains!(No.caseSensitive);
+    }
+    else
+    {
+        alias sharedDomains = origSharedDomains;
+    }
 
     if ((sharedDomains(sender.address, parser.server.address) >= 2) ||
         (sharedDomains(sender.address, parser.server.resolvedAddress)))
@@ -298,25 +307,7 @@ bool isSpecial(const IRCUser sender, const ref IRCParser parser) pure
         return true;
     }
 
-    immutable lowerAddress = sender.address.toLower;
-
-    if ((sharedDomains(lowerAddress, parser.server.address) >= 2) ||
-        (sharedDomains(lowerAddress, parser.server.resolvedAddress.toLower) >= 2))
-    {
-        if ((parser.server.network == "OFTC") && (sender.address.endsWith(".user.oftc.net") ||
-            sender.address.contains("tor-irc")))
-        {
-            return false;
-        }
-        else
-        {
-            return true;
-        }
-    }
-    else
-    {
-        return false;
-    }
+    return false;
 }
 
 ///
@@ -603,29 +594,24 @@ bool isAuthService(const IRCUser sender, const ref IRCParser parser) pure
         return false;
     }
 
-    import lu.string : sharedDomains;
-    import std.uni : toLower;
-
     // We're here if nick nickserv/sasl/etc and unknown ident, or server mismatch
     // As such, no need to be as strict as isSpecial is
 
-    if ((sharedDomains(sender.address, parser.server.address) >= 2) ||
-        (sharedDomains(sender.address, parser.server.resolvedAddress)))
-    {
-        return true;
-    }
+    import lu.string : contains, origSharedDomains = sharedDomains;
+    import std.algorithm.searching : endsWith;
+    import std.typecons : Flag, No, Yes;
 
-    immutable lowerAddress = sender.address.toLower;
-
-    if ((sharedDomains(lowerAddress, parser.server.address) >= 2) ||
-        (sharedDomains(lowerAddress, parser.server.resolvedAddress.toLower) >= 2))
+    static if (__traits(compiles, origSharedDomains!(No.caseSensitive)(string.init, string.init)))
     {
-        return true;
+        alias sharedDomains = origSharedDomains!(No.caseSensitive);
     }
     else
     {
-        return false;
+        alias sharedDomains = origSharedDomains;
     }
+
+    return (sharedDomains(sender.address, parser.server.address) >= 2) ||
+        (sharedDomains(sender.address, parser.server.resolvedAddress));
 }
 
 unittest
