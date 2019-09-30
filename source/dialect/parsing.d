@@ -1577,13 +1577,23 @@ void onNotice(ref IRCParser parser, ref IRCEvent event, ref string slice) pure
 
             //event.sender.class_ = IRCUser.Class.special; // by definition
 
-            if (event.content.asLowerCase.canFind("/msg nickserv identify"))
+            enum AuthChallenge
             {
-                event.type = IRCEvent.Type.AUTH_CHALLENGE;
-                return;
+                dalnet = "This nick is owned by someone else. Please choose another.",
+                oftc = "This nickname is registered and protected.",
             }
 
-            // FIXME: This obviously doesn't scale either
+            with (event)
+            with (AuthChallenge)
+            {
+                if (content.asLowerCase.canFind("/msg nickserv identify") ||
+                    (content == dalnet) ||
+                    content.beginsWith(oftc))
+                {
+                    type = IRCEvent.Type.AUTH_CHALLENGE;
+                    return;
+                }
+            }
 
             enum AuthSuccess
             {
@@ -1618,9 +1628,13 @@ void onNotice(ref IRCParser parser, ref IRCEvent event, ref string slice) pure
                 quakenet = "Username or password incorrect.",
                 freenodeInvalid = "is not a registered nickname.",
                 freenodeRejected = "Invalid password for",
-                dalnet = "is not registered.",  // also OFTC
+                dalnetInvalid = "is not registered.",  // also OFTC
+                dalnetRejected = "The password supplied for",
                 unreal = "isn't registered.",
-                gamesurge = "Could not find your account -- did you register yet?",
+                gamesurgeInvalid = "Could not find your account -- did you register yet?",
+                gamesurgeRejected = "Incorrect password; please try again.",
+                geekshedRejected = "Password incorrect.",  // also irchighway, rizon, rusnet
+                oftcRejected = "Identify failed as",
             }
 
             with (event)
@@ -1628,11 +1642,15 @@ void onNotice(ref IRCParser parser, ref IRCEvent event, ref string slice) pure
             {
                 if ((content == rizon) ||
                     (content == quakenet) ||
-                    (content == gamesurge) ||
+                    (content == gamesurgeInvalid) ||
+                    (content == gamesurgeRejected) ||
+                    (content == geekshedRejected) ||
                      content.contains(cast(string)freenodeInvalid) ||
                      content.beginsWith(cast(string)freenodeRejected) ||
-                     content.contains(cast(string)dalnet) ||
-                     content.contains(cast(string)unreal))
+                     content.contains(cast(string)dalnetInvalid) ||
+                     content.beginsWith(cast(string)dalnetRejected) ||
+                     content.contains(cast(string)unreal) ||
+                     content.beginsWith(cast(string)oftcRejected))
                 {
                     event.type = IRCEvent.Type.AUTH_FAILURE;
                 }
