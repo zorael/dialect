@@ -111,3 +111,42 @@ unittest
         }
     }
 }
+
+unittest
+{
+    IRCParser parser;
+
+    with (parser)
+    {
+        client.nickname = "kameloso";
+        client.user = "kameloso";
+        client.ident = "NaN";
+        client.realName = "kameloso IRC bot";
+        server.address = "irc.quakenet.org";
+        server.port = 6667;
+        server.daemon = IRCServer.Daemon.snircd;
+        server.network = "QuakeNet";
+        server.daemonstring = "snircd";
+        server.aModes = "eIbq";
+        server.bModes = "k";
+        server.cModes = "flj";
+        server.dModes = "CFLMPQScgimnprstz";
+        server.prefixchars = ['v':'+', 'o':'@'];
+        server.prefixes = "ov";
+    }
+
+    parser.typenums = typenumsOf(parser.server.daemon);
+
+    {
+        immutable event = parser.toIRCEvent(":Q!TheQBot@CServe.quakenet.org NOTICE kameloso :Username or password incorrect.");
+        with (event)
+        {
+            assert((type == IRCEvent.Type.AUTH_FAILURE), Enum!(IRCEvent.Type).toString(type));
+            assert((sender.nickname == "Q"), sender.nickname);
+            assert((sender.ident == "TheQBot"), sender.ident);
+            assert((sender.address == "CServe.quakenet.org"), sender.address);
+            assert((sender.class_ == IRCUser.Class.special), Enum!(IRCUser.Class).toString(sender.class_));
+            assert((content == "Username or password incorrect."), content);
+        }
+    }
+}

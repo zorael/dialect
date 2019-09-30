@@ -98,5 +98,55 @@ unittest
             assert((num == 396), num.to!string);
         }
     }
+}
 
+unittest
+{
+    IRCParser parser;
+
+    with (parser)
+    {
+        client.nickname = "kameloso";
+        client.user = "kameloso";
+        client.ident = "NaN";
+        client.realName = "kameloso IRC bot";
+        server.address = "Portlane.SE.EU.GameSurge.net";
+        server.port = 6667;
+        server.daemon = IRCServer.Daemon.u2;
+        server.network = "GameSurge";
+        server.daemonstring = "u2";
+        server.aModes = "eIbq";
+        server.bModes = "k";
+        server.cModes = "flj";
+        server.dModes = "CFLMPQScgimnprstz";
+        server.prefixchars = ['v':'+', 'o':'@'];
+        server.prefixes = "ov";
+    }
+
+    parser.typenums = typenumsOf(parser.server.daemon);
+
+    {
+        immutable event = parser.toIRCEvent(":AuthServ!AuthServ@Services.GameSurge.net NOTICE kameloso :Incorrect password; please try again.");
+        with (event)
+        {
+            assert((type == IRCEvent.Type.AUTH_FAILURE), Enum!(IRCEvent.Type).toString(type));
+            assert((sender.nickname == "AuthServ"), sender.nickname);
+            assert((sender.ident == "AuthServ"), sender.ident);
+            assert((sender.address == "Services.GameSurge.net"), sender.address);
+            assert((sender.class_ == IRCUser.Class.special), Enum!(IRCUser.Class).toString(sender.class_));
+            assert((content == "Incorrect password; please try again."), content);
+        }
+    }
+    {
+        immutable event = parser.toIRCEvent(":AuthServ!AuthServ@Services.GameSurge.net NOTICE kameloso :I recognize you.");
+        with (event)
+        {
+            assert((type == IRCEvent.Type.RPL_LOGGEDIN), Enum!(IRCEvent.Type).toString(type));
+            assert((sender.nickname == "AuthServ"), sender.nickname);
+            assert((sender.ident == "AuthServ"), sender.ident);
+            assert((sender.address == "Services.GameSurge.net"), sender.address);
+            assert((sender.class_ == IRCUser.Class.special), Enum!(IRCUser.Class).toString(sender.class_));
+            assert((content == "I recognize you."), content);
+        }
+    }
 }

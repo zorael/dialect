@@ -243,3 +243,54 @@ unittest
         }
     }
 }
+
+unittest
+{
+    IRCParser parser;
+
+    with (parser)
+    {
+        client.nickname = "kameloso";
+        client.user = "kameloso";
+        client.ident = "NaN";
+        client.realName = "kameloso IRC bot";
+        server.address = "irc.rizon.net";
+        server.port = 6667;
+        server.daemon = IRCServer.Daemon.rizon;
+        server.network = "Rizon";
+        server.daemonstring = "rizon";
+        server.aModes = "eIbq";
+        server.bModes = "k";
+        server.cModes = "flj";
+        server.dModes = "CFLMPQScgimnprstz";
+        server.prefixchars = ['v':'+', 'o':'@'];
+        server.prefixes = "ov";
+    }
+
+    parser.typenums = typenumsOf(parser.server.daemon);
+
+    {
+        immutable event = parser.toIRCEvent(":NickServ!service@rizon.net NOTICE kameloso^ :Password incorrect.");
+        with (event)
+        {
+            assert((type == IRCEvent.Type.AUTH_FAILURE), Enum!(IRCEvent.Type).toString(type));
+            assert((sender.nickname == "NickServ"), sender.nickname);
+            assert((sender.ident == "service"), sender.ident);
+            assert((sender.address == "rizon.net"), sender.address);
+            assert((sender.class_ == IRCUser.Class.special), Enum!(IRCUser.Class).toString(sender.class_));
+            assert((content == "Password incorrect."), content);
+        }
+    }
+    {
+        immutable event = parser.toIRCEvent(":NickServ!service@rizon.net NOTICE kameloso^ :Password accepted - you are now recognized.");
+        with (event)
+        {
+            assert((type == IRCEvent.Type.RPL_LOGGEDIN), Enum!(IRCEvent.Type).toString(type));
+            assert((sender.nickname == "NickServ"), sender.nickname);
+            assert((sender.ident == "service"), sender.ident);
+            assert((sender.address == "rizon.net"), sender.address);
+            assert((sender.class_ == IRCUser.Class.special), Enum!(IRCUser.Class).toString(sender.class_));
+            assert((content == "Password accepted - you are now recognized."), content);
+        }
+    }
+}

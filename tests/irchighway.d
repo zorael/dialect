@@ -133,3 +133,81 @@ unittest
         }
     }
 }
+
+unittest
+{
+    IRCParser parser;
+
+    with (parser)
+    {
+        client.nickname = "kameloso";
+        client.user = "kameloso";
+        client.ident = "NaN";
+        client.realName = "kameloso IRC bot";
+        server.address = "irc.irchighway.net";
+        server.port = 6667;
+        server.daemon = IRCServer.Daemon.inspircd;
+        server.network = "irchighway";
+        server.daemonstring = "inspircd";
+        server.aModes = "eIbq";
+        server.bModes = "k";
+        server.cModes = "flj";
+        server.dModes = "CFLMPQScgimnprstz";
+        server.prefixchars = ['v':'+', 'o':'@'];
+        server.prefixes = "ov";
+    }
+
+    parser.typenums = typenumsOf(parser.server.daemon);
+
+    {
+        immutable event = parser.toIRCEvent(":NickServ!services@services.irchighway.net NOTICE kameloso :nick, type /msg NickServ IDENTIFY password.  Otherwise,");
+        with (event)
+        {
+            assert((type == IRCEvent.Type.AUTH_CHALLENGE), Enum!(IRCEvent.Type).toString(type));
+            assert((sender.nickname == "NickServ"), sender.nickname);
+            assert((sender.ident == "services"), sender.ident);
+            assert((sender.address == "services.irchighway.net"), sender.address);
+            assert((sender.class_ == IRCUser.Class.special), Enum!(IRCUser.Class).toString(sender.class_));
+            assert((content == "nick, type /msg NickServ IDENTIFY password.  Otherwise,"), content);
+        }
+    }
+    {
+        immutable event = parser.toIRCEvent(":NickServ!services@services.irchighway.net NOTICE kameloso :Password incorrect.");
+        with (event)
+        {
+            assert((type == IRCEvent.Type.AUTH_FAILURE), Enum!(IRCEvent.Type).toString(type));
+            assert((sender.nickname == "NickServ"), sender.nickname);
+            assert((sender.ident == "services"), sender.ident);
+            assert((sender.address == "services.irchighway.net"), sender.address);
+            assert((sender.class_ == IRCUser.Class.special), Enum!(IRCUser.Class).toString(sender.class_));
+            assert((content == "Password incorrect."), content);
+        }
+    }
+    {
+        immutable event = parser.toIRCEvent(":NickServ!services@services.irchighway.net NOTICE kameloso :Password accepted - you are now recognized.");
+        with (event)
+        {
+            assert((type == IRCEvent.Type.RPL_LOGGEDIN), Enum!(IRCEvent.Type).toString(type));
+            assert((sender.nickname == "NickServ"), sender.nickname);
+            assert((sender.ident == "services"), sender.ident);
+            assert((sender.address == "services.irchighway.net"), sender.address);
+            assert((sender.class_ == IRCUser.Class.special), Enum!(IRCUser.Class).toString(sender.class_));
+            assert((content == "Password accepted - you are now recognized."), content);
+        }
+    }
+    {
+        immutable event = parser.toIRCEvent(":ceres.dk.eu.irchighway.net 900 kameloso kameloso!kameloso@ihw-3lt.aro.117.194.IP kameloso :You are now logged in as kameloso");
+        with (event)
+        {
+            assert((type == IRCEvent.Type.RPL_LOGGEDIN), Enum!(IRCEvent.Type).toString(type));
+            assert((sender.address == "ceres.dk.eu.irchighway.net"), sender.address);
+            assert((sender.class_ == IRCUser.Class.special), Enum!(IRCUser.Class).toString(sender.class_));
+            assert((target.nickname == "kameloso"), target.nickname);
+            assert((target.ident == "kameloso"), target.ident);
+            assert((target.address == "ihw-3lt.aro.117.194.IP"), target.address);
+            assert((target.account == "kameloso"), target.account);
+            assert((content == "You are now logged in as kameloso"), content);
+            assert((num == 900), num.to!string);
+        }
+    }
+}

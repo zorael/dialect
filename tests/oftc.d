@@ -145,3 +145,66 @@ unittest
         }
     }
 }
+
+unittest
+{
+    IRCParser parser;
+
+    with (parser)
+    {
+        client.nickname = "kameloso";
+        client.user = "kameloso";
+        client.ident = "NaN";
+        client.realName = "kameloso IRC bot";
+        server.address = "irc.oftc.net";
+        server.port = 6667;
+        server.daemon = IRCServer.Daemon.hybrid;
+        server.network = "OFTC";
+        server.daemonstring = "hybrid";
+        server.aModes = "eIbq";
+        server.bModes = "k";
+        server.cModes = "flj";
+        server.dModes = "CFLMPQScgimnprstz";
+        server.prefixchars = ['v':'+', 'o':'@'];
+        server.prefixes = "ov";
+    }
+
+    parser.typenums = typenumsOf(parser.server.daemon);
+
+    {
+        immutable event = parser.toIRCEvent(":NickServ!services@services.oftc.net NOTICE kameloso :This nickname is registered and protected.  If it is your nickname, you may");
+        with (event)
+        {
+            assert((type == IRCEvent.Type.AUTH_CHALLENGE), Enum!(IRCEvent.Type).toString(type));
+            assert((sender.nickname == "NickServ"), sender.nickname);
+            assert((sender.ident == "services"), sender.ident);
+            assert((sender.address == "services.oftc.net"), sender.address);
+            assert((sender.class_ == IRCUser.Class.special), Enum!(IRCUser.Class).toString(sender.class_));
+            assert((content == "This nickname is registered and protected.  If it is your nickname, you may"), content);
+        }
+    }
+    {
+        immutable event = parser.toIRCEvent(":NickServ!services@services.oftc.net NOTICE kameloso :Identify failed as kameloso.  You may have entered an incorrect password.");
+        with (event)
+        {
+            assert((type == IRCEvent.Type.AUTH_FAILURE), Enum!(IRCEvent.Type).toString(type));
+            assert((sender.nickname == "NickServ"), sender.nickname);
+            assert((sender.ident == "services"), sender.ident);
+            assert((sender.address == "services.oftc.net"), sender.address);
+            assert((sender.class_ == IRCUser.Class.special), Enum!(IRCUser.Class).toString(sender.class_));
+            assert((content == "Identify failed as kameloso.  You may have entered an incorrect password."), content);
+        }
+    }
+    {
+        immutable event = parser.toIRCEvent(":NickServ!services@services.oftc.net NOTICE kameloso :You are successfully identified as kameloso.");
+        with (event)
+        {
+            assert((type == IRCEvent.Type.RPL_LOGGEDIN), Enum!(IRCEvent.Type).toString(type));
+            assert((sender.nickname == "NickServ"), sender.nickname);
+            assert((sender.ident == "services"), sender.ident);
+            assert((sender.address == "services.oftc.net"), sender.address);
+            assert((sender.class_ == IRCUser.Class.special), Enum!(IRCUser.Class).toString(sender.class_));
+            assert((content == "You are successfully identified as kameloso."), content);
+        }
+    }
+}
