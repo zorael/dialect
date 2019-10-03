@@ -271,8 +271,13 @@ bool isSpecial(const IRCUser sender, const ref IRCParser parser) pure
 
     case "ChanServ":
         if ((sender.ident == "service") && (sender.address == "RusNet")) return true;
+        else if ((sender.ident == "ChanServ") && (sender.address == "services.")) return true;
         // Unknown ChanServ, drop to after switch
         break;
+
+    case string.init:
+        if (sender.address == "services.") return true;
+        goto default;
 
     default:
         // Drop down
@@ -602,6 +607,10 @@ bool isAuthService(const IRCUser sender, const ref IRCParser parser) pure
         if ((sender.ident == "AuthServ") && (sender.address == "Services.GameSurge.net")) return true;
         // Unknown ident/address, drop to after switch
         break;
+
+    case string.init:
+        if (sender.address == "services.") return true;
+        goto default;
 
     default:
         // Unknown nickname
