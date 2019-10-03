@@ -298,7 +298,7 @@ bool isSpecial(const IRCUser sender, const ref IRCParser parser) pure
     }
 
     if ((sharedDomains(sender.address, parser.server.address) >= 2) ||
-        (sharedDomains(sender.address, parser.server.resolvedAddress)))
+        (sharedDomains(sender.address, parser.server.resolvedAddress) >= 2))
     {
         if ((parser.server.network == "OFTC") && (sender.address.endsWith(".user.oftc.net") ||
             sender.address.contains("tor-irc")))
