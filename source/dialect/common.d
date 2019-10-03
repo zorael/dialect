@@ -210,14 +210,6 @@ bool isSpecial(const IRCUser sender, const ref IRCParser parser) pure
         return (sender.nickname == "jtv");
     }
 
-    if (sender.isServer || (sender.address.length &&
-        ((sender.address == parser.server.address) ||
-        (sender.address == "services.") ||
-        sender.address.equal(parser.server.resolvedAddress.asLowerCase))))
-    {
-        return true;
-    }
-
     top:
     switch (sender.nickname)
     {
