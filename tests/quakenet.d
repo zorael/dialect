@@ -13,7 +13,6 @@ unittest
         {
             assert((type == IRCEvent.Type.RPL_MYINFO), Enum!(IRCEvent.Type).toString(type));
             assert((sender.address == "underworld1.no.quakenet.org"), sender.address);
-            assert((sender.class_ == IRCUser.Class.special), Enum!(IRCUser.Class).toString(sender.class_));
             assert((content == "dioswkgxRXInP biklmnopstvrDcCNuMT bklov"), content);
             assert((aux == "u2.10.12.10+snircd(1.3.4a)"), aux);
             assert((num == 4), num.to!string);
@@ -37,7 +36,6 @@ unittest
         {
             assert((type == IRCEvent.Type.RPL_ISUPPORT), Enum!(IRCEvent.Type).toString(type));
             assert((sender.address == "underworld1.no.quakenet.org"), sender.address);
-            assert((sender.class_ == IRCUser.Class.special), Enum!(IRCUser.Class).toString(sender.class_));
             assert((content == "WHOX WALLCHOPS WALLVOICES USERIP CPRIVMSG CNOTICE SILENCE=15 MODES=6 MAXCHANNELS=20 MAXBANS=45 NICKLEN=15"), content);
             assert((num == 5), num.to!string);
         }
@@ -58,7 +56,6 @@ unittest
         {
             assert((type == IRCEvent.Type.RPL_ISUPPORT), Enum!(IRCEvent.Type).toString(type));
             assert((sender.address == "underworld1.no.quakenet.org"), sender.address);
-            assert((sender.class_ == IRCUser.Class.special), Enum!(IRCUser.Class).toString(sender.class_));
             assert((content == "MAXNICKLEN=15 TOPICLEN=250 AWAYLEN=160 KICKLEN=250 CHANNELLEN=200 MAXCHANNELLEN=200 CHANTYPES=#& PREFIX=(ov)@+ STATUSMSG=@+ CHANMODES=b,k,l,imnpstrDducCNMT CASEMAPPING=rfc1459 NETWORK=QuakeNet"), content);
             assert((num == 5), num.to!string);
         }
@@ -92,7 +89,6 @@ unittest
         {
             assert((type == RPL_UMODEIS), Enum!(IRCEvent.Type).toString(type));
             assert((sender.address == "port80b.se.quakenet.org"), sender.address);
-            assert((sender.class_ == IRCUser.Class.special), Enum!(IRCUser.Class).toString(sender.class_));
             assert((aux == "+i"), aux);
             assert((num == 221), num.to!string);
         }
@@ -104,7 +100,6 @@ unittest
         {
             assert((type == RPL_NAMREPLY), Enum!(IRCEvent.Type).toString(type));
             assert((sender.address == "port80b.se.quakenet.org"), sender.address);
-            assert((sender.class_ == IRCUser.Class.special), Enum!(IRCUser.Class).toString(sender.class_));
             assert((channel == "#garderoben"), channel);
             assert((content == "@kameloso"), content);
             assert((num == 353), num.to!string);

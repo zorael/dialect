@@ -13,7 +13,6 @@ unittest
         {
             assert((type == IRCEvent.Type.RPL_MYINFO), Enum!(IRCEvent.Type).toString(type));
             assert((sender.address == "eggbert.ca.na.irchighway.net"), sender.address);
-            assert((sender.class_ == IRCUser.Class.special), Enum!(IRCUser.Class).toString(sender.class_));
             assert((content == "BIRSWghiorswx ACDIMNORSTabcdehiklmnopqrstvz Iabdehkloqv"), content);
             assert((aux == "InspIRCd-2.0"), aux);
             assert((num == 4), num.to!string);
@@ -37,7 +36,6 @@ unittest
         {
             assert((type == IRCEvent.Type.RPL_ISUPPORT), Enum!(IRCEvent.Type).toString(type));
             assert((sender.address == "eggbert.ca.na.irchighway.net"), sender.address);
-            assert((sender.class_ == IRCUser.Class.special), Enum!(IRCUser.Class).toString(sender.class_));
             assert((content == "AWAYLEN=200 CALLERID=g CASEMAPPING=rfc1459 CHANMODES=Ibe,k,dl,ACDMNORSTcimnprstz CHANNELLEN=64 CHANTYPES=# CHARSET=ascii ELIST=MU ESILENCE EXCEPTS=e EXTBAN=,ACNORSTUcjmz FNC INVEX=I"), content);
             assert((num == 5), num.to!string);
         }
@@ -74,7 +72,6 @@ unittest
         {
             assert((type == IRCEvent.Type.RPL_ISUPPORT), Enum!(IRCEvent.Type).toString(type));
             assert((sender.address == "eggbert.ca.na.irchighway.net"), sender.address);
-            assert((sender.class_ == IRCUser.Class.special), Enum!(IRCUser.Class).toString(sender.class_));
             assert((content == "KICKLEN=255 MAP MAXBANS=60 MAXCHANNELS=30 MAXPARA=32 MAXTARGETS=20 MODES=20 NAMESX NETWORK=irchighway NICKLEN=31 PREFIX=(qaohv)~&@%+ SILENCE=32 SSL=10.0.30.4:6697"), content);
             assert((num == 5), num.to!string);
         }
@@ -101,7 +98,6 @@ unittest
         {
             assert((type == IRCEvent.Type.RPL_ISUPPORT), Enum!(IRCEvent.Type).toString(type));
             assert((sender.address == "eggbert.ca.na.irchighway.net"), sender.address);
-            assert((sender.class_ == IRCUser.Class.special), Enum!(IRCUser.Class).toString(sender.class_));
             assert((content == "STARTTLS STATUSMSG=~&@%+ TOPICLEN=307 UHNAMES USERIP VBANLIST WALLCHOPS WALLVOICES"), content);
             assert((num == 5), num.to!string);
         }
@@ -114,7 +110,6 @@ unittest
         {
             assert((type == RPL_YOURID), Enum!(IRCEvent.Type).toString(type));
             assert((sender.address == "caliburn.pa.us.irchighway.net"), sender.address);
-            assert((sender.class_ == IRCUser.Class.special), Enum!(IRCUser.Class).toString(sender.class_));
             assert((content == "your unique ID"), content);
             assert((aux == "132AAMJT5"), aux);
             assert((num == 42), num.to!string);
@@ -127,7 +122,6 @@ unittest
         {
             assert((type == CAP), Enum!(IRCEvent.Type).toString(type));
             assert((sender.address == "genesis.ks.us.irchighway.net"), sender.address);
-            assert((sender.class_ == IRCUser.Class.special), Enum!(IRCUser.Class).toString(sender.class_));
             assert((content == "away-notify extended-join account-notify multi-prefix sasl tls userhost-in-names"), content);
             assert((aux == "LS"), aux);
         }
@@ -201,7 +195,6 @@ unittest
         {
             assert((type == IRCEvent.Type.RPL_LOGGEDIN), Enum!(IRCEvent.Type).toString(type));
             assert((sender.address == "ceres.dk.eu.irchighway.net"), sender.address);
-            assert((sender.class_ == IRCUser.Class.special), Enum!(IRCUser.Class).toString(sender.class_));
             assert((target.nickname == "kameloso"), target.nickname);
             assert((target.ident == "kameloso"), target.ident);
             assert((target.address == "ihw-3lt.aro.117.194.IP"), target.address);

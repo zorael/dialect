@@ -13,7 +13,6 @@ unittest
         {
             assert((type == IRCEvent.Type.RPL_MYINFO), Enum!(IRCEvent.Type).toString(type));
             assert((sender.address == "helix.oftc.net"), sender.address);
-            assert((sender.class_ == IRCUser.Class.special), Enum!(IRCUser.Class).toString(sender.class_));
             assert((content == "CDGPRSabcdfgijklnorsuwxyz bciklmnopstvzeIMRS bkloveI"), content);
             assert((aux == "hybrid-7.2.2+oftc1.7.3"), aux);
             assert((num == 4), num.to!string);
@@ -37,7 +36,6 @@ unittest
         {
             assert((type == IRCEvent.Type.RPL_ISUPPORT), Enum!(IRCEvent.Type).toString(type));
             assert((sender.address == "helix.oftc.net"), sender.address);
-            assert((sender.class_ == IRCUser.Class.special), Enum!(IRCUser.Class).toString(sender.class_));
             assert((content == "CALLERID CASEMAPPING=rfc1459 DEAF=D KICKLEN=160 MODES=4 NICKLEN=30 PREFIX=(ov)@+ STATUSMSG=@+ TOPICLEN=391 NETWORK=OFTC MAXLIST=beI:100 MAXTARGETS=1 CHANTYPES=#"), content);
             assert((num == 5), num.to!string);
         }
@@ -64,7 +62,6 @@ unittest
         {
             assert((type == IRCEvent.Type.RPL_ISUPPORT), Enum!(IRCEvent.Type).toString(type));
             assert((sender.address == "helix.oftc.net"), sender.address);
-            assert((sender.class_ == IRCUser.Class.special), Enum!(IRCUser.Class).toString(sender.class_));
             assert((content == "CHANLIMIT=#:90 CHANNELLEN=50 CHANMODES=eIqb,k,l,cimnpstzMRS AWAYLEN=160 KNOCK ELIST=CMNTU SAFELIST EXCEPTS=e INVEX=I"), content);
             assert((num == 5), num.to!string);
         }
@@ -95,7 +92,6 @@ unittest
         {
             assert((type == IRCEvent.Type.RPL_YOURID), Enum!(IRCEvent.Type).toString(type));
             assert((sender.address == "helix.oftc.net"), sender.address);
-            assert((sender.class_ == IRCUser.Class.special), Enum!(IRCUser.Class).toString(sender.class_));
             assert((content == "your unique ID"), content);
             assert((aux == "4G4AAA7BH"), aux);
             assert((num == 42), num.to!string);
@@ -108,7 +104,6 @@ unittest
         {
             assert((type == RPL_WHOISACTUALLY), Enum!(IRCEvent.Type).toString(type));
             assert((sender.address == "kinetic.oftc.net"), sender.address);
-            assert((sender.class_ == IRCUser.Class.special), Enum!(IRCUser.Class).toString(sender.class_));
             assert((target.nickname == "wh00nix"), target.nickname);
             assert((target.address == "255.255.255.255"), target.address);
             assert((content == "actually using host"), content);
@@ -122,7 +117,6 @@ unittest
         {
             assert((type == RPL_ENDOFQUIETLIST), Enum!(IRCEvent.Type).toString(type));
             assert((sender.address == "irc.oftc.net"), sender.address);
-            assert((sender.class_ == IRCUser.Class.special), Enum!(IRCUser.Class).toString(sender.class_));
             assert((channel == "#garderoben"), channel);
             //assert((target.nickname == "kameloso"), target.nickname);
             assert((content == "End of Channel Quiet List"), content);
@@ -136,7 +130,6 @@ unittest
         {
             assert((type == RPL_QUIETLIST), Enum!(IRCEvent.Type).toString(type));
             assert((sender.address == "irc.oftc.net"), sender.address);
-            assert((sender.class_ == IRCUser.Class.special), Enum!(IRCUser.Class).toString(sender.class_));
             assert((channel == "#garderoben"), channel);
             assert((content == "harbl!snarbl@*"), content);
             assert((aux == "kameloso!~NaN@194.117.188.126"), aux);

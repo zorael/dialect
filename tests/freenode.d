@@ -12,7 +12,6 @@ unittest
         {
             assert((type == IRCEvent.Type.RPL_MYINFO), Enum!(IRCEvent.Type).toString(type));
             assert((sender.address == "sinisalo.freenode.net"), sender.address);
-            assert((sender.class_ == IRCUser.Class.special), Enum!(IRCUser.Class).toString(sender.class_));
             assert((content == "DOQRSZaghilopswz CFILMPQSbcefgijklmnopqrstvz bkloveqjfI"), content);
             assert((aux == "ircd-seven-1.1.7"), aux);
             assert((num == 4), num.to!string);
@@ -36,7 +35,6 @@ unittest
         {
             assert((type == IRCEvent.Type.RPL_ISUPPORT), Enum!(IRCEvent.Type).toString(type));
             assert((sender.address == "sinisalo.freenode.net"), sender.address);
-            assert((sender.class_ == IRCUser.Class.special), Enum!(IRCUser.Class).toString(sender.class_));
             assert((content == "CHANTYPES=# EXCEPTS INVEX CHANMODES=eIbq,k,flj,CFLMPQScgimnprstz CHANLIMIT=#:120 PREFIX=(ov)@+ MAXLIST=bqeI:100 MODES=4 NETWORK=freenode STATUSMSG=@+ CALLERID=g CASEMAPPING=rfc1459"), content);
             assert((num == 5), num.to!string);
         }
@@ -59,7 +57,6 @@ unittest
         {
             assert((type == IRCEvent.Type.RPL_ISUPPORT), Enum!(IRCEvent.Type).toString(type));
             assert((sender.address == "sinisalo.freenode.net"), sender.address);
-            assert((sender.class_ == IRCUser.Class.special), Enum!(IRCUser.Class).toString(sender.class_));
             assert((content == "CHARSET=ascii NICKLEN=16 CHANNELLEN=50 TOPICLEN=390 DEAF=D FNC TARGMAX=NAMES:1,LIST:1,KICK:1,WHOIS:1,PRIVMSG:4,NOTICE:4,ACCEPT:,MONITOR: EXTBAN=$,jrxz CLIENTVER=3.0 WHOX KNOCK ETRACE"), content);
             assert((num == 5), num.to!string);
         }
@@ -327,7 +324,6 @@ unittest
         {
             assert((type == IRCEvent.Type.RPL_UMODEGMSG), Enum!(IRCEvent.Type).toString(type));
             assert((sender.address == "rajaniemi.freenode.net"), sender.address);
-            assert((sender.class_ == IRCUser.Class.special), Enum!(IRCUser.Class).toString(sender.class_));
             assert((target.nickname == "Freyjaun"), target.nickname);
             assert((target.ident == "~FREYJAUN"), target.ident);
             assert((target.address == "41.39.229.6"), target.address);
@@ -443,7 +439,6 @@ unittest
         {
             assert((type == IRCEvent.Type.ERR_NOSUCHCHANNEL), Enum!(IRCEvent.Type).toString(type));
             assert((sender.address == "moon.freenode.net"), sender.address);
-            assert((sender.class_ == IRCUser.Class.special), Enum!(IRCUser.Class).toString(sender.class_));
             assert((channel == "archlinux"), channel);
             assert((content == "No such channel"), content);
             assert((num == 403), num.to!string);
@@ -455,7 +450,6 @@ unittest
         {
             assert((type == IRCEvent.Type.RPL_NAMREPLY), Enum!(IRCEvent.Type).toString(type));
             assert((sender.address == "asimov.freenode.net"), sender.address);
-            assert((sender.class_ == IRCUser.Class.special), Enum!(IRCUser.Class).toString(sender.class_));
             assert((channel == "#garderoben"), channel);
             assert((content == "kameloso^ ombudsma +kameloso @zorael @m @k"), content);
             assert((num == 353), num.to!string);
@@ -467,7 +461,6 @@ unittest
         {
             assert((type == IRCEvent.Type.RPL_WHOREPLY), Enum!(IRCEvent.Type).toString(type));
             assert((sender.address == "moon.freenode.net"), sender.address);
-            assert((sender.class_ == IRCUser.Class.special), Enum!(IRCUser.Class).toString(sender.class_));
             assert((channel == "##linux"), channel);
             assert((target.nickname == "Foldy"), target.nickname);
             assert((target.address == "gentoo/contributor/Foldy"), target.address);
@@ -481,7 +474,6 @@ unittest
         {
             assert((type == IRCEvent.Type.RPL_ENDOFWHO), Enum!(IRCEvent.Type).toString(type));
             assert((sender.address == "tolkien.freenode.net"), sender.address);
-            assert((sender.class_ == IRCUser.Class.special), Enum!(IRCUser.Class).toString(sender.class_));
             assert((channel == "##linux"), channel);
             assert((content == "End of /WHO list."), content);
             assert((num == 315), num.to!string);
@@ -493,7 +485,6 @@ unittest
         {
             assert((type == IRCEvent.Type.RPL_WHOISHOST), Enum!(IRCEvent.Type).toString(type));
             assert((sender.address == "wilhelm.freenode.net"), sender.address);
-            assert((sender.class_ == IRCUser.Class.special), Enum!(IRCUser.Class).toString(sender.class_));
             assert((target.nickname == "kameloso^"), target.nickname);
             assert((content == "81-233-105-62-no80.tbcn.telia.com"), content);
             assert((aux == "81.233.105.62"), aux);
@@ -506,7 +497,6 @@ unittest
         {
             assert((type == IRCEvent.Type.ERR_UNKNOWNCOMMAND), Enum!(IRCEvent.Type).toString(type));
             assert((sender.address == "asimov.freenode.net"), sender.address);
-            assert((sender.class_ == IRCUser.Class.special), Enum!(IRCUser.Class).toString(sender.class_));
             assert((content == "Unknown command"), content);version(TwitchSupport)
             assert((aux == "sudo"), aux);
             assert((num == 421), num.to!string);
@@ -518,7 +508,6 @@ unittest
         {
             assert((type == IRCEvent.Type.RPL_LUSEROP), Enum!(IRCEvent.Type).toString(type));
             assert((sender.address == "asimov.freenode.net"), sender.address);
-            assert((sender.class_ == IRCUser.Class.special), Enum!(IRCUser.Class).toString(sender.class_));
             assert((content == "IRC Operators online"), content);
             assert((count == 31), count.to!string);
             assert((num == 252), num.to!string);
@@ -530,7 +519,6 @@ unittest
         {
             assert((type == IRCEvent.Type.RPL_LUSERUNKNOWN), Enum!(IRCEvent.Type).toString(type));
             assert((sender.address == "asimov.freenode.net"), sender.address);
-            assert((sender.class_ == IRCUser.Class.special), Enum!(IRCUser.Class).toString(sender.class_));
             assert((content == "unknown connection(s)"), content);
             assert((count == 13), count.to!string);
             assert((num == 253), num.to!string);
@@ -542,7 +530,6 @@ unittest
         {
             assert((type == IRCEvent.Type.RPL_LUSERCHANNELS), Enum!(IRCEvent.Type).toString(type));
             assert((sender.address == "asimov.freenode.net"), sender.address);
-            assert((sender.class_ == IRCUser.Class.special), Enum!(IRCUser.Class).toString(sender.class_));
             assert((content == "channels formed"), content);
             assert((count == 54541), count.to!string);
             assert((num == 254), num.to!string);
@@ -554,7 +541,6 @@ unittest
         {
             assert((type == IRCEvent.Type.ERR_ERRONEOUSNICKNAME), Enum!(IRCEvent.Type).toString(type));
             assert((sender.address == "asimov.freenode.net"), sender.address);
-            assert((sender.class_ == IRCUser.Class.special), Enum!(IRCUser.Class).toString(sender.class_));
             assert((content == "Erroneous Nickname"), content);
             assert((aux == "@nickname"), aux);
             assert((num == 432), num.to!string);
@@ -566,7 +552,6 @@ unittest
         {
             assert((type == IRCEvent.Type.ERR_NEEDMOREPARAMS), Enum!(IRCEvent.Type).toString(type));
             assert((sender.address == "asimov.freenode.net"), sender.address);
-            assert((sender.class_ == IRCUser.Class.special), Enum!(IRCUser.Class).toString(sender.class_));
             assert((content == "Not enough parameters"), content);
             assert((aux == "JOIN"), aux);
             assert((num == 461), num.to!string);
@@ -578,7 +563,6 @@ unittest
         {
             assert((type == IRCEvent.Type.RPL_LOCALUSERS), Enum!(IRCEvent.Type).toString(type));
             assert((sender.address == "asimov.freenode.net"), sender.address);
-            assert((sender.class_ == IRCUser.Class.special), Enum!(IRCUser.Class).toString(sender.class_));
             assert((content == "Current local users 6500, max 11061"), content);
             assert((count == 6500), count.to!string);
             assert((altcount == 11_061), altcount.to!string);
@@ -591,7 +575,6 @@ unittest
         {
             assert((type == IRCEvent.Type.RPL_WHOISUSER), Enum!(IRCEvent.Type).toString(type));
             assert((sender.address == "orwell.freenode.net"), sender.address);
-            assert((sender.class_ == IRCUser.Class.special), Enum!(IRCUser.Class).toString(sender.class_));
             assert((target.nickname == "kameloso"), target.nickname);
             assert((target.ident == "~NaN"), target.ident);
             assert((target.address == "ns3363704.ip-94-23-253.eu"), target.address);
@@ -605,7 +588,6 @@ unittest
         {
             assert((type == IRCEvent.Type.RPL_WHOISSERVER), Enum!(IRCEvent.Type).toString(type));
             assert((sender.address == "asimov.freenode.net"), sender.address);
-            assert((sender.class_ == IRCUser.Class.special), Enum!(IRCUser.Class).toString(sender.class_));
             assert((target.nickname == "zorael"), target.nickname);
             assert((content == "sinisalo.freenode.net"), content);
             assert((aux == "SE"), aux);
@@ -618,7 +600,6 @@ unittest
         {
             assert((type == IRCEvent.Type.RPL_WHOISACCOUNT), Enum!(IRCEvent.Type).toString(type));
             assert((sender.address == "asimov.freenode.net"), sender.address);
-            assert((sender.class_ == IRCUser.Class.special), Enum!(IRCUser.Class).toString(sender.class_));
             assert((target.nickname == "xurael"), target.nickname);
             assert((target.account == "zorael"), target.account);
             assert((content == "zorael"), content);
@@ -631,7 +612,6 @@ unittest
         {
             assert((type == IRCEvent.Type.ERR_NOTREGISTERED), Enum!(IRCEvent.Type).toString(type));
             assert((sender.address == "niven.freenode.net"), sender.address);
-            assert((sender.class_ == IRCUser.Class.special), Enum!(IRCUser.Class).toString(sender.class_));
             assert((content == "You have not registered"), content);
             assert((num == 451), num.to!string);
         }
@@ -642,7 +622,6 @@ unittest
         {
             assert((type == IRCEvent.Type.ERR_NOTREGISTERED), Enum!(IRCEvent.Type).toString(type));
             assert((sender.address == "irc.harblwefwoi.org"), sender.address);
-            assert((sender.class_ == IRCUser.Class.special), Enum!(IRCUser.Class).toString(sender.class_));
             assert((content == "You have not registered"), content);
             assert((aux == "WHOIS"), aux);
             assert((num == 451), num.to!string);
@@ -654,7 +633,6 @@ unittest
         {
             assert((type == IRCEvent.Type.RPL_HELPSTART), Enum!(IRCEvent.Type).toString(type));
             assert((sender.address == "leguin.freenode.net"), sender.address);
-            assert((sender.class_ == IRCUser.Class.special), Enum!(IRCUser.Class).toString(sender.class_));
             assert((content == "Help topics available to users:"), content);
             assert((aux == "index"), aux);
             assert((num == 704), num.to!string);
@@ -666,7 +644,6 @@ unittest
         {
             assert((type == IRCEvent.Type.RPL_LINKS), Enum!(IRCEvent.Type).toString(type));
             assert((sender.address == "rajaniemi.freenode.net"), sender.address);
-            assert((sender.class_ == IRCUser.Class.special), Enum!(IRCUser.Class).toString(sender.class_));
             assert((content == "Helsinki, FI, EU"), content);
             assert((aux == "rajaniemi.freenode.net"), aux);
             assert((num == 364), num.to!string);
@@ -678,7 +655,6 @@ unittest
         {
             assert((type == IRCEvent.Type.RPL_TRACEUSER), Enum!(IRCEvent.Type).toString(type));
             assert((sender.address == "wolfe.freenode.net"), sender.address);
-            assert((sender.class_ == IRCUser.Class.special), Enum!(IRCUser.Class).toString(sender.class_));
             assert((content == "zorael[~NaN@2001:41d0:2:80b4::] (255.255.255.255) 16"), content);
             assert((aux == "v6users"), aux);
             assert((num == 205), num.to!string);
@@ -691,7 +667,6 @@ unittest
         {
             assert((type == IRCEvent.Type.RPL_ENDOFHELP), Enum!(IRCEvent.Type).toString(type));
             assert((sender.address == "leguin.freenode.net"), sender.address);
-            assert((sender.class_ == IRCUser.Class.special), Enum!(IRCUser.Class).toString(sender.class_));
             assert((content == "End of /HELP."), content);
             assert((aux == "index"), aux);
             assert((num == 706), num.to!string);
@@ -703,7 +678,6 @@ unittest
         {
             assert((type == IRCEvent.Type.RPL_STATSDEBUG), Enum!(IRCEvent.Type).toString(type));
             assert((sender.address == "livingstone.freenode.net"), sender.address);
-            assert((sender.class_ == IRCUser.Class.special), Enum!(IRCUser.Class).toString(sender.class_));
             assert((content == "1 staff members"), content);
             assert((aux == "p"), aux);
             assert((num == 249), num.to!string);
@@ -715,7 +689,6 @@ unittest
         {
             assert((type == IRCEvent.Type.RPL_TRYAGAIN), Enum!(IRCEvent.Type).toString(type));
             assert((sender.address == "verne.freenode.net"), sender.address);
-            assert((sender.class_ == IRCUser.Class.special), Enum!(IRCUser.Class).toString(sender.class_));
             assert((content == "This command could not be completed because it has been used recently, and is rate-limited"), content);
             assert((aux == "STATS"), aux);
             assert((num == 263), num.to!string);
@@ -727,7 +700,6 @@ unittest
         {
             assert((type == IRCEvent.Type.RPL_TRACEEND), Enum!(IRCEvent.Type).toString(type));
             assert((sender.address == "verne.freenode.net"), sender.address);
-            assert((sender.class_ == IRCUser.Class.special), Enum!(IRCUser.Class).toString(sender.class_));
             assert((content == "End of TRACE"), content);
             assert((aux == "verne.freenode.net"), aux);
             assert((num == 262), num.to!string);
@@ -740,7 +712,6 @@ unittest
         {
             assert((type == RPL_TOPIC), Enum!(IRCEvent.Type).toString(type));
             assert((sender.address == "asimov.freenode.net"), sender.address);
-            assert((sender.class_ == IRCUser.Class.special), Enum!(IRCUser.Class).toString(sender.class_));
             assert((channel == "#garderoben"), channel);
             assert((content == "Are you employed, sir?"), content);
             assert((num == 332), num.to!string);
@@ -753,7 +724,6 @@ unittest
         {
             assert((type == RPL_ENDOFNAMES), Enum!(IRCEvent.Type).toString(type));
             assert((sender.address == "asimov.freenode.net"), sender.address);
-            assert((sender.class_ == IRCUser.Class.special), Enum!(IRCUser.Class).toString(sender.class_));
             assert((channel == "#flerrp"), channel);
             assert((content == "End of /NAMES list."), content);
             assert((num == 366), num.to!string);
@@ -779,7 +749,6 @@ unittest
         {
             assert((type == ERR_NEEDREGGEDNICK), Enum!(IRCEvent.Type).toString(type));
             assert((sender.address == "cherryh.freenode.net"), sender.address);
-            assert((sender.class_ == IRCUser.Class.special), Enum!(IRCUser.Class).toString(sender.class_));
             assert((channel == "#archlinux"), channel);
             assert((content == "Cannot join channel (+r) - you need to be identified with services"), content);
             assert((num == 477), num.to!string);
@@ -792,7 +761,6 @@ unittest
         {
             assert((type == RPL_NAMREPLY), Enum!(IRCEvent.Type).toString(type));
             assert((sender.address == "asimov.freenode.net"), sender.address);
-            assert((sender.class_ == IRCUser.Class.special), Enum!(IRCUser.Class).toString(sender.class_));
             assert((channel == "#garderoben"), channel);
             assert((content == "kameloso^ ombudsman +kameloso @zorael @maku @klarrt"), content);
             assert((num == 353), num.to!string);
@@ -806,7 +774,6 @@ unittest
         {
             assert((type == RPL_WHOREPLY), Enum!(IRCEvent.Type).toString(type));
             assert((sender.address == "moon.freenode.net"), sender.address);
-            assert((sender.class_ == IRCUser.Class.special), Enum!(IRCUser.Class).toString(sender.class_));
             assert((channel == "##linux"), channel);
             assert((target.nickname == "Fieldy"), target.nickname);
             assert((target.address == "gentoo/contributor/Fieldy"), target.address);
@@ -821,7 +788,6 @@ unittest
         {
             assert((type == RPL_WHOREPLY), Enum!(IRCEvent.Type).toString(type));
             assert((sender.address == "moon.freenode.net"), sender.address);
-            assert((sender.class_ == IRCUser.Class.special), Enum!(IRCUser.Class).toString(sender.class_));
             assert((channel == "##linux"), channel);
             assert((target.nickname == "Axton"), target.nickname);
             assert((target.ident == "~rahlff"), target.ident);
@@ -838,7 +804,6 @@ unittest
         {
             assert((type == RPL_AWAY), Enum!(IRCEvent.Type).toString(type));
             assert((sender.address == "tolkien.freenode.net"), sender.address);
-            assert((sender.class_ == IRCUser.Class.special), Enum!(IRCUser.Class).toString(sender.class_));
             assert((target.nickname == "jcjordyn120"), target.nickname);
             assert((content == "Idle"), content);
             assert((num == 301), num.to!string);
@@ -851,7 +816,6 @@ unittest
         {
             assert((type == RPL_MOTD), Enum!(IRCEvent.Type).toString(type));
             assert((sender.address == "asimov.freenode.net"), sender.address);
-            assert((sender.class_ == IRCUser.Class.special), Enum!(IRCUser.Class).toString(sender.class_));
             assert((content == "- In particular we would like to thank the sponsor"), content);
             assert((num == 372), num.to!string);
         }
@@ -863,7 +827,6 @@ unittest
         {
             assert((type == RPL_ISUPPORT), Enum!(IRCEvent.Type).toString(type));
             assert((sender.address == "cherryh.freenode.net"), sender.address);
-            assert((sender.class_ == IRCUser.Class.special), Enum!(IRCUser.Class).toString(sender.class_));
             assert((content == "EXCEPTS INVEX MODES=eIbq,k,flj,CFLMPQScgimnprstz CHANLIMIT=#:120 PREFIX=(ov)@+ MAXLIST=bqeI:100 MODES=4 NETWORK=freenode STATUSMSG=@+ CALLERID=g CASEMAPPING=rfc1459"), content);
             assert((num == 5), num.to!string);
         }
@@ -876,7 +839,6 @@ unittest
         {
             assert((type == RPL_MYINFO), Enum!(IRCEvent.Type).toString(type));
             assert((sender.address == "asimov.freenode.net"), sender.address);
-            assert((sender.class_ == IRCUser.Class.special), Enum!(IRCUser.Class).toString(sender.class_));
             assert((content == "DOQRSZaghilopswz CFILMPQSbcefgijklmnopqrstvz bkloveqjfI"), content);
             assert((aux == "ircd-seven-1.1.4"), aux);
             assert((num == 4), num.to!string);
@@ -891,7 +853,6 @@ unittest
         {
             assert((type == RPL_TOPICWHOTIME), Enum!(IRCEvent.Type).toString(type));
             assert((sender.address == "asimov.freenode.net"), sender.address);
-            assert((sender.class_ == IRCUser.Class.special), Enum!(IRCUser.Class).toString(sender.class_));
             assert((channel == "#garderoben"), channel);
             assert((content == "klarrt!~bsdrouter@h150n13-aahm-a11.ias.bredband.telia.com"), content);
             assert((aux == "1476294377"), aux);
@@ -905,7 +866,6 @@ unittest
         {
             assert((type == ERR_UNKNOWNCOMMAND), Enum!(IRCEvent.Type).toString(type));
             assert((sender.address == "karatkievich.freenode.net"), sender.address);
-            assert((sender.class_ == IRCUser.Class.special), Enum!(IRCUser.Class).toString(sender.class_));
             assert((content == "systemd,#kde,#kubuntu,..."), content);
             assert((num == 421), num.to!string);
         }
@@ -917,7 +877,6 @@ unittest
         {
             assert((type == RPL_WHOISIDLE), Enum!(IRCEvent.Type).toString(type));
             assert((sender.address == "rajaniemi.freenode.net"), sender.address);
-            assert((sender.class_ == IRCUser.Class.special), Enum!(IRCUser.Class).toString(sender.class_));
             assert((target.nickname == "zorael"), target.nickname);
             assert((count == 0), count.to!string);
             assert((altcount == 1510219961), altcount.to!string);
@@ -931,7 +890,6 @@ unittest
         {
             assert((type == RPL_GLOBALUSERS), Enum!(IRCEvent.Type).toString(type));
             assert((sender.address == "asimov.freenode.net"), sender.address);
-            assert((sender.class_ == IRCUser.Class.special), Enum!(IRCUser.Class).toString(sender.class_));
             assert((content == "Current global users 85267, max 92341"), content);
             assert((count == 85267), count.to!string);
             assert((altcount == 92341), altcount.to!string);
@@ -945,7 +903,6 @@ unittest
         {
             assert((type == RPL_LOCALUSERS), Enum!(IRCEvent.Type).toString(type));
             assert((sender.address == "weber.freenode.net"), sender.address);
-            assert((sender.class_ == IRCUser.Class.special), Enum!(IRCUser.Class).toString(sender.class_));
             assert((content == "Current local users 3385, max 6820"), content);
             assert((count == 3385), count.to!string);
             assert((altcount == 6820), altcount.to!string);
@@ -959,7 +916,6 @@ unittest
         {
             assert((type == RPL_GLOBALUSERS), Enum!(IRCEvent.Type).toString(type));
             assert((sender.address == "weber.freenode.net"), sender.address);
-            assert((sender.class_ == IRCUser.Class.special), Enum!(IRCUser.Class).toString(sender.class_));
             assert((content == "Current global users 87056, max 93012"), content);
             assert((count == 87056), count.to!string);
             assert((altcount == 93012), altcount.to!string);
@@ -973,7 +929,6 @@ unittest
         {
             assert((type == RPL_WHOISSECURE), Enum!(IRCEvent.Type).toString(type));
             assert((sender.address == "asimov.freenode.net"), sender.address);
-            assert((sender.class_ == IRCUser.Class.special), Enum!(IRCUser.Class).toString(sender.class_));
             assert((target.nickname == "zorael"), target.nickname);
             assert((content == "is using a secure connection"), content);
             assert((num == 671), num.to!string);
@@ -986,7 +941,6 @@ unittest
         {
             assert((type == RPL_ENDOFWHOIS), Enum!(IRCEvent.Type).toString(type));
             assert((sender.address == "asimov.freenode.net"), sender.address);
-            assert((sender.class_ == IRCUser.Class.special), Enum!(IRCUser.Class).toString(sender.class_));
             assert((target.nickname == "zorael"), target.nickname);
             assert((content == "End of /WHOIS list."), content);
             assert((num == 318), num.to!string);
@@ -1000,7 +954,6 @@ unittest
         {
             assert((type == ERR_NICKNAMEINUSE), Enum!(IRCEvent.Type).toString(type));
             assert((sender.address == "asimov.freenode.net"), sender.address);
-            assert((sender.class_ == IRCUser.Class.special), Enum!(IRCUser.Class).toString(sender.class_));
             assert((content == "Nickname is already in use."), content);
             assert((num == 433), num.to!string);
         }
@@ -1012,7 +965,6 @@ unittest
         {
             assert((type == ERR_NOSUCHNICK), Enum!(IRCEvent.Type).toString(type));
             assert((sender.address == "cherryh.freenode.net"), sender.address);
-            assert((sender.class_ == IRCUser.Class.special), Enum!(IRCUser.Class).toString(sender.class_));
             assert((aux == "cherryh.freenode.net"), aux);
             assert((content == "No such nick/channel"), content);
             assert((num == 401), num.to!string);
@@ -1026,7 +978,6 @@ unittest
         {
             assert((type == RPL_WHOISOPERATOR), Enum!(IRCEvent.Type).toString(type));
             assert((sender.address == "lightning.ircstorm.net"), sender.address);
-            assert((sender.class_ == IRCUser.Class.special), Enum!(IRCUser.Class).toString(sender.class_));
             assert((target.nickname == "NickServ"), target.nickname);
             assert((content == "is a Network Service"), content);
             assert((num == 313), num.to!string);
@@ -1039,7 +990,6 @@ unittest
         {
             assert((type == RPL_WELCOME), Enum!(IRCEvent.Type).toString(type));
             assert((sender.address == "adams.freenode.net"), sender.address);
-            assert((sender.class_ == IRCUser.Class.special), Enum!(IRCUser.Class).toString(sender.class_));
             assert((content == "Welcome to the freenode Internet Relay Chat Network kameloso^"), content);
             assert((num == 1), num.to!string);
         }
@@ -1051,7 +1001,6 @@ unittest
         {
             assert((type == RPL_HELPTXT), Enum!(IRCEvent.Type).toString(type));
             assert((sender.address == "leguin.freenode.net"), sender.address);
-            assert((sender.class_ == IRCUser.Class.special), Enum!(IRCUser.Class).toString(sender.class_));
             assert((content == "ACCEPT\tADMIN\tAWAY\tCHALLENGE"), content);
             assert((aux == "index"), aux);
             assert((num == 705), num.to!string);
@@ -1064,7 +1013,6 @@ unittest
         {
             assert((type == RPL_ENDOFHELP), Enum!(IRCEvent.Type).toString(type));
             assert((sender.address == "leguin.freenode.net"), sender.address);
-            assert((sender.class_ == IRCUser.Class.special), Enum!(IRCUser.Class).toString(sender.class_));
             assert((content == "End of /HELP.// :leguin.freenode.net 706 kameloso^ index :End of /HELP."), content);
             assert((aux == "index"), aux);
             assert((num == 706), num.to!string);
@@ -1077,7 +1025,6 @@ unittest
         {
             assert((type == ERR_BANONCHAN), Enum!(IRCEvent.Type).toString(type));
             assert((sender.address == "cherryh.freenode.net"), sender.address);
-            assert((sender.class_ == IRCUser.Class.special), Enum!(IRCUser.Class).toString(sender.class_));
             assert((channel == "#d3d9"), channel);
             assert((content == "Cannot change nickname while banned on channel"), content);
             assert((aux == "kameloso^^"), aux);
@@ -1105,7 +1052,6 @@ unittest
         {
             assert((type == RPL_LOGGEDIN), Enum!(IRCEvent.Type).toString(type));
             assert((sender.address == "weber.freenode.net"), sender.address);
-            assert((sender.class_ == IRCUser.Class.special), Enum!(IRCUser.Class).toString(sender.class_));
             assert((target.nickname == "kameloso"), target.nickname);
             assert((target.ident == "NaN"), target.ident);
             assert((target.address == "194.117.188.126"), target.address);
@@ -1135,7 +1081,6 @@ unittest
         {
             assert((type == RPL_LISTSTART), Enum!(IRCEvent.Type).toString(type));
             assert((sender.address == "cherryh.freenode.net"), sender.address);
-            assert((sender.class_ == IRCUser.Class.special), Enum!(IRCUser.Class).toString(sender.class_));
             assert((num == 321), num.to!string);
         }
     }
@@ -1147,7 +1092,6 @@ unittest
         {
             assert((type == ERR_LINKCHANNEL), Enum!(IRCEvent.Type).toString(type));
             assert((sender.address == "wolfe.freenode.net"), sender.address);
-            assert((sender.class_ == IRCUser.Class.special), Enum!(IRCUser.Class).toString(sender.class_));
             assert((channel == "#linux"), channel);
             assert((content == "##linux"), content);
             assert((num == 470), num.to!string);
@@ -1161,7 +1105,6 @@ unittest
         {
             assert((type == ERR_USERONCHANNEL), Enum!(IRCEvent.Type).toString(type));
             assert((sender.address == "orwell.freenode.net"), sender.address);
-            assert((sender.class_ == IRCUser.Class.special), Enum!(IRCUser.Class).toString(sender.class_));
             assert((channel == "#flerrp"), channel);
             assert((content == "is already on channel"), content);
             assert((num == 443), num.to!string);
@@ -1200,7 +1143,6 @@ unittest
         {
             assert((type == NOTICE), Enum!(IRCEvent.Type).toString(type));
             assert((sender.address == "tolkien.freenode.net"), sender.address);
-            assert((sender.class_ == IRCUser.Class.special), Enum!(IRCUser.Class).toString(sender.class_));
             assert((content == "*** Checking Ident"), content);
         }
     }
@@ -1269,7 +1211,6 @@ unittest
         {
             assert((type == MODE), Enum!(IRCEvent.Type).toString(type));
             assert((sender.address == "niven.freenode.net"), sender.address);
-            assert((sender.class_ == IRCUser.Class.special), Enum!(IRCUser.Class).toString(sender.class_));
             assert((channel == "#sklabjoier"), channel);
             assert((aux == "+ns"), aux);
         }
@@ -1295,7 +1236,6 @@ unittest
         {
             assert((type == RPL_ISUPPORT), Enum!(IRCEvent.Type).toString(type));
             assert((sender.address == "cherryh.freenode.net"), sender.address);
-            assert((sender.class_ == IRCUser.Class.special), Enum!(IRCUser.Class).toString(sender.class_));
             assert((content == "NICKLEN=16 CHANNELLEN=50 TOPICLEN=390 DEAF=D FNC TARGMAX=NAMES:1,LIST:1,KICK:1,WHOIS:1,PRIVMSG:4,NOTICE:4,ACCEPT:,MONITOR: EXTBAN=$,ajrxz CLIENTVER=3.0 CPRIVMSG CNOTICE SAFELIST"), content);
             assert((num == 5), num.to!string);
         }
@@ -1307,7 +1247,6 @@ unittest
         {
             assert((type == ERR_YOUREBANNEDCREEP), Enum!(IRCEvent.Type).toString(type));
             assert((sender.address == "server.net"), sender.address);
-            assert((sender.class_ == IRCUser.Class.special), Enum!(IRCUser.Class).toString(sender.class_));
             assert((content == "You are banned from this server- Your irc client seems broken and is flooding lots of channels. Banned for 240 min, if in error, please contact kline@freenode.net. (2017/12/1 21.08)"), content);
             assert((num == 465), num.to!string);
         }
@@ -1333,7 +1272,6 @@ unittest
         {
             assert((type == RPL_CHANNELMODEIS), Enum!(IRCEvent.Type).toString(type));
             assert((sender.address == "kornbluth.freenode.net"), sender.address);
-            assert((sender.class_ == IRCUser.Class.special), Enum!(IRCUser.Class).toString(sender.class_));
             assert((channel == "#flerrp"), channel);
             assert((aux == "+ns"), aux);
             assert((num == 324), num.to!string);
@@ -1346,7 +1284,6 @@ unittest
         {
             assert((type == RPL_CREATIONTIME), Enum!(IRCEvent.Type).toString(type));
             assert((sender.address == "kornbluth.freenode.net"), sender.address);
-            assert((sender.class_ == IRCUser.Class.special), Enum!(IRCUser.Class).toString(sender.class_));
             assert((channel == "#flerrp"), channel);
             assert((count == 1512995737), count.to!string);
             assert((num == 329), num.to!string);
@@ -1360,7 +1297,6 @@ unittest
         {
             assert((type == RPL_BANLIST), Enum!(IRCEvent.Type).toString(type));
             assert((sender.address == "kornbluth.freenode.net"), sender.address);
-            assert((sender.class_ == IRCUser.Class.special), Enum!(IRCUser.Class).toString(sender.class_));
             assert((channel == "#flerrp"), "channel is " ~ channel);
             assert((content == "harbl!harbl@snarbl.com"), content);
             assert((aux == "zorael!~NaN@2001:41d0:2:80b4::"), aux);
@@ -1375,7 +1311,6 @@ unittest
         {
             assert((type == RPL_CHANNELMODEIS), Enum!(IRCEvent.Type).toString(type));
             assert((sender.address == "niven.freenode.net"), sender.address);
-            assert((sender.class_ == IRCUser.Class.special), Enum!(IRCUser.Class).toString(sender.class_));
             assert((channel == "##linux"), channel);
             assert((content == "##linux-overflow"), content);
             assert((aux == "+CLPcnprtf"), aux);
@@ -1390,7 +1325,6 @@ unittest
         {
             assert((type == RPL_INVITELIST), Enum!(IRCEvent.Type).toString(type));
             assert((sender.address == "niven.freenode.net"), sender.address);
-            assert((sender.class_ == IRCUser.Class.special), Enum!(IRCUser.Class).toString(sender.class_));
             assert((channel == "#flerrp"), channel);
             assert((content == "asdf!fdas@asdf.net"), content);
             assert((aux == "zorael!~NaN@2001:41d0:2:80b4:: 1514405089"), aux);
@@ -1404,7 +1338,6 @@ unittest
         {
             assert((type == RPL_QUIETLIST), Enum!(IRCEvent.Type).toString(type));
             assert((sender.address == "niven.freenode.net"), sender.address);
-            assert((sender.class_ == IRCUser.Class.special), Enum!(IRCUser.Class).toString(sender.class_));
             assert((channel == "#flerrp"), channel);
             assert((content == "qqqq!*@asdf.net"), content);
             assert((aux == "zorael!~NaN@2001:41d0:2:80b4::"), aux);

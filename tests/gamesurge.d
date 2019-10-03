@@ -13,7 +13,6 @@ unittest
         {
             assert((type == IRCEvent.Type.RPL_MYINFO), Enum!(IRCEvent.Type).toString(type));
             assert((sender.address == "Portlane.SE.EU.GameSurge.net"), sender.address);
-            assert((sender.class_ == IRCUser.Class.special), Enum!(IRCUser.Class).toString(sender.class_));
             assert((content == "diOoswkgxnI biklmnopstvrDdRcCz bklov"), content);
             assert((aux == "u2.10.12.18(gs2)"), aux);
             assert((num == 4), num.to!string);
@@ -37,7 +36,6 @@ unittest
         {
             assert((type == IRCEvent.Type.RPL_ISUPPORT), Enum!(IRCEvent.Type).toString(type));
             assert((sender.address == "Portlane.SE.EU.GameSurge.net"), sender.address);
-            assert((sender.class_ == IRCUser.Class.special), Enum!(IRCUser.Class).toString(sender.class_));
             assert((content == "WHOX WALLCHOPS WALLVOICES USERIP CPRIVMSG CNOTICE SILENCE=25 MODES=6 MAXCHANNELS=75 MAXBANS=100 NICKLEN=30"), content);
             assert((num == 5), num.to!string);
         }
@@ -58,7 +56,6 @@ unittest
         {
             assert((type == IRCEvent.Type.RPL_ISUPPORT), Enum!(IRCEvent.Type).toString(type));
             assert((sender.address == "Portlane.SE.EU.GameSurge.net"), sender.address);
-            assert((sender.class_ == IRCUser.Class.special), Enum!(IRCUser.Class).toString(sender.class_));
             assert((content == "MAXNICKLEN=30 TOPICLEN=300 AWAYLEN=200 KICKLEN=300 CHANNELLEN=200 MAXCHANNELLEN=200 CHANTYPES=#& PREFIX=(ov)@+ STATUSMSG=@+ CHANMODES=b,k,l,imnpstrDdRcC CASEMAPPING=rfc1459 NETWORK=GameSurge"), content);
             assert((num == 5), num.to!string);
         }
@@ -92,7 +89,6 @@ unittest
         {
             assert((type == RPL_HOSTHIDDEN), Enum!(IRCEvent.Type).toString(type));
             assert((sender.address == "TAL.DE.EU.GameSurge.net"), sender.address);
-            assert((sender.class_ == IRCUser.Class.special), Enum!(IRCUser.Class).toString(sender.class_));
             assert((content == "~NaN@1b24f4a7.243f02a4.5cd6f3e3.IP4"), content);
             assert((aux == "is now your hidden host"), aux);
             assert((num == 396), num.to!string);

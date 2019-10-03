@@ -13,7 +13,6 @@ unittest
         {
             assert((type == IRCEvent.Type.RPL_MYINFO), Enum!(IRCEvent.Type).toString(type));
             assert((sender.address == "irc.nlnog.net"), sender.address);
-            assert((sender.class_ == IRCUser.Class.special), Enum!(IRCUser.Class).toString(sender.class_));
             assert((content == "aoOirw abeiIklmnoOpqrRstv"), content);
             assert((aux == "2.11.2p3"), aux);
             assert((num == 4), num.to!string);
@@ -37,7 +36,6 @@ unittest
         {
             assert((type == IRCEvent.Type.RPL_ISUPPORT), Enum!(IRCEvent.Type).toString(type));
             assert((sender.address == "irc.nlnog.net"), sender.address);
-            assert((sender.class_ == IRCUser.Class.special), Enum!(IRCUser.Class).toString(sender.class_));
             assert((content == "RFC2812 PREFIX=(ov)@+ CHANTYPES=#&!+ MODES=3 CHANLIMIT=#&!+:42 NICKLEN=15 TOPICLEN=255 KICKLEN=255 MAXLIST=beIR:64 CHANNELLEN=50 IDCHAN=!:5 CHANMODES=beIR,k,l,imnpstaqr"), content);
             assert((num == 5), num.to!string);
         }
@@ -68,7 +66,6 @@ unittest
         {
             assert((type == IRCEvent.Type.RPL_ISUPPORT), Enum!(IRCEvent.Type).toString(type));
             assert((sender.address == "irc.nlnog.net"), sender.address);
-            assert((sender.class_ == IRCUser.Class.special), Enum!(IRCUser.Class).toString(sender.class_));
             assert((content == "PENALTY FNC EXCEPTS=e INVEX=I CASEMAPPING=ascii NETWORK=IRCnet"), content);
             assert((num == 5), num.to!string);
         }
@@ -99,7 +96,6 @@ unittest
         {
             assert((type == RPL_REOPLIST), Enum!(IRCEvent.Type).toString(type));
             assert((sender.address == "irc.atw-inter.net"), sender.address);
-            assert((sender.class_ == special), Enum!(IRCUser.Class).toString(sender.class_));
             assert((channel == "#debian.de"), channel);
             assert((content == "towo!towo@littlelamb.szaf.org"), content);
             assert((num == 344), num.to!string);
@@ -113,7 +109,6 @@ unittest
         {
             assert((type == RPL_ENDOFREOPLIST), Enum!(IRCEvent.Type).toString(type));
             assert((sender.address == "irc.atw-inter.net"), sender.address);
-            assert((sender.class_ == special), Enum!(IRCUser.Class).toString(sender.class_));
             assert((channel == "#debian.de"), channel);
             assert((content == "End of Channel Reop List"), content);
             assert((num == 345), num.to!string);

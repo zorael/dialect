@@ -13,7 +13,6 @@ unittest
         {
             assert((type == IRCEvent.Type.RPL_MYINFO), Enum!(IRCEvent.Type).toString(type));
             assert((sender.address == "medusa.us.SpotChat.org"), sender.address);
-            assert((sender.class_ == IRCUser.Class.special), Enum!(IRCUser.Class).toString(sender.class_));
             assert((content == "BHIRSWcdghikorswx ACIJKMNOPQRSTYabceghiklmnopqrstvz IJYabeghkloqv"), content);
             assert((aux == "InspIRCd-2.0"), aux);
             assert((num == 4), num.to!string);
@@ -37,7 +36,6 @@ unittest
         {
             assert((type == IRCEvent.Type.RPL_ISUPPORT), Enum!(IRCEvent.Type).toString(type));
             assert((sender.address == "medusa.us.SpotChat.org"), sender.address);
-            assert((sender.class_ == IRCUser.Class.special), Enum!(IRCUser.Class).toString(sender.class_));
             assert((content == "AWAYLEN=200 CALLERID=g CASEMAPPING=rfc1459 CHANMODES=Ibeg,k,Jl,ACKMNOPQRSTcimnprstz CHANNELLEN=64 CHANTYPES=# CHARSET=ascii ELIST=MU EXCEPTS=e EXTBAN=,ACNOQRSTUcmz FNC INVEX=I KICKLEN=255"), content);
             assert((num == 5), num.to!string);
         }
@@ -74,7 +72,6 @@ unittest
         {
             assert((type == IRCEvent.Type.RPL_ISUPPORT), Enum!(IRCEvent.Type).toString(type));
             assert((sender.address == "medusa.us.SpotChat.org"), sender.address);
-            assert((sender.class_ == IRCUser.Class.special), Enum!(IRCUser.Class).toString(sender.class_));
             assert((content == "MAP MAXBANS=60 MAXCHANNELS=20 MAXPARA=32 MAXTARGETS=20 MODES=20 NAMESX NETWORK=SpotChat NICKLEN=31 OVERRIDE PREFIX=(Yqaohv)!~&@%+ REMOVE SECURELIST"), content);
             assert((num == 5), num.to!string);
         }
@@ -101,7 +98,6 @@ unittest
         {
             assert((type == IRCEvent.Type.RPL_ISUPPORT), Enum!(IRCEvent.Type).toString(type));
             assert((sender.address == "medusa.us.SpotChat.org"), sender.address);
-            assert((sender.class_ == IRCUser.Class.special), Enum!(IRCUser.Class).toString(sender.class_));
             assert((content == "SSL=64.57.93.14:6697 STARTTLS STATUSMSG=!~&@%+ TOPICLEN=307 UHNAMES VBANLIST WALLCHOPS WALLVOICES WATCH=32"), content);
             assert((num == 5), num.to!string);
         }
@@ -125,7 +121,6 @@ unittest
         {
             assert((type == ENDOFSPAMFILTERLIST), Enum!(IRCEvent.Type).toString(type));
             assert((sender.address == "lamia.ca.SpotChat.org"), sender.address);
-            assert((sender.class_ == IRCUser.Class.special), Enum!(IRCUser.Class).toString(sender.class_));
             assert((channel == "#garderoben"), channel);
             //assert((target.nickname == "kameloso"), target.nickname);
             assert((content == "End of channel spamfilter list"), content);
@@ -139,7 +134,6 @@ unittest
         {
             assert((type == RPL_UMODEIS), Enum!(IRCEvent.Type).toString(type));
             assert((sender.address == "lamia.ca.SpotChat.org"), sender.address);
-            assert((sender.class_ == IRCUser.Class.special), Enum!(IRCUser.Class).toString(sender.class_));
             assert((aux == "+ix"), aux);
             assert((num == 221), num.to!string);
         }
@@ -192,7 +186,6 @@ unittest
         {
             assert((type == RPL_ISUPPORT), Enum!(IRCEvent.Type).toString(type));
             assert((sender.address == "medusa.us.SpotChat.org"), sender.address);
-            assert((sender.class_ == special), Enum!(IRCUser.Class).toString(sender.class_));
             assert((content == "AWAYLEN=200 CALLERID=g CASEMAPPING=rfc1459 CHANMODES=Ibeg,k,Jl,ACKMNOPQRSTcimnprstz CHANNELLEN=64 CHANTYPES=# CHARSET=ascii ELIST=MU EXCEPTS=e EXTBAN=,ACNOQRSTUcmz FNC INVEX=I KICKLEN=255"), content);
             assert((num == 5), num.to!string);
         }
