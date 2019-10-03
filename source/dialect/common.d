@@ -634,7 +634,7 @@ bool isAuthService(const IRCUser sender, const ref IRCParser parser) pure
     }
 
     return (sharedDomains(sender.address, parser.server.address) >= 2) ||
-        (sharedDomains(sender.address, parser.server.resolvedAddress));
+        (sharedDomains(sender.address, parser.server.resolvedAddress) >= 2);
 }
 
 unittest
