@@ -39,15 +39,12 @@ import lu.string : contains, nom;
 auto typenumsOf(const IRCServer.Daemon daemon) pure nothrow @nogc
 {
     import lu.meld : MeldingStrategy, meldInto;
-    import std.typecons : Flag, No, Yes;
 
     /// https://upload.wikimedia.org/wikipedia/commons/d/d5/IRCd_software_implementations3.svg
 
     IRCEvent.Type[1024] typenums = Typenums.base;
-
     alias strategy = MeldingStrategy.aggressive;
 
-    with (Typenums)
     with (IRCServer.Daemon)
     final switch (daemon)
     {
@@ -202,9 +199,6 @@ auto typenumsOf(const IRCServer.Daemon daemon) pure nothrow @nogc
  +/
 bool isSpecial(const IRCUser sender, const ref IRCParser parser) pure
 {
-    import std.algorithm.comparison : equal;
-    import std.uni : asLowerCase;
-
     if (parser.server.daemon == IRCServer.Daemon.twitch)
     {
         return (sender.nickname == "jtv");
@@ -285,11 +279,10 @@ bool isSpecial(const IRCUser sender, const ref IRCParser parser) pure
     }
 
     import lu.string : contains, origSharedDomains = sharedDomains;
-    import std.algorithm.searching : endsWith;
-    import std.typecons : Flag, No, Yes;
 
     static if (__traits(compiles, origSharedDomains!(No.caseSensitive)(string.init, string.init)))
     {
+        import std.typecons : Flag, No, Yes;
         alias sharedDomains = origSharedDomains!(No.caseSensitive);
     }
     else
@@ -300,6 +293,8 @@ bool isSpecial(const IRCUser sender, const ref IRCParser parser) pure
     if ((sharedDomains(sender.address, parser.server.address) >= 2) ||
         (sharedDomains(sender.address, parser.server.resolvedAddress) >= 2))
     {
+        import std.algorithm.searching : endsWith;
+
         if ((parser.server.network == "OFTC") && (sender.address.endsWith(".user.oftc.net") ||
             sender.address.contains("tor-irc")))
         {
@@ -621,11 +616,10 @@ bool isAuthService(const IRCUser sender, const ref IRCParser parser) pure
     // As such, no need to be as strict as isSpecial is
 
     import lu.string : contains, origSharedDomains = sharedDomains;
-    import std.algorithm.searching : endsWith;
-    import std.typecons : Flag, No, Yes;
 
     static if (__traits(compiles, origSharedDomains!(No.caseSensitive)(string.init, string.init)))
     {
+        import std.typecons : Flag, No, Yes;
         alias sharedDomains = origSharedDomains!(No.caseSensitive);
     }
     else
