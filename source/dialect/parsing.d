@@ -287,7 +287,6 @@ void parseBasic(ref IRCParser parser, ref IRCEvent event) pure @nogc
 
     // All but PING and PONG are sender-less.
     if (!event.sender.address) event.sender.address = parser.server.address;
-    event.sender.class_ = IRCUser.Class.special;
 }
 
 ///
@@ -1557,8 +1556,6 @@ void onNotice(ref IRCParser parser, ref IRCEvent event, ref string slice) pure
     with (parser)
     {
         import dialect.common : isAuthService, isSpecial;
-
-        if (event.sender.isSpecial(parser)) event.sender.class_ = IRCUser.Class.special;
 
         if (!event.content.length) return;
 

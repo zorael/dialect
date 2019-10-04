@@ -12,7 +12,6 @@ unittest
         with (event)
         {
             assert((type == IRCEvent.Type.SASL_AUTHENTICATE), Enum!(IRCEvent.Type).toString(type));
-            assert((sender.class_ == IRCUser.Class.special), Enum!(IRCUser.Class).toString(sender.class_));
             assert((content == "+"), content);
         }
     }
