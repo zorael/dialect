@@ -2020,31 +2020,37 @@ void onISUPPORT(ref IRCParser parser, ref IRCEvent event, ref string slice) pure
             case "NETWORK":
                 import dialect.common : typenumsOf;
 
-                network = value;
-
-                if (value == "RusNet")
+                switch (value)
                 {
+                case "RusNet":
                     // RusNet servers do not advertise an easily-identifiable
                     // daemonstring like "1.5.24/uk_UA.KOI8-U", so fake the daemon
                     // here.
                     parser.typenums = typenumsOf(IRCServer.Daemon.rusnet);
                     parser.server.daemon = IRCServer.Daemon.rusnet;
-                }
-                else if (value == "IRCnet")
-                {
+                    break;
+
+                case "IRCnet":
                     // Likewise IRCnet only advertises the daemon version and not
-                    // the daemon name.
+                    // the daemon name. (2.11.2p3)
                     parser.typenums = typenumsOf(IRCServer.Daemon.ircnet);
                     parser.server.daemon = IRCServer.Daemon.ircnet;
-                }
-                else if (value == "Rizon")
-                {
+                    break;
+
+                case "Rizon":
                     // Rizon reports hybrid but actually has some extras
+                    // onMyInfo will have already melded typenums for Daemon.hybrid,
+                    // but Daemon.rizon just applies on top of it.
                     parser.typenums = typenumsOf(IRCServer.Daemon.rizon);
                     parser.server.daemon = IRCServer.Daemon.rizon;
+                    break;
+
+                default:
+                    break;
                 }
 
                 parser.server.daemonstring = value;
+                parser.server.network = value;
                 version(FlagAsUpdated) parser.serverUpdated = true;
                 break;
 
