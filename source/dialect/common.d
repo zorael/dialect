@@ -217,7 +217,8 @@ bool isSpecial(const IRCUser sender, const ref IRCParser parser) pure
         {
         case "NickServ":
         case "SaslServ":
-            if (sender.address == "services.") return true;
+            if (sender.address == "services.") return true;  // freenode
+            else if (sender.address == "services") return true;  // snoonet
             // Unknown address, drop to after switch
             break top;
 
@@ -228,6 +229,7 @@ bool isSpecial(const IRCUser sender, const ref IRCParser parser) pure
             case "geekshed.net":
             case "services.irchighway.net":
             case "services.oftc.net":
+            case "gimpnet-services.gimp.org":
                 return true;
 
             default:
@@ -301,6 +303,10 @@ bool isSpecial(const IRCUser sender, const ref IRCParser parser) pure
 
         if ((parser.server.network == "OFTC") && (sender.address.endsWith(".user.oftc.net") ||
             sender.address.contains("tor-irc")))
+        {
+            return false;
+        }
+        else if ((parser.server.daemon == IRCServer.Daemon.ircnet) && (sender.address == "webchat.ircnet.net"))
         {
             return false;
         }
@@ -557,7 +563,8 @@ bool isAuthService(const IRCUser sender, const ref IRCParser parser) pure
         {
         case "NickServ":
         case "SaslServ":
-            if (sender.address == "services.") return true;
+            if (sender.address == "services.") return true;  // freenode
+            else if (sender.address == "services") return true;  // snoonet
             // Unknown address, drop to after switch
             break top;
 
@@ -568,6 +575,7 @@ bool isAuthService(const IRCUser sender, const ref IRCParser parser) pure
             case "geekshed.net":
             case "services.irchighway.net":
             case "services.oftc.net":
+            case "gimpnet-services.gimp.org":
                 return true;
 
             default:
