@@ -1928,9 +1928,9 @@ unittest
 
 // onISUPPORT
 /++
- +  Handles `ISUPPORT` events.
+ +  Handles `dialect.defs.IRCEvent.Type.RPL_ISUPPORT` events.
  +
- +  `ISUPPORT` contains a bunch of interesting information that changes how we
+ +  `dialect.defs.IRCEvent.Type.RPL_ISUPPORT` contains a bunch of interesting information that changes how we
  +  look at the `dialect.defs.IRCServer`. Notably which *network* the server
  +  is of and its max channel and nick lengths, and available modes. Then much
  +  more that we're currently ignoring.
@@ -2102,10 +2102,12 @@ void onISUPPORT(ref IRCParser parser, ref IRCEvent event, ref string slice) pure
 
 // onMyInfo
 /++
- +  Handle `MYINFO` events.
+ +  Handle `dialect.defs.IRCEvent.Type.RPL_MYINFO` events.
  +
  +  `MYINFO` contains information about which *daemon* the server is running.
  +  We want that to be able to meld together a good `typenums` array.
+ +
+ +  It fires before `dialect.defs.IRCEvent.Type.RPL_ISUPPORT`.
  +
  +  Params:
  +      parser = Reference to the current `IRCParser`.
@@ -2155,6 +2157,7 @@ void onMyInfo(ref IRCParser parser, ref IRCEvent event, ref string slice) pure
     alpha.noxether.net                      UnrealIRCd-4.0-Noxether
     CraZyPaLaCe.Be_ChatFun.Be_Webradio.VIP  CR1.8.03-Unreal3.2.8.1
     redhispana.org                          Unreal3.2.8+UDB-3.6.1
+    irc.portlane.se (ircnet)                2.11.2p3
     */
 
     // :asimov.freenode.net 004 kameloso^ asimov.freenode.net ircd-seven-1.1.4 DOQRSZaghilopswz CFILMPQSbcefgijklmnopqrstvz bkloveqjfI
