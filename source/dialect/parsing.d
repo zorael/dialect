@@ -2223,14 +2223,7 @@ void onMyInfo(ref IRCParser parser, ref IRCEvent event, ref string slice) pure
         }
         else if (daemonstringLower.contains("hybrid"))
         {
-            if (parser.server.address.contains(".rizon."))
-            {
-                daemon = rizon;
-            }
-            else
-            {
-                daemon = hybrid;
-            }
+            daemon = hybrid;
         }
         else if (daemonstringLower.contains("ratbox"))
         {
