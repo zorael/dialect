@@ -2049,7 +2049,6 @@ void onISUPPORT(ref IRCParser parser, ref IRCEvent event, ref string slice) pure
                     break;
                 }
 
-                parser.server.daemonstring = value;
                 parser.server.network = value;
                 version(FlagAsUpdated) parser.serverUpdated = true;
                 break;
