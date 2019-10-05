@@ -170,6 +170,10 @@ auto typenumsOf(const IRCServer.Daemon daemon) pure nothrow @nogc
         // do nothing, their events aren't numerical?
         break;
 
+    case bsdunix:
+        // unsure.
+        break;
+
     case unknown:
     case unset:
         // do nothing...
