@@ -218,7 +218,6 @@ unittest
     with (parser)
     {
         assert((server.network == "EFnet"), server.network);
-        assert((server.daemonstring == "EFnet"), server.daemonstring);
         assert((server.aModes == "eIb"), server.aModes);
         assert((server.bModes == "k"), server.bModes);
         assert((server.cModes == "l"), server.cModes);
@@ -287,7 +286,6 @@ unittest
     with (parser)
     {
         assert((server.network == "DALnet"), server.network);
-        assert((server.daemonstring == "DALnet"), server.daemonstring);
         assert((server.maxNickLength == 30), server.maxNickLength.to!string);
         assert((server.maxChannelLength == 32), server.maxChannelLength.to!string);
         assert((server.prefixchars == ['+':'v', '@':'o']), server.prefixchars.to!string);
@@ -442,7 +440,6 @@ unittest
     with (parser)
     {
         assert((server.network == "GeekShed"), server.network);
-        assert((server.daemonstring == "GeekShed"), server.daemonstring);
         assert((server.aModes == "beI"), server.aModes);
         assert((server.bModes == "kfL"), server.bModes);
         assert((server.cModes == "lj"), server.cModes);

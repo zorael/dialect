@@ -43,7 +43,6 @@ unittest
 
     /*
     server.network = "OFTC";
-    server.daemonstring = "OFTC";
     server.maxNickLength = 30;
     server.caseMapping = IRCServer.CaseMapping.rfc1459;
     */
@@ -51,7 +50,6 @@ unittest
     with (parser)
     {
         assert((server.network == "OFTC"), server.network);
-        assert((server.daemonstring == "OFTC"), server.daemonstring);
         assert((server.maxNickLength == 30), server.maxNickLength.to!string);
         assert((server.caseMapping == IRCServer.CaseMapping.rfc1459), Enum!(IRCServer.CaseMapping).toString(server.caseMapping));
     }

@@ -43,7 +43,6 @@ unittest
 
     /*
     server.daemon = IRCServer.Daemon.rusnet;
-    server.daemonstring = "RusNet";
     server.maxNickLength = 31;
     server.aModes = "beI";
     server.cModes = "l";
@@ -55,7 +54,6 @@ unittest
     with (parser)
     {
         assert((server.daemon == IRCServer.Daemon.rusnet), Enum!(IRCServer.Daemon).toString(server.daemon));
-        assert((server.daemonstring == "RusNet"), server.daemonstring);
         assert((server.maxNickLength == 31), server.maxNickLength.to!string);
         assert((server.aModes == "beI"), server.aModes);
         assert((server.cModes == "l"), server.cModes);

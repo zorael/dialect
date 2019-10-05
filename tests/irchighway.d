@@ -79,7 +79,6 @@ unittest
 
     /*
     server.network = "irchighway";
-    server.daemonstring = "irchighway";
     server.maxNickLength = 31;
     server.prefixes = "qaohv";
     */
@@ -87,7 +86,6 @@ unittest
     with (parser)
     {
         assert((server.network == "irchighway"), server.network);
-        assert((server.daemonstring == "irchighway"), server.daemonstring);
         assert((server.maxNickLength == 31), server.maxNickLength.to!string);
         assert((server.prefixes == "qaohv"), server.prefixes);
     }

@@ -63,7 +63,6 @@ unittest
 
     /*
     server.network = "QuakeNet";
-    server.daemonstring = "QuakeNet";
     server.aModes = "b";
     server.cModes = "l";
     server.dModes = "imnpstrDducCNMT";
@@ -74,7 +73,6 @@ unittest
     with (parser)
     {
         assert((server.network == "QuakeNet"), server.network);
-        assert((server.daemonstring == "QuakeNet"), server.daemonstring);
         assert((server.aModes == "b"), server.aModes);
         assert((server.cModes == "l"), server.cModes);
         assert((server.dModes == "imnpstrDducCNMT"), server.dModes);

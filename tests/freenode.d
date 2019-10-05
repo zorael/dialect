@@ -41,13 +41,11 @@ unittest
     }
 
     /*
-    server.daemonstring = "freenode";
     server.caseMapping = IRCServer.CaseMapping.rfc1459;
     */
 
     with (parser)
     {
-        assert((server.daemonstring == "freenode"), server.daemonstring);
         assert((server.caseMapping == IRCServer.CaseMapping.rfc1459), Enum!(IRCServer.CaseMapping).toString(server.caseMapping));
     }
 

@@ -74,7 +74,6 @@ unittest
     /*
     server.daemon = IRCServer.Daemon.ircnet;
     server.network = "IRCnet";
-    server.daemonstring = "IRCnet";
     server.exceptsChar = 'e';
     server.invexChar = 'I';
     */
@@ -83,7 +82,6 @@ unittest
     {
         assert((server.daemon == IRCServer.Daemon.ircnet), Enum!(IRCServer.Daemon).toString(server.daemon));
         assert((server.network == "IRCnet"), server.network);
-        assert((server.daemonstring == "IRCnet"), server.daemonstring);
         assert((server.exceptsChar == 'e'), server.exceptsChar.to!string);
         assert((server.invexChar == 'I'), server.invexChar.to!string);
     }

@@ -63,7 +63,6 @@ unittest
 
     /*
     server.network = "GameSurge";
-    server.daemonstring = "GameSurge";
     server.aModes = "b";
     server.cModes = "l";
     server.dModes = "imnpstrDdRcC";
@@ -74,7 +73,6 @@ unittest
     with (parser)
     {
         assert((server.network == "GameSurge"), server.network);
-        assert((server.daemonstring == "GameSurge"), server.daemonstring);
         assert((server.aModes == "b"), server.aModes);
         assert((server.cModes == "l"), server.cModes);
         assert((server.dModes == "imnpstrDdRcC"), server.dModes);

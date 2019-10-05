@@ -53,7 +53,6 @@ unittest
     /*
     server.daemon = IRCServer.Daemon.rizon;
     server.network = "Rizon";
-    server.daemonstring = "Rizon";
     server.maxNickLength = 30;
     server.prefixes = "qaohv";
     server.caseMapping = IRCServer.CaseMapping.rfc1459;
@@ -65,7 +64,6 @@ unittest
     {
         assert((server.daemon == IRCServer.Daemon.rizon), Enum!(IRCServer.Daemon).toString(server.daemon));
         assert((server.network == "Rizon"), server.network);
-        assert((server.daemonstring == "Rizon"), server.daemonstring);
         assert((server.maxNickLength == 30), server.maxNickLength.to!string);
         assert((server.prefixes == "qaohv"), server.prefixes);
         assert((server.caseMapping == IRCServer.CaseMapping.rfc1459), Enum!(IRCServer.CaseMapping).toString(server.caseMapping));
