@@ -1595,8 +1595,8 @@ void onNotice(ref IRCParser parser, ref IRCEvent event, ref string slice) pure
             enum AuthSuccess
             {
                 freenode = "You are now identified for",
-                rizon = "Password accepted - you are now recognized.",
-                quakenet = "You are now logged in as",
+                rizon = "Password accepted - you are now recognized.",  // also gimpnet
+                quakenet = "You are now logged in as",  // also mozilla, snoonet
                 gamesurge = "I recognize you.",
                 dalnet = "Password accepted for",
                 oftc = "You are successfully identified as",
