@@ -906,6 +906,7 @@ struct IRCServer
         undernet,
         ircdseven,
         twitch,
+        bsdunix,
 
         charybdis,
         sorircd,
