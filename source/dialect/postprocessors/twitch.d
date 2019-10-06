@@ -1296,6 +1296,9 @@ room-id             "31457014"
                 // msg-param-middle-man = gabepeixe
                 // Prime community gift "middle-man"? Name of the channel?
                 // Would store in aux but it's already reserved for msg-param-gift-name
+            case "custom-reward-id":
+                // custom-reward-id = f597fc7c-703e-42d8-98ed-f5ada6d19f4b
+                // Unsure, was just part of an emote-only PRIVMSG
 
                 // Ignore these events.
                 break;
