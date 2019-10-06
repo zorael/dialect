@@ -649,6 +649,32 @@ user-type                          ""
                 event.aux = value;
                 break;
 
+            case "primecommunitygiftreceived":
+/+
+badge-info                         ""
+badges                             "partner/1"
+color                              "#004DFF"
+display-name                       "NorddeutscherJunge"
+emotes                             ""
+flags                              ""
+id                                 "3ced021d-adab-4278-845d-4c8f2c5d6306"
+login                              "norddeutscherjunge"
+mod                                "0"
+msg-id                             "primecommunitygiftreceived"
+msg-param-gift-name                "World\sof\sTanks:\sCare\sPackage"
+msg-param-middle-man               "gabepeixe"
+msg-param-recipient                "m4ggusbruno"
+msg-param-sender                   "NorddeutscherJunge"
+room-id                            "59799994"
+subscriber                         "0"
+system-msg                         "A\sviewer\swas\sgifted\sa\sWorld\sof\sTanks:\sCare\sPackage,\scourtesy\sof\sa\sPrime\smember!"
+tmi-sent-ts                        "1570346408346"
+user-id                            "39548541"
+user-type                          ""
++/
+                event.type = Type.TWITCH_GIFTRECEIVED;
+                break;
+
             /*case "bad_ban_admin":
             case "bad_ban_anon":
             case "bad_ban_broadcaster":
@@ -933,11 +959,13 @@ user-type                          ""
 
         case "msg-param-recipient-user-name":
         case "msg-param-sender-login":
+        case "msg-param-recipient": // Prime community gift received
             // In a GIFTCHAIN the one who started the gift sub train?
             event.target.nickname = value;
             break;
 
         case "msg-param-displayName":
+        case "msg-param-sender": // Prime community gift received (apparently display name)
             // RAID; sender alias and thus raiding channel cased
             event.sender.displayName = value;
             break;
@@ -1024,6 +1052,9 @@ room-id             "31457014"
             // msg-param-domain = owl2018
             // [rewardgift] [#overwatchleague] Asdf [bits]: "A Cheer shared Rewards to 35 others in Chat!" {35}
             // Name of the context?
+        case "msg-param-gift-name":
+            // msg-param-gift-name = "World\sof\sTanks:\sCare\sPackage"
+            // Prime community gift name
 
             version(TwitchWarnings)
             {
@@ -1261,6 +1292,10 @@ room-id             "31457014"
                 // msg-param-min-cheer-amount = '150'
             case "msg-param-ritual-name":
                 // msg-param-ritual-name = 'new_chatter'
+            case "msg-param-middle-man":
+                // msg-param-middle-man = gabepeixe
+                // Prime community gift "middle-man"? Name of the channel?
+                // Would store in aux but it's already reserved for msg-param-gift-name
 
                 // Ignore these events.
                 break;
