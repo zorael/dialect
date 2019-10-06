@@ -663,4 +663,23 @@ unittest
             assert((id == "d6729804-2bf3-495d-80ce-a2fe8ed00a26"), id);
         }
     }
+    {
+        // @badge-info=;badges=partner/1;color=#004DFF;display-name=NorddeutscherJunge;emotes=;flags=;id=3ced021d-adab-4278-845d-4c8f2c5d6306;login=norddeutscherjunge;mod=0;msg-id=primecommunitygiftreceived;msg-param-gift-name=World\sof\sTanks:\sCare\sPackage;msg-param-middle-man=gabepeixe;msg-param-recipient=m4ggusbruno;msg-param-sender=NorddeutscherJunge;room-id=59799994;subscriber=0;system-msg=A\sviewer\swas\sgifted\sa\sWorld\sof\sTanks:\sCare\sPackage,\scourtesy\sof\sa\sPrime\smember!;tmi-sent-ts=1570346408346;user-id=39548541;user-type= :tmi.twitch.tv USERNOTICE #gabepeixe
+        immutable event = parser.toIRCEvent("@badge-info=;badges=partner/1;color=#004DFF;display-name=NorddeutscherJunge;emotes=;flags=;id=3ced021d-adab-4278-845d-4c8f2c5d6306;login=norddeutscherjunge;mod=0;msg-id=primecommunitygiftreceived;msg-param-gift-name=World\\sof\\sTanks:\\sCare\\sPackage;msg-param-middle-man=gabepeixe;msg-param-recipient=m4ggusbruno;msg-param-sender=NorddeutscherJunge;room-id=59799994;subscriber=0;system-msg=A\\sviewer\\swas\\sgifted\\sa\\sWorld\\sof\\sTanks:\\sCare\\sPackage,\\scourtesy\\sof\\sa\\sPrime\\smember!;tmi-sent-ts=1570346408346;user-id=39548541;user-type= :tmi.twitch.tv USERNOTICE #gabepeixe");
+        with (event)
+        {
+            assert((type == IRCEvent.Type.TWITCH_GIFTRECEIVED), Enum!(IRCEvent.Type).toString(type));
+            assert((sender.nickname == "norddeutscherjunge"), sender.nickname);
+            assert((sender.account == "norddeutscherjunge"), sender.account);
+            assert((sender.displayName == "NorddeutscherJunge"), sender.displayName);
+            assert((sender.badges == "partner/1"), sender.badges);
+            assert((sender.colour == "004DFF"), sender.colour);
+            assert((channel == "#gabepeixe"), channel);
+            assert((target.nickname == "m4ggusbruno"), target.nickname);
+            assert((content == "A viewer was gifted a World of Tanks: Care Package, courtesy of a Prime member!"), content);
+            assert((aux == "World\\sof\\sTanks:\\sCare\\sPackage"), aux);
+            assert((tags == "badge-info=;badges=partner/1;color=#004DFF;display-name=NorddeutscherJunge;emotes=;flags=;id=3ced021d-adab-4278-845d-4c8f2c5d6306;login=norddeutscherjunge;mod=0;msg-id=primecommunitygiftreceived;msg-param-gift-name=World\\sof\\sTanks:\\sCare\\sPackage;msg-param-middle-man=gabepeixe;msg-param-recipient=m4ggusbruno;msg-param-sender=NorddeutscherJunge;room-id=59799994;subscriber=0;system-msg=A\\sviewer\\swas\\sgifted\\sa\\sWorld\\sof\\sTanks:\\sCare\\sPackage,\\scourtesy\\sof\\sa\\sPrime\\smember!;tmi-sent-ts=1570346408346;user-id=39548541;user-type="), tags);
+            assert((id == "3ced021d-adab-4278-845d-4c8f2c5d6306"), id);
+        }
+    }
 }
