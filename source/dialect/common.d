@@ -284,17 +284,8 @@ bool isSpecial(const IRCUser sender, const ref IRCParser parser) pure
         break;
     }
 
-    import lu.string : contains, origSharedDomains = sharedDomains;
-
-    static if (__traits(compiles, origSharedDomains!(No.caseSensitive)(string.init, string.init)))
-    {
-        import std.typecons : Flag, No, Yes;
-        alias sharedDomains = origSharedDomains!(No.caseSensitive);
-    }
-    else
-    {
-        alias sharedDomains = origSharedDomains;
-    }
+    import lu.string : contains, sharedDomains;
+    import std.typecons : Flag, No, Yes;
 
     if ((sharedDomains(sender.address, parser.server.address) >= 2) ||
         (sharedDomains(sender.address, parser.server.resolvedAddress) >= 2))
@@ -627,17 +618,8 @@ bool isAuthService(const IRCUser sender, const ref IRCParser parser) pure
     // We're here if nick nickserv/sasl/etc and unknown ident, or server mismatch
     // As such, no need to be as strict as isSpecial is
 
-    import lu.string : contains, origSharedDomains = sharedDomains;
-
-    static if (__traits(compiles, origSharedDomains!(No.caseSensitive)(string.init, string.init)))
-    {
-        import std.typecons : Flag, No, Yes;
-        alias sharedDomains = origSharedDomains!(No.caseSensitive);
-    }
-    else
-    {
-        alias sharedDomains = origSharedDomains;
-    }
+    import lu.string : contains, sharedDomains;
+    import std.typecons : Flag, No, Yes;
 
     return (sharedDomains(sender.address, parser.server.address) >= 2) ||
         (sharedDomains(sender.address, parser.server.resolvedAddress) >= 2);
