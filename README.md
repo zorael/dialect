@@ -168,6 +168,12 @@ See the [`/tests`](/tests) directory for more example parses.
 
 * detect and remove final non-bot-agnostic remnants
 
+# Built with
+
+* [**D**](https://dlang.org)
+* [`dub`](https://code.dlang.org)
+* [`lu`](https://github.com/zorael/lu) ([dub](http://lu.dub.pm))
+
 # License
 
 This project is licensed under the **MIT** license - see the [LICENSE](LICENSE) file for details.
