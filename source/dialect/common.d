@@ -1861,61 +1861,145 @@ unittest
 }
 
 
+// isUpper
+/++
+ +  Checks whether the passed `char` is in uppercase as per the supplied case mappings.
+ +
+ +  Params:
+ +      c = Character to examine.
+ +      caseMapping = Server case mapping; maps uppercase to lowercase characters.
+ +
+ +  Returns:
+ +      `true` if the passed `c` is in uppercase, `false` if not.
+ +/
+pragma(inline)
+char isUpper(const char c, const IRCServer.CaseMapping caseMapping) pure nothrow @nogc
+{
+    import std.ascii : isUpper;
+
+    if ((caseMapping == IRCServer.CaseMapping.rfc1459) ||
+        (caseMapping == IRCServer.CaseMapping.strict_rfc1459))
+    {
+        switch (c)
+        {
+        case '[':
+        case ']':
+        case '\\':
+            return true;
+        case '^':
+            return (caseMapping == IRCServer.CaseMapping.rfc1459);
+
+        default:
+            break;
+        }
+    }
+
+    return c.isUpper;
+}
+
+
+// toLower
+/++
+ +  Produces the passed `char` in lowercase as per the supplied case mappings.
+ +
+ +  Params:
+ +      c = Character to translate into lowercase.
+ +      caseMapping = Server case mapping; maps uppercase to lowercase characters.
+ +
+ +  Returns:
+ +      The passed `c` in lowercase as per the case mappings.
+ +/
+pragma(inline)
+char toLower(const char c, const IRCServer.CaseMapping caseMapping) pure nothrow @nogc
+{
+    import std.ascii : toLower;
+
+    if ((caseMapping == IRCServer.CaseMapping.rfc1459) ||
+        (caseMapping == IRCServer.CaseMapping.strict_rfc1459))
+    {
+        switch (c)
+        {
+        case '[':
+            return '{';
+        case ']':
+            return '}';
+        case '\\':
+            return '|';
+        case '^':
+            if (caseMapping == IRCServer.CaseMapping.rfc1459)
+            {
+                return '~';
+            }
+            break;
+
+        default:
+            break;
+        }
+    }
+
+    return c.toLower;
+}
+
+
 // toLowerCase
 /++
- +  Produces the passed string in lowercase as per the supplied case
- +  mappings.
+ +  Produces the passed string in lowercase as per the supplied case mappings.
+ +
+ +  This function is `@trusted` to be able to cast the internal `output` char array
+ +  to string. `std.array.Appender` does this with its `.data`/`opSlice` method.
+ +
+ +  ---
+ +  @property inout(ElementEncodingType!A)[] opSlice() inout @trusted pure nothrow
+ +  {
+ +       /* @trusted operation:
+ +        * casting Unqual!T[] to inout(T)[]
+ +        */
+ +       return cast(typeof(return))(_data ? _data.arr : null);
+ +  }
+ +  ---
+ +
+ +  So just do the same.
  +
  +  Params:
  +      name = String to parse into lowercase.
- +      caseMapping = Server case mapping; maps uppercase to lowercase
- +          characters.
+ +      caseMapping = Server case mapping; maps uppercase to lowercase characters.
  +
  +  Returns:
  +      The passed `name` string with uppercase characters replaced as per
  +      the case mappings.
  +/
-auto toLowerCase(const string name, const IRCServer.CaseMapping caseMapping) pure nothrow
+string toLowerCase(const string name, const IRCServer.CaseMapping caseMapping) pure nothrow @trusted
 {
     import std.string : representation;
-    import std.uni : toLower;
 
-    ubyte[] lowercased;
-    lowercased.length = name.length;
+    char[] output;
+    bool dirty;
 
     foreach (immutable i, immutable c; name.representation)
     {
-        if ((caseMapping == IRCServer.CaseMapping.rfc1459) ||
-            (caseMapping == IRCServer.CaseMapping.strict_rfc1459))
+        if (c.isUpper(caseMapping))
         {
-            switch (c)
+            if (!dirty)
             {
-            case '[':
-                lowercased[i] = '{';
-                continue;
-            case ']':
-                lowercased[i] = '}';
-                continue;
-            case '\\':
-                lowercased[i] = '|';
-                continue;
-            case '^':
-                if (caseMapping == IRCServer.CaseMapping.rfc1459)
+                output.length = name.length;
+
+                foreach (immutable n, immutable c2; name[0..i])
                 {
-                    lowercased[i] = '~';
-                    continue;
+                    output[n] = name[n].toLower(caseMapping);
                 }
-                break;
 
-            default:
-                break;
+                dirty = true;
             }
-        }
 
-        lowercased[i] = cast(ubyte)c.toLower;
+            output[i] = name[i].toLower(caseMapping);
+        }
+        else if (dirty)
+        {
+            output[i] = name[i];
+        }
     }
 
-    return cast(string)lowercased.idup;
+    return dirty ? cast(string)output : name;
 }
 
 ///
