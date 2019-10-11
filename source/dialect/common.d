@@ -2008,12 +2008,16 @@ unittest
     IRCServer.CaseMapping m = IRCServer.CaseMapping.rfc1459;
 
     {
-        immutable lowercase = toLowerCase("ABCDEF", m);
+        immutable before = "ABCDEF";
+        immutable lowercase = toLowerCase(before, m);
         assert((lowercase == "abcdef"), lowercase);
     }
     {
-        immutable lowercase = toLowerCase("123", m);
+        immutable before = "123";
+        immutable lowercase = toLowerCase(before, m);
         assert((lowercase == "123"), lowercase);
+        assert(before is lowercase);
+        assert(before.ptr == lowercase.ptr);
     }
     {
         immutable lowercase = toLowerCase("^[0v0]^", m);
@@ -2027,8 +2031,11 @@ unittest
     m = IRCServer.caseMapping.ascii;
 
     {
-        immutable lowercase = toLowerCase("^[0v0]^", m);
+        immutable before = "^[0v0]^";
+        immutable lowercase = toLowerCase(before, m);
         assert((lowercase == "^[0v0]^"), lowercase);
+        assert(before is lowercase);
+        assert(before.ptr == lowercase.ptr);
     }
     {
         immutable lowercase = toLowerCase(`A|\|`, m);
