@@ -2266,7 +2266,72 @@ public:
 
 // IRCParser
 /++
- +  State needed to parse IRC events.
+ +  Parser that takes raw IRC strings and produces `dialect.defs.IRCEvent`s based on them.
+ +
+ +  Parsing requires state, which means that `IRCParser`s must be equipped with
+ +  a `dialect.defs.IRCServer` and a `dialect.defs.IRCClient` for context when parsing.
+ +  Because of this it has its postblit `@disable`d, so as not to make copies
+ +  when only one instance should exist.
+ +
+ +  The alternative is to make it a class, which works too.
+ +
+ +  See the `/tests` directory for unit tests.
+ +
+ +  Example:
+ +  ---
+ +  IRCClient client;
+ +  client.nickname = "...";
+ +
+ +  IRCServer server;
+ +  server.address = "...";
+ +
+ +  IRCParser parser = IRCParser(client, server);
+ +
+ +  string fromServer = ":zorael!~NaN@address.tld MODE #channel +v nickname";
+ +  IRCEvent event = parser.toIRCEvent(fromServer);
+ +
+ +  with (event)
+ +  {
+ +      assert(type == IRCEvent.Type.MODE);
+ +      assert(sender.nickname == "zorael");
+ +      assert(sender.ident == "~NaN");
+ +      assert(sender.address == "address.tld");
+ +      assert(target.nickname == "nickname");
+ +      assert(channel == "#channel");
+ +      assert(aux = "+v");
+ +  }
+ +
+ +  string alsoFromServer = ":cherryh.freenode.net 435 oldnick newnick #d :Cannot change nickname while banned on channel";
+ +  IRCEvent event2 = parser.toIRCEvent(alsoFromServer);
+ +
+ +  with (event2)
+ +  {
+ +      assert(type == IRCEvent.Type.ERR_BANONCHAN);
+ +      assert(sender.address == "cherryh.freenode.net");
+ +      assert(channel == "#d");
+ +      assert(target.nickname == "oldnick");
+ +      assert(content == "Cannot change nickname while banned on channel");
+ +      assert(aux == "newnick");
+ +      assert(num == 435);
+ +  }
+ +
+ +  // Requires Twitch support via build configuration "twitch"
+ +  string fullExample = "@badge-info=subscriber/15;badges=subscriber/12;color=;display-name=SomeoneOnTwitch;emotes=;flags=;id=d6729804-2bf3-495d-80ce-a2fe8ed00a26;login=someoneontwitch;mod=0;msg-id=submysterygift;msg-param-mass-gift-count=1;msg-param-origin-id=49\\s9d\\s3e\\s68\\sca\\s26\\se9\\s2a\\s6e\\s44\\sd4\\s60\\s9b\\s3d\\saa\\sb9\\s4c\\sad\\s43\\s5c;msg-param-sender-count=4;msg-param-sub-plan=1000;room-id=71092938;subscriber=1;system-msg=someoneOnTwitch\\sis\\sgifting\\s1\\sTier\\s1\\sSubs\\sto\\sxQcOW's\\scommunity!\\sThey've\\sgifted\\sa\\stotal\\sof\\s4\\sin\\sthe\\schannel!;tmi-sent-ts=1569013433362;user-id=224578549;user-type= :tmi.twitch.tv USERNOTICE #xqcow"
+ +  IRCEvent event4 = parser.toIRCEvent(fullExample);
+ +
+ +  with (event)
+ +  {
+ +      assert(type == IRCEvent.Type.TWITCH_BULKGIFT);
+ +      assert(sender.nickname == "someoneontwitch");
+ +      assert(sender.displayName == "SomeoneOnTwitch");
+ +      assert(sender.badges == "subscriber/12");
+ +      assert(channel == "#xqcow");
+ +      assert(content == "SomeoneOnTwitch is gifting 1 Tier 1 Subs to xQcOW's community! They've gifted a total of 4 in the channel!");
+ +      assert(aux == "1000");
+ +      assert(count == 1);
+ +      assert(altcount == 4);
+ +  }
+ +  ---
  +/
 struct IRCParser
 {
