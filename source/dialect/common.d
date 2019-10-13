@@ -1232,7 +1232,7 @@ void setMode(ref IRCChannel channel, const string signedModestring,
         {
             // Ward against stack corruption
             // immutable(SignedModechar)('ÿ', 'ÿ')
-            continue;
+            break;
         }
 
         IRCChannel.Mode newMode;
