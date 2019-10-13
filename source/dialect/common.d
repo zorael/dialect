@@ -834,7 +834,7 @@ do
 {
     import std.string : representation;
 
-    if (!nickname.length || (nickname.length > server.maxNickLength))
+    if (nickname.length > server.maxNickLength)
     {
         return false;
     }
