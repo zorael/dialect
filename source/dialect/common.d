@@ -203,9 +203,12 @@ auto typenumsOf(const IRCServer.Daemon daemon) pure nothrow @nogc
  +/
 bool isSpecial(const IRCUser sender, const ref IRCParser parser) pure
 {
-    if (parser.server.daemon == IRCServer.Daemon.twitch)
+    version(TwitchSupport)
     {
-        return (sender.nickname == "jtv");
+        if (parser.server.daemon == IRCServer.Daemon.twitch)
+        {
+            return (sender.nickname == "jtv");
+        }
     }
 
     top:
@@ -543,7 +546,10 @@ unittest
  +/
 bool isAuthService(const IRCUser sender, const ref IRCParser parser) pure
 {
-    if (parser.server.daemon == IRCServer.Daemon.twitch) return false;
+    version(TwitchSupport)
+    {
+        if (parser.server.daemon == IRCServer.Daemon.twitch) return false;
+    }
 
     top:
     switch (sender.nickname)
