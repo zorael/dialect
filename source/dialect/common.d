@@ -1048,9 +1048,9 @@ unittest
  +/
 string stripModesign(const IRCServer server, const string nickname,
     ref string modesigns) pure nothrow @nogc
+in (nickname.length, "Tried to strip modesigns off an empty nickname")
+do
 {
-    if (!nickname.length) return string.init;
-
     size_t i;
 
     for (i = 0; i<nickname.length; ++i)
