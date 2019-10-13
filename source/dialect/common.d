@@ -982,13 +982,12 @@ unittest
  +      to not be a different nickname.
  +/
 bool containsNickname(const string haystack, const string needle) pure nothrow @nogc
+in (needle.length, "Tried to determine whether an empty nickname was in a string")
+do
 {
     import std.string : indexOf;
 
     if ((haystack.length == needle.length) && (haystack == needle)) return true;
-
-    // What do we do with empty strings?
-    if (!needle.length) return false;
 
     immutable pos = haystack.indexOf(needle);
     if (pos == -1) return false;
@@ -1019,7 +1018,7 @@ unittest
     assert(!"kam".containsNickname("kameloso"));
     assert(!"kameloso^".containsNickname("kameloso"));
     assert(!string.init.containsNickname("kameloso"));
-    assert(!"kameloso".containsNickname(""));  // For now let this be false.
+    //assert(!"kameloso".containsNickname(""));  // For now let this be false.
     assert("@kameloso".containsNickname("kameloso"));
 }
 
