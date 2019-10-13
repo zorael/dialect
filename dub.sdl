@@ -30,6 +30,12 @@ configuration "dev" {
     versions "TwitchSupport" "TwitchWarnings"
 }
 
+configuration "benchmark" {
+    targetType "executable"
+    mainSourceFile "source/dialect/main.d"
+    versions "TwitchSupport"
+}
+
 configuration "unittest" {
     versions "TwitchSupport" "TwitchWarnings"
     sourcePaths "source" "tests"
