@@ -1260,7 +1260,7 @@ void parseSpecialcases(ref IRCParser parser, ref IRCEvent event, ref string slic
  +      event = Reference to the `dialect.defs.IRCEvent` to continue working on.
  +      slice = Reference to the slice of the raw IRC string.
  +/
-void parseGeneralCases(ref IRCParser parser, ref IRCEvent event, ref string slice) pure @nogc
+void parseGeneralCases(const ref IRCParser parser, ref IRCEvent event, ref string slice) pure @nogc
 {
     import lu.string : beginsWithOneOf;
 
