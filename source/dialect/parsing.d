@@ -2430,10 +2430,10 @@ struct IRCParser
 
     version(FlagAsUpdated)
     {
-        /// Whether or not parsing updated its internal `IRCClient`.
+        /// Whether or not parsing updated its internal `dialect.defs.IRCClient`.
         bool clientUpdated;
 
-        /// Whether or not parsing updated its internal `IRCServer`.
+        /// Whether or not parsing updated its internal `dialect.defs.IRCServer`.
         bool serverUpdated;
     }
 }
