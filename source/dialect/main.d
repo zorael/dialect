@@ -242,77 +242,60 @@ static immutable string[] lines = [
     "@badge-info=;badges=partner/1;color=#004DFF;display-name=NorddeutscherJunge;emotes=;flags=;id=3ced021d-adab-4278-845d-4c8f2c5d6306;login=norddeutscherjunge;mod=0;msg-id=primecommunitygiftreceived;msg-param-gift-name=World\\sof\\sTanks:\\sCare\\sPackage;msg-param-middle-man=gabepeixe;msg-param-recipient=m4ggusbruno;msg-param-sender=NorddeutscherJunge;room-id=59799994;subscriber=0;system-msg=A\\sviewer\\swas\\sgifted\\sa\\sWorld\\sof\\sTanks:\\sCare\\sPackage,\\scourtesy\\sof\\sa\\sPrime\\smember!;tmi-sent-ts=1570346408346;user-id=39548541;user-type= :tmi.twitch.tv USERNOTICE #gabepeixe",
 ];
 
+__gshared bool go;
+
+enum periodInSeconds = 30;
+
+void spinlockGo()
+{
+    import std.datetime.systime : Clock;
+    import core.thread : Thread;
+    import core.time : msecs;
+
+    immutable prestartSecond = Clock.currTime.toUnixTime;
+
+    while (Clock.currTime.toUnixTime == prestartSecond) { Thread.sleep(1.msecs); }
+
+    // start immediately
+    go = true;
+
+    immutable stopSecond = Clock.currTime.toUnixTime + periodInSeconds;
+
+    while (Clock.currTime.toUnixTime < stopSecond) { Thread.sleep(1.msecs); }
+
+    // periodInSeconds elapsed, stop
+    go = false;
+}
+
+
 void main()
 {
-    import std.datetime.stopwatch : StopWatch;
-    import std.datetime.systime : Clock;
-    import core.time;
-    import std.stdio;
+    import std.stdio : writeln;
     import std.random : uniform;
+    import std.concurrency : spawn;
+    import core.thread : Thread;
+    import core.time : msecs;
+
+    writeln("Period: ", periodInSeconds, " seconds");
 
     IRCServer server;
     IRCClient client;
     IRCParser parser = IRCParser(client, server);
-    StopWatch watch;
-
-    immutable prestartSecond = Clock.currTime.toUnixTime;
-    long startSecond;
     uint count;
 
-    enum limit = 100.msecs;
+    spawn(&spinlockGo);
 
-    pragma(inline, true)
-    static void spinlockUntilNextSecond()
+    // Wait for spinlockGo to start
+    while (!go) { Thread.sleep(1.msecs); }
+
+    while (go)
     {
-        immutable before = Clock.currTime.toUnixTime;
-        while (true)
-        {
-            if (Clock.currTime.toUnixTime > before) return;
-        }
+        enum endIndex = lines.length;
+        immutable index = uniform(0, endIndex);
+        immutable line = lines[index];
+        immutable event = parser.toIRCEvent(line);
+        ++count;
     }
 
-    //spinlockUntilNextSecond();
-
-    //uint good;
-    //uint bad;
-    uint step = 500_000;
-    //uint round;
-    double mod = 1.5;
-
-    while (true)
-    {
-        immutable start = Clock.currTime;
-
-        foreach (immutable i; 0..step)
-        {
-            import std.conv : text;
-
-            enum endIndex = lines.length;
-            immutable index = uniform(0,endIndex);
-            immutable line = lines[index];
-            assert(line.length, i.text);
-            immutable event = parser.toIRCEvent(line);
-        }
-
-        immutable stop = Clock.currTime;
-        immutable delta = stop - start;
-        writeln(step, ": ", delta);
-        mod -= 0.05;
-        if (mod <= 0.0) break;
-
-        if (delta > 1.seconds)
-        {
-            if ((1.seconds-delta < limit) && (1.seconds-delta > limit))
-            {
-                writeln(1.seconds-delta);
-                break;
-            }
-
-            step = cast(uint)(step/mod);
-        }
-        else
-        {
-            step = cast(uint)(step*mod);
-        }
-    }
+    writeln((count / periodInSeconds), " events per second");
 }
