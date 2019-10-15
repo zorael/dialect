@@ -23,6 +23,8 @@ void spinlockGo(const int periodInSeconds)
     go = false;
 }
 
+version(unittest) {}
+else
 void main(string[] args)
 {
     import std.stdio : writeln;
