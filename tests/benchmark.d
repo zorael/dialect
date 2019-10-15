@@ -1,15 +1,8 @@
 module dialect.tests.benchmark;
 
-import dialect.defs;
-import dialect.parsing;
-
-// cat ../../tests/* | grep 'immutable event' | sed 's/ \+immutable event = parser.toIRCEvent(//g' | sed 's/);$/,/' > events.list
-
 __gshared bool go;
 
-enum periodInSeconds = 10;
-
-void spinlockGo()
+void spinlockGo(const int periodInSeconds)
 {
     import std.datetime.systime : Clock;
     import core.thread : Thread;
@@ -30,22 +23,20 @@ void spinlockGo()
     go = false;
 }
 
-void main()
+void main(string[] args)
 {
     import std.stdio : writeln;
-    import std.random : uniform;
     import std.concurrency : spawn;
+    import std.conv : to;
     import core.thread : Thread;
     import core.time : msecs;
 
-    writeln("Period: ", periodInSeconds, " seconds");
-
-    IRCServer server;
-    IRCClient client;
-    IRCParser parser = IRCParser(client, server);
+    immutable periodInSeconds = (args.length > 1) ? args[1].to!int : 10;
     uint count;
 
-    spawn(&spinlockGo);
+    writeln("Period: ", periodInSeconds, " seconds");
+
+    spawn(&spinlockGo, periodInSeconds);
 
     // Wait for spinlockGo to start
     while (!go) { Thread.sleep(1.msecs); }
@@ -69,37 +60,52 @@ void main()
         import std.meta : AliasSeq;
 
         alias testFuns = AliasSeq!(
-            dialect.tests.dalnet.unittest1,       // 3
-            dialect.tests.events.unittest1,       // 26
-            dialect.tests.events.unittest2,       // 26
-            dialect.tests.events.unittest3,       // 26
-            dialect.tests.events.unittest4,       // 26
-            dialect.tests.events.unittest5,       // 26
-            dialect.tests.events.unittest6,       // 26
-            dialect.tests.freenode.unittest1,     // 89
-            dialect.tests.freenode.unittest2,     // 89
-            dialect.tests.freenode.unittest3,     // 89
-            dialect.tests.gamesurge.unittest1,    // 6
-            dialect.tests.gamesurge.unittest2,    // 6
-            dialect.tests.geekshed.unittest1,     // 3
-            dialect.tests.irchighway.unittest1,   // 10
-            dialect.tests.irchighway.unittest2,   // 10
-            dialect.tests.ircnet.unittest1,       // 5
-            dialect.tests.oftc.unittest1,         // 10
-            dialect.tests.oftc.unittest2,         // 10
-            dialect.tests.quakenet.unittest1,     // 6
-            dialect.tests.quakenet.unittest2,     // 6
-            dialect.tests.rizon.unittest1,        // 17
-            dialect.tests.rizon.unittest2,        // 17
-            dialect.tests.rusnet.unittest1,       // 5
-            dialect.tests.rusnet.unittest2,       // 5
-            dialect.tests.spotchat.unittest1,     // 10
-            dialect.tests.spotchat.unittest2,     // 10
-            dialect.tests.swiftirc.unittest1,     // 3
-            dialect.tests.twitch.unittest1,       // 41
-            dialect.tests.twitch.unittest2,       // 41
+            // 3
+            dialect.tests.dalnet.unittest1,
+            // 26
+            dialect.tests.events.unittest1,
+            dialect.tests.events.unittest2,
+            dialect.tests.events.unittest3,
+            dialect.tests.events.unittest4,
+            dialect.tests.events.unittest5,
+            dialect.tests.events.unittest6,
+            // 89
+            dialect.tests.freenode.unittest1,
+            dialect.tests.freenode.unittest2,
+            dialect.tests.freenode.unittest3,
+            // 6
+            dialect.tests.gamesurge.unittest1,
+            dialect.tests.gamesurge.unittest2,
+            // 3
+            dialect.tests.geekshed.unittest1,
+            // 10
+            dialect.tests.irchighway.unittest1,
+            dialect.tests.irchighway.unittest2,
+            // 5
+            dialect.tests.ircnet.unittest1,
+            // 10
+            dialect.tests.oftc.unittest1,
+            dialect.tests.oftc.unittest2,
+            // 6
+            dialect.tests.quakenet.unittest1,
+            dialect.tests.quakenet.unittest2,
+            // 17
+            dialect.tests.rizon.unittest1,
+            dialect.tests.rizon.unittest2,
+            // 5
+            dialect.tests.rusnet.unittest1,
+            dialect.tests.rusnet.unittest2,
+            // 10
+            dialect.tests.spotchat.unittest1,
+            dialect.tests.spotchat.unittest2,
+            // 3
+            dialect.tests.swiftirc.unittest1,
+            // 41
+            dialect.tests.twitch.unittest1,
+            dialect.tests.twitch.unittest2,
         );
 
+        // grep -c 'immutable event' tests/*.d
         enum numEvents = (3+26+89+6+3+10+5+10+6+17+5+10+3+41);
 
         static foreach (fun; testFuns)
