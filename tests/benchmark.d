@@ -1,4 +1,4 @@
-module dialect.main;
+module dialect.tests.benchmark;
 
 import dialect.defs;
 import dialect.parsing;
@@ -244,7 +244,7 @@ static immutable string[] lines = [
 
 __gshared bool go;
 
-enum periodInSeconds = 30;
+enum periodInSeconds = 10;
 
 void spinlockGo()
 {
@@ -267,8 +267,7 @@ void spinlockGo()
     go = false;
 }
 
-
-void main()
+unittest
 {
     import std.stdio : writeln;
     import std.random : uniform;
@@ -288,13 +287,50 @@ void main()
     // Wait for spinlockGo to start
     while (!go) { Thread.sleep(1.msecs); }
 
-    while (go)
+    /*while (go)
     {
         enum endIndex = lines.length;
         immutable index = uniform(0, endIndex);
         immutable line = lines[index];
         immutable event = parser.toIRCEvent(line);
         ++count;
+    }*/
+
+    while (go)
+    {
+        import std.meta : AliasSeq;
+
+        alias testModules = AliasSeq!(
+            dialect.tests.dalnet,       // 3
+            dialect.tests.events,       // 26
+            dialect.tests.freenode,     // 89
+            dialect.tests.gamesurge,    // 6
+            dialect.tests.geekshed,     // 3
+            dialect.tests.irchighway,   // 10
+            dialect.tests.ircnet,       // 5
+            dialect.tests.oftc,         // 10
+            dialect.tests.quakenet,     // 6
+            dialect.tests.rizon,        // 17
+            dialect.tests.rusnet,       // 5
+            dialect.tests.spotchat,     // 10
+            dialect.tests.swiftirc,     // 3
+            dialect.tests.twitch,       // 41
+        );
+
+        enum numEvents = (3+26+89+6+3+10+5+10+6+17+5+10+3+41);
+
+        foreach (module_; testModules)
+        {
+            alias tests = __traits(getUnitTests, module_);
+
+            foreach (test; tests)
+            {
+                test();
+            }
+
+        }
+
+        count += numEvents;
     }
 
     writeln((count / periodInSeconds), " events per second");

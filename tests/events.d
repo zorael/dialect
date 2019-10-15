@@ -1,3 +1,5 @@
+module dialect.tests.events;
+
 import lu.conv : Enum;
 import dialect;
 import std.conv : to;

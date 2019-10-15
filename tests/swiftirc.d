@@ -1,3 +1,5 @@
+module dialect.tests.swiftirc;
+
 import dialect;
 import lu.conv;
 

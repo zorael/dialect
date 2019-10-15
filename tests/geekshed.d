@@ -1,3 +1,5 @@
+module dialect.tests.geekshed;
+
 import dialect;
 import lu.conv;
 

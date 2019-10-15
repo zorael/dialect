@@ -33,7 +33,10 @@ configuration "dev" {
 configuration "benchmark" {
     targetType "executable"
     mainSourceFile "source/dialect/main.d"
+    buildType "unittest"
     versions "TwitchSupport"
+    sourcePaths "source" "tests"
+    importPaths "source" "tests"
 }
 
 configuration "unittest" {

@@ -1,3 +1,5 @@
+module dialect.tests.twitch;
+
 import lu.conv : Enum;
 import dialect;
 import std.conv : to;

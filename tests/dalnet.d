@@ -1,3 +1,5 @@
+module dialect.tests.dalnet;
+
 import dialect;
 import lu.conv;
 

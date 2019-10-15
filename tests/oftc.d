@@ -1,3 +1,5 @@
+module dialect.tests.oftc;
+
 import lu.conv : Enum;
 import dialect;
 import std.conv : to;

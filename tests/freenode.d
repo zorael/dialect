@@ -1,3 +1,5 @@
+module dialect.tests.freenode;
+
 import lu.conv : Enum;
 import dialect;
 import std.conv : to;
