@@ -5,7 +5,7 @@ import dialect;
 import std.conv : to;
 
 
-unittest
+void unittest1()
 {
     IRCParser parser;
     parser.client.nickname = "kameloso";  // Because we removed the default value
@@ -128,7 +128,7 @@ unittest
 }
 
 
-unittest
+void unittest2()
 {
     IRCParser parser;
     parser.client.nickname = "kameloso^";  // Because we removed the default value
@@ -153,7 +153,7 @@ unittest
 }
 
 
-unittest
+void unittest3()
 {
     IRCParser parser;
 
@@ -178,7 +178,7 @@ unittest
 }
 
 
-unittest
+void unittest4()
 {
     IRCParser parser;
     parser.client.nickname = "kameloso";  // Because we removed the default value
@@ -231,7 +231,7 @@ unittest
 }
 
 
-unittest
+void unittest5()
 {
     IRCParser parser;
     parser.client.nickname = "kameloso";  // Because we removed the default value
@@ -358,7 +358,7 @@ unittest
 }
 
 
-unittest
+void unittest6()
 {
     IRCParser parser;
     parser.client.nickname = "kameloso";  // Because we removed the default value

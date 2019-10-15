@@ -4,7 +4,7 @@ import lu.conv : Enum;
 import dialect;
 import std.conv : to;
 
-unittest
+void unittest1()
 {
     IRCParser parser;
 
@@ -334,7 +334,7 @@ unittest
 }
 
 
-unittest
+void unittest2()
 {
     IRCParser parser;
     with (parser)
@@ -1347,7 +1347,7 @@ unittest
     }
 }
 
-unittest
+void unittest3()
 {
     IRCParser parser;
 

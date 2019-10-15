@@ -6,7 +6,7 @@ import std.conv : to;
 
 version(TwitchSupport):
 
-unittest
+void unittest1()
 {
     IRCParser parser;
     parser.initPostprocessors();
@@ -218,7 +218,7 @@ unittest
     }
 }
 
-unittest
+void unittest2()
 {
     IRCParser parser;
     parser.initPostprocessors();

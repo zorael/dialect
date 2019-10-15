@@ -4,7 +4,7 @@ import lu.conv : Enum;
 import dialect;
 import std.conv : to;
 
-unittest
+void unittest1()
 {
     IRCParser parser;
     parser.client.nickname = "kameloso";  // Because we removed the default value
@@ -77,7 +77,7 @@ unittest
     }
 }
 
-unittest
+void unittest2()
 {
     IRCParser parser;
 

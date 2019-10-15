@@ -32,8 +32,7 @@ configuration "dev" {
 
 configuration "benchmark" {
     targetType "executable"
-    mainSourceFile "source/dialect/main.d"
-    buildType "unittest"
+    mainSourceFile "tests/benchmark.d"
     versions "TwitchSupport"
     sourcePaths "source" "tests"
     importPaths "source" "tests"

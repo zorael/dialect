@@ -3,7 +3,7 @@ module dialect.tests.dalnet;
 import dialect;
 import lu.conv;
 
-unittest
+void unittest1()
 {
     IRCParser parser;
 
