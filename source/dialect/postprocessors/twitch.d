@@ -1051,10 +1051,10 @@ room-id             "31457014"
         case "msg-param-promo-name":
             // Promotion name
             // msg-param-promo-name = Subtember
-        case "msg-param-domain":
-            // msg-param-domain = owl2018
-            // [rewardgift] [#overwatchleague] Asdf [bits]: "A Cheer shared Rewards to 35 others in Chat!" {35}
-            // Name of the context?
+        case "msg-param-trigger-type":
+            // reward gift, what kind of event triggered a gifting
+            // example values CHEER, SUBGIFT
+            // We don't have anywhere to store this without adding altalt
         case "msg-param-gift-name":
             // msg-param-gift-name = "World\sof\sTanks:\sCare\sPackage"
             // Prime community gift name
@@ -1302,6 +1302,17 @@ room-id             "31457014"
             case "custom-reward-id":
                 // custom-reward-id = f597fc7c-703e-42d8-98ed-f5ada6d19f4b
                 // Unsure, was just part of an emote-only PRIVMSG
+            case "msg-param-total-reward-count":
+                // reward gift, to how many users a reward was gifted
+                // alias of msg-param-selected-count?
+            case "msg-param-trigger-amount":
+                // reward gift, the "amount" of an event that triggered a gifting
+                // (eg "1000" for 1000 bits)
+            case "msg-param-domain":
+                // msg-param-domain = owl2018
+                // [rewardgift] [#overwatchleague] Asdf [bits]: "A Cheer shared Rewards to 35 others in Chat!" {35}
+                // Name of the context?
+                // Swapped places with msg-param-trigger-type
 
                 // Ignore these events.
                 break;
