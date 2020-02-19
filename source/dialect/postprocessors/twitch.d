@@ -319,7 +319,9 @@ user-type                          ""
             case "rewardgift":
 /+
 -- IRCEvent
-     Type type                    TWITCH_REWARDGIFT                                                                                                                                        string raw                    ":tmi.twitch.tv USERNOTICE #overwatchleague :A Cheer shared Rewards to 20 others in Chat!"(88)                                                           IRCUser sender                 <struct>
+     Type type                    TWITCH_REWARDGIFT
+   string raw                    ":tmi.twitch.tv USERNOTICE #overwatchleague :A Cheer shared Rewards to 20 others in Chat!"(88)
+  IRCUser sender                 <struct>
    string channel                "#overwatchleague"(16)
   IRCUser target                 <struct> (init)
    string content                "A Cheer shared Rewards to 20 others in Chat!"(44)
