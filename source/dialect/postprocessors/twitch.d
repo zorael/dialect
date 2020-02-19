@@ -67,13 +67,14 @@ void parseTwitchTags(ref IRCParser parser, ref IRCEvent event)
         {
             foreach (immutable tagline; tagRange)
             {
-                import std.stdio : writef, writeln;
+                import std.stdio : stdout, writef, writeln;
 
                 string slice = tagline;  // mutable
                 immutable key = slice.nom('=');
 
                 writef(`%-35s"%s"`, key, slice);
                 writeln((highlight.length && (slice == highlight)) ? " <-- !" : string.init);
+                version(Windows) stdout.flush();  // Cygwin
             }
         }
 
