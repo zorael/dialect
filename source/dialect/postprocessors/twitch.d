@@ -677,6 +677,58 @@ user-type                          ""
                 event.type = Type.TWITCH_GIFTRECEIVED;
                 break;
 
+            case "standardpayforward":
+/+
+badge-info                         "subscriber/1"
+badges                             "subscriber/0,premium/1"
+color                              "#1E90FF"
+display-name                       "lil_bytch"
+emotes                             ""
+flags                              ""
+id                                 "f9f5c093-ebd3-447b-96f2-64fe94e19c9b"
+login                              "lil_bytch"
+mod                                "0"
+msg-id                             "standardpayforward"
+msg-param-prior-gifter-anonymous   "false"
+msg-param-prior-gifter-display-name"CoopaManTV"
+msg-param-prior-gifter-id          "444343916"
+msg-param-prior-gifter-user-name   "coopamantv"
+msg-param-recipient-display-name   "Just_Illustrationz"
+msg-param-recipient-id             "236981420"
+msg-param-recipient-user-name      "just_illustrationz"
+room-id                            "32787655"
+subscriber                         "1"
+system-msg                         "lil_bytch\sis\spaying\sforward\sthe\sGift\sthey\sgot\sfrom\sCoopaManTV\sto\sJust_Illustrationz!"
+tmi-sent-ts                        "1582159747742"
+user-id                            "229842635"
+user-type                          ""
++/
+                event.type = Type.TWITCH_GIFTPAYFORWARD;
+                break;
+
+            case "skip-subs-mode-message":
+/+
+badge-info                         ""
+badges                             "glhf-pledge/1"
+color                              "#FF4500"
+display-name                       "TurfyH"
+emotes                             ""
+flags                              ""
+id                                 "4a71d07f-31f3-40da-82e8-602bb5c40f1e"
+mod                                "0"
+msg-id                             "skip-subs-mode-message"
+room-id                            "15310631"
+subscriber                         "0"
+tmi-sent-ts                        "1582177444168"
+turbo                              "0"
+user-id                            "89592030"
+user-type                          ""
++/
+                // Not sure what this is. The message is generally just emotes,
+                // but the emotes tag is empty.
+                event.type = Type.TWITCH_SKIPSUBSMODEMESSAGE;
+                break;
+
             /*case "bad_ban_admin":
             case "bad_ban_anon":
             case "bad_ban_broadcaster":
@@ -1057,6 +1109,13 @@ room-id             "31457014"
         case "msg-param-gift-name":
             // msg-param-gift-name = "World\sof\sTanks:\sCare\sPackage"
             // Prime community gift name
+        case "msg-param-prior-gifter-user-name":
+            // msg-param-prior-gifter-user-name = "coopamantv"
+            // Prior gifter when a user pays forward a gift
+        //case "msg-param-prior-gifter-display-name":
+            // "msg-param-prior-gifter-display-name" = "CoopaManTV"
+            // Prefer msg-param-prior-gifter-user-name as we can deduce the
+            // display name from that but not the other way around.
 
             version(TwitchWarnings)
             {
@@ -1312,6 +1371,12 @@ room-id             "31457014"
                 // [rewardgift] [#overwatchleague] Asdf [bits]: "A Cheer shared Rewards to 35 others in Chat!" {35}
                 // Name of the context?
                 // Swapped places with msg-param-trigger-type
+            case "msg-param-prior-gifter-anonymous":
+                // Paying forward gifts, whether or not the prior gifter was anonymous
+            case "msg-param-prior-gifter-display-name":
+                // Prior gifter display name when a user pays forward a gift
+            case "msg-param-prior-gifter-id":
+                // Numeric id of prior gifter when a user pays forward a gift
 
                 // Ignore these events.
                 break;
