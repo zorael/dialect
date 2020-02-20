@@ -54,6 +54,29 @@ void parseTwitchTags(ref IRCParser parser, ref IRCEvent event)
 
     auto tagRange = event.tags.splitter(";");
 
+    version(TwitchWarnings)
+    {
+        /// Whether or not an error occured and debug information should be printed
+        /// upon leaving the function.
+        bool printTagsOnExit;
+
+        static void printTags(typeof(tagRange) tagRange, const IRCEvent event)
+        {
+            import lu.string : nom;
+            import std.stdio : writefln, writeln;
+
+            writeln('@', event.tags, ' ', event.raw, '$');
+
+            foreach (immutable tagline; tagRange)
+            {
+                string slice = tagline;  // mutable
+                immutable key = slice.nom('=');
+
+                writefln(`%-35s"%s"`, key, slice);
+            }
+        }
+    }
+
     with (IRCEvent)
     foreach (tag; tagRange)
     {
@@ -61,21 +84,6 @@ void parseTwitchTags(ref IRCParser parser, ref IRCEvent event)
 
         immutable key = tag.nom('=');
         immutable value = tag;
-
-        version(TwitchWarnings)
-        static void printTags(typeof(tagRange) tagRange, const string highlight = string.init)
-        {
-            foreach (immutable tagline; tagRange)
-            {
-                import std.stdio : writef, writeln;
-
-                string slice = tagline;  // mutable
-                immutable key = slice.nom('=');
-
-                writef(`%-35s"%s"`, key, slice);
-                writeln((highlight.length && (slice == highlight)) ? " <-- !" : string.init);
-            }
-        }
 
         switch (key)
         {
@@ -241,12 +249,7 @@ user-type                          ""
                 break;
 
             case "anonsubgift":
-                version(TwitchWarnings)
-                {
-                    import std.stdio : writeln;
-                    writeln('@', event.tags, ' ', event.raw, '$');
-                    printTags(tagRange);
-                }
+                version(TwitchWarnings) printTagsOnExit = true;
                 goto case "subgift";
 
             case "submysterygift":
@@ -494,12 +497,7 @@ room-id                            "39298218"
                     event.altcount = (*charityRemaining).to!int;
                 }
 
-                version(TwitchWarnings)
-                {
-                    import std.stdio : writeln;
-                    writeln('@', event.tags, ' ', event.raw, '$');
-                    printTags(tagRange);
-                }
+                version(TwitchWarnings) printTagsOnExit = true;
                 break;
 
             case "giftpaidupgrade":
@@ -895,8 +893,7 @@ user-type                          ""
                     {
                         import std.stdio : writeln;
                         writeln("msg-id ", value, " overwrote an aux: ", event.aux);
-                        writeln('@', event.tags, ' ', event.raw, '$');
-                        printTags(tagRange, event.aux);
+                        printTagsOnExit = true;
                     }
                 }
 
@@ -917,8 +914,7 @@ user-type                          ""
                 {
                     import std.stdio : writeln;
                     writeln("Unknown Twitch msg-id: ", value);
-                    writeln('@', event.tags, ' ', event.raw, '$');
-                    printTags(tagRange);
+                    printTagsOnExit = true;
                 }
                 break;
             }
@@ -1085,8 +1081,7 @@ room-id             "31457014"
                 {
                     import std.stdio : writeln;
                     writeln(key, " overwrote a count: ", event.count);
-                    writeln('@', event.tags, ' ', event.raw, '$');
-                    printTags(tagRange, event.count.to!string);
+                    printTagsOnExit = true;
                 }
             }
 
@@ -1123,8 +1118,7 @@ room-id             "31457014"
                 {
                     import std.stdio : writeln;
                     writeln(key, " overwrote an aux: ", event.aux);
-                    writeln('@', event.tags, ' ', event.raw, '$');
-                    printTags(tagRange, event.aux);
+                    printTagsOnExit = true;
                 }
             }
 
@@ -1177,8 +1171,7 @@ room-id             "31457014"
                 {
                     import std.stdio : writeln;
                     writeln(key, " overwrote a count: ", event.count);
-                    writeln('@', event.tags, ' ', event.raw, '$');
-                    printTags(tagRange, event.count.to!string);
+                    printTagsOnExit = true;
                 }
             }
 
@@ -1204,8 +1197,7 @@ room-id             "31457014"
                 {
                     import std.stdio : writeln;
                     writeln(key, " overwrote an altcount: ", event.altcount);
-                    writeln('@', event.tags, ' ', event.raw, '$');
-                    printTags(tagRange, event.altcount.to!string);
+                    printTagsOnExit = true;
                 }
             }
 
@@ -1388,11 +1380,15 @@ room-id             "31457014"
                 import std.stdio : writefln, writeln;
 
                 writefln("Unknown Twitch tag: %s = %s", key, value);
-                writeln('@', event.tags, ' ', event.raw, '$');
-                printTags(tagRange);
+                printTagsOnExit = true;
             }
             break;
         }
+    }
+
+    version(TwitchWarnings)
+    {
+        if (printTagsOnExit) printTags(tagRange, event);
     }
 }
 
