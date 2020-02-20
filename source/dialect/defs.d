@@ -128,6 +128,8 @@ struct IRCEvent
         TWITCH_BULKGIFT,  /// Twitch no-target multiple gift event.
         TWITCH_EXTENDSUB, /// Twitch sub extension.
         TWITCH_GIFTRECEIVED , /// Twitch Prime community gift received.
+        TWITCH_GIFTPAYFORWARD, /// Twitch paying forwards of gifts.
+        TWITCH_SKIPSUBSMODEMESSAGE, /// Twitch message evading subs mode? Unsure.
 
         RPL_WELCOME, // = 001,          // ":Welcome to <server name> <user>"
         RPL_YOURHOST, // = 002,         // ":Your host is <servername>, running version <version>"
