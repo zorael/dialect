@@ -682,4 +682,42 @@ unittest
             assert((id == "3ced021d-adab-4278-845d-4c8f2c5d6306"), id);
         }
     }
+    {
+        // @badge-info=subscriber/1;badges=subscriber/0,premium/1;color=#1E90FF;display-name=lil_bytch;emotes=;flags=;id=f9f5c093-ebd3-447b-96f2-64fe94e19c9b;login=lil_bytch;mod=0;msg-id=standardpayforward;msg-param-prior-gifter-anonymous=false;msg-param-prior-gifter-display-name=CoopaManTV;msg-param-prior-gifter-id=444343916;msg-param-prior-gifter-user-name=coopamantv;msg-param-recipient-display-name=Just_Illustrationz;msg-param-recipient-id=236981420;msg-param-recipient-user-name=just_illustrationz;room-id=32787655;subscriber=1;system-msg=lil_bytch\sis\spaying\sforward\sthe\sGift\sthey\sgot\sfrom\sCoopaManTV\sto\sJust_Illustrationz!;tmi-sent-ts=1582159747742;user-id=229842635;user-type= :tmi.twitch.tv USERNOTICE #kitboga
+        immutable event = parser.toIRCEvent("@badge-info=subscriber/1;badges=subscriber/0,premium/1;color=#1E90FF;display-name=lil_bytch;emotes=;flags=;id=f9f5c093-ebd3-447b-96f2-64fe94e19c9b;login=lil_bytch;mod=0;msg-id=standardpayforward;msg-param-prior-gifter-anonymous=false;msg-param-prior-gifter-display-name=CoopaManTV;msg-param-prior-gifter-id=444343916;msg-param-prior-gifter-user-name=coopamantv;msg-param-recipient-display-name=Just_Illustrationz;msg-param-recipient-id=236981420;msg-param-recipient-user-name=just_illustrationz;room-id=32787655;subscriber=1;system-msg=lil_bytch\\sis\\spaying\\sforward\\sthe\\sGift\\sthey\\sgot\\sfrom\\sCoopaManTV\\sto\\sJust_Illustrationz!;tmi-sent-ts=1582159747742;user-id=229842635;user-type= :tmi.twitch.tv USERNOTICE #kitboga");
+        with (event)
+        {
+            assert((type == IRCEvent.Type.TWITCH_GIFTPAYFORWARD), Enum!(IRCEvent.Type).toString(type));
+            assert((sender.nickname == "lil_bytch"), sender.nickname);
+            assert((sender.account == "lil_bytch"), sender.account);
+            assert((sender.displayName == "lil_bytch"), sender.displayName);
+            assert((sender.badges == "subscriber/0,premium/1"), sender.badges);
+            assert((sender.colour == "1E90FF"), sender.colour);
+            assert((channel == "#kitboga"), channel);
+            assert((target.nickname == "just_illustrationz"), target.nickname);
+            assert((target.displayName == "Just_Illustrationz"), target.displayName);
+            assert((content == "lil_bytch is paying forward the Gift they got from CoopaManTV to Just_Illustrationz!"), content);
+            assert((aux == "coopamantv"), aux);
+            assert((tags == "badge-info=subscriber/1;badges=subscriber/0,premium/1;color=#1E90FF;display-name=lil_bytch;emotes=;flags=;id=f9f5c093-ebd3-447b-96f2-64fe94e19c9b;login=lil_bytch;mod=0;msg-id=standardpayforward;msg-param-prior-gifter-anonymous=false;msg-param-prior-gifter-display-name=CoopaManTV;msg-param-prior-gifter-id=444343916;msg-param-prior-gifter-user-name=coopamantv;msg-param-recipient-display-name=Just_Illustrationz;msg-param-recipient-id=236981420;msg-param-recipient-user-name=just_illustrationz;room-id=32787655;subscriber=1;system-msg=lil_bytch\\sis\\spaying\\sforward\\sthe\\sGift\\sthey\\sgot\\sfrom\\sCoopaManTV\\sto\\sJust_Illustrationz!;tmi-sent-ts=1582159747742;user-id=229842635;user-type="), tags);
+            assert((id == "f9f5c093-ebd3-447b-96f2-64fe94e19c9b"), id);
+        }
+    }
+    {
+        immutable event = parser.toIRCEvent("@badge-info=;badges=;color=#8A2BE2;display-name=Chronaholic;emotes=;flags=;id=0e6ed47e-f461-4a9c-a38c-369366417677;mod=0;msg-id=skip-subs-mode-message;room-id=15310631;subscriber=0;tmi-sent-ts=1582177983697;turbo=0;user-id=25928141;user-type= :chronaholic!chronaholic@chronaholic.tmi.twitch.tv PRIVMSG #greekgodx :GreekCreep");
+        with (event)
+        {
+            assert((type == IRCEvent.Type.TWITCH_SKIPSUBSMODEMESSAGE), Enum!(IRCEvent.Type).toString(type));
+            assert((sender.nickname == "chronaholic"), sender.nickname);
+            assert((sender.ident == "chronaholic"), sender.ident);
+            assert((sender.address == "chronaholic.tmi.twitch.tv"), sender.address);
+            assert((sender.account == "chronaholic"), sender.account);
+            assert((sender.displayName == "Chronaholic"), sender.displayName);
+            assert((sender.badges == "*"), sender.badges);
+            assert((sender.colour == "8A2BE2"), sender.colour);
+            assert((channel == "#greekgodx"), channel);
+            assert((content == "GreekCreep"), content);
+            assert((tags == "badge-info=;badges=;color=#8A2BE2;display-name=Chronaholic;emotes=;flags=;id=0e6ed47e-f461-4a9c-a38c-369366417677;mod=0;msg-id=skip-subs-mode-message;room-id=15310631;subscriber=0;tmi-sent-ts=1582177983697;turbo=0;user-id=25928141;user-type="), tags);
+            assert((id == "0e6ed47e-f461-4a9c-a38c-369366417677"), id);
+        }
+    }
 }
