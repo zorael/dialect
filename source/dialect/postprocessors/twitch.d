@@ -675,7 +675,8 @@ user-type                          ""
                 event.type = Type.TWITCH_GIFTRECEIVED;
                 break;
 
-            case "standardpayforward":
+            case "standardpayforward":  // has a target
+            case "communitypayforward": // toward community, no target
 /+
 badge-info                         "subscriber/1"
 badges                             "subscriber/0,premium/1"
@@ -700,8 +701,29 @@ system-msg                         "lil_bytch\sis\spaying\sforward\sthe\sGift\st
 tmi-sent-ts                        "1582159747742"
 user-id                            "229842635"
 user-type                          ""
+
+badge-info                         "subscriber/1"
+badges                             "subscriber/0,premium/1"
+color                              ""
+display-name                       "havoc_sinz"
+emotes                             ""
+flags                              ""
+id                                 "f28a7d4c-5d2a-4182-b9a3-2fbf82eb3883"
+login                              "havoc_sinz"
+mod                                "0"
+msg-id                             "communitypayforward"
+msg-param-prior-gifter-anonymous   "false"
+msg-param-prior-gifter-display-name"pytori1"
+msg-param-prior-gifter-id          "35087710"
+msg-param-prior-gifter-user-name   "pytori1"
+room-id                            "71190292"
+subscriber                         "1"
+system-msg                         "havoc_sinz\sis\spaying\sforward\sthe\sGift\sthey\sgot\sfrom\spytori1\sto\sthe\scommunity!"
+tmi-sent-ts                        "1582267055759"
+user-id                            "223347745"
+user-type                          ""
 +/
-                event.type = Type.TWITCH_GIFTPAYFORWARD;
+                event.type = Type.TWITCH_PAYFORWARD;
                 break;
 
             case "skip-subs-mode-message":
