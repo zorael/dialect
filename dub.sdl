@@ -30,6 +30,13 @@ configuration "dev" {
     versions "TwitchSupport" "TwitchWarnings"
 }
 
+configuration "assertgen" {
+    targetType "executable"
+    mainSourceFile "source/dialect/assertgen.d"
+    versions "TwitchSupport" "TwitchWarnings" "AssertGeneration"
+    dependency "lu:deltastrings" version="~>0.1.2"
+}
+
 configuration "unittest" {
     versions "TwitchSupport" "TwitchWarnings"
     sourcePaths "source" "tests"
