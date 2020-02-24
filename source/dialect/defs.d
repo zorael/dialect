@@ -832,7 +832,7 @@ struct IRCEvent
     Type type;
 
     /// The raw IRC string, untouched.
-    string raw;
+    @Hidden string raw;
 
     /// The name of whoever (or whatever) sent this event.
     IRCUser sender;
@@ -862,7 +862,7 @@ struct IRCEvent
     int altcount;
 
     /// A timestamp of when the event transpired.
-    long time;
+    @Hidden long time;
 
     /// What errors occurred during parsing, if any.
     string errors;
@@ -1050,7 +1050,7 @@ struct IRCUser
     string account;
 
     /// Timestamp when the user was last modified.
-    long updated;
+    @Hidden long updated;
 
     /// Deprecated alias to `IRCUser.updated`.
     deprecated("Use `.updated`")
