@@ -12,8 +12,8 @@ x:ddoxTool "scod"
 sourcePaths "source"
 importPaths "source"
 
-dependency "lu:core" version="~>0.1.2"
-dependency "lu:meld" version="~>0.1.2"
+dependency "lu:core" version="~>0.2.0"
+dependency "lu:meld" version="~>0.2.0"
 
 versions "FlagAsUpdated"
 
@@ -34,7 +34,7 @@ configuration "assertgen" {
     targetType "executable"
     mainSourceFile "source/dialect/assertgen.d"
     versions "TwitchSupport" "TwitchWarnings" "AssertGeneration"
-    dependency "lu:deltastrings" version="~>0.1.2"
+    dependency "lu:deltastrings" version="~>0.2.0"
 }
 
 configuration "unittest" {
