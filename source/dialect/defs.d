@@ -940,7 +940,7 @@ struct IRCServer
     {
         /// The lowercase of `[A-Z]` is `[a-z]`.
         ascii,
-        /// `ascii`, plus the lowercase of `[]\^` is `}|~`.
+        /// `ascii`, plus the lowercase of `[]\^` is `{}|~`.
         rfc1459,
         /// `rfc1459`, except no `^` for `~`.
         strict_rfc1459,
