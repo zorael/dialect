@@ -24,10 +24,12 @@ build() {
     time dub build -b plain -c dev
     time dub build -b plain -c twitch
     time dub build -b plain -c library
+    time dub build -b plain -c assertgen
 
     time dub build -b release -c dev
     time dub build -b release -c twitch
     time dub build -b release -c library
+    time dub build -b release -c assertgen
 }
 
 # execution start

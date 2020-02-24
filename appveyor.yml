@@ -139,6 +139,8 @@ test_script:
  - dub build --arch=%Darch% --compiler=%DC% %dubArgs% -b plain -c dev
  - dub build --arch=%Darch% --compiler=%DC% %dubArgs% -b plain -c twitch
  - dub build --arch=%Darch% --compiler=%DC% %dubArgs% -b plain -c library
+ - dub build --arch=%Darch% --compiler=%DC% %dubArgs% -b plain -c assertgen
  - dub build --arch=%Darch% --compiler=%DC% %dubArgs% -b release -c dev
  - dub build --arch=%Darch% --compiler=%DC% %dubArgs% -b release -c twitch
  - dub build --arch=%Darch% --compiler=%DC% %dubArgs% -b release -c library
+ - dub build --arch=%Darch% --compiler=%DC% %dubArgs% -b release -c assertgen
