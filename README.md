@@ -164,6 +164,35 @@ with (event)
 
 See the [`/tests`](/tests) directory for more example parses.
 
+# Unit test generation
+
+Compiling the `assertgen` dub build configuration builds a command-line tool with which it is easy to generate assert blocks like the one above. These can then be pasted into an according file in [`/tests`](/tests), then ideally submitted as a GitHub pull request for upstream inclusion. You can use it to contribute known-good parses and increase coverage of event types.
+
+Simply run `dub run -c assertgen` and follow the on-screen instructions.
+
+```
+Enter daemon [optional daemon literal] (ircdseven):
+Enter network (freenode):
+Enter server address (irc.freenode.net):
+
+[...]
+
+// Paste a raw event string and hit Enter to generate an assert block. Ctrl+C to exit.
+
+:irc.server.tld PRIVMSG #channel :i am a fish
+
+{
+    immutable event = parser.toIRCEvent(":irc.server.tld PRIVMSG #channel :i am a fish");
+    with (event)
+    {
+        assert((type == IRCEvent.Type.CHAN), Enum!(IRCEvent.Type).toString(type));
+        assert((sender.address == "irc.server.tld"), sender.address);
+        assert((channel == "#channel"), channel);
+        assert((content == "i am a fish"), content);
+    }
+}
+```
+
 # Roadmap
 
 * detect and remove final non-bot-agnostic remnants
