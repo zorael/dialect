@@ -12,8 +12,8 @@ x:ddoxTool "scod"
 sourcePaths "source"
 importPaths "source"
 
-dependency "lu:core" version="~>0.2.0"
-dependency "lu:meld" version="~>0.2.0"
+dependency "lu:core" version="~>0.2.1"
+dependency "lu:meld" version="~>0.2.1"
 
 versions "FlagAsUpdated"
 
