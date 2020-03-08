@@ -1030,11 +1030,12 @@ struct IRCUser
     enum Class
     {
         unset,      /// Unknown, yet to be determined.
-        anyone,     /// Any user.
         blacklist,  /// A blacklisted user.
+        anyone,     /// Any user.
         whitelist,  /// A whitelisted user.
+        operator,   /// A user enjoying operator (or moderator) privileges.
+        special,    /// Special; like staff. May eventually be removed.
         admin,      /// An administrator, in a bot-like context.
-        special,    /// Special; like staff.
     }
 
     /// The user's nickname.
