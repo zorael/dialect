@@ -1233,6 +1233,16 @@ void parseSpecialcases(ref IRCParser parser, ref IRCEvent event, ref string slic
         }
         break;
 
+    case RPL_AWAY: // 301
+        // :hitchcock.freenode.net 301 kameloso^ Morrolan :Auto away at Tue Mar  3 09:43:26 2020
+        // Sent if you send a message (or WHOIS) a user who is away
+        slice.nom(' '); // bot nickname
+        event.sender.nickname = slice.nom(" :");
+        event.sender.address = string.init;
+        event.sender.class_ = IRCUser.Class.unset;
+        event.content = slice;
+        break;
+
     default:
         if ((event.type == NUMERIC) || (event.type == UNSET))
         {
