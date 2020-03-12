@@ -796,13 +796,12 @@ unittest
     }
     {
         parser.client.nickname = "kameloso^";
+
         immutable event = parser.toIRCEvent(":tolkien.freenode.net 301 kameloso^ jcjordyn120 :Idle");
-        with (IRCEvent.Type)
         with (event)
         {
-            assert((type == RPL_AWAY), Enum!(IRCEvent.Type).toString(type));
-            assert((sender.address == "tolkien.freenode.net"), sender.address);
-            assert((target.nickname == "jcjordyn120"), target.nickname);
+            assert((type == IRCEvent.Type.RPL_AWAY), Enum!(IRCEvent.Type).toString(type));
+            assert((sender.nickname == "jcjordyn120"), sender.nickname);
             assert((content == "Idle"), content);
             assert((num == 301), num.to!string);
         }
