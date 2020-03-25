@@ -737,4 +737,39 @@ unittest
             assert((id == "0e6ed47e-f461-4a9c-a38c-369366417677"), id);
         }
     }
+    {
+        // @badge-info=subscriber/19;badges=vip/1,subscriber/12,partner/1;color=#CC0000;display-name=Xari;emotes=;flags=;id=85c3a060-07df-474a-abdc-bae457018dc5;login=xari;mod=0;msg-id=raid;msg-param-displayName=Xari;msg-param-login=xari;msg-param-profileImageURL=https://static-cdn.jtvnw.net/jtv_user_pictures/86214da3-1461-44d1-a2e9-43501af29538-profile_image-70x70.jpeg;msg-param-viewerCount=3322;room-id=147337432;subscriber=1;system-msg=3322\sraiders\sfrom\sXari\shave\sjoined!;tmi-sent-ts=1585054359220;user-id=88301612;user-type= :tmi.twitch.tv USERNOTICE #lestream
+        immutable event = parser.toIRCEvent("@badge-info=subscriber/19;badges=vip/1,subscriber/12,partner/1;color=#CC0000;display-name=Xari;emotes=;flags=;id=85c3a060-07df-474a-abdc-bae457018dc5;login=xari;mod=0;msg-id=raid;msg-param-displayName=Xari;msg-param-login=xari;msg-param-profileImageURL=https://static-cdn.jtvnw.net/jtv_user_pictures/86214da3-1461-44d1-a2e9-43501af29538-profile_image-70x70.jpeg;msg-param-viewerCount=3322;room-id=147337432;subscriber=1;system-msg=3322\\sraiders\\sfrom\\sXari\\shave\\sjoined!;tmi-sent-ts=1585054359220;user-id=88301612;user-type= :tmi.twitch.tv USERNOTICE #lestream");
+        with (event)
+        {
+            assert((type == IRCEvent.Type.TWITCH_RAID), Enum!(IRCEvent.Type).toString(type));
+            assert((sender.nickname == "xari"), sender.nickname);
+            assert((sender.account == "xari"), sender.account);
+            assert((sender.displayName == "Xari"), sender.displayName);
+            assert((sender.badges == "vip/1,subscriber/12,partner/1"), sender.badges);
+            assert((sender.colour == "CC0000"), sender.colour);
+            assert((channel == "#lestream"), channel);
+            assert((content == "3322 raiders from Xari have joined!"), content);
+            assert((tags == "badge-info=subscriber/19;badges=vip/1,subscriber/12,partner/1;color=#CC0000;display-name=Xari;emotes=;flags=;id=85c3a060-07df-474a-abdc-bae457018dc5;login=xari;mod=0;msg-id=raid;msg-param-displayName=Xari;msg-param-login=xari;msg-param-profileImageURL=https://static-cdn.jtvnw.net/jtv_user_pictures/86214da3-1461-44d1-a2e9-43501af29538-profile_image-70x70.jpeg;msg-param-viewerCount=3322;room-id=147337432;subscriber=1;system-msg=3322\\sraiders\\sfrom\\sXari\\shave\\sjoined!;tmi-sent-ts=1585054359220;user-id=88301612;user-type="), tags);
+            assert((count == 3322), count.to!string);
+        }
+    }
+    {
+        // @badge-info=subscriber/8;badges=subscriber/6;color=;display-name=mymii87;emotes=;flags=;id=0ce7f53f-928a-4b71-abe5-e06ff53eb8fe;login=mymii87;mod=0;msg-id=extendsub;msg-param-cumulative-months=8;msg-param-sub-benefit-end-month=4;msg-param-sub-plan=1000;room-id=137687203;subscriber=1;system-msg=mymii87\sextended\stheir\sTier\s1\ssubscription\sthrough\sApril!;tmi-sent-ts=1585061506357;user-id=167733757;user-type= :tmi.twitch.tv USERNOTICE #nokduro
+        immutable event = parser.toIRCEvent("@badge-info=subscriber/8;badges=subscriber/6;color=;display-name=mymii87;emotes=;flags=;id=0ce7f53f-928a-4b71-abe5-e06ff53eb8fe;login=mymii87;mod=0;msg-id=extendsub;msg-param-cumulative-months=8;msg-param-sub-benefit-end-month=4;msg-param-sub-plan=1000;room-id=137687203;subscriber=1;system-msg=mymii87\\sextended\\stheir\\sTier\\s1\\ssubscription\\sthrough\\sApril!;tmi-sent-ts=1585061506357;user-id=167733757;user-type= :tmi.twitch.tv USERNOTICE #nokduro");
+        with (event)
+        {
+            assert((type == IRCEvent.Type.TWITCH_EXTENDSUB), Enum!(IRCEvent.Type).toString(type));
+            assert((sender.nickname == "mymii87"), sender.nickname);
+            assert((sender.account == "mymii87"), sender.account);
+            assert((sender.displayName == "mymii87"), sender.displayName);
+            assert((sender.badges == "subscriber/6"), sender.badges);
+            assert((channel == "#nokduro"), channel);
+            assert((content == "mymii87 extended their Tier 1 subscription through April!"), content);
+            assert((aux == "1000"), aux);
+            assert((tags == "badge-info=subscriber/8;badges=subscriber/6;color=;display-name=mymii87;emotes=;flags=;id=0ce7f53f-928a-4b71-abe5-e06ff53eb8fe;login=mymii87;mod=0;msg-id=extendsub;msg-param-cumulative-months=8;msg-param-sub-benefit-end-month=4;msg-param-sub-plan=1000;room-id=137687203;subscriber=1;system-msg=mymii87\\sextended\\stheir\\sTier\\s1\\ssubscription\\sthrough\\sApril!;tmi-sent-ts=1585061506357;user-id=167733757;user-type="), tags);
+            assert((count == 4), count.to!string);
+            assert((altcount == 8), altcount.to!string);
+        }
+    }
 }
