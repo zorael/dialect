@@ -13,8 +13,9 @@ install_deps() {
     # fingerprint 0xEBCF975E5BA24D5E
     sudo apt install -y --allow-unauthenticated --reinstall d-apt-keyring
     sudo apt update
-    sudo apt install dmd-compiler dub
-    #sudo apt install ldc
+    sudo apt install -y dmd-compiler dub
+
+    #curl -fsS --retry 3 https://dlang.org/install.sh | bash -s ldc
 }
 
 build() {
@@ -40,10 +41,14 @@ git branch
 case "$1" in
     install-deps)
         install_deps;
+
+        dub --version
+        dmd --version
+        #ldc --version
         ;;
     build)
-        time build dmd;
-        #build ldc2;  # 0.14.0; too old
+        time build dmd
+        #time build ldc
         ;;
     *)
         echo "Unknown command: $1";
