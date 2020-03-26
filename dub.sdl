@@ -38,7 +38,8 @@ configuration "assertgen" {
 }
 
 configuration "unittest" {
-    versions "TwitchSupport" "TwitchWarnings" "PrintStacktraces"
+    versions "TwitchSupport" "TwitchWarnings" "PrintStacktraces" "AssertGeneration"
+    dependency "lu:deltastrings" version="~>0.2.0"
     sourcePaths "source" "tests"
     importPaths "source" "tests"
 }
