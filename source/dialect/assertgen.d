@@ -268,6 +268,8 @@ public:
  +  Reads raw server strings from `stdin`, parses them into
  +  `dialect.defs.IRCEvent`s and constructs assert blocks of their contents.
  +/
+version(unittest) {}
+else
 void main() @system
 {
     import dialect.defs : IRCServer;
