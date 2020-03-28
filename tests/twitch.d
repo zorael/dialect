@@ -772,4 +772,52 @@ unittest
             assert((altcount == 8), altcount.to!string);
         }
     }
+    {
+        // @badge-info=subscriber/28;badges=broadcaster/1,subscriber/12,partner/1;color=#FF0000;display-name=Diegosaurs;emotes=;flags=;id=9ef511d5-b99c-48c5-b32c-d815c66ac6e4;login=diegosaurs;mod=0;msg-id=unraid;room-id=73779954;subscriber=1;system-msg=The\sraid\shas\sbeen\scancelled.;tmi-sent-ts=1585234096906;user-id=73779954;user-type= :tmi.twitch.tv USERNOTICE #diegosaurs
+        immutable event = parser.toIRCEvent("@badge-info=subscriber/28;badges=broadcaster/1,subscriber/12,partner/1;color=#FF0000;display-name=Diegosaurs;emotes=;flags=;id=9ef511d5-b99c-48c5-b32c-d815c66ac6e4;login=diegosaurs;mod=0;msg-id=unraid;room-id=73779954;subscriber=1;system-msg=The\\sraid\\shas\\sbeen\\scancelled.;tmi-sent-ts=1585234096906;user-id=73779954;user-type= :tmi.twitch.tv USERNOTICE #diegosaurs");
+        with (event)
+        {
+            assert((type == IRCEvent.Type.TWITCH_UNRAID), Enum!(IRCEvent.Type).toString(type));
+            assert((sender.nickname == "diegosaurs"), sender.nickname);
+            assert((sender.account == "diegosaurs"), sender.account);
+            assert((sender.displayName == "Diegosaurs"), sender.displayName);
+            assert((sender.badges == "broadcaster/1,subscriber/12,partner/1"), sender.badges);
+            assert((sender.colour == "FF0000"), sender.colour);
+            assert((channel == "#diegosaurs"), channel);
+            assert((content == "The raid has been cancelled."), content);
+            assert((tags == "badge-info=subscriber/28;badges=broadcaster/1,subscriber/12,partner/1;color=#FF0000;display-name=Diegosaurs;emotes=;flags=;id=9ef511d5-b99c-48c5-b32c-d815c66ac6e4;login=diegosaurs;mod=0;msg-id=unraid;room-id=73779954;subscriber=1;system-msg=The\\sraid\\shas\\sbeen\\scancelled.;tmi-sent-ts=1585234096906;user-id=73779954;user-type="), tags);
+        }
+    }
+    {
+        // @badge-info=subscriber/1;badges=subscriber/0,bits/1000;color=;display-name=High_Depth;emotes=;flags=;id=4ef6d438-dcfc-4435-b63e-730d5c400c10;login=high_depth;mod=0;msg-id=bitsbadgetier;msg-param-threshold=1000;room-id=36769016;subscriber=1;system-msg=bits\sbadge\stier\snotification;tmi-sent-ts=1585240021586;user-id=457965105;user-type= :tmi.twitch.tv USERNOTICE #timthetatman :GG
+        immutable event = parser.toIRCEvent("@badge-info=subscriber/1;badges=subscriber/0,bits/1000;color=;display-name=High_Depth;emotes=;flags=;id=4ef6d438-dcfc-4435-b63e-730d5c400c10;login=high_depth;mod=0;msg-id=bitsbadgetier;msg-param-threshold=1000;room-id=36769016;subscriber=1;system-msg=bits\\sbadge\\stier\\snotification;tmi-sent-ts=1585240021586;user-id=457965105;user-type= :tmi.twitch.tv USERNOTICE #timthetatman :GG");
+        with (event)
+        {
+            assert((type == IRCEvent.Type.TWITCH_BITSBADGETIER), Enum!(IRCEvent.Type).toString(type));
+            assert((sender.nickname == "high_depth"), sender.nickname);
+            assert((sender.account == "high_depth"), sender.account);
+            assert((sender.displayName == "High_Depth"), sender.displayName);
+            assert((sender.badges == "subscriber/0,bits/1000"), sender.badges);
+            assert((channel == "#timthetatman"), channel);
+            assert((content == "GG"), content);
+            assert((tags == "badge-info=subscriber/1;badges=subscriber/0,bits/1000;color=;display-name=High_Depth;emotes=;flags=;id=4ef6d438-dcfc-4435-b63e-730d5c400c10;login=high_depth;mod=0;msg-id=bitsbadgetier;msg-param-threshold=1000;room-id=36769016;subscriber=1;system-msg=bits\\sbadge\\stier\\snotification;tmi-sent-ts=1585240021586;user-id=457965105;user-type="), tags);
+            assert((count == 1000), count.to!string);
+        }
+    }
+    {
+        // @badge-info=subscriber/10;badges=subscriber/9,bits/1000;color=;display-name=reykjaviik_;emotes=;flags=;id=efd7886f-45f3-4781-a9aa-dd601fd340eb;login=reykjaviik_;mod=0;msg-id=bitsbadgetier;msg-param-threshold=1000;room-id=181077473;subscriber=1;system-msg=bits\sbadge\stier\snotification;tmi-sent-ts=1585336240505;user-id=248795812;user-type= :tmi.twitch.tv USERNOTICE #gaules :SAFE
+        immutable event = parser.toIRCEvent("@badge-info=subscriber/10;badges=subscriber/9,bits/1000;color=;display-name=reykjaviik_;emotes=;flags=;id=efd7886f-45f3-4781-a9aa-dd601fd340eb;login=reykjaviik_;mod=0;msg-id=bitsbadgetier;msg-param-threshold=1000;room-id=181077473;subscriber=1;system-msg=bits\\sbadge\\stier\\snotification;tmi-sent-ts=1585336240505;user-id=248795812;user-type= :tmi.twitch.tv USERNOTICE #gaules :SAFE");
+        with (event)
+        {
+            assert((type == IRCEvent.Type.TWITCH_BITSBADGETIER), Enum!(IRCEvent.Type).toString(type));
+            assert((sender.nickname == "reykjaviik_"), sender.nickname);
+            assert((sender.account == "reykjaviik_"), sender.account);
+            assert((sender.displayName == "reykjaviik_"), sender.displayName);
+            assert((sender.badges == "subscriber/9,bits/1000"), sender.badges);
+            assert((channel == "#gaules"), channel);
+            assert((content == "SAFE"), content);
+            assert((tags == "badge-info=subscriber/10;badges=subscriber/9,bits/1000;color=;display-name=reykjaviik_;emotes=;flags=;id=efd7886f-45f3-4781-a9aa-dd601fd340eb;login=reykjaviik_;mod=0;msg-id=bitsbadgetier;msg-param-threshold=1000;room-id=181077473;subscriber=1;system-msg=bits\\sbadge\\stier\\snotification;tmi-sent-ts=1585336240505;user-id=248795812;user-type="), tags);
+            assert((count == 1000), count.to!string);
+        }
+    }
 }
