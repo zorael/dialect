@@ -289,6 +289,7 @@ void main() @system
     writeln();
 
     write("Enter daemon [optional daemon literal] (ircdseven): ");
+    stdout.flush();
     string slice = readln().stripped;  // mutable so we can nom it
     immutable daemonstring = slice.nom!(Yes.inherit)(' ');
     immutable daemonLiteral = slice.length ? slice : daemonstring;
@@ -308,10 +309,12 @@ void main() @system
         writeln();
         writeln("-- Conversion exception caught when parsing daemon: ", e.msg);
         version(PrintStacktraces) writeln(e.info);
+        stdout.flush();
         return;
     }
 
     write("Enter network (freenode): ");
+    stdout.flush();
     immutable network = readln().stripped;
     parser.server.network = network.length ? network : "freenode";
 
@@ -337,6 +340,7 @@ void main() @system
     }
 
     write("Enter server address (irc.freenode.net): ");
+    stdout.flush();
     parser.server.address = readln().stripped;
     if (!parser.server.address.length) parser.server.address = "irc.freenode.net";
 
@@ -352,6 +356,7 @@ void main() @system
     writeln("// Paste a raw event string and hit Enter to generate an assert block. " ~
         "Ctrl+C to exit.");
     writeln();
+    stdout.flush();
 
     IRCClient oldClient = parser.client;
     IRCServer oldServer = parser.server;
