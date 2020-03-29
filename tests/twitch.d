@@ -42,7 +42,7 @@ unittest
     with (e18)
     {
         assert((type == IRCEvent.Type.TWITCH_HOSTSTART), Enum!(IRCEvent.Type).toString(type));
-        assert((sender.address == "tmi.twitch.tv"), sender.address);
+        assert((sender.nickname == "lirik"), sender.nickname);
         // assert((sender.class_ == IRCUser.Class.special), Enum!(IRCUser.Class).toString(sender.class_));
         assert((target.nickname == "h1z1"), sender.nickname);
         assert((channel == "#lirik"), channel);
@@ -54,7 +54,7 @@ unittest
     with (e19)
     {
         assert((type == IRCEvent.Type.TWITCH_HOSTEND), Enum!(IRCEvent.Type).toString(type));
-        assert((sender.address == "tmi.twitch.tv"), sender.address);
+        assert((sender.nickname == "lirik"), sender.nickname);
         // assert((sender.class_ == IRCUser.Class.special), Enum!(IRCUser.Class).toString(sender.class_));
         assert((channel == "#lirik"), channel);
         assert((count == 178), count.to!string);
@@ -65,7 +65,7 @@ unittest
     with (e20)
     {
         assert((type == IRCEvent.Type.TWITCH_HOSTSTART), Enum!(IRCEvent.Type).toString(type));
-        assert((sender.address == "tmi.twitch.tv"), sender.address);
+        assert((sender.nickname == "lirik"), sender.nickname);
         // assert((sender.class_ == IRCUser.Class.special), Enum!(IRCUser.Class).toString(sender.class_));
         assert((target.nickname == "chu8"), sender.nickname);
         assert((channel == "#lirik"), channel);
@@ -142,7 +142,7 @@ unittest
         with (event)
         {
             assert((type == TWITCH_HOSTSTART), Enum!(IRCEvent.Type).toString(type));
-            assert((sender.address == "tmi.twitch.tv"), sender.address);
+            assert((sender.nickname == "andymilonakis"), sender.nickname);
             // assert((sender.class_ == IRCUser.Class.special), Enum!(IRCUser.Class).toString(sender.class_));
             assert((target.nickname == "zombie_barricades"), sender.nickname);
             assert((channel == "#andymilonakis"), channel);
@@ -596,7 +596,7 @@ unittest
         with (event)
         {
             assert((type == IRCEvent.Type.TWITCH_HOSTSTART), Enum!(IRCEvent.Type).toString(type));
-            assert((sender.address == "tmi.twitch.tv"), sender.address);
+            assert((sender.nickname == "kungentv"), sender.nickname);
             // assert((sender.class_ == IRCUser.Class.special), Enum!(IRCUser.Class).toString(sender.class_));
             assert((channel == "#kungentv"), channel);
             assert((target.nickname == "esfandtv"), target.nickname);
@@ -639,7 +639,7 @@ unittest
         with (event)
         {
             assert((type == IRCEvent.Type.TWITCH_HOSTEND), Enum!(IRCEvent.Type).toString(type));
-            assert((sender.address == "tmi.twitch.tv"), sender.address);
+            assert((sender.nickname == "asmongold"), sender.nickname);
             // assert((sender.class_ == IRCUser.Class.special), Enum!(IRCUser.Class).toString(sender.class_));
             assert((channel == "#asmongold"), channel);
         }
