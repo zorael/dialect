@@ -2258,8 +2258,6 @@ struct IRCChannel
         size_t toHash() const pure nothrow
         {
             import std.conv : text;
-
-            scope(failure) assert(0, "Logic error, could not get user.hashOf.text in Mode.toHash");
             return (modechar ~ data ~ user.hashOf.text ~ channel ~ negated ? "negated" : "not").hashOf;
         }
     }
