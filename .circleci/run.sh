@@ -54,7 +54,7 @@ case "$1" in
         #ldc --version
         ;;
     build)
-        time build dmd x86
+        #time build dmd x86  # CircleCI does not seem to have the needed libs
         time build dmd x86_64
         #time build ldc x86_64
         ;;
