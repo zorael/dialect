@@ -4,7 +4,7 @@
  +
  +  Example:
  +
- +  `$ dub run -c assertgen`
+ +  `$ dub run :assertgen`
  +  ---
  + [...]
  +
@@ -47,7 +47,7 @@ nt=4;msg-param-sub-plan=1000;room-id=71092938;subscriber=1;system-msg=tayk47_mom
  +
  +  Example:
  +
- +  `$ dub run -c assertgen`
+ +  `$ dub run :assertgen`
  +  ---
  + [...]
  +
