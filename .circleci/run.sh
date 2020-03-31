@@ -19,24 +19,31 @@ install_deps() {
 }
 
 build() {
-    time dub test
-    time dub test -c library
+    local dubArgs="--compiler=$1 --arch=$2"
 
-    time dub build -b plain -c dev
-    time dub build -b plain -c twitch
-    time dub build -b plain -c library
-    time dub build -b plain -c assertgen
+    time dub $dubArgs test
 
-    time dub build -b release -c dev
-    time dub build -b release -c twitch
-    time dub build -b release -c library
-    time dub build -b release -c assertgen
+    time dub $dubArgs build -b debug
+    time dub $dubArgs build -b debug -c twitch
+    time dub $dubArgs build -b debug -c dev
+
+    time dub $dubArgs build -b plain
+    time dub $dubArgs build -b plain -c twitch
+    time dub $dubArgs build -b plain -c dev
+
+    time dub $dubArgs build -b release
+    time dub $dubArgs build -b release -c twitch
+    time dub $dubArgs build -b release -c dev
+
+    time dub $dubArgs build -b debug :defs
+    time dub $dubArgs build -b debug :defs -c twitch
+
+    time dub $dubArgs build -b debug :assertgen
+    time dub $dubArgs build -b plain :assertgen
+    time dub $dubArgs build -b release :assertgen
 }
 
 # execution start
-
-git branch
-[[ "$(git branch 2>&1 grep "* gh-pages")" ]] && exit 0
 
 case "$1" in
     install-deps)
@@ -47,8 +54,9 @@ case "$1" in
         #ldc --version
         ;;
     build)
-        time build dmd
-        #time build ldc
+        time build dmd x86
+        time build dmd x86_64
+        #time build ldc x86_64
         ;;
     *)
         echo "Unknown command: $1";
