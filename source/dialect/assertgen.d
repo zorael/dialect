@@ -82,17 +82,17 @@ with (parser.client)
  +/
 module dialect.assertgen;
 
+version(AssertGeneration):
+
+private:
+
 import dialect.defs;
 import lu.deltastrings : formatDeltaInto;
 
 import std.range.primitives : isOutputRange;
 import std.typecons : Flag, No, Yes;
 
-version(AssertGeneration):
-
 @safe:
-
-private:
 
 
 // formatClientAssignment
