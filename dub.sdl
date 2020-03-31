@@ -2,18 +2,69 @@ name "dialect"
 description "IRC parsing library"
 authors "JR"
 copyright "Copyright © 2020, JR"
+homepage "https://www.github.com/zorael/dialect"
 license "MIT"
+
 targetType "library"
 dflags "-dip25" "-dip1008"
 libs "phobos2" platform="posix-dmd"
-
 x:ddoxTool "scod"
 
-sourcePaths "source"
-importPaths "source"
+subPackage {
+    name "defs"
+    targetType "library"
+    sourcePaths "include" "source"
+    importPaths "include" "source"
 
-dependency "lu:core" version="~>0.2.0"
+    dependency "lu:uda" version="~>0.2.0"
+
+    sourceFiles \
+        "source/dialect/defs.d"
+
+    configuration "library" {
+        // Mustn't be empty
+        targetType "library"
+    }
+
+    configuration "twitch" {
+        versions "TwitchSupport"
+    }
+
+    configuration "unittest" {
+        versions "TwitchSupport"
+    }
+}
+
+subPackage {
+    name "assertgen"
+    targetType "executable"
+    targetName "assertgen"
+
+    mainSourceFile "source/dialect/assertgen.d"
+
+    sourcePaths "include" "source"
+    importPaths "include" "source"
+
+    dependency "lu:conv" version="~>0.2.0"
+    dependency "lu:deltastrings" version="~>0.2.0"
+    dependency "lu:meld" version="~>0.2.0"
+
+    versions \
+        "FlagAsUpdated" \
+        "TwitchSupport" \
+        "TwitchWarnings" \
+        "PrintStacktraces" \
+        "AssertGeneration"
+}
+
+dependency "lu:conv" version="~>0.2.0"
 dependency "lu:meld" version="~>0.2.0"
+
+sourcePaths "include" "source"
+importPaths "include" "source"
+
+excludedSourceFiles \
+    "source/dialect/assertgen.d"
 
 versions "FlagAsUpdated"
 
@@ -30,16 +81,17 @@ configuration "dev" {
     versions "TwitchSupport" "TwitchWarnings"
 }
 
-configuration "assertgen" {
-    targetType "executable"
-    mainSourceFile "source/dialect/assertgen.d"
-    versions "TwitchSupport" "TwitchWarnings" "PrintStacktraces" "AssertGeneration"
-    dependency "lu:deltastrings" version="~>0.2.0"
-}
-
 configuration "unittest" {
-    versions "TwitchSupport" "TwitchWarnings" "PrintStacktraces" "AssertGeneration"
+    sourcePaths "include" "source" "tests"
+    importPaths "include" "source" "tests"
+
     dependency "lu:deltastrings" version="~>0.2.0"
-    sourcePaths "source" "tests"
-    importPaths "source" "tests"
+
+    sourceFiles "source/dialect/assertgen.d"
+
+    versions \
+        "TwitchSupport" \
+        "TwitchWarnings" \
+        "PrintStacktraces" \
+        "AssertGeneration"
 }
