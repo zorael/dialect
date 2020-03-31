@@ -21,26 +21,26 @@ install_deps() {
 build() {
     local dubArgs="--compiler=$1 --arch=$2"
 
-    time dub $dubArgs test
+    time dub test $dubArgs
 
-    time dub $dubArgs build -b debug
-    time dub $dubArgs build -b debug -c twitch
-    time dub $dubArgs build -b debug -c dev
+    time dub build $dubArgs -b debug
+    time dub build $dubArgs -b debug -c twitch
+    time dub build $dubArgs -b debug -c dev
 
-    time dub $dubArgs build -b plain
-    time dub $dubArgs build -b plain -c twitch
-    time dub $dubArgs build -b plain -c dev
+    time dub build $dubArgs -b plain
+    time dub build $dubArgs -b plain -c twitch
+    time dub build $dubArgs -b plain -c dev
 
-    time dub $dubArgs build -b release
-    time dub $dubArgs build -b release -c twitch
-    time dub $dubArgs build -b release -c dev
+    time dub build $dubArgs -b release
+    time dub build $dubArgs -b release -c twitch
+    time dub build $dubArgs -b release -c dev
 
-    time dub $dubArgs build -b debug :defs
-    time dub $dubArgs build -b debug :defs -c twitch
+    time dub build $dubArgs -b debug :defs
+    time dub build $dubArgs -b debug :defs -c twitch
 
-    time dub $dubArgs build -b debug :assertgen
-    time dub $dubArgs build -b plain :assertgen
-    time dub $dubArgs build -b release :assertgen
+    time dub build $dubArgs -b debug :assertgen
+    time dub build $dubArgs -b plain :assertgen
+    time dub build $dubArgs -b release :assertgen
 }
 
 # execution start
