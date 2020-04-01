@@ -368,9 +368,6 @@ void parsePrefix(ref IRCParser parser, ref IRCEvent event, ref string slice) pur
             nickname = prefix;
         }
     }
-
-    import dialect.common : isSpecial;
-    if (event.sender.isSpecial(parser)) event.sender.class_ = IRCUser.Class.special;
 }
 
 ///
@@ -390,7 +387,6 @@ unittest
         assert((nickname == "zorael"), nickname);
         assert((ident == "~NaN"), ident);
         assert((address == "some.address.org"), address);
-        assert((class_ != IRCUser.Class.special), Enum!(IRCUser.Class).toString(class_));
     }
 
     IRCEvent e2;
@@ -403,7 +399,6 @@ unittest
         assert((nickname == "NickServ"), nickname);
         assert((ident == "NickServ"), ident);
         assert((address == "services."), address);
-        assert((class_ == IRCUser.Class.special), Enum!(IRCUser.Class).toString(class_));
     }
 
     IRCEvent e3;
@@ -416,7 +411,6 @@ unittest
         assert((nickname == "kameloso^^"), nickname);
         assert((ident == "~NaN"), ident);
         assert((address == "C2802314.E23AD7D8.E9841504.IP"), address);
-        assert((class_ != IRCUser.Class.special), Enum!(IRCUser.Class).toString(class_));
     }
 
     IRCEvent e4;
@@ -430,7 +424,6 @@ unittest
         assert((nickname == "Q"), nickname);
         assert((ident == "TheQBot"), ident);
         assert((address == "CServe.quakenet.org"), address);
-        assert((class_ == IRCUser.Class.special), Enum!(IRCUser.Class).toString(class_));
     }
 }
 
@@ -1569,7 +1562,7 @@ void onNotice(ref IRCParser parser, ref IRCEvent event, ref string slice) pure
 
     with (parser)
     {
-        import dialect.common : isAuthService, isSpecial;
+        import dialect.common : isAuthService;
 
         if (!event.content.length) return;
 
@@ -1585,8 +1578,6 @@ void onNotice(ref IRCParser parser, ref IRCEvent event, ref string slice) pure
         {
             import std.algorithm.searching : canFind;
             import std.uni : asLowerCase;
-
-            //event.sender.class_ = IRCUser.Class.special; // by definition
 
             enum AuthChallenge
             {
