@@ -45,6 +45,7 @@ subPackage {
     sourcePaths "include" "source"
     importPaths "include" "source"
 
+    dependency "lu:common" version="~>0.2.0"
     dependency "lu:conv" version="~>0.2.0"
     dependency "lu:deltastrings" version="~>0.2.0"
     dependency "lu:meld" version="~>0.2.0"
