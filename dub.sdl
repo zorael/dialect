@@ -66,21 +66,24 @@ dependency "lu:string" version="~>0.2.0"
 sourcePaths "include" "source"
 importPaths "include" "source"
 
-excludedSourceFiles \
-    "source/dialect/assertgen.d"
-
 versions "FlagAsUpdated"
 
 configuration "library" {
-    // Mustn't be empty
-    targetType "library"
+    excludedSourceFiles \
+        "source/dialect/assertgen.d"
 }
 
 configuration "twitch" {
+    excludedSourceFiles \
+        "source/dialect/assertgen.d"
+
     versions "TwitchSupport"
 }
 
 configuration "dev" {
+    excludedSourceFiles \
+        "source/dialect/assertgen.d"
+
     versions "TwitchSupport" "TwitchWarnings"
 }
 
@@ -89,8 +92,6 @@ configuration "unittest" {
     importPaths "include" "source" "tests"
 
     dependency "lu:deltastrings" version="~>0.2.0"
-
-    sourceFiles "source/dialect/assertgen.d"
 
     versions \
         "TwitchSupport" \
