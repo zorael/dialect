@@ -8,35 +8,35 @@ environment:
       DSubversion:
       arch: x64
       dubArgs:
-    #- DC: dmd
-      #DReleaseType: releases
-      #DVersion: 2.091.0
-      #DSubversion:
-      #arch: x86
-      #dubArgs:
-    #- DC: dmd
-      #DReleaseType: releases
-      #DVersion: 2.090.1
-      #DSubversion:
-      #arch: x64
-      #dubArgs:
-    #- DC: dmd
-      #DReleaseType: releases
-      #DVersion: 2.090.1
-      #DSubversion:
-      #arch: x86
-      #dubArgs:
-    #- DC: dmd
-      #DReleaseType: releases
-      #DVersion: 2.089.1
-      #DSubversion:
-      #arch: x64
-      #dubArgs:
-    #- DC: dmd
-      #DReleaseType: releases
-      #DVersion: 2.089.1
-      #DSubversion:
-      #arch: x86
+    - DC: dmd
+      DReleaseType: releases
+      DVersion: 2.091.0
+      DSubversion:
+      arch: x86
+      dubArgs:
+    - DC: dmd
+      DReleaseType: releases
+      DVersion: 2.090.1
+      DSubversion:
+      arch: x64
+      dubArgs:
+    - DC: dmd
+      DReleaseType: releases
+      DVersion: 2.090.1
+      DSubversion:
+      arch: x86
+      dubArgs:
+    - DC: dmd
+      DReleaseType: releases
+      DVersion: 2.089.1
+      DSubversion:
+      arch: x64
+      dubArgs:
+    - DC: dmd
+      DReleaseType: releases
+      DVersion: 2.089.1
+      DSubversion:
+      arch: x86
       dubArgs:
     - DC: dmd
       DReleaseType: releases
@@ -44,27 +44,27 @@ environment:
       DSubversion:
       arch: x64
       dubArgs:
-    #- DC: dmd
-      #DReleaseType: releases
-      #DVersion: 2.084.0
-      #DSubversion:
-      #arch: x86
-      #dubArgs:
+    - DC: dmd
+      DReleaseType: releases
+      DVersion: 2.084.0
+      DSubversion:
+      arch: x86
+      dubArgs:
     - DC: ldc
       DVersion: 1.20.0
       DSubversion:
       arch: x64
       dubArgs:
-    #- DC: ldc
-      #DVersion: 1.19.0
-      #DSubversion:
-      #arch: x64
-      #dubArgs:
-    #- DC: ldc
-      #DVersion: 1.18.0
-      #DSubversion:
-      #arch: x64
-      #dubArgs:
+    - DC: ldc
+      DVersion: 1.19.0
+      DSubversion:
+      arch: x64
+      dubArgs:
+    - DC: ldc
+      DVersion: 1.18.0
+      DSubversion:
+      arch: x64
+      dubArgs:
     - DC: ldc
       DVersion: 1.14.0
       DSubversion:
@@ -138,16 +138,16 @@ test_script:
  - dub add-local lu
  - dub test  --arch=%Darch% --compiler=%DC% %dubArgs%
  - dub build --arch=%Darch% --compiler=%DC% %dubArgs% -b debug
- #- dub build --arch=%Darch% --compiler=%DC% %dubArgs% -b debug -c twitch
+ - dub build --arch=%Darch% --compiler=%DC% %dubArgs% -b debug -c twitch
  - dub build --arch=%Darch% --compiler=%DC% %dubArgs% -b debug -c dev
  - dub build --arch=%Darch% --compiler=%DC% %dubArgs% -b plain
- #- dub build --arch=%Darch% --compiler=%DC% %dubArgs% -b plain -c twitch
+ - dub build --arch=%Darch% --compiler=%DC% %dubArgs% -b plain -c twitch
  - dub build --arch=%Darch% --compiler=%DC% %dubArgs% -b plain -c dev
- #- dub build --arch=%Darch% --compiler=%DC% %dubArgs% -b release
- #- dub build --arch=%Darch% --compiler=%DC% %dubArgs% -b release -c twitch
- #- dub build --arch=%Darch% --compiler=%DC% %dubArgs% -b release -c dev
+ - dub build --arch=%Darch% --compiler=%DC% %dubArgs% -b release
+ - dub build --arch=%Darch% --compiler=%DC% %dubArgs% -b release -c twitch
+ - dub build --arch=%Darch% --compiler=%DC% %dubArgs% -b release -c dev
  - dub build --arch=%Darch% --compiler=%DC% %dubArgs% -b debug :defs
  - dub build --arch=%Darch% --compiler=%DC% %dubArgs% -b debug :defs -c twitch
  - dub build --arch=%Darch% --compiler=%DC% %dubArgs% -b debug :assertgen
- #- dub build --arch=%Darch% --compiler=%DC% %dubArgs% -b plain :assertgen
- #- dub build --arch=%Darch% --compiler=%DC% %dubArgs% -b release :assertgen
+ - dub build --arch=%Darch% --compiler=%DC% %dubArgs% -b plain :assertgen
+ - dub build --arch=%Darch% --compiler=%DC% %dubArgs% -b release :assertgen
