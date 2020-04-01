@@ -13,7 +13,7 @@ x:ddoxTool "scod"
 subPackage {
     name "defs"
     targetType "library"
-    sourcePaths "include" "source"
+    sourcePaths "include"
     importPaths "include" "source"
 
     dependency "lu:uda" version="~>0.2.0"
