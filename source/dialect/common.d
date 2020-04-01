@@ -464,36 +464,6 @@ unittest
 }
 
 
-// isFromAuthService
-/++
- +  Inspects an `dialect.defs.IRCEvent` and judges whether or not it is from services.
- +
- +  Deprecated oveload that takes an `dialect.defs.IRCEvent` instead of the real
- +  overload that takes an `dialect.defs.IRCUser`.
- +
- +  Example:
- +  ---
- +  IRCEvent event;
- +  if (parser.isFromAuthService(event))
- +  {
- +      // ...
- +  }
- +  ---
- +
- +  Params:
- +      parser = Reference to the current `dialect.parsing.IRCParser`.
- +      event = `dialect.defs.IRCEvent` to examine.
- +
- +  Returns:
- +      `true` if the `sender` is judged to be from nickname services, `false` if not.
- +/
-deprecated("Use `isAuthService(IRCUser, IRCParser)`")
-bool isFromAuthService(const ref IRCParser parser, const IRCEvent event) pure
-{
-    return isAuthService(event.sender, parser);
-}
-
-
 // isValidChannel
 /++
  +  Examines a string and judges whether or not it *looks* like a channel.
