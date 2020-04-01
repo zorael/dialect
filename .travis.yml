@@ -18,6 +18,8 @@ os:
   - osx
 
 script:
+  - git clone https://github.com/zorael/lu.git
+  - dub add-local lu
   - dub test  --compiler=${DC}
   - dub build --compiler=${DC} -b debug
   - dub build --compiler=${DC} -b debug -c twitch
