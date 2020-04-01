@@ -1890,7 +1890,7 @@ void onMode(ref IRCParser parser, ref IRCEvent event, ref string slice) pure
             auto modes = parser.client.modes.dup.representation;
             modes ~= slice;
             parser.client.modes = cast(string)modes
-                .sort()
+                .sort
                 .uniq
                 .array
                 .idup;
