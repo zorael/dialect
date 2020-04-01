@@ -113,6 +113,9 @@ public IRCEvent toIRCEvent(ref IRCParser parser, const string raw) pure
     {
         if (raw[0] == '@')
         {
+            if (raw.length < 2) throw new IRCParseException("Tried to parse " ~
+                "what was only the start of tags");
+
             // IRCv3 tags
             // @badges=broadcaster/1;color=;display-name=Zorael;emote-sets=0;mod=0;subscriber=0;user-type= :tmi.twitch.tv USERSTATE #zorael
             // @broadcaster-lang=;emote-only=0;followers-only=-1;mercury=0;r9k=0;room-id=22216721;slow=0;subs-only=0 :tmi.twitch.tv ROOMSTATE #zorael
