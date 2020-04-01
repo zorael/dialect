@@ -1,4 +1,4 @@
-# dialect [![CircleCI Linux/OSX](https://img.shields.io/circleci/project/github/zorael/dialect/master.svg?maxAge=3600&logo=circleci)](https://circleci.com/gh/zorael/dialect) [![Travis Linux/OSX and documentation](https://img.shields.io/travis/zorael/dialect/master.svg?maxAge=3600&logo=travis)](https://travis-ci.org/zorael/dialect) [![Windows](https://img.shields.io/appveyor/ci/zorael/dialect/master.svg?maxAge=3600&logo=appveyor)](https://ci.appveyor.com/project/zorael/dialect) [![GitHub commits since last release](https://img.shields.io/github/commits-since/zorael/dialect/v0.4.2.svg?maxAge=3600&logo=github)](https://github.com/zorael/dialect/compare/v0.4.2...master)
+# dialect [![CircleCI Linux/OSX](https://img.shields.io/circleci/project/github/zorael/dialect/master.svg?maxAge=3600&logo=circleci)](https://circleci.com/gh/zorael/dialect) [![Travis Linux/OSX and documentation](https://img.shields.io/travis/zorael/dialect/master.svg?maxAge=3600&logo=travis)](https://travis-ci.com/zorael/dialect) [![Windows](https://img.shields.io/appveyor/ci/zorael/dialect/master.svg?maxAge=3600&logo=appveyor)](https://ci.appveyor.com/project/zorael/dialect) [![GitHub commits since last release](https://img.shields.io/github/commits-since/zorael/dialect/v0.4.2.svg?maxAge=3600&logo=github)](https://github.com/zorael/dialect/compare/v0.4.2...master)
 
 IRC parsing library with support for a wide variety of server daemons.
 
@@ -6,7 +6,7 @@ It uses exceptions to signal errors during parsing, so it's not `nothrow`. Some 
 
 Note that while IRC is standardised, servers still come in [many flavours](https://upload.wikimedia.org/wikipedia/commons/thumb/d/d5/IRCd_software_implementations3.svg/1533px-IRCd_software_implementations3.svg.png), some of which [outright conflict](http://defs.ircdocs.horse/defs/numerics.html) with others. If something doesn't immediately work, generally it's because we simply haven't encountered that type of event before, and so no rules for how to parse it have yet been written.
 
-Used in the [kameloso](https://github.com/zorael/kameloso) bot. However, while dialect unavoidably caters to its needs, it is independent from it. Likely some remnants of code that violate separation of concern still exist, and they are to be considered bugs.
+Used in the [kameloso](https://github.com/zorael/kameloso) bot.
 
 **Please report bugs. Unreported bugs can only be fixed by accident.**
 
@@ -17,7 +17,7 @@ API documentation can be found [here](https://zorael.github.io/dialect).
 ```d
 struct IRCEvent
 {
-    enum Type { ... }  // large enum of IRC event types
+    enum Type { ... }  // *large* enum of IRC event types
 
     Type type;
     string raw;
@@ -32,12 +32,6 @@ struct IRCEvent
     int altcount;
     long time;
     string errors;
-
-    version(TwitchSupport)
-    {
-        string emotes;
-        string id;
-    }
 }
 
 struct IRCUser
@@ -46,13 +40,7 @@ struct IRCUser
     string ident;
     string address;
     string account;
-
-    version(TwitchSupport)
-    {
-        string displayName;
-        string badges;
-        string colour;
-    }
+    long updated;
 }
 
 struct IRCChannel
@@ -60,17 +48,16 @@ struct IRCChannel
     struct Mode { ... }
 
     string name;
-    Mode[] modes
-    string modechars;
     string topic;
-    string[][char] mods;
+    string modechars;
+    Mode[] modes
     bool[string] users;
+    string[][char] mods;
+    long created;
 }
 
 struct IRCServer
 {
-    enum Daemon { ... }
-
     string address;
     ushort port;
 
@@ -83,8 +70,6 @@ struct IRCClient
     string user;
     string ident;
     string realName;
-
-    // More internals
 }
 
 struct IRCParser
@@ -166,14 +151,14 @@ See the [`/tests`](/tests) directory for more example parses.
 
 # Unit test generation
 
-Compiling the `assertgen` dub build configuration builds a command-line tool with which it is easy to generate assert blocks like the one above. These can then be pasted into an according file in [`/tests`](/tests), then ideally submitted as a GitHub pull request for upstream inclusion. You can use it to contribute known-good parses and increase coverage of event types.
+Compiling the `assertgen` dub subpackag builds a command-line tool with which it is easy to generate assert blocks like the one above. These can then be pasted into an according file in [`/tests`](/tests), then ideally submitted as a GitHub pull request for upstream inclusion. You can use it to contribute known-good parses and increase coverage of event types.
 
-Simply run `dub run -c assertgen` and follow the on-screen instructions.
+Simply run `dub run :assertgen` and follow the on-screen instructions.
 
 ```
-Enter daemon [optional daemon literal] (ircdseven):
-Enter network (freenode):
-Enter server address (irc.freenode.net):
+Enter daemon [optional daemon literal] (ircdseven): unreal
+Enter network (freenode): foobar
+Enter server address (irc.freenode.net): irc.server.tld
 
 [...]
 
@@ -195,7 +180,7 @@ Enter server address (irc.freenode.net):
 
 # Roadmap
 
-* detect and remove final non-bot-agnostic remnants
+* nothing right now, ideas needed
 
 # Built with
 
