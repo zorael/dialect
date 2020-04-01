@@ -2405,14 +2405,6 @@ struct IRCParser
         initPostprocessors();
     }
 
-    /// Create a new `IRCParser` with the passed `dialect.defs.IRCClient` as base.
-    deprecated("Use the `IRCParser(IRCClient, IRCServer)` overload")
-    this(IRCClient client) pure nothrow
-    {
-        this.client = client;
-        initPostprocessors();
-    }
-
     /// Disallow copying of this struct.
     @disable this(this);
 

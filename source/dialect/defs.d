@@ -1053,10 +1053,6 @@ struct IRCUser
     /// Timestamp when the user was last modified.
     @Hidden long updated;
 
-    /// Deprecated alias to `IRCUser.updated`.
-    deprecated("Use `.updated`")
-    alias lastWhois = updated;
-
     /// User classifier.
     Class class_;
 
@@ -1067,21 +1063,11 @@ struct IRCUser
         /// The alternate "display name" of the user.
         string displayName;
 
-        /// Deprecated alias kept as transition.
-        deprecated("Use `.displayName`")
-        alias alias_ = displayName;
-
         /// The Twitch badges this user has.
         string badges;
 
         /// The Twitch colour (RRGGBB) to tint the user's nickname with.
         string colour;
-    }
-    else
-    {
-        /// Deprecated remnant of when `displayName` was `alias_` and wasn't versioned TwitchSupport
-        deprecated("Version your code to use dialect build config \"twitch\" and use `.displayName`")
-        string alias_;
     }
 
     /// Create a new `IRCUser` based on a `*!*@*` mask string.
