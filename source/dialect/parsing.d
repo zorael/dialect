@@ -1047,7 +1047,7 @@ void parseSpecialcases(ref IRCParser parser, ref IRCEvent event, ref string slic
             event.channel = slice.nom(" :- ");
             event.sender.nickname = event.channel[1..$];
             event.sender.address = string.init;
-            event.count = slice.to!int;
+            event.count = (slice == "-") ? 0 : slice.to!int;
             break;
 
         case CLEARCHAT:
