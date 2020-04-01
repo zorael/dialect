@@ -293,7 +293,6 @@ unittest
         {
             assert((type == RPL_STATSDEBUG), Enum!(IRCEvent.Type).toString(type));
             assert((sender.address == "livingstone.freenode.net"), sender.address);
-            assert((sender.class_ == special), Enum!(IRCUser.Class).toString(sender.class_));
             assert((content == "dax (dax@freenode/staff/dax)"), content);
             assert((aux == "p"), aux);
             assert((num == 249), num.to!string);
@@ -307,7 +306,6 @@ unittest
         {
             assert((type == RPL_ENDOFSTATS), Enum!(IRCEvent.Type).toString(type));
             assert((sender.address == "livingstone.freenode.net"), sender.address);
-            assert((sender.class_ == special), Enum!(IRCUser.Class).toString(sender.class_));
             assert((content == "End of /STATS report"), content);
             assert((aux == "p"), aux);
             assert((num == 219), num.to!string);
@@ -734,7 +732,6 @@ unittest
         {
             assert((type == RPL_CHANNEL_URL), Enum!(IRCEvent.Type).toString(type));
             assert((sender.address == "services."), sender.address);
-            assert((sender.class_ == IRCUser.Class.special), Enum!(IRCUser.Class).toString(sender.class_));
             assert((channel == "#ubuntu"), channel);
             assert((content == "http://www.ubuntu.com"), content);
             assert((num == 328), num.to!string);
@@ -1037,7 +1034,6 @@ unittest
             assert((sender.nickname == "zorael"), sender.nickname);
             assert((sender.ident == "~NaN"), sender.ident);
             assert((sender.address == "2001:41d0:2:80b4::"), sender.address);
-            assert((sender.class_ != IRCUser.Class.special), Enum!(IRCUser.Class).toString(sender.class_));
             assert((channel == "#garderoben"), channel);
             assert((content == "en greps av hybris, sen var de bara fyra"), content);
         }
@@ -1067,7 +1063,6 @@ unittest
             assert((sender.ident == "~quassel"), sender.ident);
             assert((sender.address == "ip5b435007.dynamic.kabel-deutschland.de"), sender.address);
             assert((sender.account == "skix77"), sender.account);
-            assert((sender.class_ != IRCUser.Class.special), Enum!(IRCUser.Class).toString(sender.class_));
             assert((aux == "skix77"), aux);
         }
     }
@@ -1116,7 +1111,6 @@ unittest
             assert((sender.nickname == "ChanServ"), sender.nickname);
             assert((sender.ident == "ChanServ"), sender.ident);
             assert((sender.address == "services."), sender.address);
-            assert((sender.class_ == IRCUser.Class.special), Enum!(IRCUser.Class).toString(sender.class_));
             assert((content == "[##linux-overflohomeOnlyw] Make sure your nick is registered, then please try again to join ##linux."), content);
         }
     }
@@ -1129,7 +1123,6 @@ unittest
             assert((sender.nickname == "ChanServ"), sender.nickname);
             assert((sender.ident == "ChanServ"), sender.ident);
             assert((sender.address == "services."), sender.address);
-            assert((sender.class_ == IRCUser.Class.special), Enum!(IRCUser.Class).toString(sender.class_));
             assert((content == "[#ubuntu] Welcome to #ubuntu! Please read the channel topic."), content);
         }
     }
@@ -1152,7 +1145,6 @@ unittest
             assert((sender.nickname == "zorael"), sender.nickname);
             assert((sender.ident == "~NaN"), sender.ident);
             assert((sender.address == "ns3363704.ip-94-23-253.eu"), sender.address);
-            assert((sender.class_ != IRCUser.Class.special), Enum!(IRCUser.Class).toString(sender.class_));
             assert((channel == "#flerrp"), channel);
             assert((content == "test test content"), content);
         }
@@ -1166,7 +1158,6 @@ unittest
             assert((sender.nickname == "zorael"), sender.nickname);
             assert((sender.ident == "~NaN"), sender.ident);
             assert((sender.address == "ns3363704.ip-94-23-253.eu"), sender.address);
-            assert((sender.class_ != IRCUser.Class.special), Enum!(IRCUser.Class).toString(sender.class_));
             assert((target.nickname == "kameloso^"), target.nickname);
             assert((content == "test test content"), content);
         }
@@ -1180,7 +1171,6 @@ unittest
             assert((sender.nickname == "zorael"), sender.nickname);
             assert((sender.ident == "~NaN"), sender.ident);
             assert((sender.address == "ns3363704.ip-94-23-253.eu"), sender.address);
-            assert((sender.class_ != IRCUser.Class.special), Enum!(IRCUser.Class).toString(sender.class_));
             assert((channel == "#flerrp"), channel);
             assert((content == "kameloso^"), content);
             assert((aux == "+v"), aux);
@@ -1195,7 +1185,6 @@ unittest
             assert((sender.nickname == "zorael"), sender.nickname);
             assert((sender.ident == "~NaN"), sender.ident);
             assert((sender.address == "ns3363704.ip-94-23-253.eu"), sender.address);
-            assert((sender.class_ != IRCUser.Class.special), Enum!(IRCUser.Class).toString(sender.class_));
             assert((channel == "#flerrp"), channel);
             assert((aux == "+i"), aux);
         }
@@ -1222,7 +1211,6 @@ unittest
         {
             assert((type == SELFMODE), Enum!(IRCEvent.Type).toString(type));
             assert((sender.nickname == "kameloso^"), sender.nickname);
-            assert((sender.class_ != IRCUser.Class.special), Enum!(IRCUser.Class).toString(sender.class_));
             assert((aux == "+i"), aux);
         }
     }
@@ -1257,7 +1245,6 @@ unittest
             assert((sender.nickname == "ASDphBa|zzZ"), sender.nickname);
             assert((sender.ident == "~ASDphBa"), sender.ident);
             assert((sender.address == "a.asdphs-tech.com"), sender.address);
-            assert((sender.class_ != IRCUser.Class.special), Enum!(IRCUser.Class).toString(sender.class_));
             assert((channel == "#d"), channel);
             assert((content == "does anyone know how the unittest stuff is working with cmake-d?"), content);
         }
@@ -1376,7 +1363,6 @@ unittest
             assert((sender.nickname == "NickServ"), sender.nickname);
             assert((sender.ident == "NickServ"), sender.ident);
             assert((sender.address == "services."), sender.address);
-            assert((sender.class_ == IRCUser.Class.special), Enum!(IRCUser.Class).toString(sender.class_));
             assert((content == "Invalid password for kameloso."), content);
         }
     }

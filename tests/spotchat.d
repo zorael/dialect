@@ -145,7 +145,6 @@ unittest
             assert((sender.nickname == "Halcy0n"), sender.nickname);
             assert((sender.ident == "~Halcy0n"), sender.ident);
             assert((sender.address == "SpotChat-rauo6p.dyn.suddenlink.net"), sender.address);
-            assert((sender.class_ != IRCUser.Class.special), Enum!(IRCUser.Class).toString(sender.class_));
             assert((content == "I'm busy"), content);
         }
     }
@@ -158,7 +157,6 @@ unittest
             assert((sender.nickname == "Halcy0n"), sender.nickname);
             assert((sender.ident == "~Halcy0n"), sender.ident);
             assert((sender.address == "SpotChat-rauo6p.dyn.suddenlink.net"), sender.address);
-            assert((sender.class_ != IRCUser.Class.special), Enum!(IRCUser.Class).toString(sender.class_));
         }
     }
 }

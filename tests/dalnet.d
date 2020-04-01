@@ -34,7 +34,6 @@ unittest
             assert((sender.nickname == "NickServ"), sender.nickname);
             assert((sender.ident == "service"), sender.ident);
             assert((sender.address == "dal.net"), sender.address);
-            assert((sender.class_ == IRCUser.Class.special), Enum!(IRCUser.Class).toString(sender.class_));
             assert((content == "This nick is owned by someone else. Please choose another."), content);
         }
     }
@@ -46,7 +45,6 @@ unittest
             assert((sender.nickname == "NickServ"), sender.nickname);
             assert((sender.ident == "service"), sender.ident);
             assert((sender.address == "dal.net"), sender.address);
-            assert((sender.class_ == IRCUser.Class.special), Enum!(IRCUser.Class).toString(sender.class_));
             assert((content == "The password supplied for kameloso is incorrect."), content);
         }
     }
@@ -58,7 +56,6 @@ unittest
             assert((sender.nickname == "NickServ"), sender.nickname);
             assert((sender.ident == "service"), sender.ident);
             assert((sender.address == "dal.net"), sender.address);
-            assert((sender.class_ == IRCUser.Class.special), Enum!(IRCUser.Class).toString(sender.class_));
             assert((content == "Password accepted for kameloso."), content);
         }
     }

@@ -127,7 +127,6 @@ unittest
             assert((sender.nickname == "AuthServ"), sender.nickname);
             assert((sender.ident == "AuthServ"), sender.ident);
             assert((sender.address == "Services.GameSurge.net"), sender.address);
-            assert((sender.class_ == IRCUser.Class.special), Enum!(IRCUser.Class).toString(sender.class_));
             assert((content == "Incorrect password; please try again."), content);
         }
     }
@@ -139,7 +138,6 @@ unittest
             assert((sender.nickname == "AuthServ"), sender.nickname);
             assert((sender.ident == "AuthServ"), sender.ident);
             assert((sender.address == "Services.GameSurge.net"), sender.address);
-            assert((sender.class_ == IRCUser.Class.special), Enum!(IRCUser.Class).toString(sender.class_));
             assert((content == "I recognize you."), content);
         }
     }

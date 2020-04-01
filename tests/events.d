@@ -84,7 +84,6 @@ unittest
             assert((sender.nickname == "Miyabro"), sender.nickname);
             assert((sender.ident == "~Miyabro"), sender.ident);
             assert((sender.address == "Miyako.is.mai.waifu"), sender.address);
-            assert((sender.class_ != IRCUser.Class.special), Enum!(IRCUser.Class).toString(sender.class_));
         }
     }
     {
@@ -319,7 +318,6 @@ unittest
             assert((sender.nickname == "NickServ"), sender.nickname);
             assert((sender.ident == "service"), sender.ident);
             assert((sender.address == "dal.net"), sender.address);
-            assert((sender.class_ == IRCUser.Class.special), Enum!(IRCUser.Class).toString(sender.class_));
             assert((content == "Password accepted for kameloso."), content);
         }
     }

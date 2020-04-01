@@ -170,7 +170,6 @@ unittest
             assert((sender.nickname == "NickServ"), sender.nickname);
             assert((sender.ident == "services"), sender.ident);
             assert((sender.address == "services.oftc.net"), sender.address);
-            assert((sender.class_ == IRCUser.Class.special), Enum!(IRCUser.Class).toString(sender.class_));
             assert((content == "This nickname is registered and protected.  If it is your nickname, you may"), content);
         }
     }
@@ -182,7 +181,6 @@ unittest
             assert((sender.nickname == "NickServ"), sender.nickname);
             assert((sender.ident == "services"), sender.ident);
             assert((sender.address == "services.oftc.net"), sender.address);
-            assert((sender.class_ == IRCUser.Class.special), Enum!(IRCUser.Class).toString(sender.class_));
             assert((content == "Identify failed as kameloso.  You may have entered an incorrect password."), content);
         }
     }
@@ -194,7 +192,6 @@ unittest
             assert((sender.nickname == "NickServ"), sender.nickname);
             assert((sender.ident == "services"), sender.ident);
             assert((sender.address == "services.oftc.net"), sender.address);
-            assert((sender.class_ == IRCUser.Class.special), Enum!(IRCUser.Class).toString(sender.class_));
             assert((content == "You are successfully identified as kameloso."), content);
         }
     }

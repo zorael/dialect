@@ -138,7 +138,6 @@ unittest
             assert((sender.nickname == "Q"), sender.nickname);
             assert((sender.ident == "TheQBot"), sender.ident);
             assert((sender.address == "CServe.quakenet.org"), sender.address);
-            assert((sender.class_ == IRCUser.Class.special), Enum!(IRCUser.Class).toString(sender.class_));
             assert((content == "Username or password incorrect."), content);
         }
     }

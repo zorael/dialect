@@ -159,7 +159,6 @@ unittest
             assert((sender.nickname == "NickServ"), sender.nickname);
             assert((sender.ident == "services"), sender.ident);
             assert((sender.address == "services.irchighway.net"), sender.address);
-            assert((sender.class_ == IRCUser.Class.special), Enum!(IRCUser.Class).toString(sender.class_));
             assert((content == "nick, type /msg NickServ IDENTIFY password.  Otherwise,"), content);
         }
     }
@@ -171,7 +170,6 @@ unittest
             assert((sender.nickname == "NickServ"), sender.nickname);
             assert((sender.ident == "services"), sender.ident);
             assert((sender.address == "services.irchighway.net"), sender.address);
-            assert((sender.class_ == IRCUser.Class.special), Enum!(IRCUser.Class).toString(sender.class_));
             assert((content == "Password incorrect."), content);
         }
     }
@@ -183,7 +181,6 @@ unittest
             assert((sender.nickname == "NickServ"), sender.nickname);
             assert((sender.ident == "services"), sender.ident);
             assert((sender.address == "services.irchighway.net"), sender.address);
-            assert((sender.class_ == IRCUser.Class.special), Enum!(IRCUser.Class).toString(sender.class_));
             assert((content == "Password accepted - you are now recognized."), content);
         }
     }
