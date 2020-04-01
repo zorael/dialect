@@ -1034,7 +1034,6 @@ struct IRCUser
         anyone,     /// Any user.
         whitelist,  /// A whitelisted user.
         operator,   /// A user enjoying operator (or moderator) privileges.
-        special,    /// Special; like staff. May eventually be removed.
         admin,      /// An administrator, in a bot-like context.
     }
 
