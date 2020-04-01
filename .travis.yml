@@ -22,19 +22,12 @@ script:
   - dub add-local lu
   - dub test  --compiler=${DC}
   - dub build --compiler=${DC} -b debug
-  - dub build --compiler=${DC} -b debug -c twitch
   - dub build --compiler=${DC} -b debug -c dev
   - dub build --compiler=${DC} -b plain
-  - dub build --compiler=${DC} -b plain -c twitch
   - dub build --compiler=${DC} -b plain -c dev
   - dub build --compiler=${DC} -b release
-  - dub build --compiler=${DC} -b release -c twitch
   - dub build --compiler=${DC} -b release -c dev
-  - dub build --compiler=${DC} -b debug :defs
-  - dub build --compiler=${DC} -b debug :defs -c twitch
   - dub build --compiler=${DC} -b debug :assertgen
-  - dub build --compiler=${DC} -b plain :assertgen
-  - dub build --compiler=${DC} -b release :assertgen
 
 before_deploy:
   - dub build --compiler=${DC} -b ddox

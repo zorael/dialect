@@ -27,23 +27,15 @@ build() {
     time dub test $dubArgs
 
     time dub build $dubArgs -b debug
-    time dub build $dubArgs -b debug -c twitch
     time dub build $dubArgs -b debug -c dev
 
     time dub build $dubArgs -b plain
-    time dub build $dubArgs -b plain -c twitch
     time dub build $dubArgs -b plain -c dev
 
     time dub build $dubArgs -b release
-    time dub build $dubArgs -b release -c twitch
     time dub build $dubArgs -b release -c dev
 
-    time dub build $dubArgs -b debug :defs
-    time dub build $dubArgs -b debug :defs -c twitch
-
     time dub build $dubArgs -b debug :assertgen
-    time dub build $dubArgs -b plain :assertgen
-    time dub build $dubArgs -b release :assertgen
 }
 
 # execution start
