@@ -310,14 +310,15 @@ unittest
 
 // isAuthService
 /++
- +  Inspects an `dialect.defs.IRCUser` and judges whether or not it is services.
+ +  Inspects an `dialect.defs.IRCUser` and judges whether or not it is
+ +  authentication services.
  +
- +  Much of this is duplicated in `isSpecial`, but it is hard to break out, as
- +  their default cases differ.
+ +  This is very ad-hoc.
  +
  +  Example:
  +  ---
  +  IRCUser user;
+ +
  +  if (user.isAuthService(parser))
  +  {
  +      // ...
@@ -413,7 +414,6 @@ bool isAuthService(const IRCUser sender, const ref IRCParser parser) pure
 
     import lu.common : sharedDomains;
     import lu.string : contains;
-    import std.typecons : Flag, No, Yes;
 
     return (sharedDomains(sender.address, parser.server.address) >= 2) ||
         (sharedDomains(sender.address, parser.server.resolvedAddress) >= 2);

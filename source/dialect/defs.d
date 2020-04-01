@@ -788,6 +788,7 @@ struct IRCEvent
 
     /*
         /// Run this to generate the Type[n] map.
+        /// WARNING: This has not been used in a long time. Don't expect it to work.
         void generateTypenums()
         {
             import std.regex;
@@ -2248,8 +2249,6 @@ struct IRCChannel
 
         /++
          +  Produces a hash for this `Mode`.
-         +
-         +  Use a scopeguard to keep it nothrow.
          +
          +  Returns:
          +      A hash.
