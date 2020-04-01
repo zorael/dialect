@@ -11,44 +11,16 @@ libs "phobos2" platform="posix-dmd"
 x:ddoxTool "scod"
 
 subPackage {
-    name "defs"
-    targetType "library"
-    sourcePaths "include"
-    importPaths "include" "source"
-
-    dependency "lu:uda" version="~>0.2.0"
-
-    sourceFiles \
-        "source/dialect/defs.d"
-
-    configuration "library" {
-        // Mustn't be empty
-        targetType "library"
-    }
-
-    configuration "twitch" {
-        versions "TwitchSupport"
-    }
-
-    configuration "unittest" {
-        versions "TwitchSupport"
-    }
-}
-
-subPackage {
     name "assertgen"
     targetType "executable"
     targetName "assertgen"
 
-    mainSourceFile "source/dialect/assertgen.d"
+    dependency "lu" version="~>0.2.0"
 
     sourcePaths "include" "source"
     importPaths "include" "source"
 
-    dependency "lu:common" version="~>0.2.0"
-    dependency "lu:conv" version="~>0.2.0"
-    dependency "lu:deltastrings" version="~>0.2.0"
-    dependency "lu:meld" version="~>0.2.0"
+    mainSourceFile "source/dialect/assertgen.d"
 
     versions \
         "FlagAsUpdated" \
@@ -58,10 +30,7 @@ subPackage {
         "AssertGeneration"
 }
 
-dependency "lu:common" version="~>0.2.0"
-dependency "lu:conv" version="~>0.2.0"
-dependency "lu:meld" version="~>0.2.0"
-dependency "lu:string" version="~>0.2.0"
+dependency "lu" version="~>0.2.0"
 
 sourcePaths "include" "source"
 importPaths "include" "source"
@@ -69,29 +38,27 @@ importPaths "include" "source"
 versions "FlagAsUpdated"
 
 configuration "library" {
-    excludedSourceFiles \
-        "source/dialect/assertgen.d"
+    excludedSourceFiles "source/dialect/assertgen.d"
 }
 
 configuration "twitch" {
-    excludedSourceFiles \
-        "source/dialect/assertgen.d"
+    excludedSourceFiles "source/dialect/assertgen.d"
 
-    versions "TwitchSupport"
+    versions \
+        "TwitchSupport"
 }
 
 configuration "dev" {
-    excludedSourceFiles \
-        "source/dialect/assertgen.d"
+    excludedSourceFiles "source/dialect/assertgen.d"
 
-    versions "TwitchSupport" "TwitchWarnings"
+    versions \
+        "TwitchSupport" \
+        "TwitchWarnings"
 }
 
 configuration "unittest" {
     sourcePaths "include" "source" "tests"
     importPaths "include" "source" "tests"
-
-    dependency "lu:deltastrings" version="~>0.2.0"
 
     versions \
         "TwitchSupport" \
