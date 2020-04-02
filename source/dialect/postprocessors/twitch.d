@@ -460,12 +460,12 @@ room-id                            "39298218"
 
                 if (const charityName = "msg-param-charity-name" in charityAA)
                 {
-                    import lu.string : escapeControlCharacters, strippedRight;
+                    import lu.string : removeControlCharacters, strippedRight;
 
                     event.aux = (*charityName)
                         .decodeIRCv3String
                         .strippedRight
-                        .escapeControlCharacters!(Yes.remove);
+                        .removeControlCharacters;
                 }
 
                 if (const charityLink = "msg-param-charity-learn-more" in charityAA)
@@ -997,7 +997,7 @@ user-type                          ""
             // @ban-duration=<ban-duration>;ban-reason=<ban-reason> :tmi.twitch.tv CLEARCHAT #<channel> :<user>
             // The moderator’s reason for the timeout or ban.
             // system-msg: The message printed in chat along with this notice.
-            import lu.string : escapeControlCharacters, strippedRight;
+            import lu.string : removeControlCharacters, strippedRight;
             import std.typecons : No, Yes;
 
             if (!value.length) break;
@@ -1005,7 +1005,7 @@ user-type                          ""
             immutable message = value
                 .decodeIRCv3String
                 .strippedRight
-                .escapeControlCharacters!(Yes.remove);
+                .removeControlCharacters;
 
             if (event.type == Type.TWITCH_RITUAL)
             {
