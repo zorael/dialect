@@ -953,7 +953,7 @@ struct IRCServer
     /// The port to connect to, usually `6667`-`6669`.
     ushort port;
 
-    @Unconfigurable
+    @Unserialisable
     {
         /// The server daemon family the server is running.
         Daemon daemon;
@@ -2312,7 +2312,7 @@ struct IRCChannel
  +/
 struct IRCClient
 {
-    import lu.uda : Unconfigurable;
+    import lu.uda : Unserialisable;
 
     /// Client nickname.
     string nickname; // = "kameloso";
@@ -2326,7 +2326,7 @@ struct IRCClient
     /// Client GECOS/"real name".
     string realName;
 
-    @Unconfigurable
+    @Unserialisable
     {
         /// The original client nickname before connecting, in case it changed.
         string origNickname;
