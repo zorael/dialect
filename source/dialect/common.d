@@ -221,14 +221,21 @@ string decodeIRCv3String(const string line) pure nothrow
     if (!line.length) return string.init;
 
     Appender!string sink;
-    sink.reserve(line.length);
 
     bool escaping;
+    bool dirty;
 
-    foreach (immutable c; line.representation)
+    foreach (immutable i, immutable c; line.representation)
     {
         if (escaping)
         {
+            if (!dirty)
+            {
+                sink.reserve(line.length);
+                sink.put(line[0..i-1]);
+                dirty = true;
+            }
+
             switch (c)
             {
             case '\\':
@@ -275,12 +282,13 @@ string decodeIRCv3String(const string line) pure nothrow
                 break;
 
             default:
-                sink.put(c);
+                if (dirty) sink.put(c);
+                break;
             }
         }
     }
 
-    return sink.data;
+    return dirty ? sink.data : line;
 }
 
 ///
