@@ -956,7 +956,7 @@ user-type                          ""
 
             if (!value.length) break;
 
-            immutable displayName = value.contains('\\') ? decodeIRCv3String(value).strippedRight : value;
+            immutable displayName = decodeIRCv3String(value).strippedRight;
 
             if ((event.type == Type.USERSTATE) || (event.type == Type.GLOBALUSERSTATE))
             {
