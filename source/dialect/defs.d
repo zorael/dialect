@@ -1014,6 +1014,9 @@ struct IRCServer
 
         /// The modechar for invite exceptions.
         char invexChar = 'I';
+
+        /// Contents of the `IRCEvent.Type.RPL_ISUPPORT` response(s).
+        string supports;
     }
 }
 
