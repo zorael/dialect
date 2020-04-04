@@ -313,6 +313,19 @@ unittest
 
     immutable s6 = decodeIRCv3String(`9\sraiders\sfrom\sVHSGlitch\shave\sjoined\n!`);
     assert((s6 == "9 raiders from VHSGlitch have joined\n!"), s6);
+
+    {
+        immutable before = `\s\s\s`;
+        immutable after = decodeIRCv3String(before);
+        assert((after == "   "), after);
+        assert(before !is after);
+    }
+    {
+        immutable before = `foo bar`;
+        immutable after = decodeIRCv3String(before);
+        assert((after == "foo bar"), after);
+        assert(before is after);
+    }
 }
 
 
