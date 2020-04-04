@@ -497,6 +497,11 @@ room-id                            "39298218"
                     event.altcount = (*charityRemaining).to!int;
                 }
 
+                /*if (const charityRemaining = "msg-param-charity-days-remaining" in charityAA)
+                {
+                    // No event.tricount...
+                }*/
+
                 version(TwitchWarnings) printTagsOnExit = true;
                 break;
 
@@ -1209,8 +1214,6 @@ room-id             "31457014"
             // Number of gift subs a user has given in the channel, on a SUBGIFT event
         case "msg-param-cumulative-months":
             // Total number of months subscribed, over time. Replaces msg-param-months
-        case "msg-param-charity-hours-remaining":
-            // Number of hours remaining in a charity
             import std.conv : to;
 
             version(TwitchWarnings)
@@ -1351,6 +1354,10 @@ room-id             "31457014"
                 // DEPRECATED in favour of msg-param-cumulative-months.
                 // The number of consecutive months the user has subscribed for,
                 // in a resub notice.
+            case "msg-param-charity-hashtag":
+                //msg-param-charity-hashtag = #charity
+            case "msg-param-charity-hours-remaining":
+                // Number of hours remaining in a charity
             case "msg-param-charity-days-remaining":
                 // Number of days remaining in a charity
             case "msg-param-charity-name":
