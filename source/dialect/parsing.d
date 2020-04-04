@@ -1965,6 +1965,16 @@ void onISUPPORT(ref IRCParser parser, ref IRCEvent event, ref string slice) pure
         event.content = slice.nom(" :");
     }
 
+    if (parser.server.supports.length)
+    {
+        // Not the first event, add a space
+        parser.server.supports ~= ' ' ~ event.content;
+    }
+    else
+    {
+        parser.server.supports = event.content;
+    }
+
     try
     {
         foreach (value; event.content.splitter(' '))
