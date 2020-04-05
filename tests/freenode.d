@@ -40,13 +40,10 @@ unittest
         }
     }
 
-    /*
-    server.caseMapping = IRCServer.CaseMapping.rfc1459;
-    */
-
     with (parser)
     {
         assert((server.caseMapping == IRCServer.CaseMapping.rfc1459), Enum!(IRCServer.CaseMapping).toString(server.caseMapping));
+        assert((server.supports == "CHANTYPES=# EXCEPTS INVEX CHANMODES=eIbq,k,flj,CFLMPQScgimnprstz CHANLIMIT=#:120 PREFIX=(ov)@+ MAXLIST=bqeI:100 MODES=4 NETWORK=freenode STATUSMSG=@+ CALLERID=g CASEMAPPING=rfc1459"), server.supports);
     }
 
     {
@@ -60,19 +57,12 @@ unittest
         }
     }
 
-    /*
-    server.maxNickLength = 16;
-    server.maxChannelLength = 50;
-    server.extbanPrefix = '$';
-    server.extbanTypes = "jrxz";
-    */
-
     with (parser)
     {
         assert((server.maxNickLength == 16), server.maxNickLength.to!string);
         assert((server.maxChannelLength == 50), server.maxChannelLength.to!string);
-        assert((server.extbanPrefix == '$'), server.extbanPrefix.to!string);
         assert((server.extbanTypes == "jrxz"), server.extbanTypes);
+        assert((server.supports == "CHANTYPES=# EXCEPTS INVEX CHANMODES=eIbq,k,flj,CFLMPQScgimnprstz CHANLIMIT=#:120 PREFIX=(ov)@+ MAXLIST=bqeI:100 MODES=4 NETWORK=freenode STATUSMSG=@+ CALLERID=g CASEMAPPING=rfc1459 CHARSET=ascii NICKLEN=16 CHANNELLEN=50 TOPICLEN=390 DEAF=D FNC TARGMAX=NAMES:1,LIST:1,KICK:1,WHOIS:1,PRIVMSG:4,NOTICE:4,ACCEPT:,MONITOR: EXTBAN=$,jrxz CLIENTVER=3.0 WHOX KNOCK ETRACE"), server.supports);
     }
 
     /+
