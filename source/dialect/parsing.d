@@ -1967,13 +1967,11 @@ void onISUPPORT(ref IRCParser parser, ref IRCEvent event, ref string slice) pure
 
     if (parser.server.supports.length)
     {
-        // Not the first event, add a space
-        parser.server.supports ~= ' ' ~ event.content;
+        // Not the first event, add a space first
+        parser.server.supports ~= ' ';
     }
-    else
-    {
-        parser.server.supports = event.content;
-    }
+
+    parser.server.supports ~= event.content;
 
     try
     {
