@@ -759,14 +759,14 @@ unittest
  +  ---
  +
  +  Params:
- +      server = `dialect.defs.IRCServer`, with all its settings.
  +      nickname = String with a signed nickname.
+ +      server = `dialect.defs.IRCServer`, with all its settings.
  +      modesigns = Reference string to write the stripped modesigns to.
  +
  +  Returns:
  +      The nickname without any prepended prefix signs.
  +/
-string stripModesign(const IRCServer server, const string nickname,
+string stripModesign(const string nickname, const IRCServer server,
     ref string modesigns) pure nothrow @nogc
 in (nickname.length, "Tried to strip modesigns off an empty nickname")
 do
@@ -799,7 +799,7 @@ unittest
     {
         immutable signed = "@kameloso";
         string signs;
-        immutable nickname = server.stripModesign(signed, signs);
+        immutable nickname = signed.stripModesign(server, signs);
         assert((nickname == "kameloso"), nickname);
         assert((signs == "@"), signs);
     }
@@ -807,7 +807,7 @@ unittest
     {
         immutable signed = "kameloso";
         string signs;
-        immutable nickname = server.stripModesign(signed, signs);
+        immutable nickname = signed.stripModesign(server, signs);
         assert((nickname == "kameloso"), nickname);
         assert(!signs.length, signs);
     }
@@ -815,7 +815,7 @@ unittest
     {
         immutable signed = "@+kameloso";
         string signs;
-        immutable nickname = server.stripModesign(signed, signs);
+        immutable nickname = signed.stripModesign(server, signs);
         assert((nickname == "kameloso"), nickname);
         assert((signs == "@+"), signs);
     }
@@ -837,16 +837,16 @@ unittest
  +  ---
  +
  +  Params:
- +      server = The `dialect.defs.IRCServer` whose prefix characters to strip.
  +      nickname = The (potentially) signed nickname to strip the prefix off.
+ +      server = The `dialect.defs.IRCServer` whose prefix characters to strip.
  +
  +  Returns:
  +      The raw nickname, unsigned.
  +/
-string stripModesign(const IRCServer server, const string nickname) pure nothrow @nogc
+string stripModesign(const string nickname, const IRCServer server) pure nothrow @nogc
 {
     string nothing;
-    return stripModesign(server, nickname, nothing);
+    return stripModesign(nickname, server, nothing);
 }
 
 ///
@@ -862,7 +862,7 @@ unittest
 
     {
         immutable signed = "@+kameloso";
-        immutable nickname = server.stripModesign(signed);
+        immutable nickname = signed.stripModesign(server);
         assert((nickname == "kameloso"), nickname);
     }
 }
