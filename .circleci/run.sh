@@ -17,8 +17,8 @@ install_deps() {
 
     #curl -fsS --retry 3 https://dlang.org/install.sh | bash -s ldc
 
-    git clone https://github.com/zorael/lu.git
-    dub add-local lu
+    #git clone https://github.com/zorael/lu.git
+    #dub add-local lu
 }
 
 build() {
