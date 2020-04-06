@@ -134,8 +134,8 @@ test_script:
  - echo %PATH%
  - '%DC% --version'
  - dub --version
- - git clone https://github.com/zorael/lu.git
- - dub add-local lu
+ #- git clone https://github.com/zorael/lu.git
+ #- dub add-local lu
  - dub test  --arch=%Darch% --compiler=%DC% %dubArgs%
  - dub build --arch=%Darch% --compiler=%DC% %dubArgs% -b debug
  - dub build --arch=%Darch% --compiler=%DC% %dubArgs% -b debug -c dev
