@@ -1707,12 +1707,7 @@ string toLowerCase(const string name, const IRCServer.CaseMapping caseMapping) p
             if (!dirty)
             {
                 output.length = name.length;
-
-                foreach (immutable n, immutable c2; name[0..i])
-                {
-                    output[n] = name[n].toLower(caseMapping);
-                }
-
+                output[0..i] = name[0..i];
                 dirty = true;
             }
 
