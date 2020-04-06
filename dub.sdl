@@ -17,8 +17,8 @@ subPackage {
 
     dependency "lu" version="~>0.3.0"
 
-    sourcePaths "include" "source"
-    importPaths "include" "source"
+    sourcePaths "source"
+    importPaths "source"
 
     mainSourceFile "source/dialect/assertgen.d"
 
@@ -32,8 +32,8 @@ subPackage {
 
 dependency "lu" version="~>0.3.0"
 
-sourcePaths "include" "source"
-importPaths "include" "source"
+sourcePaths "source"
+importPaths "source"
 
 versions "FlagAsUpdated"
 
@@ -57,8 +57,8 @@ configuration "dev" {
 }
 
 configuration "unittest" {
-    sourcePaths "include" "source" "tests"
-    importPaths "include" "source" "tests"
+    sourcePaths "source" "tests"
+    importPaths "source" "tests"
 
     versions \
         "TwitchSupport" \
