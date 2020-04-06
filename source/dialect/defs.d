@@ -2315,8 +2315,6 @@ struct IRCChannel
  +/
 struct IRCClient
 {
-    import lu.uda : Unserialisable;
-
     /// Client nickname.
     string nickname; // = "kameloso";
 
