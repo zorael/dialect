@@ -151,7 +151,7 @@ See the [`/tests`](/tests) directory for more example parses.
 
 # Unit test generation
 
-Compiling the `assertgen` dub subpackag builds a command-line tool with which it is easy to generate assert blocks like the one above. These can then be pasted into an according file in [`/tests`](/tests), then ideally submitted as a GitHub pull request for upstream inclusion. You can use it to contribute known-good parses and increase coverage of event types.
+Compiling the `assertgen` dub subpackage builds a command-line tool with which it is easy to generate assert blocks like the one above. These can then be pasted into an according file in [`/tests`](/tests), then ideally submitted as a GitHub pull request for upstream inclusion. You can use it to contribute known-good parses and increase coverage of event types.
 
 Simply run `dub run :assertgen` and follow the on-screen instructions.
 
