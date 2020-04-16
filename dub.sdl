@@ -12,6 +12,7 @@ x:ddoxTool "scod"
 
 subPackage {
     name "assertgen"
+    description "Tool for generating asserts for unittest blocks"
     targetType "executable"
     targetName "assertgen"
 
