@@ -796,4 +796,29 @@ unittest
             assert((count == 1000), count.to!string);
         }
     }
+    {
+        // @msg-id=unavailable_command :tmi.twitch.tv NOTICE #zorael :Sorry, "/user" is not available through this client.
+        immutable event = parser.toIRCEvent("@msg-id=unavailable_command :tmi.twitch.tv NOTICE #zorael :Sorry, \"/user\" is not available through this client.");
+        with (event)
+        {
+            assert((type == IRCEvent.Type.TWITCH_ERROR), Enum!(IRCEvent.Type).toString(type));
+            assert((sender.address == "tmi.twitch.tv"), sender.address);
+            assert((channel == "#zorael"), channel);
+            assert((content == "Sorry, \"/user\" is not available through this client."), content);
+            assert((aux == "unavailable_command"), aux);
+            assert((tags == "msg-id=unavailable_command"), tags);
+        }
+    }
+    {
+        immutable event = parser.toIRCEvent("@msg-id=no_vips :tmi.twitch.tv NOTICE #zorael :This channel does not have any VIPs.");
+        with (event)
+        {
+            assert((type == IRCEvent.Type.TWITCH_NOTICE), Enum!(IRCEvent.Type).toString(type));
+            assert((sender.address == "tmi.twitch.tv"), sender.address);
+            assert((channel == "#zorael"), channel);
+            assert((content == "This channel does not have any VIPs."), content);
+            assert((aux == "no_vips"), aux);
+            assert((tags == "msg-id=no_vips"), tags);
+        }
+    }
 }
