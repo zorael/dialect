@@ -803,7 +803,6 @@ user-type                          ""
             case "msg_suspended":
             case "msg_timedout":
             case "no_help":
-            case "no_mods":
             case "not_hosting":
             case "no_permission":
             case "raid_already_raiding":
@@ -835,6 +834,7 @@ user-type                          ""
             case "msg_duplicate":
             case "msg_facebook":
             case "turbo_only_color":
+            case "unavailable_command":
                 // Generic Twitch error.
                 event.type = Type.TWITCH_ERROR;
                 event.aux = value;
@@ -906,6 +906,8 @@ user-type                          ""
             case "ban_success":
             case "host_target_went_offline":
             case "host_success":
+            case "no_vips":
+            case "no_mods":
                 // Generic Twitch server reply.
                 event.type = Type.TWITCH_NOTICE;
                 event.aux = value;
