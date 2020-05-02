@@ -1071,6 +1071,9 @@ struct IRCUser
 
         /// The Twitch colour (RRGGBB) to tint the user's nickname with.
         string colour;
+
+        /// The Twitch ID of this user's account.
+        uint id;
     }
 
     /// Create a new `IRCUser` based on a `*!*@*` mask string.
