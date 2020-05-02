@@ -1271,6 +1271,11 @@ room-id             "31457014"
             if (value.length) event.target.id = value.to!uint;
             break;
 
+        case "room-id":
+            // The channel ID.
+            if (event.type == Type.ROOMSTATE) event.aux = value;
+            break;
+
         // We only need set cases for every known tag if we want to be alerted
         // when we come across unknown ones, which is version TwitchWarnings.
         // As such, version away all the cases from normal builds, and just let
@@ -1298,8 +1303,6 @@ room-id             "31457014"
                 // ?
             case "followers-only":
                 // Probably followers only.
-            case "room-id":
-                // The channel ID.
             case "slow":
                 // The number of seconds chatters without moderator privileges must
                 // wait between sending messages.
