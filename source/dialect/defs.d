@@ -1200,6 +1200,50 @@ struct IRCUser
 
         sink.formattedWrite("%s!%s@%s", nickname, ident, address);
     }
+
+    // hostmask
+    /++
+     +  Formats this `IRCUser` into a hostmask representing its values.
+     +  Merely wraps `toString` and returns a newly allocated string.
+     +
+     +  Returns:
+     +      A hostmask "*!*@*" string.
+     +/
+    string hostmask() pure const
+    {
+        import std.array : Appender;
+
+        Appender!string sink;
+        sink.reserve(nickname.length + ident.length + address.length + 3);
+
+        this.toString(sink);
+        return sink.data;
+    }
+
+    ///
+    unittest
+    {
+        {
+            const user = IRCUser("nickname", "ident", "address.tld");
+            immutable hostmask = user.hostmask;
+            assert((hostmask == "nickname!ident@address.tld"), hostmask);
+        }
+        {
+            const user = IRCUser("nickname", string.init, "address.tld");
+            immutable hostmask = user.hostmask;
+            assert((hostmask == "nickname!*@address.tld"), hostmask);
+        }
+        {
+            const user = IRCUser(string.init, string.init, "address.tld");
+            immutable hostmask = user.hostmask;
+            assert((hostmask == "*!*@address.tld"), hostmask);
+        }
+        {
+            const IRCUser user;
+            immutable hostmask = user.hostmask;
+            assert((hostmask == "*!*@*"), hostmask);
+        }
+    }
 }
 
 
