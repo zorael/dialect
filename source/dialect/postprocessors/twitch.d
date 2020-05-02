@@ -1255,6 +1255,22 @@ room-id             "31457014"
             event.id = value;
             break;
 
+        case "msg-param-userID":
+        case "user-id":
+        case "user-ID":
+            import std.conv : to;
+
+            // The sender's user ID.
+            if (value.length) event.sender.id = value.to!uint;
+            break;
+
+        case "target-user-id":
+            import std.conv : to;
+
+            // The target's user ID
+            if (value.length) event.target.id = value.to!uint;
+            break;
+
         // We only need set cases for every known tag if we want to be alerted
         // when we come across unknown ones, which is version TwitchWarnings.
         // As such, version away all the cases from normal builds, and just let
@@ -1293,12 +1309,6 @@ room-id             "31457014"
                 // ?
             case "user":
                 // The name of the user who sent the notice.
-            case "msg-param-userID":
-            case "user-id":
-            case "user-ID":
-                // The user’s ID.
-            case "target-user-id":
-                // The target's user ID
             case "rituals":
                 /++
                     "Rituals makes it easier for you to celebrate special moments
