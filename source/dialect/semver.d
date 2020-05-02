@@ -17,4 +17,4 @@ enum DialectSemVer
 
 
 /// Pre-release SemVer subversion of this build.
-enum dialectSemVerPrerelease = string.init;
+enum DialectSemVerPrerelease = string.init;
