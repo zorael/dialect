@@ -1181,6 +1181,25 @@ struct IRCUser
     {
         return (nickname ~ ident ~ address).hashOf;
     }
+
+    // toString
+    /++
+     +  Formats this `IRCUser` into a hostmask representing its values.
+     +  Stores the result in the passed output range sink.
+     +
+     +  Params:
+     +      sink = Output range sink to save the hostmask string to.
+     +/
+    void toString(Sink)(auto ref Sink sink) const
+    {
+        import std.format : formattedWrite;
+
+        immutable nickname = this.nickname.length ? this.nickname : "*";
+        immutable ident = this.ident.length ? this.ident : "*";
+        immutable address = this.address.length ? this.address : "*";
+
+        sink.formattedWrite("%s!%s@%s", nickname, ident, address);
+    }
 }
 
 
