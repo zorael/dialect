@@ -30,7 +30,13 @@ script:
   - dub build --compiler=${DC} -b debug :assertgen
 
 before_deploy:
-  - dub build --compiler=${DC} -b ddox
+  #- time dub build --compiler=${DC} --nodeps --force -b ddox
+  - cd ..
+  - git clone https://github.com/adamdruppe/adrdox.git
+  - cd adrdox
+  - make
+  - ./doc2 -ip --directory ../dialect/docs ../dialect
+  - cd ../dialect
   - cp -rv .circleci docs/
 
 deploy:
