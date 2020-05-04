@@ -2385,18 +2385,18 @@ struct IRCClient
     string nickname; // = "kameloso";
 
     /// Client "user".
-    string user; // = "kameloso!";
-
-    /// Client IDENT identifier.
-    string ident; // = "NaN";
+    string user; // = "kameloso";
 
     /// Client GECOS/"real name".
-    string realName;
+    string realName; // = "kameloso IRC bot";
 
     @Unserialisable
     {
         /// The original client nickname before connecting, in case it changed.
         string origNickname;
+
+        /// Client IDENT identifier. Defaults to ~`user`. Unused but keep for future expansion.
+        string ident;
 
         version(TwitchSupport)
         {
