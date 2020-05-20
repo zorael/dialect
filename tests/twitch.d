@@ -696,24 +696,6 @@ unittest
         }
     }
     {
-        immutable event = parser.toIRCEvent("@badge-info=;badges=;color=#8A2BE2;display-name=Chronaholic;emotes=;flags=;id=0e6ed47e-f461-4a9c-a38c-369366417677;mod=0;msg-id=skip-subs-mode-message;room-id=15310631;subscriber=0;tmi-sent-ts=1582177983697;turbo=0;user-id=25928141;user-type= :chronaholic!chronaholic@chronaholic.tmi.twitch.tv PRIVMSG #greekgodx :GreekCreep");
-        with (event)
-        {
-            assert((type == IRCEvent.Type.TWITCH_SKIPSUBSMODEMESSAGE), Enum!(IRCEvent.Type).toString(type));
-            assert((sender.nickname == "chronaholic"), sender.nickname);
-            assert((sender.ident == "chronaholic"), sender.ident);
-            assert((sender.address == "chronaholic.tmi.twitch.tv"), sender.address);
-            assert((sender.account == "chronaholic"), sender.account);
-            assert((sender.displayName == "Chronaholic"), sender.displayName);
-            assert((sender.badges == "*"), sender.badges);
-            assert((sender.colour == "8A2BE2"), sender.colour);
-            assert((channel == "#greekgodx"), channel);
-            assert((content == "GreekCreep"), content);
-            assert((tags == "badge-info=;badges=;color=#8A2BE2;display-name=Chronaholic;emotes=;flags=;id=0e6ed47e-f461-4a9c-a38c-369366417677;mod=0;msg-id=skip-subs-mode-message;room-id=15310631;subscriber=0;tmi-sent-ts=1582177983697;turbo=0;user-id=25928141;user-type="), tags);
-            assert((id == "0e6ed47e-f461-4a9c-a38c-369366417677"), id);
-        }
-    }
-    {
         // @badge-info=subscriber/19;badges=vip/1,subscriber/12,partner/1;color=#CC0000;display-name=Xari;emotes=;flags=;id=85c3a060-07df-474a-abdc-bae457018dc5;login=xari;mod=0;msg-id=raid;msg-param-displayName=Xari;msg-param-login=xari;msg-param-profileImageURL=https://static-cdn.jtvnw.net/jtv_user_pictures/86214da3-1461-44d1-a2e9-43501af29538-profile_image-70x70.jpeg;msg-param-viewerCount=3322;room-id=147337432;subscriber=1;system-msg=3322\sraiders\sfrom\sXari\shave\sjoined!;tmi-sent-ts=1585054359220;user-id=88301612;user-type= :tmi.twitch.tv USERNOTICE #lestream
         immutable event = parser.toIRCEvent("@badge-info=subscriber/19;badges=vip/1,subscriber/12,partner/1;color=#CC0000;display-name=Xari;emotes=;flags=;id=85c3a060-07df-474a-abdc-bae457018dc5;login=xari;mod=0;msg-id=raid;msg-param-displayName=Xari;msg-param-login=xari;msg-param-profileImageURL=https://static-cdn.jtvnw.net/jtv_user_pictures/86214da3-1461-44d1-a2e9-43501af29538-profile_image-70x70.jpeg;msg-param-viewerCount=3322;room-id=147337432;subscriber=1;system-msg=3322\\sraiders\\sfrom\\sXari\\shave\\sjoined!;tmi-sent-ts=1585054359220;user-id=88301612;user-type= :tmi.twitch.tv USERNOTICE #lestream");
         with (event)
@@ -819,6 +801,26 @@ unittest
             assert((content == "This channel does not have any VIPs."), content);
             assert((aux == "no_vips"), aux);
             assert((tags == "msg-id=no_vips"), tags);
+        }
+    }
+    {
+        immutable event = parser.toIRCEvent("@badge-info=;badges=premium/1;color=#00FFAD;display-name=sleepingbeds;emote-only=1;emotes=300787466:0-5,7-12,14-19,21-26,28-33,35-40,42-47,49-54,56-61,63-68,70-75,77-82,84-89,91-96,98-103,105-110,112-117,119-124,126-131,133-138,140-145,147-152,154-159,161-166,168-173,175-180,182-187,189-194,196-201,203-208,210-215,217-222,224-229,231-236,238-243,245-250,252-257,259-264;flags=;id=f9ec222e-1d73-4db4-b67e-3f1857ba204f;mod=0;msg-id=skip-subs-mode-message;room-id=44424631;subscriber=0;tmi-sent-ts=1589991183756;turbo=0;user-id=237489408;user-type= :sleepingbeds!sleepingbeds@sleepingbeds.tmi.twitch.tv PRIVMSG #nickeh30 :gladd7 gladd7 gladd7 gladd7 gladd7 gladd7 gladd7 gladd7 gladd7 gladd7 gladd7 gladd7 gladd7 gladd7 gladd7 gladd7 gladd7 gladd7 gladd7 gladd7 gladd7 gladd7 gladd7 gladd7 gladd7 gladd7 gladd7 gladd7 gladd7 gladd7 gladd7 gladd7 gladd7 gladd7 gladd7 gladd7 gladd7 gladd7");
+        with (event)
+        {
+            assert((type == IRCEvent.Type.CHAN), Enum!(IRCEvent.Type).toString(type));
+            assert((sender.nickname == "sleepingbeds"), sender.nickname);
+            assert((sender.ident == "sleepingbeds"), sender.ident);
+            assert((sender.address == "sleepingbeds.tmi.twitch.tv"), sender.address);
+            assert((sender.account == "sleepingbeds"), sender.account);
+            assert((sender.displayName == "sleepingbeds"), sender.displayName);
+            assert((sender.badges == "premium/1"), sender.badges);
+            assert((sender.colour == "00FFAD"), sender.colour);
+            assert((sender.id == 237489408), sender.id.to!string);
+            assert((channel == "#nickeh30"), channel);
+            assert((content == "gladd7 gladd7 gladd7 gladd7 gladd7 gladd7 gladd7 gladd7 gladd7 gladd7 gladd7 gladd7 gladd7 gladd7 gladd7 gladd7 gladd7 gladd7 gladd7 gladd7 gladd7 gladd7 gladd7 gladd7 gladd7 gladd7 gladd7 gladd7 gladd7 gladd7 gladd7 gladd7 gladd7 gladd7 gladd7 gladd7 gladd7 gladd7"), content);
+            assert((aux == "skip-subs-mode-message"), aux);
+            assert((tags == "badge-info=;badges=premium/1;color=#00FFAD;display-name=sleepingbeds;emote-only=1;emotes=300787466:0-5,7-12,14-19,21-26,28-33,35-40,42-47,49-54,56-61,63-68,70-75,77-82,84-89,91-96,98-103,105-110,112-117,119-124,126-131,133-138,140-145,147-152,154-159,161-166,168-173,175-180,182-187,189-194,196-201,203-208,210-215,217-222,224-229,231-236,238-243,245-250,252-257,259-264;flags=;id=f9ec222e-1d73-4db4-b67e-3f1857ba204f;mod=0;msg-id=skip-subs-mode-message;room-id=44424631;subscriber=0;tmi-sent-ts=1589991183756;turbo=0;user-id=237489408;user-type="), tags);
+            assert((emotes == "300787466:0-5,7-12,14-19,21-26,28-33,35-40,42-47,49-54,56-61,63-68,70-75,77-82,84-89,91-96,98-103,105-110,112-117,119-124,126-131,133-138,140-145,147-152,154-159,161-166,168-173,175-180,182-187,189-194,196-201,203-208,210-215,217-222,224-229,231-236,238-243,245-250,252-257,259-264"), emotes);
         }
     }
 }
