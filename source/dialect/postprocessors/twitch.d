@@ -734,24 +734,25 @@ user-type                          ""
             case "skip-subs-mode-message":
 /+
 badge-info                         ""
-badges                             "glhf-pledge/1"
-color                              "#FF4500"
-display-name                       "TurfyH"
-emotes                             ""
+badges                             "premium/1"
+color                              "#00FFAD"                                                                                                                                                   display-name                       "sleepingbeds"
+emote-only                         "1"
+emotes                             "300787466:0-5,7-12,14-19,21-26,28-33,35-40,42-47,49-54,56-61,63-68,70-75,77-82,84-89,91-96,98-103,105-110,112-117,119-124,126-131,133-138,140-145,147-152,1
+54-159,161-166,168-173,175-180,182-187,189-194,196-201,203-208,210-215,217-222,224-229,231-236,238-243,245-250,252-257,259-264"
 flags                              ""
-id                                 "4a71d07f-31f3-40da-82e8-602bb5c40f1e"
+id                                 "f9ec222e-1d73-4db4-b67e-3f1857ba204f"
 mod                                "0"
 msg-id                             "skip-subs-mode-message"
-room-id                            "15310631"
+room-id                            "44424631"
 subscriber                         "0"
-tmi-sent-ts                        "1582177444168"
+tmi-sent-ts                        "1589991183756"
 turbo                              "0"
-user-id                            "89592030"
+user-id                            "237489408"
 user-type                          ""
 +/
-                // Not sure what this is. The message is generally just emotes,
-                // but the emotes tag is empty.
-                event.type = Type.TWITCH_SKIPSUBSMODEMESSAGE;
+                // Treat like a highlighted message; set aux.
+                event.type = Type.CHAN;
+                event.aux = value;
                 break;
 
             /*case "bad_ban_admin":
