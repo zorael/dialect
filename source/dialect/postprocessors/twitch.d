@@ -1414,6 +1414,8 @@ room-id             "31457014"
                 // Prior gifter display name when a user pays forward a gift
             case "msg-param-prior-gifter-id":
                 // Numeric id of prior gifter when a user pays forward a gift
+            case "client-nonce":
+                // Opaque nonce ID for this message
 
                 // Ignore these events.
                 break;
