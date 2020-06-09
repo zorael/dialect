@@ -117,8 +117,6 @@ import std.typecons : Flag, No, Yes;
 void formatClientAssignment(Sink)(auto ref Sink sink, const IRCClient client, const IRCServer server)
 if (isOutputRange!(Sink, char[]))
 {
-    static if (!__traits(hasMember, Sink, "put")) import std.range.primitives : put;
-
     sink.put("IRCParser parser;\n\n");
     sink.put("with (parser)\n");
     sink.put("{\n");
@@ -192,8 +190,6 @@ if (isOutputRange!(Sink, char[]))
     import lu.string : tabs;
     import std.array : replace;
     import std.format : format, formattedWrite;
-
-    static if (!__traits(hasMember, Sink, "put")) import std.range.primitives : put;
 
     immutable raw = event.tags.length ?
         "@%s %s".format(event.tags, event.raw) : event.raw;
