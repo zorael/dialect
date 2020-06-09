@@ -696,7 +696,6 @@ unittest
  +      `true` if the character is in the list of valid characters for
  +      nicknames, `false` if not.
  +/
-pragma(inline)
 bool isValidNicknameCharacter(const ubyte c) pure nothrow @nogc
 {
     switch (c)
@@ -1597,7 +1596,6 @@ unittest
  +  Returns:
  +      `true` if the passed `c` is in uppercase, `false` if not.
  +/
-pragma(inline)
 char isUpper(const char c, const IRCServer.CaseMapping caseMapping) pure nothrow @nogc
 {
     import std.ascii : isUpper;
@@ -1634,7 +1632,6 @@ char isUpper(const char c, const IRCServer.CaseMapping caseMapping) pure nothrow
  +  Returns:
  +      The passed `c` in lowercase as per the case mappings.
  +/
-pragma(inline)
 char toLower(const char c, const IRCServer.CaseMapping caseMapping) pure nothrow @nogc
 {
     import std.ascii : toLower;
@@ -1791,7 +1788,6 @@ bool isValidHostmask(const string hostmask, const IRCServer server) pure nothrow
 
     string slice = hostmask;  // mutable
 
-    pragma(inline)
     static bool isValidIdentOrAddressCharacter(Flag!"address" address)(const char c)
     {
         switch (c)
@@ -1824,7 +1820,6 @@ bool isValidHostmask(const string hostmask, const IRCServer server) pure nothrow
         return true;
     }
 
-    pragma(inline)
     static bool isValidIdent(const string ident)
     {
         import std.string : representation;
@@ -1839,7 +1834,6 @@ bool isValidHostmask(const string hostmask, const IRCServer server) pure nothrow
         return true;
     }
 
-    pragma(inline)
     static bool isValidAddress(const string address)
     {
         import std.string : representation;
