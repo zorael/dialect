@@ -348,6 +348,7 @@ unittest
  +      slice = Reference to the *slice* of the raw IRC string.
  +/
 void parsePrefix(ref IRCParser parser, ref IRCEvent event, ref string slice) pure
+in (slice.length, "Tried to parse prefix on an empty slice")
 {
     string prefix = slice.nom(' ');
 
@@ -452,6 +453,7 @@ unittest
  +      `dialect.defs.IRCEvent.Type` or typestring to a number failed.
  +/
 void parseTypestring(ref IRCParser parser, ref IRCEvent event, ref string slice) pure
+in (slice.length, "Tried to parse typestring on an empty slice")
 {
     import std.conv : ConvException, to;
     import std.typecons : Flag, No, Yes;
@@ -553,6 +555,7 @@ unittest
  +      normal type nor a numeric.
  +/
 void parseSpecialcases(ref IRCParser parser, ref IRCEvent event, ref string slice) pure
+//in (slice.length, "Tried to parse specialcases on an empty slice")
 {
     import lu.string : beginsWith, strippedRight;
     import std.conv : to;
@@ -1546,6 +1549,7 @@ public void postparseSanityCheck(const ref IRCParser parser, ref IRCEvent event)
  +      slice = Reference to the slice of the raw IRC string.
  +/
 void onNotice(ref IRCParser parser, ref IRCEvent event, ref string slice) pure
+in (slice.length, "Tried to process `onNotice` on an empty slice")
 {
     import lu.string : beginsWith, beginsWithOneOf;
     import std.typecons : Flag, No, Yes;
@@ -1688,6 +1692,7 @@ void onNotice(ref IRCParser parser, ref IRCEvent event, ref string slice) pure
  +  Throws: `dialect.common.IRCParseException` on unknown CTCP types.
  +/
 void onPRIVMSG(const ref IRCParser parser, ref IRCEvent event, ref string slice) pure
+in (slice.length, "Tried to process `onPRIVMSG` on an empty slice")
 {
     import dialect.common : IRCControlCharacter, isValidChannel;
 
@@ -1809,6 +1814,7 @@ void onPRIVMSG(const ref IRCParser parser, ref IRCEvent event, ref string slice)
  +      slice = Reference to the slice of the raw IRC string.
  +/
 void onMode(ref IRCParser parser, ref IRCEvent event, ref string slice) pure
+in (slice.length, "Tried to process `onMode` on an empty slice")
 {
     import dialect.common : isValidChannel;
 
@@ -1951,6 +1957,7 @@ unittest
  +  Throws: `dialect.common.IRCParseException` if something could not be parsed or converted.
  +/
 void onISUPPORT(ref IRCParser parser, ref IRCEvent event, ref string slice) pure
+in (slice.length, "Tried to process `onISUPPORT` on an empty slice")
 {
     import lu.conv : Enum;
     import std.algorithm.iteration : splitter;
@@ -2132,6 +2139,7 @@ void onISUPPORT(ref IRCParser parser, ref IRCEvent event, ref string slice) pure
  +      slice = Reference to the slice of the raw IRC string.
  +/
 void onMyInfo(ref IRCParser parser, ref IRCEvent event, ref string slice) pure
+in (slice.length, "Tried to process `onMyInfo` on an empty slice")
 {
     import dialect.common : typenumsOf;
     import std.uni : toLower;
