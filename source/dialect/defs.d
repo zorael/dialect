@@ -129,7 +129,6 @@ struct IRCEvent
         TWITCH_EXTENDSUB, /// Twitch sub extension.
         TWITCH_GIFTRECEIVED , /// Twitch Prime community gift received.
         TWITCH_PAYFORWARD,/// Twitch paying forward of gifts.
-        TWITCH_SKIPSUBSMODEMESSAGE, /// DEPRECATED. Use CHAN instead. Remove in time for v0.6.0.
 
         RPL_WELCOME, // = 001,          // ":Welcome to <server name> <user>"
         RPL_YOURHOST, // = 002,         // ":Your host is <servername>, running version <version>"
