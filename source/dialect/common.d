@@ -1386,9 +1386,9 @@ final class IRCParseException : Exception
      +  `dialect.defs.IRCEvent`.
      +/
     this(const string message, const string file = __FILE__,
-        const size_t line = __LINE__) pure nothrow @nogc
+        const size_t line = __LINE__, Throwable nextInChain = null) pure nothrow @nogc @safe
     {
-        super(message, file, line);
+        super(message, file, line, nextInChain);
     }
 
     /++
@@ -1396,10 +1396,10 @@ final class IRCParseException : Exception
      +  `dialect.defs.IRCEvent` to it.
      +/
     this(const string message, const IRCEvent event, const string file = __FILE__,
-        const size_t line = __LINE__) pure nothrow @nogc
+        const size_t line = __LINE__, Throwable nextInChain = null) pure nothrow @nogc @safe
     {
         this.event = event;
-        super(message, file, line);
+        super(message, file, line, nextInChain);
     }
 }
 
