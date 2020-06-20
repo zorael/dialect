@@ -1275,9 +1275,14 @@ void parseSpecialcases(ref IRCParser parser, ref IRCEvent event, ref string slic
  +/
 void parseGeneralCases(const ref IRCParser parser, ref IRCEvent event, ref string slice) pure @nogc
 {
-    import lu.string : beginsWithOneOf;
+    import lu.string : beginsWith, beginsWithOneOf;
 
-    if (slice.contains(" :"))
+    if (slice.beginsWith(':'))
+    {
+        // Merely nickname!ident@address.tld TYPESTRING :content
+        event.content = slice[1..$];
+    }
+    else if (slice.contains(" :"))
     {
         // Has colon-content
         string targets = slice.nom(" :");
