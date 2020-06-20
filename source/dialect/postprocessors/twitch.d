@@ -1283,6 +1283,33 @@ room-id             "31457014"
         // them fall to the default.
         version(TwitchWarnings)
         {
+            case "msg-param-gift-months":
+/*
+[01:24:59] [subgift] [#lemonleafasmr] honeybadger62 [subscriber/2,hype-train/1] (awwden): "honeybadger62 gifted a Tier 1 sub to awwden!" (1000)
+
+@badge-info=subscriber/2;badges=subscriber/2,hype-train/1;color=#008000;display-name=honeybadger62;emotes=;flags=;id=ff652036-005e-44a4-927f-7226506054f3;login=honeybadger62;mod=0;msg-id=subg
+ift;msg-param-gift-months=1;msg-param-months=1;msg-param-origin-id=da\s39\sa3\see\s5e\s6b\s4b\s0d\s32\s55\sbf\sef\s95\s60\s18\s90\saf\sd8\s07\s09;msg-param-recipient-display-name=awwden;msg-p
+aram-recipient-id=149183950;msg-param-recipient-user-name=awwden;msg-param-sender-count=0;msg-param-sub-plan-name=Channel\sSubscription\s(lemonleafasmr);msg-param-sub-plan=1000;room-id=464544
+368;subscriber=1;system-msg=honeybadger62\sgifted\sa\sTier\s1\ssub\sto\sawwden!;tmi-sent-ts=1592609099360;user-id=62057569;user-type= :tmi.twitch.tv USERNOTICE #lemonleafasmr$
+badge-info                         "subscriber/2"
+badges                             "subscriber/2,hype-train/1"
+color                              "#008000"
+display-name                       "honeybadger62"
+login                              "honeybadger62"
+msg-id                             "subgift"
+msg-param-gift-months              "1"
+msg-param-months                   "1"
+msg-param-origin-id                "da\s39\sa3\see\s5e\s6b\s4b\s0d\s32\s55\sbf\sef\s95\s60\s18\s90\saf\sd8\s07\s09"
+msg-param-recipient-display-name   "awwden"
+msg-param-recipient-id             "149183950"
+msg-param-recipient-user-name      "awwden"
+msg-param-sender-count             "0"
+msg-param-sub-plan-name            "Channel\sSubscription\s(lemonleafasmr)"
+msg-param-sub-plan                 "1000"
+room-id                            "464544368"
+subscriber                         "1"
+system-msg                         "honeybadger62\sgifted\sa\sTier\s1\ssub\sto\sawwden!"*/
+
             case "msg-param-sub-plan-name":
                 // The display name of the subscription plan. This may be a default
                 // name or one created by the channel owner.
