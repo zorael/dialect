@@ -1505,6 +1505,7 @@ void parseGeneralCases(const ref IRCParser parser, ref IRCEvent event, ref strin
  +/
 public void postparseSanityCheck(const ref IRCParser parser, ref IRCEvent event) pure nothrow
 {
+    import lu.string : beginsWith;
     import std.array : Appender;
 
     Appender!string sink;
@@ -1513,6 +1514,12 @@ public void postparseSanityCheck(const ref IRCParser parser, ref IRCEvent event)
     if (event.target.nickname.contains(' ') || event.channel.contains(' '))
     {
         sink.put("Spaces in target nickname or channel");
+    }
+
+    if (event.target.nickname.beginsWith(':'))
+    {
+        if (sink.data.length) sink.put(". ");
+        sink.put("Colon in target nickname");
     }
 
     if (event.target.nickname.length && parser.server.chantypes.contains(event.target.nickname[0]))
