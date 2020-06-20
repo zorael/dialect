@@ -86,6 +86,7 @@ struct IRCEvent
         CTCP_AVATAR,/// Someone requested an avatar image.
         CTCP_SLOTS, /// Someone broadcast their file transfer slots.
         ACCOUNT,    /// Someone logged in on nickname services.
+        WALLOPS,    /// "WALLOPS messages are for broadcasting network information and its status to following users."
         SASL_AUTHENTICATE,/// SASL authentication negotiation.
         AUTH_CHALLENGE,   /// Authentication challenge.
         AUTH_FAILURE,     /// Authentication failure.
