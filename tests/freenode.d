@@ -1356,4 +1356,15 @@ unittest
             assert((content == "Invalid password for kameloso."), content);
         }
     }
+    {
+        immutable event = parser.toIRCEvent(":tomaw!tom@freenode/staff/tomaw WALLOPS :Ahead of services maintenance later we need to move a few services to a different hub. This will be a little noisey but should be quick.");
+        with (event)
+        {
+            assert((type == IRCEvent.Type.WALLOPS), Enum!(IRCEvent.Type).toString(type));
+            assert((sender.nickname == "tomaw"), sender.nickname);
+            assert((sender.ident == "tom"), sender.ident);
+            assert((sender.address == "freenode/staff/tomaw"), sender.address);
+            assert((content == "Ahead of services maintenance later we need to move a few services to a different hub. This will be a little noisey but should be quick."), content);
+        }
+    }
 }
