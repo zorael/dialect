@@ -1277,6 +1277,32 @@ room-id             "31457014"
             if (event.type == Type.ROOMSTATE) event.aux = value;
             break;
 
+        case "reply-parent-display-name":
+            // The display name of the user that is being replied to
+            // reply-parent-display-name = zenArc
+            event.target.displayName = value;
+            break;
+
+        case "reply-parent-msg-body":
+            // The body of the message that is being replied to
+            // reply-parent-msg-body = she's\sgonna\swin\s2truths\sand\sa\slie\severytime
+            event.aux = decodeIRCv3String(value);
+            break;
+
+        case "reply-parent-user-id":
+            import std.conv : to;
+
+            // The user id of the author of the message that is being replied to
+            // reply-parent-user-id = 50081302
+            if (value.length) event.target.id = value.to!int;
+            break;
+
+        case "reply-parent-user-login":
+            // The account name of the author of the message that is being replied to
+            // reply-parent-user-login = zenarc
+            event.target.nickname = value;
+            break;
+
         // We only need set cases for every known tag if we want to be alerted
         // when we come across unknown ones, which is version TwitchWarnings.
         // As such, version away all the cases from normal builds, and just let
@@ -1443,6 +1469,10 @@ system-msg                         "honeybadger62\sgifted\sa\sTier\s1\ssub\sto\s
                 // Numeric id of prior gifter when a user pays forward a gift
             case "client-nonce":
                 // Opaque nonce ID for this message
+            case "reply-parent-msg-id":
+                // The msg-id of the message that is being replied to
+                // reply-parent-msg-id = 81b6262b-7ce3-4686-be4f-1f5c548c9d16
+                // Ignore. Let plugins who want it grep event.tags
 
                 // Ignore these events.
                 break;
