@@ -1548,5 +1548,11 @@ final class TwitchPostprocessor : Postprocessor
             // Clear it.
             event.sender.displayName = string.init;
         }
+
+        if (event.target.nickname.length)
+        {
+            // Likewise sync target nickname and account.
+            event.target.account = event.target.nickname;
+        }
     }
 }
