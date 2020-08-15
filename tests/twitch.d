@@ -823,4 +823,54 @@ unittest
             assert((emotes == "300787466:0-5,7-12,14-19,21-26,28-33,35-40,42-47,49-54,56-61,63-68,70-75,77-82,84-89,91-96,98-103,105-110,112-117,119-124,126-131,133-138,140-145,147-152,154-159,161-166,168-173,175-180,182-187,189-194,196-201,203-208,210-215,217-222,224-229,231-236,238-243,245-250,252-257,259-264"), emotes);
         }
     }
+    {
+        // @badge-info=subscriber/4;badges=subscriber/3;client-nonce=354569ede0b9750bdc895a861ddbf341;color=#5F9EA0;display-name=thatgirllalison;emotes=;flags=;id=6ff2d906-536f-4019-9611-cff930d449cb;mod=0;reply-parent-display-name=zenArc;reply-parent-msg-body=she's\sgonna\swin\s2truths\sand\sa\slie\severytime;reply-parent-msg-id=81b6262b-7ce3-4686-be4f-1f5c548c9d16;reply-parent-user-id=50081302;reply-parent-user-login=zenarc;room-id=32393428;subscriber=1;tmi-sent-ts=1597446673211;turbo=0;user-id=525941821;user-type= :thatgirllalison!thatgirllalison@thatgirllalison.tmi.twitch.tv PRIVMSG #sincerelylyn :@zenArc KEKW
+        immutable event = parser.toIRCEvent("@badge-info=subscriber/4;badges=subscriber/3;client-nonce=354569ede0b9750bdc895a861ddbf341;color=#5F9EA0;display-name=thatgirllalison;emotes=;flags=;id=6ff2d906-536f-4019-9611-cff930d449cb;mod=0;reply-parent-display-name=zenArc;reply-parent-msg-body=she's\\sgonna\\swin\\s2truths\\sand\\sa\\slie\\severytime;reply-parent-msg-id=81b6262b-7ce3-4686-be4f-1f5c548c9d16;reply-parent-user-id=50081302;reply-parent-user-login=zenarc;room-id=32393428;subscriber=1;tmi-sent-ts=1597446673211;turbo=0;user-id=525941821;user-type= :thatgirllalison!thatgirllalison@thatgirllalison.tmi.twitch.tv PRIVMSG #sincerelylyn :@zenArc KEKW");
+        with (event)
+        {
+            assert((type == IRCEvent.Type.CHAN), Enum!(IRCEvent.Type).toString(type));
+            assert((sender.nickname == "thatgirllalison"), sender.nickname);
+            assert((sender.ident == "thatgirllalison"), sender.ident);
+            assert((sender.address == "thatgirllalison.tmi.twitch.tv"), sender.address);
+            assert((sender.account == "thatgirllalison"), sender.account);
+            assert((sender.displayName == "thatgirllalison"), sender.displayName);
+            assert((sender.badges == "subscriber/3"), sender.badges);
+            assert((sender.colour == "5F9EA0"), sender.colour);
+            assert((sender.id == 525941821), sender.id.to!string);
+            assert((channel == "#sincerelylyn"), channel);
+            assert((target.nickname == "zenarc"), target.nickname);
+            assert((target.displayName == "zenArc"), target.displayName);
+            assert((target.id == 50081302), target.id.to!string);
+            assert((content == "@zenArc KEKW"), content);
+            assert((aux == "she's gonna win 2truths and a lie everytime"), aux);
+            assert((tags == "badge-info=subscriber/4;badges=subscriber/3;client-nonce=354569ede0b9750bdc895a861ddbf341;color=#5F9EA0;display-name=thatgirllalison;emotes=;flags=;id=6ff2d906-536f-4019-9611-cff930d449cb;mod=0;reply-parent-display-name=zenArc;reply-parent-msg-body=she's\\sgonna\\swin\\s2truths\\sand\\sa\\slie\\severytime;reply-parent-msg-id=81b6262b-7ce3-4686-be4f-1f5c548c9d16;reply-parent-user-id=50081302;reply-parent-user-login=zenarc;room-id=32393428;subscriber=1;tmi-sent-ts=1597446673211;turbo=0;user-id=525941821;user-type="), tags);
+            assert((id == "6ff2d906-536f-4019-9611-cff930d449cb"), id);
+        }
+    }
+    {
+        // @badge-info=subscriber/8;badges=subscriber/6,bits/100;client-nonce=94d8f991f0ec1dfa346247fcb78c6306;color=#3ED8B3;display-name=zenArc;emotes=301235090:8-11;flags=;id=bb0c7669-7fe9-409d-92e2-29f96cf6b3de;mod=0;reply-parent-display-name=zenArc;reply-parent-msg-body=Ohno\sdid\sthey\schange\sreply?\si\ssee\sit\sagain;reply-parent-msg-id=bc2a2412-356f-4633-aa5b-c85a6ce2906e;reply-parent-user-id=50081302;reply-parent-user-login=zenarc;room-id=32393428;subscriber=1;tmi-sent-ts=1597443237324;turbo=0;user-id=50081302;user-type= :zenarc!zenarc@zenarc.tmi.twitch.tv PRIVMSG #sincerelylyn :@zenArc lynD
+        immutable event = parser.toIRCEvent("@badge-info=subscriber/8;badges=subscriber/6,bits/100;client-nonce=94d8f991f0ec1dfa346247fcb78c6306;color=#3ED8B3;display-name=zenArc;emotes=301235090:8-11;flags=;id=bb0c7669-7fe9-409d-92e2-29f96cf6b3de;mod=0;reply-parent-display-name=zenArc;reply-parent-msg-body=Ohno\\sdid\\sthey\\schange\\sreply?\\si\\ssee\\sit\\sagain;reply-parent-msg-id=bc2a2412-356f-4633-aa5b-c85a6ce2906e;reply-parent-user-id=50081302;reply-parent-user-login=zenarc;room-id=32393428;subscriber=1;tmi-sent-ts=1597443237324;turbo=0;user-id=50081302;user-type= :zenarc!zenarc@zenarc.tmi.twitch.tv PRIVMSG #sincerelylyn :@zenArc lynD");
+        with (event)
+        {
+            assert((type == IRCEvent.Type.CHAN), Enum!(IRCEvent.Type).toString(type));
+            assert((sender.nickname == "zenarc"), sender.nickname);
+            assert((sender.ident == "zenarc"), sender.ident);
+            assert((sender.address == "zenarc.tmi.twitch.tv"), sender.address);
+            assert((sender.account == "zenarc"), sender.account);
+            assert((sender.displayName == "zenArc"), sender.displayName);
+            assert((sender.badges == "subscriber/6,bits/100"), sender.badges);
+            assert((sender.colour == "3ED8B3"), sender.colour);
+            assert((sender.id == 50081302), sender.id.to!string);
+            assert((channel == "#sincerelylyn"), channel);
+            assert((target.nickname == "zenarc"), target.nickname);
+            assert((target.account == "zenarc"), target.account);
+            assert((target.displayName == "zenArc"), target.displayName);
+            assert((target.id == 50081302), target.id.to!string);
+            assert((content == "@zenArc lynD"), content);
+            assert((aux == "Ohno did they change reply? i see it again"), aux);
+            assert((tags == "badge-info=subscriber/8;badges=subscriber/6,bits/100;client-nonce=94d8f991f0ec1dfa346247fcb78c6306;color=#3ED8B3;display-name=zenArc;emotes=301235090:8-11;flags=;id=bb0c7669-7fe9-409d-92e2-29f96cf6b3de;mod=0;reply-parent-display-name=zenArc;reply-parent-msg-body=Ohno\\sdid\\sthey\\schange\\sreply?\\si\\ssee\\sit\\sagain;reply-parent-msg-id=bc2a2412-356f-4633-aa5b-c85a6ce2906e;reply-parent-user-id=50081302;reply-parent-user-login=zenarc;room-id=32393428;subscriber=1;tmi-sent-ts=1597443237324;turbo=0;user-id=50081302;user-type="), tags);
+            assert((emotes == "301235090:8-11"), emotes);
+            assert((id == "bb0c7669-7fe9-409d-92e2-29f96cf6b3de"), id);
+        }
+    }
 }
