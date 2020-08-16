@@ -38,20 +38,6 @@ void parseTwitchTags(ref IRCParser parser, ref IRCEvent event)
 
     if (!event.tags.length) return;
 
-    /++
-     +  Clears a user's address and class.
-     +
-     +  We invent users on some events, like (re-)subs, where there before were
-     +  only the server announcing some event originating from that user. When
-     +  we rewrite it, the server's address and its classification as special
-     +  remain. Reset those.
-     +/
-    static void resetUser(ref IRCUser user)
-    {
-        user.address = string.init;  // Clear server address
-        user.class_ = IRCUser.Class.unset;
-    }
-
     auto tagRange = event.tags.splitter(";");
 
     version(TwitchWarnings)
