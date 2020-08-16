@@ -995,12 +995,11 @@ user-type                          ""
             {
                 event.content = message;
             }
-            break;
-
-        case "emote-only":
-            // We don't conflate ACTION emotes and emote-only messages anymore
-            /*if (value == "0") break;
-            if (event.type == Type.CHAN) event.type = Type.EMOTE;*/
+            else if (!event.aux.length)
+            {
+                // If event.content.length but no aux.length, store in aux
+                event.aux = message;
+            }
             break;
 
         case "msg-param-recipient-display-name":
