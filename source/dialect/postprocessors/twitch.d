@@ -33,6 +33,7 @@ void parseTwitchTags(ref IRCParser parser, ref IRCEvent event)
 {
     import dialect.common : decodeIRCv3String;
     import std.algorithm.iteration : splitter;
+    import std.conv : to;
 
     // https://dev.twitch.tv/docs/v5/guides/irc/#twitch-irc-capability-tags
 
@@ -116,34 +117,15 @@ void parseTwitchTags(ref IRCParser parser, ref IRCEvent event)
             {
             case "sub":
             case "resub":
-/+
-badge-info                         "subscriber/3"
-badges                             "subscriber/3,premium/1"
-color                              "#008000"
-display-name                       "krufster"
-emotes                             ""
-flags                              ""
-id                                 "b97b13a2-8966-4d18-b634-61a04aefcb92"
-login                              "krufster"
-mod                                "0"
-msg-id                             "resub"
-msg-param-cumulative-months        "3"
-msg-param-months                   "0"
-msg-param-should-share-streak      "1"
-msg-param-streak-months            "2"
-msg-param-sub-plan-name            "Dr\sDisRespect"
-msg-param-sub-plan                 "Prime"
-room-id                            "17337557"
-subscriber                         "1"
-system-msg                         "krufster\ssubscribed\swith\sTwitch\sPrime.\sThey've\ssubscribed\sfor\s3\smonths,\scurrently\son\sa\s2\smonth\sstreak!"
-tmi-sent-ts                        "1565380381758"
-user-id                            "83176999"
-user-type                          ""
-+/
+                // Subscription. Disambiguate subs from resubs by other tags, set
+                // in count and altcount.
                 event.type = Type.TWITCH_SUB;
                 break;
 
             case "subgift":
+                // A gifted subscription.
+                // "X subscribed with Twitch Prime."
+                // "Y subscribed at Tier 1. They've subscribed for 11 months!"
                 // "We added the msg-id “anonsubgift” to the user-notice which
                 // defaults the sender to the channel owner"
                 /+
@@ -154,258 +136,36 @@ user-type                          ""
 
                     https://discuss.dev.twitch.tv/t/msg-id-purchase/22067/8
                  +/
-                // Solution: throw money at it.
-/+
-[21:00:40] [subgift] [#beardageddon] AnAnonymousGifter (dolochild): "An anonymous user gifted a Tier 1 sub to dolochild!" (1000)
--- IRCEvent
-     Type type                    TWITCH_SUBGIFT
-   string raw                    ":tmi.twitch.tv USERNOTICE #beardageddon"(39)
-  IRCUser sender                 <struct>
-   string channel                "#beardageddon"(13)
-  IRCUser target                 <struct>
-   string content                "An anonymous user gifted a Tier 1 sub to dolochild!"(51)
-   string aux                    "1000"(4)
-   string tags                   (below)
-     uint num                     0
-      int count                   0
-      int altcount                0
-     long time                    1565377240
-   string errors                  ""(0)
-   string emotes                  ""(0)
-   string id                     "30f00e1d-0724-4c30-b265-0c8695c5e748"(36)
-
-badge-info                         ""
-badges                             ""
-color                              ""
-display-name                       "AnAnonymousGifter"
-emotes                             ""
-flags                              ""
-id                                 "30f00e1d-0724-4c30-b265-0c8695c5e748"
-login                              "ananonymousgifter"
-mod                                "0"
-msg-id                             "subgift"
-msg-param-fun-string               "FunStringOne"
-msg-param-months                   "2"
-msg-param-origin-id                "da\s39\sa3\see\s5e\s6b\s4b\s0d\s32\s55\sbf\sef\s95\s60\s18\s90\saf\sd8\s07\s09"
-msg-param-recipient-display-name   "dolochild"
-msg-param-recipient-id             "124388477"
-msg-param-recipient-user-name      "dolochild"
-msg-param-sub-plan-name            "Channel\sSubscription\s(beardageddon)"
-msg-param-sub-plan                 "1000"
-room-id                            "74488574"
-subscriber                         "0"
-system-msg                         "An\sanonymous\suser\sgifted\sa\sTier\s1\ssub\sto\sdolochild!\s"
-tmi-sent-ts                        "1565377240017"
-user-id                            "274598607"
-user-type                          ""
-
-badge-info                         "subscriber/2"
-badges                             "subscriber/0,sub-gifter/1"
-color                              "#DAA520"
-display-name                       "Kraltic"
-emotes                             ""
-flags                              ""
-id                                 "eaac38a6-da95-4f22-b6bd-52faedc65b79"
-login                              "kraltic"
-mod                                "0"
-msg-id                             "subgift"
-msg-param-months                   "1"
-msg-param-origin-id                "da\s39\sa3\see\s5e\s6b\s4b\s0d\s32\s55\sbf\sef\s95\s60\s18\s90\saf\sd8\s07\s09"
-msg-param-recipient-display-name   "daveeedpistolass"
-msg-param-recipient-id             "245630631"
-msg-param-recipient-user-name      "daveeedpistolass"
-msg-param-sender-count             "2"
-msg-param-sub-plan-name            "Dr\sDisRespect"
-msg-param-sub-plan                 "1000"
-room-id                            "17337557"
-subscriber                         "1"
-system-msg                         "Kraltic\sgifted\sa\sTier\s1\ssub\sto\sdaveeedpistolass!\sThey\shave\sgiven\s2\sGift\sSubs\sin\sthe\schannel!"
-tmi-sent-ts                        "1565380535752"
-user-id                            "98897370"
-user-type                          ""
-+/
+                // In reality the sender is "ananonymousgifter".
                 event.type = Type.TWITCH_SUBGIFT;
                 break;
 
-            case "anonsubgift":
-                version(TwitchWarnings) printTagsOnExit = true;
-                goto case "subgift";
-
             case "submysterygift":
-/+
-badge-info                         "subscriber/8"
-badges                             "subscriber/6,sub-gifter/1000"
-color                              ""
-display-name                       "kinghaua35"
-emotes                             ""
-flags                              ""
-id                                 "fbf4e664-95f4-4205-919b-a71268bb71a6"
-login                              "kinghaua35"
-mod                                "0"
-msg-id                             "submysterygift"
-msg-param-mass-gift-count          "50"
-msg-param-origin-id                "27\s3f\sc2\s0d\sde\s69\sa2\sb7\s06\sba\sb3\sb4\s9b\s4e\sd1\s2b\s8c\s65\s83\s27"
-msg-param-sender-count             "2230"
-msg-param-sub-plan                 "1000"
-room-id                            "17337557"
-subscriber                         "1"
-system-msg                         "kinghaua35\sis\sgifting\s50\sTier\s1\sSubs\sto\sDrDisrespect's\scommunity!\sThey've\sgifted\sa\stotal\sof\s2230\sin\sthe\schannel!"
-tmi-sent-ts                        "1565381426467"
-user-id                            "215907614"
-user-type                          ""
-+/
+                // Gifting several subs to random people in one event.
+                // "A is gifting 1 Tier 1 Subs to C's community! They've gifted a total of n in the channel!"
                 event.type = Type.TWITCH_BULKGIFT;
                 break;
 
             case "ritual":
-/+
--- IRCEvent
-     Type type                    TWITCH_RITUAL
-   string raw                    ":tmi.twitch.tv USERNOTICE #rdulive :VoHiYo"(42)
-  IRCUser sender                 <struct>
-   string channel                "#rdulive"(8)
-  IRCUser target                 <struct> (init)
-   string content                "VoHiYo"(6)
-   string aux                     ""(0)
-   string tags                   (below)
-     uint num                     0
-      int count                   0
-      int altcount                0
-     long time                    1565380797
-   string errors                  ""(0)
-   string emotes                 "81274:0-5"(9)
-   string id                     "5f8659bc-646f-407d-9d75-25dbfc6745ff"(36)
-
-badge-info                         ""
-badges                             ""
-color                              "#00FF7F"
-display-name                       "VNXL"
-emotes                             "81274:0-5"
-flags                              ""
-id                                 "5f8659bc-646f-407d-9d75-25dbfc6745ff"
-login                              "vnxl"
-mod                                "0"
-msg-id                             "ritual"
-msg-param-ritual-name              "new_chatter"
-room-id                            "59965916"
-subscriber                         "0"
-system-msg                         "@VNXL\sis\snew\shere.\sSay\shello!"
-tmi-sent-ts                        "1565380719028"
-user-id                            "81266025"
-user-type                          ""
-+/
+                // Oneliner upon joining chat.
+                // content: "HeyGuys"
                 event.type = Type.TWITCH_RITUAL;
                 break;
 
             case "rewardgift":
-/+
--- IRCEvent
-     Type type                    TWITCH_REWARDGIFT
-   string raw                    ":tmi.twitch.tv USERNOTICE #overwatchleague :A Cheer shared Rewards to 20 others in Chat!"(88)
-  IRCUser sender                 <struct>
-   string channel                "#overwatchleague"(16)
-  IRCUser target                 <struct> (init)
-   string content                "A Cheer shared Rewards to 20 others in Chat!"(44)
-   string aux                     ""(0)
-   string tags                   (below)
-     uint num                     0
-      int count                   0
-      int altcount                0
-     long time                    1565309300
-   string errors                  ""(0)
-   string emotes                  ""(0)
-   string id                     "9d7e2298-9ee4-4e43-abb5-328ffae83a31"(36)
-
-badge-info                         ""
-badges                             "subscriber/0,bits/1000"
-color                              "#DAA520"
-display-name                       "Gerath94"
-emotes                             ""
-flags                              ""
-id                                 "9d7e2298-9ee4-4e43-abb5-328ffae83a31"
-login                              "gerath94"
-mod                                "0"
-msg-id                             "rewardgift"
-msg-param-bits-amount              "500"
-msg-param-domain                   "owl2019"
-msg-param-min-cheer-amount         "300"
-msg-param-selected-count           "20"
-room-id                            "137512364"
-subscriber                         "1"
-system-msg                         "reward"
-tmi-sent-ts                        "1565309265716"
-user-id                            "81251937"
-user-type                          ""
-
-badge-info                         ""
-badges                             "subscriber/0,bits/100"
-color                              "#0000FF"
-display-name                       "Flori_DE"
-emotes                             ""
-flags                              ""
-id                                 "4d4953ce-b9a6-460c-aec1-4bfdaaae342b"
-login                              "flori_de"
-mod                                "0"
-msg-id                             "rewardgift"
-msg-param-bits-amount              "300"
-msg-param-domain                   "owl2019"
-msg-param-min-cheer-amount         "300"
-msg-param-selected-count           "10"
-room-id                            "137512364"
-subscriber                         "1"
-system-msg                         "reward"
-tmi-sent-ts                        "1565381918616"
-user-id                            "170554786"
-user-type                          ""
-+/
                 event.type = Type.TWITCH_REWARDGIFT;
+                version(TwitchWarnings) printTagsOnExit = true;
                 break;
 
             case "raid":
-/+
-badge-info                         ""
-badges                             ""
-color                              "#FF0000"
-display-name                       "Not_A_Banana"
-emotes                             ""
-flags                              ""
-id                                 "28d76102-e05b-4185-a30e-80ee88572d50"
-login                              "not_a_banana"
-mod                                "0"
-msg-id                             "raid"
-msg-param-displayName              "Not_A_Banana"
-msg-param-login                    "not_a_banana"
-msg-param-profileImageURL          "https://static-cdn.jtvnw.net/jtv_user_pictures/not_a_banana-profile_image-fee36a93a752bf70-70x70.jpeg"
-msg-param-viewerCount              "3"
-room-id                            "57292293"
-subscriber                         "0"
-system-msg                         "3\sraiders\sfrom\sNot_A_Banana\shave\sjoined!"
-tmi-sent-ts                        "1565387919848"
-user-id                            "50143288"
-user-type                          ""
-+/
+                // Raid start. Seen in target channel.
+                // "3322 raiders from A have joined!"
                 event.type = Type.TWITCH_RAID;
                 break;
 
             case "unraid":
-/+
-user-type                          ""
-display-name                       "dakotaz"
-id                                 "55245012-9790-4599-b51c-90b1cac0ced7"
-mod                                "0"
-tmi-sent-ts                        "1565104791674"
-user-id                            "39298218"
-login                              "dakotaz"
-badge-info                         "subscriber/71"
-flags                              ""
-emotes                             ""
-color                              "#AA79EB"
-msg-id                             "unraid"
-system-msg                         "The\sraid\shas\sbeen\scancelled."
-subscriber                         "1"
-badges                             "broadcaster/1,subscriber/60,sub-gifter/1000"
-room-id                            "39298218"
-+/
+                // Manual raid abort.
+                // "The raid has been cancelled."
                 event.type = Type.TWITCH_UNRAID;
                 break;
 
@@ -421,7 +181,7 @@ room-id                            "39298218"
                 // Cram as much into aux as possible
                 import lu.string : beginsWith;
                 import std.algorithm.iteration : filter;
-                import std.conv : to;
+
                 import std.typecons : Flag, No, Yes;
 
                 event.type = Type.TWITCH_CHARITY;
@@ -485,246 +245,45 @@ room-id                            "39298218"
                 break;
 
             case "giftpaidupgrade":
-/+
-user-type                          ""
-msg-param-sender-name              "blamebruce"
-display-name                       "LouCmusic_"
-id                                 "23c5ff34-778b-47fa-935a-beedbe0c598c"
-mod                                "0"
-tmi-sent-ts                        "1565043295367"
-user-id                            "149718683"
-login                              "loucmusic_"
-badge-info                         "subscriber/1"
-flags                              ""
-emotes                             ""
-color                              "#FF69B4"
-msg-id                             "giftpaidupgrade"
-msg-param-sender-login             "blamebruce"
-system-msg                         "LouCmusic_\sis\scontinuing\sthe\sGift\sSub\sthey\sgot\sfrom\sblamebruce!"
-subscriber                         "1"
-badges                             "subscriber/0,premium/1"
-room-id                            "60056333"
-+/
+            case "anongiftpaidupgrade":
+                // "Continuing a gift sub" by gifting a sub you were gifted (?)
+                // "A is continuing the Gift Sub they got from B!"
                 event.type = Type.TWITCH_GIFTCHAIN;
                 break;
 
-            case "anongiftpaidupgrade":
-/+
-@badge-info=subscriber/1;badges=subscriber/0,turbo/1;color=#FF0000;display-name=BlackCore900;emotes=;flags=;id=99b46653-6c93-4ea7-ae28-9a0cc1b98124;login=blackcore900;mod=0;msg-id=anon
-giftpaidupgrade;room-id=23528098;subscriber=1;system-msg=BlackCore900\sis\scontinuing\sthe\sGift\sSub\sthey\sgot\sfrom\san\sanonymous\suser!;tmi-sent-ts=1569641163030;user-id=53872581;
-user-type= :tmi.twitch.tv USERNOTICE #avoidingthepuddle$
-badge-info                         "subscriber/1"
-badges                             "subscriber/0,turbo/1"
-color                              "#FF0000"
-display-name                       "BlackCore900"
-emotes                             ""
-flags                              ""
-id                                 "99b46653-6c93-4ea7-ae28-9a0cc1b98124"
-login                              "blackcore900"
-mod                                "0"
-msg-id                             "anongiftpaidupgrade"
-room-id                            "23528098"
-subscriber                         "1"
-system-msg                         "BlackCore900\sis\scontinuing\sthe\sGift\sSub\sthey\sgot\sfrom\san\sanonymous\suser!"
-tmi-sent-ts                        "1569641163030"
-user-id                            "53872581"
-user-type                          ""
-+/
-                goto case "giftpaidupgrade";
-
             case "primepaidupgrade":
-/+
-user-type                          ""
-display-name                       "luton9"
-id                                 "d851692c-2987-4534-b58f-95cb0fc5b630"
-mod                                "0"
-tmi-sent-ts                        "1565036616388"
-user-id                            "430838491"
-login                              "luton9"
-badge-info                         "subscriber/2"
-flags                              ""
-emotes                             ""
-msg-param-sub-plan                 "1000"
-color                              ""
-msg-id                             "primepaidupgrade"
-system-msg                         "luton9\sconverted\sfrom\sa\sTwitch\sPrime\ssub\sto\sa\sTier\s1\ssub!"
-subscriber                         "1"
-badges                             "subscriber/0,premium/1"
-room-id                            "12875057"
-+/
+                // User upgrading a prime sub to a normal paid one.
+                // "A converted from a Twitch Prime sub to a Tier 1 sub!"
                 event.type = Type.TWITCH_SUBUPGRADE;
                 break;
 
             case "bitsbadgetier":
                 // User just earned a badge for a tier of bits
-/+
-[12:31:59] [bitsbadgetier] [#mrfreshasian] blasterdark9000 [SC]: "new badge hype :)" {1000}
-user-type                          ""
-display-name                       "blasterdark9000"
-id                                 "0f454461-251a-4fad-a2b4-bc12fa776206"
-mod                                "0"
-msg-param-threshold                "1000"
-tmi-sent-ts                        "1565086861733"
-user-id                            "123361548"
-login                              "blasterdark9000"
-badge-info                         "subscriber/7"
-flags                              ""
-emotes                             "1:15-16"
-color                              "#DAA520"
-msg-id                             "bitsbadgetier"
-system-msg                         "bits\sbadge\stier\snotification"
-subscriber                         "1"
-badges                             "subscriber/6,bits/1000"
-room-id                            "38594688"
-+/
+                // content is the message body, e.g. "GG"
                 event.type = Type.TWITCH_BITSBADGETIER;
                 break;
 
             case "extendsub":
-/+
-badge-info                         "subscriber/1"
-badges                             "subscriber/0,bits-charity/1"
-color                              "#FF0000"
-display-name                       "ensqa473"
-emotes                             ""
-flags                              ""
-id                                 "4abc1a50-51b3-4659-8c12-e1d8c3652963"
-login                              "ensqa473"
-mod                                "0"
-msg-id                             "extendsub"
-msg-param-sub-benefit-end-month    "9"
-msg-param-sub-plan                 "1000"
-room-id                            "17337557"
-subscriber                         "1"
-system-msg                         "ensqa473\sextended\stheir\sTier\s1\ssubscription\sthrough\sSeptember!"
-tmi-sent-ts                        "1565384774599"
-user-id                            "237654991"
-user-type
-+/
+                // User extended their sub, always by a month?
+                // "A extended their Tier 1 subscription through April!"
                 event.type = Type.TWITCH_EXTENDSUB;
                 break;
 
             case "highlighted-message":
-/+
-badge-info                         ""
-badges                             "bits-leader/1"
-color                              ""
-display-name                       "racken771"
-emotes                             ""
-flags                              ""
-id                                 "dcba6d0e-931b-483a-9be8-74547ec12f31"
-mod                                "0"
-msg-id                             "highlighted-message"
-room-id                            "176370525"
-subscriber                         "0"
-tmi-sent-ts                        "1567811080611"
-turbo                              "0"
-user-id                            "243530867"
-user-type                          ""
-+/
+            case "skip-subs-mode-message":
                 // These are PRIVMSGs
                 event.aux = value;
                 break;
 
             case "primecommunitygiftreceived":
-/+
-badge-info                         ""
-badges                             "partner/1"
-color                              "#004DFF"
-display-name                       "NorddeutscherJunge"
-emotes                             ""
-flags                              ""
-id                                 "3ced021d-adab-4278-845d-4c8f2c5d6306"
-login                              "norddeutscherjunge"
-mod                                "0"
-msg-id                             "primecommunitygiftreceived"
-msg-param-gift-name                "World\sof\sTanks:\sCare\sPackage"
-msg-param-middle-man               "gabepeixe"
-msg-param-recipient                "m4ggusbruno"
-msg-param-sender                   "NorddeutscherJunge"
-room-id                            "59799994"
-subscriber                         "0"
-system-msg                         "A\sviewer\swas\sgifted\sa\sWorld\sof\sTanks:\sCare\sPackage,\scourtesy\sof\sa\sPrime\smember!"
-tmi-sent-ts                        "1570346408346"
-user-id                            "39548541"
-user-type                          ""
-+/
+                // "A viewer was gifted a World of Tanks: Care Package, courtesy of a Prime member!"
                 event.type = Type.TWITCH_GIFTRECEIVED;
                 break;
 
             case "standardpayforward":  // has a target
             case "communitypayforward": // toward community, no target
-/+
-badge-info                         "subscriber/1"
-badges                             "subscriber/0,premium/1"
-color                              "#1E90FF"
-display-name                       "lil_bytch"
-emotes                             ""
-flags                              ""
-id                                 "f9f5c093-ebd3-447b-96f2-64fe94e19c9b"
-login                              "lil_bytch"
-mod                                "0"
-msg-id                             "standardpayforward"
-msg-param-prior-gifter-anonymous   "false"
-msg-param-prior-gifter-display-name"CoopaManTV"
-msg-param-prior-gifter-id          "444343916"
-msg-param-prior-gifter-user-name   "coopamantv"
-msg-param-recipient-display-name   "Just_Illustrationz"
-msg-param-recipient-id             "236981420"
-msg-param-recipient-user-name      "just_illustrationz"
-room-id                            "32787655"
-subscriber                         "1"
-system-msg                         "lil_bytch\sis\spaying\sforward\sthe\sGift\sthey\sgot\sfrom\sCoopaManTV\sto\sJust_Illustrationz!"
-tmi-sent-ts                        "1582159747742"
-user-id                            "229842635"
-user-type                          ""
-
-badge-info                         "subscriber/1"
-badges                             "subscriber/0,premium/1"
-color                              ""
-display-name                       "havoc_sinz"
-emotes                             ""
-flags                              ""
-id                                 "f28a7d4c-5d2a-4182-b9a3-2fbf82eb3883"
-login                              "havoc_sinz"
-mod                                "0"
-msg-id                             "communitypayforward"
-msg-param-prior-gifter-anonymous   "false"
-msg-param-prior-gifter-display-name"pytori1"
-msg-param-prior-gifter-id          "35087710"
-msg-param-prior-gifter-user-name   "pytori1"
-room-id                            "71190292"
-subscriber                         "1"
-system-msg                         "havoc_sinz\sis\spaying\sforward\sthe\sGift\sthey\sgot\sfrom\spytori1\sto\sthe\scommunity!"
-tmi-sent-ts                        "1582267055759"
-user-id                            "223347745"
-user-type                          ""
-+/
+                // "A is paying forward the Gift they got from B to #channel!"
                 event.type = Type.TWITCH_PAYFORWARD;
-                break;
-
-            case "skip-subs-mode-message":
-/+
-badge-info                         ""
-badges                             "premium/1"
-color                              "#00FFAD"                                                                                                                                                   display-name                       "sleepingbeds"
-emote-only                         "1"
-emotes                             "300787466:0-5,7-12,14-19,21-26,28-33,35-40,42-47,49-54,56-61,63-68,70-75,77-82,84-89,91-96,98-103,105-110,112-117,119-124,126-131,133-138,140-145,147-152,1
-54-159,161-166,168-173,175-180,182-187,189-194,196-201,203-208,210-215,217-222,224-229,231-236,238-243,245-250,252-257,259-264"
-flags                              ""
-id                                 "f9ec222e-1d73-4db4-b67e-3f1857ba204f"
-mod                                "0"
-msg-id                             "skip-subs-mode-message"
-room-id                            "44424631"
-subscriber                         "0"
-tmi-sent-ts                        "1589991183756"
-turbo                              "0"
-user-id                            "237489408"
-user-type                          ""
-+/
-                // Treat like a highlighted message; set aux.
-                event.type = Type.CHAN;
-                event.aux = value;
                 break;
 
             /*case "bad_ban_admin":
@@ -1051,25 +610,6 @@ user-type                          ""
                   1000-4999, purple for 100-999, gray for 1-99
                 * size – A digit between 1 and 4
             */
-/+
-[01:30:29] [cheer] [#pace22] Jay_027 [SC] Cheer100 Cheer100 what mouse do you use for SOT? {200}
-user-type           ""
-display-name        "Jay_027"
-id                  "6a4098be-c959-4803-9e9d-2480edad577e"
-mod                 "0"
-tmi-sent-ts         "1564961429282"
-user-id             "82203804"
-turbo               "0"
-badge-info          "subscriber/6"
-flags               ""
-emotes              ""
-bits                "200"
-color               "#E4FF00"
-subscriber          "1"
-badges              "subscriber/6,bits/1000"
-room-id             "31457014"
-+/
-            import std.conv : to;
             event.type = Type.TWITCH_CHEER;
 
             version(TwitchWarnings)
@@ -1160,8 +700,6 @@ room-id             "31457014"
         case "msg-param-streak-tenure-months":
         case "msg-param-sub-benefit-end-month":
             /// "...extended their Tier 1 sub to {month}"
-            import std.conv : to;
-
             version(TwitchWarnings)
             {
                 if (event.count != 0)
@@ -1184,8 +722,6 @@ room-id             "31457014"
             // Number of gift subs a user has given in the channel, on a SUBGIFT event
         case "msg-param-cumulative-months":
             // Total number of months subscribed, over time. Replaces msg-param-months
-            import std.conv : to;
-
             version(TwitchWarnings)
             {
                 if (event.altcount != 0)
@@ -1226,15 +762,11 @@ room-id             "31457014"
         case "msg-param-userID":
         case "user-id":
         case "user-ID":
-            import std.conv : to;
-
             // The sender's user ID.
             if (value.length) event.sender.id = value.to!uint;
             break;
 
         case "target-user-id":
-            import std.conv : to;
-
             // The target's user ID
             if (value.length) event.target.id = value.to!uint;
             break;
@@ -1257,8 +789,6 @@ room-id             "31457014"
             break;
 
         case "reply-parent-user-id":
-            import std.conv : to;
-
             // The user id of the author of the message that is being replied to
             // reply-parent-user-id = 50081302
             if (value.length) event.target.id = value.to!int;
@@ -1276,33 +806,13 @@ room-id             "31457014"
         // them fall to the default.
         version(TwitchWarnings)
         {
+            case "emote-only":
+                // We don't conflate ACTION emotes and emote-only messages anymore
+                /*if (value == "0") break;
+                if (event.type == Type.CHAN) event.type = Type.EMOTE;
+                break;*/
             case "msg-param-gift-months":
-/*
-[01:24:59] [subgift] [#lemonleafasmr] honeybadger62 [subscriber/2,hype-train/1] (awwden): "honeybadger62 gifted a Tier 1 sub to awwden!" (1000)
-
-@badge-info=subscriber/2;badges=subscriber/2,hype-train/1;color=#008000;display-name=honeybadger62;emotes=;flags=;id=ff652036-005e-44a4-927f-7226506054f3;login=honeybadger62;mod=0;msg-id=subg
-ift;msg-param-gift-months=1;msg-param-months=1;msg-param-origin-id=da\s39\sa3\see\s5e\s6b\s4b\s0d\s32\s55\sbf\sef\s95\s60\s18\s90\saf\sd8\s07\s09;msg-param-recipient-display-name=awwden;msg-p
-aram-recipient-id=149183950;msg-param-recipient-user-name=awwden;msg-param-sender-count=0;msg-param-sub-plan-name=Channel\sSubscription\s(lemonleafasmr);msg-param-sub-plan=1000;room-id=464544
-368;subscriber=1;system-msg=honeybadger62\sgifted\sa\sTier\s1\ssub\sto\sawwden!;tmi-sent-ts=1592609099360;user-id=62057569;user-type= :tmi.twitch.tv USERNOTICE #lemonleafasmr$
-badge-info                         "subscriber/2"
-badges                             "subscriber/2,hype-train/1"
-color                              "#008000"
-display-name                       "honeybadger62"
-login                              "honeybadger62"
-msg-id                             "subgift"
-msg-param-gift-months              "1"
-msg-param-months                   "1"
-msg-param-origin-id                "da\s39\sa3\see\s5e\s6b\s4b\s0d\s32\s55\sbf\sef\s95\s60\s18\s90\saf\sd8\s07\s09"
-msg-param-recipient-display-name   "awwden"
-msg-param-recipient-id             "149183950"
-msg-param-recipient-user-name      "awwden"
-msg-param-sender-count             "0"
-msg-param-sub-plan-name            "Channel\sSubscription\s(lemonleafasmr)"
-msg-param-sub-plan                 "1000"
-room-id                            "464544368"
-subscriber                         "1"
-system-msg                         "honeybadger62\sgifted\sa\sTier\s1\ssub\sto\sawwden!"*/
-
+                // Number of months in a gifted sub?
             case "msg-param-sub-plan-name":
                 // The display name of the subscription plan. This may be a default
                 // name or one created by the channel owner.
