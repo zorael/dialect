@@ -239,13 +239,6 @@ user-id                            "98897370"
 user-type                          ""
 +/
                 event.type = Type.TWITCH_SUBGIFT;
-
-                if (event.sender.nickname == "ananonymousgifter")
-                {
-                    // Make anonymous gifts detectable by no nickname.
-                    event.sender.nickname = string.init;
-                    event.sender.displayName = string.init;
-                }
                 break;
 
             case "anonsubgift":
@@ -527,13 +520,6 @@ badges                             "subscriber/0,premium/1"
 room-id                            "60056333"
 +/
                 event.type = Type.TWITCH_GIFTCHAIN;
-
-                if (event.sender.nickname == "ananonymousgifter")
-                {
-                    // Make anonymous gifts detectable by no nickname.
-                    event.sender.nickname = string.init;
-                    event.sender.displayName = string.init;
-                }
                 break;
 
             case "anongiftpaidupgrade":
@@ -1054,11 +1040,7 @@ user-type                          ""
         case "login":
             // RAID; real sender nickname and thus raiding channel lowercased
             // CLEARMSG, SUBGIFT, lots
-            if (value != "ananonymousgifter")
-            {
-                event.sender.nickname = value;
-                resetUser(event.sender);
-            }
+            event.sender.nickname = value;
             break;
 
         case "color":
@@ -1540,13 +1522,6 @@ final class TwitchPostprocessor : Postprocessor
             // Twitch nicknames are always the same as the user accounts; the
             // displayed name/alias is sent separately as a "display-name" IRCv3 tag
             event.sender.account = event.sender.nickname;
-        }
-        else if (event.sender.displayName.length)
-        {
-            // If no nickname yet an alias, it may be an anonymous subgift/bulkgift
-            // where the msg-id appeared before the display-name in the tags.
-            // Clear it.
-            event.sender.displayName = string.init;
         }
 
         if (event.target.nickname.length)
