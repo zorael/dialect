@@ -940,4 +940,45 @@ unittest
             assert((id == "f7339efa-06a5-4708-a1bb-97592158781a"), id);
         }
     }
+    {
+        // @badge-info=;badges=;color=#1E90FF;display-name=Shaezonai;emotes=;flags=;id=094ae469-6827-4d80-a689-dd1b4a33ba69;login=shaezonai;mod=0;msg-id=rewardgift;msg-param-domain=hyperscape_megacommerce;msg-param-selected-count=5;msg-param-total-reward-count=5;msg-param-trigger-amount=1;msg-param-trigger-type=SUBGIFT;room-id=22510310;subscriber=0;system-msg=Shaezonai's\sGift\sshared\srewards\sto\s5\sothers\sin\sChat!;tmi-sent-ts=1597689523398;user-id=30175011;user-type= :tmi.twitch.tv USERNOTICE #gamesdonequick
+        immutable event = parser.toIRCEvent("@badge-info=;badges=;color=#1E90FF;display-name=Shaezonai;emotes=;flags=;id=094ae469-6827-4d80-a689-dd1b4a33ba69;login=shaezonai;mod=0;msg-id=rewardgift;msg-param-domain=hyperscape_megacommerce;msg-param-selected-count=5;msg-param-total-reward-count=5;msg-param-trigger-amount=1;msg-param-trigger-type=SUBGIFT;room-id=22510310;subscriber=0;system-msg=Shaezonai's\\sGift\\sshared\\srewards\\sto\\s5\\sothers\\sin\\sChat!;tmi-sent-ts=1597689523398;user-id=30175011;user-type= :tmi.twitch.tv USERNOTICE #gamesdonequick");
+        with (event)
+        {
+            assert((type == IRCEvent.Type.TWITCH_REWARDGIFT), Enum!(IRCEvent.Type).toString(type));
+            assert((sender.nickname == "shaezonai"), sender.nickname);
+            assert((sender.address == "tmi.twitch.tv"), sender.address);
+            assert((sender.account == "shaezonai"), sender.account);
+            assert((sender.displayName == "Shaezonai"), sender.displayName);
+            assert((sender.badges == "*"), sender.badges);
+            assert((sender.colour == "1E90FF"), sender.colour);
+            assert((sender.id == 30175011), sender.id.to!string);
+            assert((channel == "#gamesdonequick"), channel);
+            assert((content == "Shaezonai's Gift shared rewards to 5 others in Chat!"), content);
+            assert((aux == "SUBGIFT"), aux);
+            assert((tags == "badge-info=;badges=;color=#1E90FF;display-name=Shaezonai;emotes=;flags=;id=094ae469-6827-4d80-a689-dd1b4a33ba69;login=shaezonai;mod=0;msg-id=rewardgift;msg-param-domain=hyperscape_megacommerce;msg-param-selected-count=5;msg-param-total-reward-count=5;msg-param-trigger-amount=1;msg-param-trigger-type=SUBGIFT;room-id=22510310;subscriber=0;system-msg=Shaezonai's\\sGift\\sshared\\srewards\\sto\\s5\\sothers\\sin\\sChat!;tmi-sent-ts=1597689523398;user-id=30175011;user-type="), tags);
+            assert((altcount == 5), altcount.to!string);
+            assert((id == "094ae469-6827-4d80-a689-dd1b4a33ba69"), id);
+        }
+    }
+    {
+        // @badge-info=subscriber/1;badges=subscriber/0,bits/1000;color=;display-name=multibatteri;emotes=;flags=;id=e2901dc8-b247-4aaa-8ff2-78e4e472c3a8;login=multibatteri;mod=0;msg-id=rewardgift;msg-param-domain=hyperscape_megacommerce;msg-param-selected-count=25;msg-param-total-reward-count=25;msg-param-trigger-amount=1000;msg-param-trigger-type=CHEER;room-id=22510310;subscriber=1;system-msg=multibatteri's\sCheer\sshared\srewards\sto\s25\sothers\sin\sChat!;tmi-sent-ts=1597689117752;user-id=492403027;user-type= :tmi.twitch.tv USERNOTICE #gamesdonequick
+        immutable event = parser.toIRCEvent("@badge-info=subscriber/1;badges=subscriber/0,bits/1000;color=;display-name=multibatteri;emotes=;flags=;id=e2901dc8-b247-4aaa-8ff2-78e4e472c3a8;login=multibatteri;mod=0;msg-id=rewardgift;msg-param-domain=hyperscape_megacommerce;msg-param-selected-count=25;msg-param-total-reward-count=25;msg-param-trigger-amount=1000;msg-param-trigger-type=CHEER;room-id=22510310;subscriber=1;system-msg=multibatteri's\\sCheer\\sshared\\srewards\\sto\\s25\\sothers\\sin\\sChat!;tmi-sent-ts=1597689117752;user-id=492403027;user-type= :tmi.twitch.tv USERNOTICE #gamesdonequick");
+        with (event)
+        {
+            assert((type == IRCEvent.Type.TWITCH_REWARDGIFT), Enum!(IRCEvent.Type).toString(type));
+            assert((sender.nickname == "multibatteri"), sender.nickname);
+            assert((sender.address == "tmi.twitch.tv"), sender.address);
+            assert((sender.account == "multibatteri"), sender.account);
+            assert((sender.displayName == "multibatteri"), sender.displayName);
+            assert((sender.badges == "subscriber/0,bits/1000"), sender.badges);
+            assert((sender.id == 492403027), sender.id.to!string);
+            assert((channel == "#gamesdonequick"), channel);
+            assert((content == "multibatteri's Cheer shared rewards to 25 others in Chat!"), content);
+            assert((aux == "CHEER"), aux);
+            assert((tags == "badge-info=subscriber/1;badges=subscriber/0,bits/1000;color=;display-name=multibatteri;emotes=;flags=;id=e2901dc8-b247-4aaa-8ff2-78e4e472c3a8;login=multibatteri;mod=0;msg-id=rewardgift;msg-param-domain=hyperscape_megacommerce;msg-param-selected-count=25;msg-param-total-reward-count=25;msg-param-trigger-amount=1000;msg-param-trigger-type=CHEER;room-id=22510310;subscriber=1;system-msg=multibatteri's\\sCheer\\sshared\\srewards\\sto\\s25\\sothers\\sin\\sChat!;tmi-sent-ts=1597689117752;user-id=492403027;user-type="), tags);
+            assert((altcount == 25), altcount.to!string);
+            assert((id == "e2901dc8-b247-4aaa-8ff2-78e4e472c3a8"), id);
+        }
+    }
 }
