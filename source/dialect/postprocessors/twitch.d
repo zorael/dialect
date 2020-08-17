@@ -154,7 +154,6 @@ void parseTwitchTags(ref IRCParser parser, ref IRCEvent event)
 
             case "rewardgift":
                 event.type = Type.TWITCH_REWARDGIFT;
-                version(TwitchWarnings) printTagsOnExit = true;
                 break;
 
             case "raid":
