@@ -215,7 +215,10 @@ void parseTwitchTags(ref IRCParser parser, ref IRCEvent event)
                 if (const charityLink = "msg-param-charity-learn-more" in charityAA)
                 {
                     //msg-param-charity-learn-more = https://link.twitch.tv/blizzardofbits
-                    if (event.aux.length) event.aux ~= " (" ~ *charityLink ~ ')';
+                    if (event.aux.length)
+                    {
+                        event.aux ~= " (" ~ *charityLink ~ ')';
+                    }
                     else
                     {
                         event.aux = *charityLink;
@@ -225,7 +228,10 @@ void parseTwitchTags(ref IRCParser parser, ref IRCEvent event)
                 if (const charityHashtag = "msg-param-charity-hashtag" in charityAA)
                 {
                     //msg-param-charity-hashtag = #charity
-                    if (event.aux.length) event.aux ~= ' ' ~ *charityHashtag;
+                    if (event.aux.length)
+                    {
+                        event.aux ~= ' ' ~ *charityHashtag;
+                    }
                     else
                     {
                         event.aux = *charityHashtag;
