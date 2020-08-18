@@ -169,12 +169,6 @@ void parseTwitchTags(ref IRCParser parser, ref IRCEvent event)
                 break;
 
             case "charity":
-                //msg-id = charity
-                //msg-param-charity-days-remaining = 11
-                //msg-param-charity-hashtag = #charity
-                //msg-param-charity-hours-remaining = 286
-                //msg-param-charity-learn-more = https://link.twitch.tv/blizzardofbits
-                //msg-param-charity-name = Direct\sRelief
                 //msg-param-total = 135770
                 // Charity has too many fields to fit an IRCEvent as they are currently
                 // Cram as much into aux as possible
@@ -200,6 +194,7 @@ void parseTwitchTags(ref IRCParser parser, ref IRCEvent event)
                 {
                     import lu.string : removeControlCharacters, strippedRight;
 
+                    //msg-param-charity-name = Direct\sRelief
                     event.aux = (*charityName)
                         .decodeIRCv3String
                         .strippedRight
@@ -208,6 +203,7 @@ void parseTwitchTags(ref IRCParser parser, ref IRCEvent event)
 
                 if (const charityLink = "msg-param-charity-learn-more" in charityAA)
                 {
+                    //msg-param-charity-learn-more = https://link.twitch.tv/blizzardofbits
                     if (event.aux.length) event.aux ~= " (" ~ *charityLink ~ ')';
                     else
                     {
@@ -217,6 +213,7 @@ void parseTwitchTags(ref IRCParser parser, ref IRCEvent event)
 
                 if (const charityHashtag = "msg-param-charity-hashtag" in charityAA)
                 {
+                    //msg-param-charity-hashtag = #charity
                     if (event.aux.length) event.aux ~= ' ' ~ *charityHashtag;
                     else
                     {
@@ -227,6 +224,7 @@ void parseTwitchTags(ref IRCParser parser, ref IRCEvent event)
                 // Doesn't start with msg-param-charity but it will be set later down
                 /*if (const charityTotal = "msg-param-total" in charityAA)
                 {
+                    //msg-param-charity-hours-remaining = 286
                     event.count = (*charityTotal).to!int;
                 }*/
 
@@ -235,11 +233,14 @@ void parseTwitchTags(ref IRCParser parser, ref IRCEvent event)
                     event.altcount = (*charityRemaining).to!int;
                 }
 
-                /*if (const charityRemaining = "msg-param-charity-days-remaining" in charityAA)
+                /*if (const charityDaysRemaining = "msg-param-charity-days-remaining" in charityAA)
                 {
+                    //msg-param-charity-days-remaining = 11
                     // No event.tricount...
+                    // Seems to be included in hours-remaining. Ignore?
                 }*/
 
+                // Remove once we have a recorded parse
                 version(TwitchWarnings) printTagsOnExit = true;
                 break;
 
