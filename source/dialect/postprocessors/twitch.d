@@ -194,6 +194,17 @@ void parseTwitchTags(ref IRCParser parser, ref IRCEvent event)
                 {
                     import lu.string : removeControlCharacters, strippedRight;
 
+                    version(TwitchWarnings)
+                    {
+                        if (event.aux.length)
+                        {
+                            import std.stdio : writeln;
+                            writeln("msg-id charity subtag msg-param-charity-name " ~
+                                "overwrote an aux: ", event.aux);
+                            printTagsOnExit = true;
+                        }
+                    }
+
                     //msg-param-charity-name = Direct\sRelief
                     event.aux = (*charityName)
                         .decodeIRCv3String
