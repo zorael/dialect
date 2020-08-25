@@ -4,22 +4,18 @@
  +/
 module dialect.postprocessors;
 
-@safe:
+private:
 
 import std.meta : AliasSeq;
 
-version(TwitchSupport)
-{
-    import dialect.postprocessors.twitch : TwitchPostprocessor;
-}
-else
-{
-    // Non-twitch build but we still need the alias for `EnabledPostprocessors` below.
-    alias TwitchPostprocessor = AliasSeq!();
-}
+public:
 
 
-/// List of enabled postprocessors.
-public alias EnabledPostprocessors = AliasSeq!(
-    TwitchPostprocessor,
+// Postprocessors
+/++
+ +  A list of all postprocessor modules, by string name so they can be resolved
+ +  even in `singleFile` mode. These will be instantiated in the order listed.
+ +/
+alias Postprocessors = AliasSeq!(
+    "dialect.postprocessors.twitch",
 );

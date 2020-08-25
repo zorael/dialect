@@ -2374,6 +2374,8 @@ struct IRCParser
 {
     @safe:
 
+    private import dialect.postprocessors : Postprocessors;
+
     /// The current `dialect.defs.IRCClient` with all the context needed for parsing.
     IRCClient client;
 
@@ -2412,12 +2414,10 @@ struct IRCParser
         // meaningful error messages if something doesn't look right.
         postparseSanityCheck(this, event);
 
-        import dialect.postprocessors : EnabledPostprocessors;
-
-        static if (EnabledPostprocessors.length)
+        static if (Postprocessors.length)
         {
             // Epilogue: let postprocessors alter the event
-            foreach (postprocessor; postprocessors)
+            foreach (postprocessor; this.postprocessors)
             {
                 postprocessor.postprocess(this, event);
             }
@@ -2434,7 +2434,11 @@ struct IRCParser
     {
         this.client = client;
         this.server = server;
-        initPostprocessors();
+
+        static if (Postprocessors.length)
+        {
+            initPostprocessors();
+        }
     }
 
     /// Disallow copying of this struct.
@@ -2444,16 +2448,36 @@ struct IRCParser
      +  Initialises defined postprocessors.
      +/
     void initPostprocessors() pure nothrow
-    in (!postprocessors.length, "Tried to double-init postprocessors")
+    in (!this.postprocessors.length, "Tried to double-init postprocessors")
     do
     {
-        import dialect.postprocessors : EnabledPostprocessors;
+        this.postprocessors.reserve(Postprocessors.length);
 
-        postprocessors.reserve(EnabledPostprocessors.length);
-
-        foreach (Postprocessor; EnabledPostprocessors)
+        foreach (immutable moduleName; Postprocessors)
         {
-            postprocessors ~= new Postprocessor;
+            mixin("import postprocessorModule = ", moduleName, ";");
+
+            foreach (member; __traits(allMembers, postprocessorModule))
+            {
+                static if (is(__traits(getMember, postprocessorModule, member) == class))
+                {
+                    alias Class = __traits(getMember, postprocessorModule, member);
+
+                    static if (is(Class : Postprocessor))
+                    {
+                        static if (__traits(compiles, new Class))
+                        {
+                            this.postprocessors ~= new Class;
+                        }
+                        else
+                        {
+                            import std.format : format;
+                            static assert(0, "`%s.%s` constructor does not compile"
+                                .format(moduleName, Class.stringof));
+                        }
+                    }
+                }
+            }
         }
     }
 
