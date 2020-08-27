@@ -2455,6 +2455,9 @@ struct IRCParser
 
         foreach (immutable moduleName; Postprocessors)
         {
+            static assert(__traits(compiles, { mixin("import ", moduleName, ";"); }),
+                "Postprocessor module `" ~ moduleName ~ "` is missing or fails to compile");
+
             mixin("import postprocessorModule = ", moduleName, ";");
 
             foreach (member; __traits(allMembers, postprocessorModule))
