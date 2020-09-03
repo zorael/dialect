@@ -1,11 +1,11 @@
 /++
- +  Definitions of struct aggregates used throughout the library, representing
- +  `IRCEvent`s and thereto related objects like `IRCServer` and `IRCUser`.
- +
- +  Things related to actually parsing IRC do not belong here; what's here should only be
- +  applicable to be used as a header.
- +
- +  The only lu dependency should be `lu.uda`.
+    Definitions of struct aggregates used throughout the library, representing
+    `IRCEvent`s and thereto related objects like `IRCServer` and `IRCUser`.
+
+    Things related to actually parsing IRC do not belong here; what's here should only be
+    applicable to be used as a header.
+
+    The only lu dependency should be `lu.uda`.
  +/
 module dialect.defs;
 
@@ -20,26 +20,26 @@ nothrow:
 
 // IRCEvent
 /++
- +  A single IRC event, parsed from server input.
- +
- +  The `IRCEvent` struct is a construct with fields extracted from raw server
- +  strings. Since structs are not polymorphic the `Type` enum dictates what
- +  kind of event it is.
+    A single IRC event, parsed from server input.
+
+    The `IRCEvent` struct is a construct with fields extracted from raw server
+    strings. Since structs are not polymorphic the `Type` enum dictates what
+    kind of event it is.
  +/
 struct IRCEvent
 {
     /++
-     +  `Type`s of `IRCEvent`s.
-     +
-     +  Taken from https://tools.ietf.org/html/rfc1459 with many additions.
-     +
-     +  - https://www.alien.net.au/irc/irc2numerics.html
-     +
-     +  - https://defs.ircdocs.horse
-     +
-     +  Some are outright fabrications of ours, like `Type.CHAN` and `Type.QUERY`.
-     +  These are not prefixed with `RPL_` and `ERR_` (but not all such are made up,
-     +  like `Type.AWAY` and `Type.CHGHOST` that are properly `Type.AWAY` and `Type.CHGHOST`).
+        `Type`s of `IRCEvent`s.
+
+        Taken from https://tools.ietf.org/html/rfc1459 with many additions.
+
+        - https://www.alien.net.au/irc/irc2numerics.html
+
+        - https://defs.ircdocs.horse
+
+        Some are outright fabrications of ours, like `Type.CHAN` and `Type.QUERY`.
+        These are not prefixed with `RPL_` and `ERR_` (but not all such are made up,
+        like `Type.AWAY` and `Type.CHGHOST` that are properly `Type.AWAY` and `Type.CHGHOST`).
      +/
     enum Type
     {
@@ -881,18 +881,18 @@ struct IRCEvent
 
 // IRCServer
 /++
- +  Aggregate of all information and state pertaining to the connected IRC
- +  server. Some fields are transient on a per-connection basis and should not
- +  be serialised.
+    Aggregate of all information and state pertaining to the connected IRC
+    server. Some fields are transient on a per-connection basis and should not
+    be serialised.
  +/
 struct IRCServer
 {
     /++
-     +  Server daemons, or families of server programs.
-     +
-     +  Many daemons handle some events slightly differently than others do, and
-     +  by tracking which daemon the server is running we can apply the
-     +  differences and always have an appropriate tables of events.
+        Server daemons, or families of server programs.
+
+        Many daemons handle some events slightly differently than others do, and
+        by tracking which daemon the server is running we can apply the
+        differences and always have an appropriate tables of events.
      +/
     enum Daemon
     {
@@ -933,9 +933,9 @@ struct IRCServer
     }
 
     /++
-     +  Case mappings used by an IRC server.
-     +
-     +  These decide how case-insensitivity works.
+        Case mappings used by an IRC server.
+
+        These decide how case-insensitivity works.
      +/
     enum CaseMapping
     {
@@ -974,8 +974,8 @@ struct IRCServer
         uint maxChannelLength = 200;
 
         /++
-         +  A = Mode that adds or removes a nick or address to a list.
-         +      Always has a parameter.
+            A = Mode that adds or removes a nick or address to a list.
+                Always has a parameter.
          +/
         string aModes; // = "eIbq";
 
@@ -995,8 +995,8 @@ struct IRCServer
         string prefixes;
 
         /++
-         +  Supported channel prefix characters, as announced by the server in
-         +  the `ISUPPORT` event, before the MOTD.
+            Supported channel prefix characters, as announced by the server in
+            the `ISUPPORT` event, before the MOTD.
          +/
         string chantypes = "#";
 
@@ -1023,10 +1023,10 @@ struct IRCServer
 
 // IRCUser
 /++
- +  An aggregate of fields representing a single user on IRC.
- +
- +  Instances of these should not survive a disconnect and reconnect; they are
- +  transient on a per-connection basis and should not be serialised.
+    An aggregate of fields representing a single user on IRC.
+
+    Instances of these should not survive a disconnect and reconnect; they are
+    transient on a per-connection basis and should not be serialised.
  +/
 struct IRCUser
 {
@@ -1112,8 +1112,8 @@ struct IRCUser
     }
 
     /++
-     +  Create a new `IRCUser` inheriting passed `nickname`, `ident`, and
-     +  `address` strings.
+        Create a new `IRCUser` inheriting passed `nickname`, `ident`, and
+        `address` strings.
      +/
     this(const string nickname, const string ident, const string address) pure nothrow @nogc
     {
@@ -1123,11 +1123,11 @@ struct IRCUser
     }
 
     /++
-     +  Makes an educated guess that a sender is a server.
-     +
-     +  Returns:
-     +      `true` if the sender nickname and/or address looks to be a server's,
-     +      `false` if not.
+        Makes an educated guess that a sender is a server.
+
+        Returns:
+            `true` if the sender nickname and/or address looks to be a server's,
+            `false` if not.
      +/
     bool isServer() const @property pure nothrow @nogc
     {
@@ -1157,14 +1157,14 @@ struct IRCUser
     }
 
     /++
-     +  Compares two `IRCUser`s with each other, ignoring members considered to
-     +  be extra or optional.
-     +
-     +  Params:
-     +      that = Second user to compare this one with.
-     +
-     +  Returns:
-     +      `true` if the users match, `false` if not.
+        Compares two `IRCUser`s with each other, ignoring members considered to
+        be extra or optional.
+
+        Params:
+            that = Second user to compare this one with.
+
+        Returns:
+            `true` if the users match, `false` if not.
      +/
     bool opEquals(const IRCUser that) const pure nothrow @nogc
     {
@@ -1173,10 +1173,10 @@ struct IRCUser
     }
 
     /++
-     +  Produces a hash for this `IRCUser`.
-     +
-     +  Returns:
-     +      A hash.
+        Produces a hash for this `IRCUser`.
+
+        Returns:
+            A hash.
      +/
     size_t toHash() const pure nothrow
     {
@@ -1185,11 +1185,11 @@ struct IRCUser
 
     // toString
     /++
-     +  Formats this `IRCUser` into a hostmask representing its values.
-     +  Stores the result in the passed output range sink.
-     +
-     +  Params:
-     +      sink = Output range sink to save the hostmask string to.
+        Formats this `IRCUser` into a hostmask representing its values.
+        Stores the result in the passed output range sink.
+
+        Params:
+            sink = Output range sink to save the hostmask string to.
      +/
     void toString(Sink)(auto ref Sink sink) const
     {
@@ -1204,11 +1204,11 @@ struct IRCUser
 
     // hostmask
     /++
-     +  Formats this `IRCUser` into a hostmask representing its values.
-     +  Merely wraps `toString` and returns a newly allocated string.
-     +
-     +  Returns:
-     +      A hostmask "*!*@*" string.
+        Formats this `IRCUser` into a hostmask representing its values.
+        Merely wraps `toString` and returns a newly allocated string.
+
+        Returns:
+            A hostmask "*!*@*" string.
      +/
     string hostmask() pure const
     {
@@ -1250,12 +1250,12 @@ struct IRCUser
 
 // Typenums
 /++
- +  Reverse mappings of *numerics* to `IRCEvent.Type`s.
- +
- +  One `base` table that covers most cases, and then specialised arrays for
- +  different server daemons, to meld into `base` for a union of the two
- +  (or more). This speeds up translation greatly and allows us to have
- +  different mappings for different daemons.
+    Reverse mappings of *numerics* to `IRCEvent.Type`s.
+
+    One `base` table that covers most cases, and then specialised arrays for
+    different server daemons, to meld into `base` for a union of the two
+    (or more). This speeds up translation greatly and allows us to have
+    different mappings for different daemons.
  +/
 struct Typenums
 {
@@ -1741,9 +1741,9 @@ struct Typenums
     ];
 
     /++
-     +  Delta typenum mappings for servers running the `UnrealIRCd` daemon.
-     +
-     +  - https://www.unrealircd.org
+        Delta typenum mappings for servers running the `UnrealIRCd` daemon.
+
+        - https://www.unrealircd.org
      +/
     static immutable Type[975] unreal =
     [
@@ -1805,9 +1805,9 @@ struct Typenums
     ];
 
     /++
-     +  Delta typenum mappings for servers running the `ircu` (Undernet) daemon.
-     +
-     +  - http://coder-com.undernet.org
+        Delta typenum mappings for servers running the `ircu` (Undernet) daemon.
+
+        - http://coder-com.undernet.org
      +/
     static immutable Type[569] ircu =
     [
@@ -1849,14 +1849,14 @@ struct Typenums
     ];
 
     /++
-     +  Delta typenum mappings for servers running the `aircd` (?) daemon.
-     +
-     +  "After AnotherNet had become a commercial and proprietary-client chat
-     +  network, the former users of AnotherNet's #trax decided to found their
-     +  own network - "where free speech and ideas would be able to run
-     +  unbounded through the pastures of #trax and #coders". They use the
-     +  "`aircd`" IRC daemon, coded by an ex-member of the demoscene, simon
-     +  kirby."
+        Delta typenum mappings for servers running the `aircd` (?) daemon.
+
+        "After AnotherNet had become a commercial and proprietary-client chat
+        network, the former users of AnotherNet's #trax decided to found their
+        own network - "where free speech and ideas would be able to run
+        unbounded through the pastures of #trax and #coders". They use the
+        "`aircd`" IRC daemon, coded by an ex-member of the demoscene, simon
+        kirby."
      +/
     static immutable Type[471] aircd =
     [
@@ -1883,9 +1883,9 @@ struct Typenums
     ];
 
     /++
-     +  Delta typenum mappings for servers adhering to the `RFC1459` draft.
-     +
-     +  - https://tools.ietf.org/html/rfc1459
+        Delta typenum mappings for servers adhering to the `RFC1459` draft.
+
+        - https://tools.ietf.org/html/rfc1459
      +/
     static immutable Type[502] rfc1459 =
     [
@@ -1899,9 +1899,9 @@ struct Typenums
     ];
 
     /++
-     +  Delta typenum mappings for servers adhering to the `RFC2812` draft.
-     +
-     +  - https://tools.ietf.org/html/rfc2812
+        Delta typenum mappings for servers adhering to the `RFC2812` draft.
+
+        - https://tools.ietf.org/html/rfc2812
      +/
     static immutable Type[485] rfc2812 =
     [
@@ -1917,9 +1917,9 @@ struct Typenums
     ];
 
     /++
-     +  Delta typenum mappings for servers running the `IRCD-Hybrid` daemon.
-     +
-     +  - http://www.ircd-hybrid.org
+        Delta typenum mappings for servers running the `IRCD-Hybrid` daemon.
+
+        - http://www.ircd-hybrid.org
      +/
     static immutable Type[716] hybrid =
     [
@@ -1951,10 +1951,10 @@ struct Typenums
     ];
 
     /++
-     +  Delta typenum mappings for servers running the `Bahamut` daemon
-     +  (DALnet).
-     +
-     +  - https://www.dal.net/?page=bahamut
+        Delta typenum mappings for servers running the `Bahamut` daemon
+        (DALnet).
+
+        - https://www.dal.net/?page=bahamut
      +/
     static immutable Type[621] bahamut =
     [
@@ -1991,10 +1991,10 @@ struct Typenums
     ];
 
     /++
-     +  Delta typenum mappings for servers running the `snircd` daemon
-     +  (QuakeNet), based on `ircu`.
-     +
-     +  - https://development.quakenet.org
+        Delta typenum mappings for servers running the `snircd` daemon
+        (QuakeNet), based on `ircu`.
+
+        - https://development.quakenet.org
      +/
     static immutable Type[554] snircd =
     [
@@ -2011,11 +2011,11 @@ struct Typenums
     ];
 
     /++
-     +  Delta typenum mappings for servers running the `Nefarious` or
-     +  `Nefarious2` daemons, based on `ircu`.
-     +
-     +  - https://github.com/evilnet/nefarious
-     +  - https://github.com/evilnet/nefarious2
+        Delta typenum mappings for servers running the `Nefarious` or
+        `Nefarious2` daemons, based on `ircu`.
+
+        - https://github.com/evilnet/nefarious
+        - https://github.com/evilnet/nefarious2
      +/
     static immutable Type[976] nefarious =
     [
@@ -2036,10 +2036,10 @@ struct Typenums
     ];
 
     /++
-     +  Delta typenum mappings for `RusNet` servers. Unsure of what daemon they
-     +  run.
-     +
-     +  - http://www.rus-net.org
+        Delta typenum mappings for `RusNet` servers. Unsure of what daemon they
+        run.
+
+        - http://www.rus-net.org
      +/
     static immutable Type[501] rusnet =
     [
@@ -2055,10 +2055,10 @@ struct Typenums
     ];
 
     /++
-     +  Delta typenum mappings for `Rizon` network servers. Supposedly they use
-     +  a mixture of Hybrid typenums, plus a few of their own.
-     +
-     +  - https://www.rizon.net
+        Delta typenum mappings for `Rizon` network servers. Supposedly they use
+        a mixture of Hybrid typenums, plus a few of their own.
+
+        - https://www.rizon.net
      +/
     static immutable Type[716] rizon =
     [
@@ -2068,9 +2068,9 @@ struct Typenums
     ];
 
     /++
-     +  Delta typenum mappings for `austHex` AUSTNet Development servers.
-     +
-     +  - https://sourceforge.net/projects/austhex
+        Delta typenum mappings for `austHex` AUSTNet Development servers.
+
+        - https://sourceforge.net/projects/austhex
      +/
     static immutable Type[521] austHex =
     [
@@ -2092,10 +2092,10 @@ struct Typenums
     ];
 
     /++
-     +  Delta typenum mappings for the `IRCnet` network of servers. Unsure of
-     +  what server daemon they run.
-     +
-     +  - http://www.ircnet.org
+        Delta typenum mappings for the `IRCnet` network of servers. Unsure of
+        what server daemon they run.
+
+        - http://www.ircnet.org
      +/
     static immutable Type[489] ircNet =
     [
@@ -2110,9 +2110,9 @@ struct Typenums
     ];
 
     /++
-     +  Delta typenum mappings for servers running the `PTlink` daemon.
-     +
-     +  - https://sourceforge.net/projects/ptlinksoft
+        Delta typenum mappings for servers running the `PTlink` daemon.
+
+        - https://sourceforge.net/projects/ptlinksoft
      +/
     static immutable Type[616] ptlink =
     [
@@ -2123,9 +2123,9 @@ struct Typenums
     ];
 
     /++
-     +  Delta typenum mappings for servers running the `InspIRCd` daemon.
-     +
-     +  - http://www.inspircd.org
+        Delta typenum mappings for servers running the `InspIRCd` daemon.
+
+        - http://www.inspircd.org
      +/
     static immutable Type[976] inspIRCd =
     [
@@ -2143,8 +2143,8 @@ struct Typenums
     ];
 
     /++
-     +  Delta typenum mapping for servers running the `ultimate` daemon.
-     +  Based off of `Bahamut`.
+        Delta typenum mapping for servers running the `ultimate` daemon.
+        Based off of `Bahamut`.
      +/
     static immutable Type[624] ultimate =
     [
@@ -2164,9 +2164,9 @@ struct Typenums
     ];
 
     /++
-     +  Delta typenum mappings extending `ircu` typenums, for UnderNet.
-     +
-     +  - https://github.com/UndernetIRC/ircu2
+        Delta typenum mappings extending `ircu` typenums, for UnderNet.
+
+        - https://github.com/UndernetIRC/ircu2
      +/
     static immutable Type[490] undernet =
     [
@@ -2176,10 +2176,10 @@ struct Typenums
     ];
 
     /++
-     +  Delta typenum mapping for servers running the `ratbox` daemon. It is
-     +  primarily used on EFnet.
-     +
-     +  - https://www.ratbox.org
+        Delta typenum mapping for servers running the `ratbox` daemon. It is
+        primarily used on EFnet.
+
+        - https://www.ratbox.org
      +/
     static immutable Type[716] ratBox =
     [
@@ -2191,9 +2191,9 @@ struct Typenums
     ];
 
     /++
-     +  Delta typenum mappings for servers running the `charybdis` daemon.
-     +
-     +  - https://github.com/charybdis-ircd/charybdis
+        Delta typenum mappings for servers running the `charybdis` daemon.
+
+        - https://github.com/charybdis-ircd/charybdis
      +/
     static immutable Type[495] charybdis =
     [
@@ -2202,10 +2202,10 @@ struct Typenums
     ];
 
     /++
-     +  Delta typenum mappings for servers running the `sorircd` daemon
-     +  (SorceryNet).
-     +
-     +  - http://www.nongnu.org/snservices/sorircd.html
+        Delta typenum mappings for servers running the `sorircd` daemon
+        (SorceryNet).
+
+        - http://www.nongnu.org/snservices/sorircd.html
      +/
     static immutable Type[326] sorircd =
     [
@@ -2243,20 +2243,20 @@ struct Typenums
 
 // IRCChannel
 /++
- +  Aggregate personifying an IRC channel and its state.
- +
- +  An IRC channel may have a topic, a creation date, and one or more *modes*.
- +  Modes define how the channel behaves and how it treats its users, including
- +  which ones have operator and voice status, as well as which are banned, and more.
+    Aggregate personifying an IRC channel and its state.
+
+    An IRC channel may have a topic, a creation date, and one or more *modes*.
+    Modes define how the channel behaves and how it treats its users, including
+    which ones have operator and voice status, as well as which are banned, and more.
  +/
 struct IRCChannel
 {
     /++
-     +  A channel mode.
-     +
-     +  Some modes overwrite themselves; a channel may be `+i` or `-i`, never
-     +  `i` twice. Others stack; a channel may have an arbitrary number of `b`
-     +  bans. We try our best to support both.
+        A channel mode.
+
+        Some modes overwrite themselves; a channel may be `+i` or `-i`, never
+        `i` twice. Others stack; a channel may have an arbitrary number of `b`
+        bans. We try our best to support both.
      +/
     struct Mode
     {
@@ -2264,8 +2264,8 @@ struct IRCChannel
         char modechar;
 
         /++
-         +  The data associated with the `Mode`, if applicable. This is often a
-         +  number, such as what `l` takes (join limit).
+            The data associated with the `Mode`, if applicable. This is often a
+            number, such as what `l` takes (join limit).
          +/
         string data;
 
@@ -2282,14 +2282,14 @@ struct IRCChannel
         bool negated;
 
         /++
-         +  Compare two `Mode`s with each other to see if they are both of the
-         +  same type, as well as having the same `data` and/or `user`.
-         +
-         +  Params:
-         +      that = Other `Mode` to compare this one with.
-         +
-         +  Returns:
-         +      `true` if the `Mode`s match, `false` if not.
+            Compare two `Mode`s with each other to see if they are both of the
+            same type, as well as having the same `data` and/or `user`.
+
+            Params:
+                that = Other `Mode` to compare this one with.
+
+            Returns:
+                `true` if the `Mode`s match, `false` if not.
          +/
         bool opEquals(const Mode that) const pure nothrow @nogc
         {
@@ -2304,10 +2304,10 @@ struct IRCChannel
         }
 
         /++
-         +  Produces a hash for this `Mode`.
-         +
-         +  Returns:
-         +      A hash.
+            Produces a hash for this `Mode`.
+
+            Returns:
+                A hash.
          +/
         size_t toHash() const pure nothrow
         {
@@ -2332,19 +2332,19 @@ struct IRCChannel
     bool[string] users;
 
     /++
-     +  Associative array of nicknames with a prefixing channel mode (operator,
-     +  halfops, voiced, ...) keyed by modechar.
+        Associative array of nicknames with a prefixing channel mode (operator,
+        halfops, voiced, ...) keyed by modechar.
      +/
     string[][char] mods;
 
     /++
-     +  Template to deduplicate code for mods shorthands.
-     +
-     +  Params:
-     +      prefix = Mode character.
-     +
-     +  Returns:
-     +      A `string[]` array of all users with the given mode character.
+        Template to deduplicate code for mods shorthands.
+
+        Params:
+            prefix = Mode character.
+
+        Returns:
+            A `string[]` array of all users with the given mode character.
      +/
     ref string[] modsShorthand(char prefix)()
     {
@@ -2375,10 +2375,10 @@ struct IRCChannel
 
 // IRCClient
 /++
- +  Aggregate collecting all the relevant settings, options and state needed for
- +  a connection to an IRC server.
- +
- +  Many fields are transient and unfit to be saved to disk.
+    Aggregate collecting all the relevant settings, options and state needed for
+    a connection to an IRC server.
+
+    Many fields are transient and unfit to be saved to disk.
  +/
 struct IRCClient
 {

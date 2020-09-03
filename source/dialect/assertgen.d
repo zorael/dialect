@@ -1,13 +1,13 @@
 /++
- +  Interactive assert statement generation from raw IRC strings, for use in the
- +  source code `unittest` blocks.
- +
- +  Example:
- +
- +  `$ dub run :assertgen`
- +  ---
- + [...]
- +
+    Interactive assert statement generation from raw IRC strings, for use in the
+    source code `unittest` blocks.
+
+    Example:
+
+    `$ dub run :assertgen`
+    ---
+    [...]
+
 // Paste a raw event string and hit Enter to generate an assert block. Ctrl+C to exit.
 
 @badge-info=subscriber/15;badges=subscriber/12;color=;display-name=tayk47_mom;emotes=;flags=;id=d6729804-2bf3-495d-80ce-a2fe8ed00a26;login=tayk47_mom;mod=0;msg-id=submysterygift;msg-pa
@@ -39,18 +39,18 @@ nt=4;msg-param-sub-plan=1000;room-id=71092938;subscriber=1;system-msg=tayk47_mom
         assert((id == "d6729804-2bf3-495d-80ce-a2fe8ed00a26"), id);
     }
 }
- +  ---
- +
- +  These can be directly copy/pasted into the appropriate files in `/tests`.
- +  They only carry state from the events pasted before it, but the changes made
- +  are also expressed as asserts.
- +
- +  Example:
- +
- +  `$ dub run :assertgen`
- +  ---
- + [...]
- +
+    ---
+
+    These can be directly copy/pasted into the appropriate files in `/tests`.
+    They only carry state from the events pasted before it, but the changes made
+    are also expressed as asserts.
+
+    Example:
+
+    `$ dub run :assertgen`
+    ---
+    [...]
+
 // Paste a raw event string and hit Enter to generate an assert block. Ctrl+C to exit.
 
 @badge-info=;badges=;color=#5F9EA0;display-name=Zorael;emote-sets=0,185411,771823,1511983;user-id=22216721;user-type= :tmi.twitch.tv GLOBALUSERSTATE
@@ -75,10 +75,10 @@ with (parser.client)
 {
     assert((displayName == "Zorael"), displayName);
 }
- +  ---
- +
- +  This makes it easy to generate tests that verify wanted side-effects
- +  incurred by events.
+    ---
+
+    This makes it easy to generate tests that verify wanted side-effects
+    incurred by events.
  +/
 module dialect.assertgen;
 
@@ -97,22 +97,22 @@ import std.typecons : Flag, No, Yes;
 
 // formatClientAssignment
 /++
- +  Constructs statement lines for each changed field of an
- +  `dialect.defs.IRCClient`, including instantiating a fresh one.
- +
- +  Example:
- +  ---
- +  IRCClient client;
- +  IRCServer server;
- +  Appender!string sink;
- +
- +  sink.formatClientAssignment(client, server);
- +  ---
- +
- +  Params:
- +      sink = Output buffer to write to.
- +      client = `dialect.defs.IRCClient` to simulate the assignment of.
- +      server = `dialect.defs.IRCServer` to simulate the assignment of.
+    Constructs statement lines for each changed field of an
+    `dialect.defs.IRCClient`, including instantiating a fresh one.
+
+    Example:
+    ---
+    IRCClient client;
+    IRCServer server;
+    Appender!string sink;
+
+    sink.formatClientAssignment(client, server);
+    ---
+
+    Params:
+        sink = Output buffer to write to.
+        client = `dialect.defs.IRCClient` to simulate the assignment of.
+        server = `dialect.defs.IRCServer` to simulate the assignment of.
  +/
 void formatClientAssignment(Sink)(auto ref Sink sink, const IRCClient client, const IRCServer server)
 if (isOutputRange!(Sink, char[]))
@@ -170,19 +170,19 @@ with (parser)
 
 // formatEventAssertBlock
 /++
- +  Constructs assert statement blocks for each changed field of an
- +  `dialect.defs.IRCEvent`.
- +
- +  Example:
- +  ---
- +  IRCEvent event;
- +  Appender!string sink;
- +  sink.formatEventAssertBlock(event);
- +  ---
- +
- +  Params:
- +      sink = Output buffer to write to.
- +      event = `dialect.defs.IRCEvent` to construct assert statements for.
+    Constructs assert statement blocks for each changed field of an
+    `dialect.defs.IRCEvent`.
+
+    Example:
+    ---
+    IRCEvent event;
+    Appender!string sink;
+    sink.formatEventAssertBlock(event);
+    ---
+
+    Params:
+        sink = Output buffer to write to.
+        event = `dialect.defs.IRCEvent` to construct assert statements for.
  +/
 void formatEventAssertBlock(Sink)(auto ref Sink sink, const IRCEvent event)
 if (isOutputRange!(Sink, char[]))
@@ -259,10 +259,10 @@ public:
 
 // main
 /++
- +  Entry point when compiling the `assertgen` dub configuration.
- +
- +  Reads raw server strings from `stdin`, parses them into
- +  `dialect.defs.IRCEvent`s and constructs assert blocks of their contents.
+    Entry point when compiling the `assertgen` dub configuration.
+
+    Reads raw server strings from `stdin`, parses them into
+    `dialect.defs.IRCEvent`s and constructs assert blocks of their contents.
  +/
 version(unittest) {}
 else

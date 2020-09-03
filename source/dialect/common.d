@@ -1,7 +1,7 @@
 /++
- +  Helper functions needed to parse raw IRC event strings into `dialect.defs.IRCEvent`s.
- +
- +  Also things that don't belong anywhere else.
+    Helper functions needed to parse raw IRC event strings into `dialect.defs.IRCEvent`s.
+
+    Also things that don't belong anywhere else.
  +/
 module dialect.common;
 
@@ -17,24 +17,24 @@ import lu.string : contains, nom;
 
 // typenumsOf
 /++
- +  Returns the `typenums` mapping for a given `dialect.defs.IRCServer.Daemon`.
- +
- +  Example:
- +  ---
- +  IRCParser parser;
- +  IRCServer.Daemon daemon = IRCServer.Daemon.unreal;
- +  string daemonstring = "unreal";
- +
- +  parser.typenums = getTypenums(daemon);
- +  parser.client.daemon = daemon;
- +  parser.client.daemonstring = daemonstring;
- +  ---
- +
- +  Params:
- +      daemon = The `dialect.defs.IRCServer.Daemon` to get the typenums for.
- +
- +  Returns:
- +      A `typenums` array of `dialect.defs.IRCEvent`s mapped to numerics.
+    Returns the `typenums` mapping for a given `dialect.defs.IRCServer.Daemon`.
+
+    Example:
+    ---
+    IRCParser parser;
+    IRCServer.Daemon daemon = IRCServer.Daemon.unreal;
+    string daemonstring = "unreal";
+
+    parser.typenums = getTypenums(daemon);
+    parser.client.daemon = daemon;
+    parser.client.daemonstring = daemonstring;
+    ---
+
+    Params:
+        daemon = The `dialect.defs.IRCServer.Daemon` to get the typenums for.
+
+    Returns:
+        A `typenums` array of `dialect.defs.IRCEvent`s mapped to numerics.
  +/
 auto typenumsOf(const IRCServer.Daemon daemon) pure nothrow @nogc
 {
@@ -186,24 +186,24 @@ auto typenumsOf(const IRCServer.Daemon daemon) pure nothrow @nogc
 
 // decodeIRCv3String
 /++
- +  Decodes an IRCv3 tag string, replacing some characters.
- +
- +  IRCv3 tags need to be free of spaces, so by necessity they're encoded into
- +  `\s`. Likewise; since tags are separated by semicolons, semicolons in tag
- +  string are encoded into `\:`, and literal backslashes `\\`.
- +
- +  Example:
- +  ---
- +  string encoded = `This\sline\sis\sencoded\:\swith\s\\s`;
- +  string decoded = decodeIRCv3String(encoded);
- +  assert(decoded == "This line is encoded; with \\s");
- +  ---
- +
- +  Params:
- +      line = Original line to decode.
- +
- +  Returns:
- +      A decoded string without `\s` in it.
+    Decodes an IRCv3 tag string, replacing some characters.
+
+    IRCv3 tags need to be free of spaces, so by necessity they're encoded into
+    `\s`. Likewise; since tags are separated by semicolons, semicolons in tag
+    string are encoded into `\:`, and literal backslashes `\\`.
+
+    Example:
+    ---
+    string encoded = `This\sline\sis\sencoded\:\swith\s\\s`;
+    string decoded = decodeIRCv3String(encoded);
+    assert(decoded == "This line is encoded; with \\s");
+    ---
+
+    Params:
+        line = Original line to decode.
+
+    Returns:
+        A decoded string without `\s` in it.
  +/
 string decodeIRCv3String(const string line) pure nothrow
 {
@@ -211,11 +211,11 @@ string decodeIRCv3String(const string line) pure nothrow
     import std.string : representation;
 
     /++
-     +  - http://ircv3.net/specs/core/message-tags-3.2.html
-     +
-     +  If a lone \ exists at the end of an escaped value (with no escape
-     +  character following it), then there SHOULD be no output character.
-     +  For example, the escaped value test\ should unescape to test.
+        - http://ircv3.net/specs/core/message-tags-3.2.html
+
+        If a lone \ exists at the end of an escaped value (with no escape
+        character following it), then there SHOULD be no output character.
+        For example, the escaped value test\ should unescape to test.
      +/
 
     if (!line.length) return string.init;
@@ -331,27 +331,27 @@ unittest
 
 // isAuthService
 /++
- +  Inspects an `dialect.defs.IRCUser` and judges whether or not it is
- +  authentication services.
- +
- +  This is very ad-hoc.
- +
- +  Example:
- +  ---
- +  IRCUser user;
- +
- +  if (user.isAuthService(parser))
- +  {
- +      // ...
- +  }
- +  ---
- +
- +  Params:
- +      sender = `dialect.defs.IRCUser` to examine.
- +      parser = Reference to the current `dialect.parsing.IRCParser`.
- +
- +  Returns:
- +      `true` if the `sender` is judged to be from nickname services, `false` if not.
+    Inspects an `dialect.defs.IRCUser` and judges whether or not it is
+    authentication services.
+
+    This is very ad-hoc.
+
+    Example:
+    ---
+    IRCUser user;
+
+    if (user.isAuthService(parser))
+    {
+        // ...
+    }
+    ---
+
+    Params:
+        sender = `dialect.defs.IRCUser` to examine.
+        parser = Reference to the current `dialect.parsing.IRCParser`.
+
+    Returns:
+        `true` if the `sender` is judged to be from nickname services, `false` if not.
  +/
 bool isAuthService(const IRCUser sender, const ref IRCParser parser) pure
 {
@@ -487,27 +487,27 @@ unittest
 
 // isValidChannel
 /++
- +  Examines a string and judges whether or not it *looks* like a channel.
- +
- +  It needs to be passed an `dialect.defs.IRCServer` to know the max
- +  channel name length. An alternative would be to change the
- +  `dialect.defs.IRCServer` parameter to be an `uint`.
- +
- +  Example:
- +  ---
- +  IRCServer server;
- +  assert("#channel".isValidChannel(server));
- +  assert("##channel".isValidChannel(server));
- +  assert(!"!channel".isValidChannel(server));
- +  assert(!"#ch#annel".isValidChannel(server));
- +  ---
- +
- +  Params:
- +      channel = String of a potential channel name.
- +      server = The current `dialect.defs.IRCServer` with all its settings.
- +
- +  Returns:
- +      `true` if the string content is judged to be a channel, `false` if not.
+    Examines a string and judges whether or not it *looks* like a channel.
+
+    It needs to be passed an `dialect.defs.IRCServer` to know the max
+    channel name length. An alternative would be to change the
+    `dialect.defs.IRCServer` parameter to be an `uint`.
+
+    Example:
+    ---
+    IRCServer server;
+    assert("#channel".isValidChannel(server));
+    assert("##channel".isValidChannel(server));
+    assert(!"!channel".isValidChannel(server));
+    assert(!"#ch#annel".isValidChannel(server));
+    ---
+
+    Params:
+        channel = String of a potential channel name.
+        server = The current `dialect.defs.IRCServer` with all its settings.
+
+    Returns:
+        `true` if the string content is judged to be a channel, `false` if not.
  +/
 bool isValidChannel(const string channel, const IRCServer server) pure nothrow @nogc
 in (channel.length, "Tried to determine whether a channel was valid but no channel was given")
@@ -517,14 +517,14 @@ do
     import std.string : representation;
 
     /++
-     +  Channels names are strings (beginning with a '&' or '#' character) of
-     +  length up to 200 characters.  Apart from the the requirement that the
-     +  first character being either '&' or '#'; the only restriction on a
-     +  channel name is that it may not contain any spaces (' '), a control G
-     +  (^G or ASCII 7), or a comma (',' which is used as a list item
-     +  separator by the protocol).
-     +
-     +  - https://tools.ietf.org/html/rfc1459.html
+        Channels names are strings (beginning with a '&' or '#' character) of
+        length up to 200 characters.  Apart from the the requirement that the
+        first character being either '&' or '#'; the only restriction on a
+        channel name is that it may not contain any spaces (' '), a control G
+        (^G or ASCII 7), or a comma (',' which is used as a list item
+        separator by the protocol).
+
+        - https://tools.ietf.org/html/rfc1459.html
      +/
     if ((channel.length < 2) || (channel.length > server.maxChannelLength))
     {
@@ -587,25 +587,25 @@ unittest
 
 // isValidNickname
 /++
- +  Examines a string and judges whether or not it *looks* like a nickname.
- +
- +  It only looks for invalid characters in the name as well as it length.
- +
- +  Example:
- +  ---
- +  assert("kameloso".isValidNickname);
- +  assert("kameloso^".isValidNickname);
- +  assert("kamelåså".isValidNickname);
- +  assert(!"#kameloso".isValidNickname);
- +  assert(!"k&&me##so".isValidNickname);
- +  ---
- +
- +  Params:
- +      nickname = String nickname.
- +      server = The current `dialect.defs.IRCServer` with all its settings.
- +
- +  Returns:
- +      `true` if the nickname string is judged to be a nickname, `false` if not.
+    Examines a string and judges whether or not it *looks* like a nickname.
+
+    It only looks for invalid characters in the name as well as it length.
+
+    Example:
+    ---
+    assert("kameloso".isValidNickname);
+    assert("kameloso^".isValidNickname);
+    assert("kamelåså".isValidNickname);
+    assert(!"#kameloso".isValidNickname);
+    assert(!"k&&me##so".isValidNickname);
+    ---
+
+    Params:
+        nickname = String nickname.
+        server = The current `dialect.defs.IRCServer` with all its settings.
+
+    Returns:
+        `true` if the nickname string is judged to be a nickname, `false` if not.
  +/
 bool isValidNickname(const string nickname, const IRCServer server) pure nothrow @nogc
 in (nickname.length, "Tried to determine whether a nickname was valid but no nickname was given")
@@ -674,27 +674,27 @@ unittest
 
 // isValidNicknameCharacter
 /++
- +  Returns whether or not a passed `char` can be part of a nickname.
- +
- +  The IRC standard describes nicknames as being a string of any of the
- +  following characters:
- +
- +  `[a-z] [A-Z] [0-9] _-\[]{}^`|`
- +
- +  Example:
- +  ---
- +  assert('a'.isValidNicknameCharacter);
- +  assert('9'.isValidNicknameCharacter);
- +  assert('`'.isValidNicknameCharacter);
- +  assert(!(' '.isValidNicknameCharacter));
- +  ---
- +
- +  Params:
- +      c = Character to compare with the list of accepted characters in a nickname.
- +
- +  Returns:
- +      `true` if the character is in the list of valid characters for
- +      nicknames, `false` if not.
+    Returns whether or not a passed `char` can be part of a nickname.
+
+    The IRC standard describes nicknames as being a string of any of the
+    following characters:
+
+    `[a-z] [A-Z] [0-9] _-\[]{}^`|`
+
+    Example:
+    ---
+    assert('a'.isValidNicknameCharacter);
+    assert('9'.isValidNicknameCharacter);
+    assert('`'.isValidNicknameCharacter);
+    assert(!(' '.isValidNicknameCharacter));
+    ---
+
+    Params:
+        c = Character to compare with the list of accepted characters in a nickname.
+
+    Returns:
+        `true` if the character is in the list of valid characters for
+        nicknames, `false` if not.
  +/
 bool isValidNicknameCharacter(const ubyte c) pure nothrow @nogc
 {
@@ -744,26 +744,26 @@ unittest
 
 // stripModesign
 /++
- +  Takes a nickname and strips it of any prepended mode signs, like the `@` in
- +  `@nickname`. Saves the stripped signs in the ref string `modesigns`.
- +
- +  Example:
- +  ---
- +  IRCServer server;
- +  immutable signed = "@+kameloso";
- +  string signs;
- +  immutable nickname = server.stripModeSign(signed, signs);
- +  assert((nickname == "kameloso"), nickname);
- +  assert((signs == "@+"), signs);
- +  ---
- +
- +  Params:
- +      nickname = String with a signed nickname.
- +      server = `dialect.defs.IRCServer`, with all its settings.
- +      modesigns = Reference string to write the stripped modesigns to.
- +
- +  Returns:
- +      The nickname without any prepended prefix signs.
+    Takes a nickname and strips it of any prepended mode signs, like the `@` in
+    `@nickname`. Saves the stripped signs in the ref string `modesigns`.
+
+    Example:
+    ---
+    IRCServer server;
+    immutable signed = "@+kameloso";
+    string signs;
+    immutable nickname = server.stripModeSign(signed, signs);
+    assert((nickname == "kameloso"), nickname);
+    assert((signs == "@+"), signs);
+    ---
+
+    Params:
+        nickname = String with a signed nickname.
+        server = `dialect.defs.IRCServer`, with all its settings.
+        modesigns = Reference string to write the stripped modesigns to.
+
+    Returns:
+        The nickname without any prepended prefix signs.
  +/
 string stripModesign(const string nickname, const IRCServer server,
     ref string modesigns) pure nothrow @nogc
@@ -823,24 +823,24 @@ unittest
 
 // stripModesign
 /++
- +  Convenience function to `stripModesign` that doesn't take a ref string
- +  parameter to store the stripped modesign characters in.
- +
- +  Example:
- +  ---
- +  IRCServer server;
- +  immutable signed = "@+kameloso";
- +  immutable nickname = server.stripModeSign(signed);
- +  assert((nickname == "kameloso"), nickname);
- +  assert((signs == "@+"), signs);
- +  ---
- +
- +  Params:
- +      nickname = The (potentially) signed nickname to strip the prefix off.
- +      server = The `dialect.defs.IRCServer` whose prefix characters to strip.
- +
- +  Returns:
- +      The raw nickname, unsigned.
+    Convenience function to `stripModesign` that doesn't take a ref string
+    parameter to store the stripped modesign characters in.
+
+    Example:
+    ---
+    IRCServer server;
+    immutable signed = "@+kameloso";
+    immutable nickname = server.stripModeSign(signed);
+    assert((nickname == "kameloso"), nickname);
+    assert((signs == "@+"), signs);
+    ---
+
+    Params:
+        nickname = The (potentially) signed nickname to strip the prefix off.
+        server = The `dialect.defs.IRCServer` whose prefix characters to strip.
+
+    Returns:
+        The raw nickname, unsigned.
  +/
 string stripModesign(const string nickname, const IRCServer server) pure nothrow @nogc
 {
@@ -869,37 +869,37 @@ unittest
 
 // setMode
 /++
- +  Sets a new or removes a `dialect.defs.IRCChannel.Mode`.
- +
- +  `dialect.defs.IRCChannel.Mode`s that are merely a character in `modechars` are simply removed if
- +   the *sign* of the mode change is negative, whereas a more elaborate
- +  `dialect.defs.IRCChannel.Mode` in the `modes` array are only replaced or removed if they match a
- +   comparison test.
- +
- +  Several modes can be specified at once, including modes that take a
- +  `data` argument, assuming they are in the proper order (where the
- +  `data`-taking modes are at the end of the string).
- +
- +  Care has to be taken not to have trailing spaces in the arguments.
- +
- +  Example:
- +  ---
- +  IRCChannel channel;
- +  channel.setMode("+oo zorael!NaN@* kameloso!*@*")
- +  assert(channel.modes.length == 2);
- +  channel.setMode("-o kameloso!*@*");
- +  assert(channel.modes.length == 1);
- +  channel.setMode("-o *!*@*");
- +  assert(!channel.modes.length);
- +  ---
- +
- +  Params:
- +      channel = `dialect.defs.IRCChannel` whose modes are being set.
- +      signedModestring = String of the raw mode command, including the
- +          prefixing sign (+ or -).
- +      data = Appendix to the signed modestring; arguments to the modes that
- +          are being set.
- +      server = The current `dialect.defs.IRCServer` with all its settings.
+    Sets a new or removes a `dialect.defs.IRCChannel.Mode`.
+
+    `dialect.defs.IRCChannel.Mode`s that are merely a character in `modechars` are simply removed if
+     the *sign* of the mode change is negative, whereas a more elaborate
+    `dialect.defs.IRCChannel.Mode` in the `modes` array are only replaced or removed if they match a
+     comparison test.
+
+    Several modes can be specified at once, including modes that take a
+    `data` argument, assuming they are in the proper order (where the
+    `data`-taking modes are at the end of the string).
+
+    Care has to be taken not to have trailing spaces in the arguments.
+
+    Example:
+    ---
+    IRCChannel channel;
+    channel.setMode("+oo zorael!NaN@* kameloso!*@*")
+    assert(channel.modes.length == 2);
+    channel.setMode("-o kameloso!*@*");
+    assert(channel.modes.length == 1);
+    channel.setMode("-o *!*@*");
+    assert(!channel.modes.length);
+    ---
+
+    Params:
+        channel = `dialect.defs.IRCChannel` whose modes are being set.
+        signedModestring = String of the raw mode command, including the
+            prefixing sign (+ or -).
+        data = Appendix to the signed modestring; arguments to the modes that
+            are being set.
+        server = The current `dialect.defs.IRCServer` with all its settings.
  +/
 void setMode(ref IRCChannel channel, const string signedModestring,
     const string data, const IRCServer server) pure
@@ -1081,8 +1081,8 @@ void setMode(ref IRCChannel channel, const string signedModestring,
             else if (server.aModes.contains(modechar))
             {
                 /++
-                 +  A = Mode that adds or removes a nick or address to a
-                 +  list. Always has a parameter.
+                    A = Mode that adds or removes a nick or address to a
+                    list. Always has a parameter.
                  +/
 
                 // STACKS.
@@ -1103,11 +1103,11 @@ void setMode(ref IRCChannel channel, const string signedModestring,
             else if (server.bModes.contains(modechar) || server.cModes.contains(modechar))
             {
                 /++
-                 +  B = Mode that changes a setting and always has a
-                 +  parameter.
-                 +
-                 +  C = Mode that changes a setting and only has a
-                 +  parameter when set.
+                    B = Mode that changes a setting and always has a
+                    parameter.
+
+                    C = Mode that changes a setting and only has a
+                    parameter when set.
                  +/
 
                 // DOES NOT STACK.
@@ -1151,8 +1151,8 @@ void setMode(ref IRCChannel channel, const string signedModestring,
             else if (server.aModes.contains(modechar))
             {
                 /++
-                 +  A = Mode that adds or removes a nick or address to a
-                 +  a list. Always has a parameter.
+                    A = Mode that adds or removes a nick or address to a
+                    a list. Always has a parameter.
                  +/
 
                 // If a comparison matches, remove
@@ -1161,11 +1161,11 @@ void setMode(ref IRCChannel channel, const string signedModestring,
             else if (server.bModes.contains(modechar) || server.cModes.contains(modechar))
             {
                 /++
-                 +  B = Mode that changes a setting and always has a
-                 +  parameter.
-                 +
-                 +  C = Mode that changes a setting and only has a
-                 +  parameter when set.
+                    B = Mode that changes a setting and always has a
+                    parameter.
+
+                    C = Mode that changes a setting and only has a
+                    parameter when set.
                  +/
 
                 // If the modechar matches, remove
@@ -1371,9 +1371,9 @@ unittest
 
 // IRCParseException
 /++
- +  IRC Parsing Exception, thrown when there were errors parsing.
- +
- +  It is a normal `object.Exception` but with an attached `dialect.defs.IRCEvent`.
+    IRC Parsing Exception, thrown when there were errors parsing.
+
+    It is a normal `object.Exception` but with an attached `dialect.defs.IRCEvent`.
  +/
 final class IRCParseException : Exception
 {
@@ -1382,8 +1382,8 @@ final class IRCParseException : Exception
     IRCEvent event;
 
     /++
-     +  Create a new `IRCParseException`, without attaching an
-     +  `dialect.defs.IRCEvent`.
+        Create a new `IRCParseException`, without attaching an
+        `dialect.defs.IRCEvent`.
      +/
     this(const string message, const string file = __FILE__,
         const size_t line = __LINE__, Throwable nextInChain = null) pure nothrow @nogc @safe
@@ -1392,8 +1392,8 @@ final class IRCParseException : Exception
     }
 
     /++
-     +  Create a new `IRCParseException`, attaching an
-     +  `dialect.defs.IRCEvent` to it.
+        Create a new `IRCParseException`, attaching an
+        `dialect.defs.IRCEvent` to it.
      +/
     this(const string message, const IRCEvent event, const string file = __FILE__,
         const size_t line = __LINE__, Throwable nextInChain = null) pure nothrow @nogc @safe
@@ -1444,54 +1444,54 @@ enum IRCControlCharacter
 
 // matchesByMask
 /++
- +  Compares this `dialect.defs.IRCUser` with a second one, treating fields with
- +  asterisks as glob wildcards, mimicking `*!*@*` mask matching.
- +
- +  Example:
- +  ---
- +  IRCUser u1;
- +  with (u1)
- +  {
- +      nickname = "foo";
- +      ident = "NaN";
- +      address = "asdf.asdf.com";
- +  }
- +
- +  IRCUser u2;
- +  with (u2)
- +  {
- +      nickname = "*";
- +       ident = "NaN";
- +      address = "*";
- +  }
- +
- +  assert(u1.matchesByMask(u2));
- +  assert(u1.matchesByMask("f*!NaN@*.com"));
- +  ---
- +
- +  Params:
- +      this_ = `dialect.defs.IRCUser` to compare.
- +      that = `dialect.defs.IRCUser` to compare `this_` with.
- +      caseMapping = `dialect.defs.IRCServer.CaseMapping` with which to translate
- +          the nicknames in the relevant masks to lowercase.
- +
- +  Returns:
- +      `true` if the `dialect.defs.IRCUser`s are deemed to match, `false` if not.
+    Compares this `dialect.defs.IRCUser` with a second one, treating fields with
+    asterisks as glob wildcards, mimicking `*!*@*` mask matching.
+
+    Example:
+    ---
+    IRCUser u1;
+    with (u1)
+    {
+        nickname = "foo";
+        ident = "NaN";
+        address = "asdf.asdf.com";
+    }
+
+    IRCUser u2;
+    with (u2)
+    {
+        nickname = "*";
+         ident = "NaN";
+        address = "*";
+    }
+
+    assert(u1.matchesByMask(u2));
+    assert(u1.matchesByMask("f*!NaN@*.com"));
+    ---
+
+    Params:
+        this_ = `dialect.defs.IRCUser` to compare.
+        that = `dialect.defs.IRCUser` to compare `this_` with.
+        caseMapping = `dialect.defs.IRCServer.CaseMapping` with which to translate
+            the nicknames in the relevant masks to lowercase.
+
+    Returns:
+        `true` if the `dialect.defs.IRCUser`s are deemed to match, `false` if not.
  +/
 auto matchesByMask(const IRCUser this_, const IRCUser that,
     const IRCServer.CaseMapping caseMapping = IRCServer.CaseMapping.rfc1459) pure nothrow
 {
     // unpatternedGlobMatch
     /++
-     +  Performs a glob match without taking special consideration of
-     +  bracketed patterns (with [, ], { and }).
-     +
-     +  Params:
-     +      first = First string.
-     +      second = Second expression string to glob match with the first.
-     +
-     +  Returns:
-     +      True if `first` matches the `second` glob mask, false if not.
+        Performs a glob match without taking special consideration of
+        bracketed patterns (with [, ], { and }).
+
+        Params:
+            first = First string.
+            second = Second expression string to glob match with the first.
+
+        Returns:
+            True if `first` matches the `second` glob mask, false if not.
      +/
     static bool unpatternedGlobMatch(const string first, const string second)
     {
@@ -1587,14 +1587,14 @@ unittest
 
 // isUpper
 /++
- +  Checks whether the passed `char` is in uppercase as per the supplied case mappings.
- +
- +  Params:
- +      c = Character to examine.
- +      caseMapping = Server case mapping; maps uppercase to lowercase characters.
- +
- +  Returns:
- +      `true` if the passed `c` is in uppercase, `false` if not.
+    Checks whether the passed `char` is in uppercase as per the supplied case mappings.
+
+    Params:
+        c = Character to examine.
+        caseMapping = Server case mapping; maps uppercase to lowercase characters.
+
+    Returns:
+        `true` if the passed `c` is in uppercase, `false` if not.
  +/
 char isUpper(const char c, const IRCServer.CaseMapping caseMapping) pure nothrow @nogc
 {
@@ -1623,14 +1623,14 @@ char isUpper(const char c, const IRCServer.CaseMapping caseMapping) pure nothrow
 
 // toLower
 /++
- +  Produces the passed `char` in lowercase as per the supplied case mappings.
- +
- +  Params:
- +      c = Character to translate into lowercase.
- +      caseMapping = Server case mapping; maps uppercase to lowercase characters.
- +
- +  Returns:
- +      The passed `c` in lowercase as per the case mappings.
+    Produces the passed `char` in lowercase as per the supplied case mappings.
+
+    Params:
+        c = Character to translate into lowercase.
+        caseMapping = Server case mapping; maps uppercase to lowercase characters.
+
+    Returns:
+        The passed `c` in lowercase as per the case mappings.
  +/
 char toLower(const char c, const IRCServer.CaseMapping caseMapping) pure nothrow @nogc
 {
@@ -1665,30 +1665,30 @@ char toLower(const char c, const IRCServer.CaseMapping caseMapping) pure nothrow
 
 // toLowerCase
 /++
- +  Produces the passed string in lowercase as per the supplied case mappings.
- +
- +  This function is `@trusted` to be able to cast the internal `output` char array
- +  to string. `std.array.Appender` does this with its `.data`/`opSlice` method.
- +
- +  ---
- +  @property inout(ElementEncodingType!A)[] opSlice() inout @trusted pure nothrow
- +  {
- +       /* @trusted operation:
- +        * casting Unqual!T[] to inout(T)[]
- +        */
- +       return cast(typeof(return))(_data ? _data.arr : null);
- +  }
- +  ---
- +
- +  So just do the same.
- +
- +  Params:
- +      name = String to parse into lowercase.
- +      caseMapping = Server case mapping; maps uppercase to lowercase characters.
- +
- +  Returns:
- +      The passed `name` string with uppercase characters replaced as per
- +      the case mappings.
+    Produces the passed string in lowercase as per the supplied case mappings.
+
+    This function is `@trusted` to be able to cast the internal `output` char array
+    to string. `std.array.Appender` does this with its `.data`/`opSlice` method.
+
+    ---
+    @property inout(ElementEncodingType!A)[] opSlice() inout @trusted pure nothrow
+    {
+         /* @trusted operation:
+          * casting Unqual!T[] to inout(T)[]
+          */
+         return cast(typeof(return))(_data ? _data.arr : null);
+    }
+    ---
+
+    So just do the same.
+
+    Params:
+        name = String to parse into lowercase.
+        caseMapping = Server case mapping; maps uppercase to lowercase characters.
+
+    Returns:
+        The passed `name` string with uppercase characters replaced as per
+        the case mappings.
  +/
 string toLowerCase(const string name, const IRCServer.CaseMapping caseMapping) pure nothrow @trusted
 {
@@ -1770,16 +1770,16 @@ unittest
 
 // isValidHostmask
 /++
- +  Makes a cursory verification of a hostmask, ensuring that it doesn't contain
- +  invalid characters. May very well have false positives.
- +
- +  Params:
- +      hostmask = Hostmask string to examine.
- +      server = The current `dialect.defs.IRCServer` with its
- +          `dialect.defs.IRCServer.CaseMapping`.
- +
- +  Returns:
- +      true if the hostmask seems to be valid, false if it obviously is not.
+    Makes a cursory verification of a hostmask, ensuring that it doesn't contain
+    invalid characters. May very well have false positives.
+
+    Params:
+        hostmask = Hostmask string to examine.
+        server = The current `dialect.defs.IRCServer` with its
+            `dialect.defs.IRCServer.CaseMapping`.
+
+    Returns:
+        true if the hostmask seems to be valid, false if it obviously is not.
  +/
 bool isValidHostmask(const string hostmask, const IRCServer server) pure nothrow @nogc
 {
@@ -1913,19 +1913,19 @@ unittest
 
 // Postprocessor
 /++
- +  Postprocessor interface for concrete postprocessors to inherit from.
- +
- +  Postprocessors modify `dialect.defs.IRCEvent`s after they are parsed, before
- +  returning the final object to the caller. This is used to provide support
- +  for Twitch servers, where most information is carried in IRCv3 tags prepended
- +  to the raw server strings. The normal parser routine just separates the tags
- +  from the normal string, parses it as per usual, and lets postprocessors
- +  interpret the tags. Or not, depending on what build configuration was compiled.
+    Postprocessor interface for concrete postprocessors to inherit from.
+
+    Postprocessors modify `dialect.defs.IRCEvent`s after they are parsed, before
+    returning the final object to the caller. This is used to provide support
+    for Twitch servers, where most information is carried in IRCv3 tags prepended
+    to the raw server strings. The normal parser routine just separates the tags
+    from the normal string, parses it as per usual, and lets postprocessors
+    interpret the tags. Or not, depending on what build configuration was compiled.
  +/
 interface Postprocessor
 {
     /++
-     +  Postprocesses an `dialect.defs.IRCEvent`.
+        Postprocesses an `dialect.defs.IRCEvent`.
      +/
     void postprocess(ref IRCParser, ref IRCEvent);
 }

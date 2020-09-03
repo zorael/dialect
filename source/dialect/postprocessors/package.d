@@ -1,6 +1,6 @@
 /++
- +  Postprocessor package module. Only enumerates the postprocessors into an
- +  `std.meta.AliasSeq` for easy foreaching.
+    Postprocessor package module. Only enumerates the postprocessors into an
+    `std.meta.AliasSeq` for easy foreaching.
  +/
 module dialect.postprocessors;
 
@@ -13,8 +13,8 @@ public:
 
 // Postprocessors
 /++
- +  A list of all postprocessor modules, by string name so they can be resolved
- +  even in `singleFile` mode. These will be instantiated in the order listed.
+    A list of all postprocessor modules, by string name so they can be resolved
+    even in `singleFile` mode. These will be instantiated in the order listed.
  +/
 alias Postprocessors = AliasSeq!(
     "dialect.postprocessors.twitch",

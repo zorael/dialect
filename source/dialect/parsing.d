@@ -1,74 +1,74 @@
 /++
- +  Functions related to parsing IRC events.
- +
- +  IRC events come in very heterogeneous forms along the lines of:
- +
- +      `:sender.address.tld TYPE [args...] :content`
- +
- +      `:sender!~ident@address.tld 123 [args...] :content`
- +
- +  The number and syntax of arguments for types vary wildly. As such, one
- +  common parsing routine can't be used; there are simply too many exceptions.
- +  The beginning `:sender.address.tld` is *almost* always the same form, but only
- +  almost. It's guaranteed to be followed by the type however, which come either in
- +  alphanumeric name (e.g. `PRIVMSG`, `INVITE`, `MODE`, ...), or in numeric form
- +  of 001 to 999 inclusive.
- +
- +  What we can do then is to parse this type, and interpret the arguments following
- +  as befits it.
- +
- +  This translates to large switches, which can't be helped. There are simply
- +  too many variations, which switches lend themselves well to. You could make
- +  it into long if...else if chains, but it would just be the same thing in a
- +  different form. Likewise a nested function is not essentially different from
- +  a switch case.
- +
- +  ---
- +  IRCParser parser;
- +
- +  string fromServer = ":zorael!~NaN@address.tld MODE #channel +v nickname";
- +  IRCEvent event = parser.toIRCEvent(fromServer);
- +
- +  with (event)
- +  {
- +      assert(type == IRCEvent.Type.MODE);
- +      assert(sender.nickname == "zorael");
- +      assert(sender.ident == "~NaN");
- +      assert(sender.address == "address.tld");
- +      assert(target.nickname == "nickname");
- +      assert(channel == "#channel");
- +      assert(aux = "+v");
- +  }
- +
- +  string alsoFromServer = ":cherryh.freenode.net 435 oldnick newnick #d " ~
- +      ":Cannot change nickname while banned on channel";
- +  IRCEvent event2 = parser.toIRCEvent(alsoFromServer);
- +
- +  with (event2)
- +  {
- +      assert(type == IRCEvent.Type.ERR_BANONCHAN);
- +      assert(sender.address == "cherryh.freenode.net");
- +      assert(channel == "#d");
- +      assert(target.nickname == "oldnick");
- +      assert(content == "Cannot change nickname while banned on channel");
- +      assert(aux == "newnick");
- +      assert(num == 435);
- +  }
- +
- +  string furtherFromServer = ":kameloso^!~ident@81-233-105-99-no80.tbcn.telia.com NICK :kameloso_";
- +  IRCEvent event3 = parser.toIRCEvent(furtherFromServer);
- +
- +  with (event3)
- +  {
- +      assert(type == IRCEvent.Type.NICK);
- +      assert(sender.nickname == "kameloso^");
- +      assert(sender.ident == "~ident");
- +      assert(sender.address == "81-233-105-99-no80.tbcn.telia.com");
- +      assert(target.nickname = "kameloso_");
- +  }
- +  ---
- +
- +  See the `/tests` directory for more example parses.
+    Functions related to parsing IRC events.
+
+    IRC events come in very heterogeneous forms along the lines of:
+
+        `:sender.address.tld TYPE [args...] :content`
+
+        `:sender!~ident@address.tld 123 [args...] :content`
+
+    The number and syntax of arguments for types vary wildly. As such, one
+    common parsing routine can't be used; there are simply too many exceptions.
+    The beginning `:sender.address.tld` is *almost* always the same form, but only
+    almost. It's guaranteed to be followed by the type however, which come either in
+    alphanumeric name (e.g. `PRIVMSG`, `INVITE`, `MODE`, ...), or in numeric form
+    of 001 to 999 inclusive.
+
+    What we can do then is to parse this type, and interpret the arguments following
+    as befits it.
+
+    This translates to large switches, which can't be helped. There are simply
+    too many variations, which switches lend themselves well to. You could make
+    it into long if...else if chains, but it would just be the same thing in a
+    different form. Likewise a nested function is not essentially different from
+    a switch case.
+
+    ---
+    IRCParser parser;
+
+    string fromServer = ":zorael!~NaN@address.tld MODE #channel +v nickname";
+    IRCEvent event = parser.toIRCEvent(fromServer);
+
+    with (event)
+    {
+        assert(type == IRCEvent.Type.MODE);
+        assert(sender.nickname == "zorael");
+        assert(sender.ident == "~NaN");
+        assert(sender.address == "address.tld");
+        assert(target.nickname == "nickname");
+        assert(channel == "#channel");
+        assert(aux = "+v");
+    }
+
+    string alsoFromServer = ":cherryh.freenode.net 435 oldnick newnick #d " ~
+        ":Cannot change nickname while banned on channel";
+    IRCEvent event2 = parser.toIRCEvent(alsoFromServer);
+
+    with (event2)
+    {
+        assert(type == IRCEvent.Type.ERR_BANONCHAN);
+        assert(sender.address == "cherryh.freenode.net");
+        assert(channel == "#d");
+        assert(target.nickname == "oldnick");
+        assert(content == "Cannot change nickname while banned on channel");
+        assert(aux == "newnick");
+        assert(num == 435);
+    }
+
+    string furtherFromServer = ":kameloso^!~ident@81-233-105-99-no80.tbcn.telia.com NICK :kameloso_";
+    IRCEvent event3 = parser.toIRCEvent(furtherFromServer);
+
+    with (event3)
+    {
+        assert(type == IRCEvent.Type.NICK);
+        assert(sender.nickname == "kameloso^");
+        assert(sender.ident == "~ident");
+        assert(sender.address == "81-233-105-99-no80.tbcn.telia.com");
+        assert(target.nickname = "kameloso_");
+    }
+    ---
+
+    See the `/tests` directory for more example parses.
  +/
 module dialect.parsing;
 
@@ -83,21 +83,21 @@ package:
 
 // toIRCEvent
 /++
- +  Parses an IRC string into an `dialect.defs.IRCEvent`.
- +
- +  Parsing goes through several phases (prefix, typestring, specialcases) and
- +  this is the function that calls them, in order.
- +
- +  See the files in `/tests` for unittest examples.
- +
- +  Params:
- +      parser = Reference to the current `IRCParser`.
- +      raw = Raw IRC string to parse.
- +
- +  Returns:
- +      A finished `dialect.defs.IRCEvent`.
- +
- +  Throws: `dialect.common.IRCParseException` if an empty string was passed.
+    Parses an IRC string into an `dialect.defs.IRCEvent`.
+
+    Parsing goes through several phases (prefix, typestring, specialcases) and
+    this is the function that calls them, in order.
+
+    See the files in `/tests` for unittest examples.
+
+    Params:
+        parser = Reference to the current `IRCParser`.
+        raw = Raw IRC string to parse.
+
+    Returns:
+        A finished `dialect.defs.IRCEvent`.
+
+    Throws: `dialect.common.IRCParseException` if an empty string was passed.
  +/
 public IRCEvent toIRCEvent(ref IRCParser parser, const string raw) pure
 {
@@ -193,20 +193,20 @@ unittest
 
 // parseBasic
 /++
- +  Parses the most basic of IRC events; `dialect.defs.IRCEvent.Type.PING`,
- +  `dialect.defs.IRCEvent.Type.ERROR`, `dialect.defs.IRCEvent.Type.PONG`,
- +  `dialect.defs.IRCEvent.Type.NOTICE` (plus `NOTICE AUTH`), and `AUTHENTICATE`.
- +
- +  They syntactically differ from other events in that they are not prefixed
- +  by their sender.
- +
- +  The `dialect.defs.IRCEvent` is finished at the end of this function.
- +
- +  Params:
- +      parser = Reference to the current `IRCParser`.
- +      event = Reference to the `dialect.defs.IRCEvent` to start working on.
- +
- +  Throws: `dialect.common.IRCParseException` if an unknown type was encountered.
+    Parses the most basic of IRC events; `dialect.defs.IRCEvent.Type.PING`,
+    `dialect.defs.IRCEvent.Type.ERROR`, `dialect.defs.IRCEvent.Type.PONG`,
+    `dialect.defs.IRCEvent.Type.NOTICE` (plus `NOTICE AUTH`), and `AUTHENTICATE`.
+
+    They syntactically differ from other events in that they are not prefixed
+    by their sender.
+
+    The `dialect.defs.IRCEvent` is finished at the end of this function.
+
+    Params:
+        parser = Reference to the current `IRCParser`.
+        event = Reference to the `dialect.defs.IRCEvent` to start working on.
+
+    Throws: `dialect.common.IRCParseException` if an unknown type was encountered.
  +/
 void parseBasic(ref IRCParser parser, ref IRCEvent event) pure @nogc
 {
@@ -334,18 +334,18 @@ unittest
 
 // parsePrefix
 /++
- +  Takes a slice of a raw IRC string and starts parsing it into an
- +  `dialect.defs.IRCEvent` struct.
- +
- +  This function only focuses on the prefix; the sender, be it nickname and
- +  ident or server address.
- +
- +  The `dialect.defs.IRCEvent` is not finished at the end of this function.
- +
- +  Params:
- +      parser = Reference to the current `IRCParser`.
- +      event = Reference to the `dialect.defs.IRCEvent` to start working on.
- +      slice = Reference to the *slice* of the raw IRC string.
+    Takes a slice of a raw IRC string and starts parsing it into an
+    `dialect.defs.IRCEvent` struct.
+
+    This function only focuses on the prefix; the sender, be it nickname and
+    ident or server address.
+
+    The `dialect.defs.IRCEvent` is not finished at the end of this function.
+
+    Params:
+        parser = Reference to the current `IRCParser`.
+        event = Reference to the `dialect.defs.IRCEvent` to start working on.
+        slice = Reference to the *slice* of the raw IRC string.
  +/
 void parsePrefix(ref IRCParser parser, ref IRCEvent event, ref string slice) pure
 in (slice.length, "Tried to parse prefix on an empty slice")
@@ -434,23 +434,23 @@ unittest
 
 // parseTypestring
 /++
- +  Takes a slice of a raw IRC string and continues parsing it into an
- +  `dialect.defs.IRCEvent` struct.
- +
- +  This function only focuses on the *typestring*; the part that tells what
- +  kind of event happened, like `dialect.defs.IRCEvent.Type.PRIVMSG` or
- +  `dialect.defs.IRCEvent.Type.MODE` or `dialect.defs.IRCEvent.Type.NICK`
- +  or `dialect.defs.IRCEvent.Type.KICK`, etc; in string format.
- +
- +  The `dialect.defs.IRCEvent` is not finished at the end of this function.
- +
- +  Params:
- +      parser = Reference to the current `IRCParser`.
- +      event = Reference to the `dialect.defs.IRCEvent` to continue working on.
- +      slice = Reference to the slice of the raw IRC string.
- +
- +  Throws: `dialect.common.IRCParseException` if conversion from typestring to
- +      `dialect.defs.IRCEvent.Type` or typestring to a number failed.
+    Takes a slice of a raw IRC string and continues parsing it into an
+    `dialect.defs.IRCEvent` struct.
+
+    This function only focuses on the *typestring*; the part that tells what
+    kind of event happened, like `dialect.defs.IRCEvent.Type.PRIVMSG` or
+    `dialect.defs.IRCEvent.Type.MODE` or `dialect.defs.IRCEvent.Type.NICK`
+    or `dialect.defs.IRCEvent.Type.KICK`, etc; in string format.
+
+    The `dialect.defs.IRCEvent` is not finished at the end of this function.
+
+    Params:
+        parser = Reference to the current `IRCParser`.
+        event = Reference to the `dialect.defs.IRCEvent` to continue working on.
+        slice = Reference to the slice of the raw IRC string.
+
+    Throws: `dialect.common.IRCParseException` if conversion from typestring to
+        `dialect.defs.IRCEvent.Type` or typestring to a number failed.
  +/
 void parseTypestring(ref IRCParser parser, ref IRCEvent event, ref string slice) pure
 in (slice.length, "Tried to parse typestring on an empty slice")
@@ -534,25 +534,25 @@ unittest
 
 // parseSpecialcases
 /++
- +  Takes a slice of a raw IRC string and continues parsing it into an
- +  `dialect.defs.IRCEvent` struct.
- +
- +  This function only focuses on specialcasing the remaining line, dividing it
- +  into fields like `target`, `channel`, `content`, etc.
- +
- +  IRC events are *riddled* with inconsistencies and specialcasings, so this
- +  function is very very long, but by necessity.
- +
- +  The `dialect.defs.IRCEvent` is finished at the end of this function.
- +
- +  Params:
- +      parser = Reference to the current `IRCParser`.
- +      event = Reference to the `dialect.defs.IRCEvent` to continue working on.
- +      slice = Reference to the slice of the raw IRC string.
- +
- +  Throws: `dialect.common.IRCParseException` if an unknown to-connect-type event was
- +      encountered, or if the event was not recognised at all, as neither a
- +      normal type nor a numeric.
+    Takes a slice of a raw IRC string and continues parsing it into an
+    `dialect.defs.IRCEvent` struct.
+
+    This function only focuses on specialcasing the remaining line, dividing it
+    into fields like `target`, `channel`, `content`, etc.
+
+    IRC events are *riddled* with inconsistencies and specialcasings, so this
+    function is very very long, but by necessity.
+
+    The `dialect.defs.IRCEvent` is finished at the end of this function.
+
+    Params:
+        parser = Reference to the current `IRCParser`.
+        event = Reference to the `dialect.defs.IRCEvent` to continue working on.
+        slice = Reference to the slice of the raw IRC string.
+
+    Throws: `dialect.common.IRCParseException` if an unknown to-connect-type event was
+        encountered, or if the event was not recognised at all, as neither a
+        normal type nor a numeric.
  +/
 void parseSpecialcases(ref IRCParser parser, ref IRCEvent event, ref string slice) pure
 //in (slice.length, "Tried to parse specialcases on an empty slice")
@@ -910,9 +910,9 @@ void parseSpecialcases(ref IRCParser parser, ref IRCEvent event, ref string slic
 
     case ERR_NEEDPONG: // 513
         /++
-         +  "Also known as ERR_NEEDPONG (Unreal/Ultimate) for use during
-         +  registration, however it's not used in Unreal (and might not be used
-         +  in Ultimate either)."
+            "Also known as ERR_NEEDPONG (Unreal/Ultimate) for use during
+            registration, however it's not used in Unreal (and might not be used
+            in Ultimate either)."
          +/
         // :irc.uworld.se 513 kameloso :To connect type /QUOTE PONG 3705964477
 
@@ -1259,19 +1259,19 @@ void parseSpecialcases(ref IRCParser parser, ref IRCEvent event, ref string slic
 
 // parseGeneralCases
 /++
- +  Takes a slice of a raw IRC string and continues parsing it into an
- +  `dialect.defs.IRCEvent` struct.
- +
- +  This function only focuses on applying general heuristics to the remaining
- +  line, dividing it into fields like `target`, `channel`, `content`, etc; not
- +  based by its type but rather by how the string looks.
- +
- +  The `dialect.defs.IRCEvent` is finished at the end of this function.
- +
- +  Params:
- +      parser = Reference to the current `IRCParser`.
- +      event = Reference to the `dialect.defs.IRCEvent` to continue working on.
- +      slice = Reference to the slice of the raw IRC string.
+    Takes a slice of a raw IRC string and continues parsing it into an
+    `dialect.defs.IRCEvent` struct.
+
+    This function only focuses on applying general heuristics to the remaining
+    line, dividing it into fields like `target`, `channel`, `content`, etc; not
+    based by its type but rather by how the string looks.
+
+    The `dialect.defs.IRCEvent` is finished at the end of this function.
+
+    Params:
+        parser = Reference to the current `IRCParser`.
+        event = Reference to the `dialect.defs.IRCEvent` to continue working on.
+        slice = Reference to the slice of the raw IRC string.
  +/
 void parseGeneralCases(const ref IRCParser parser, ref IRCEvent event, ref string slice) pure @nogc
 {
@@ -1495,13 +1495,13 @@ void parseGeneralCases(const ref IRCParser parser, ref IRCEvent event, ref strin
 
 // postparseSanityCheck
 /++
- +  Checks for some specific erroneous edge cases in an `dialect.defs.IRCEvent`.
- +
- +  Descriptions of the errors are stored in `event.errors`.
- +
- +  Params:
- +      parser = Reference to the current `IRCParser`.
- +      event = Reference to the `dialect.defs.IRCEvent` to continue working on.
+    Checks for some specific erroneous edge cases in an `dialect.defs.IRCEvent`.
+
+    Descriptions of the errors are stored in `event.errors`.
+
+    Params:
+        parser = Reference to the current `IRCParser`.
+        event = Reference to the `dialect.defs.IRCEvent` to continue working on.
  +/
 public void postparseSanityCheck(const ref IRCParser parser, ref IRCEvent event) pure nothrow
 {
@@ -1550,15 +1550,15 @@ public void postparseSanityCheck(const ref IRCParser parser, ref IRCEvent event)
 
 // onNotice
 /++
- +  Handle `dialect.defs.IRCEvent.Type.NOTICE` events.
- +
- +  These are all(?) sent by the server and/or services. As such they often
- +  convey important `special` things, so parse those.
- +
- +  Params:
- +      parser = Reference to the current `IRCParser`.
- +      event = Reference to the `dialect.defs.IRCEvent` to continue working on.
- +      slice = Reference to the slice of the raw IRC string.
+    Handle `dialect.defs.IRCEvent.Type.NOTICE` events.
+
+    These are all(?) sent by the server and/or services. As such they often
+    convey important `special` things, so parse those.
+
+    Params:
+        parser = Reference to the current `IRCParser`.
+        event = Reference to the `dialect.defs.IRCEvent` to continue working on.
+        slice = Reference to the slice of the raw IRC string.
  +/
 void onNotice(ref IRCParser parser, ref IRCEvent event, ref string slice) pure
 in (slice.length, "Tried to process `onNotice` on an empty slice")
@@ -1686,22 +1686,22 @@ in (slice.length, "Tried to process `onNotice` on an empty slice")
 
 // onPRIVMSG
 /++
- +  Handle `dialect.defs.IRCEvent.Type.QUERY` and `dialect.defs.IRCEvent.Type.CHAN`
- +  messages (`dialect.defs.IRCEvent.Type.PRIVMSG`).
- +
- +  Whether or not it is a private query message or a channel message is only obvious
- +  by looking at the target field of it; if it starts with a `#`, it is a
- +  channel message.
- +
- +  Also handle `ACTION` events (`/me slaps foo with a large trout`), and change
- +  the type to `CTCP_`-types if applicable.
- +
- +  Params:
- +      parser = Reference to the current `IRCParser`.
- +      event = Reference to the `dialect.defs.IRCEvent` to continue working on.
- +      slice = Reference to the slice of the raw IRC string.
- +
- +  Throws: `dialect.common.IRCParseException` on unknown CTCP types.
+    Handle `dialect.defs.IRCEvent.Type.QUERY` and `dialect.defs.IRCEvent.Type.CHAN`
+    messages (`dialect.defs.IRCEvent.Type.PRIVMSG`).
+
+    Whether or not it is a private query message or a channel message is only obvious
+    by looking at the target field of it; if it starts with a `#`, it is a
+    channel message.
+
+    Also handle `ACTION` events (`/me slaps foo with a large trout`), and change
+    the type to `CTCP_`-types if applicable.
+
+    Params:
+        parser = Reference to the current `IRCParser`.
+        event = Reference to the `dialect.defs.IRCEvent` to continue working on.
+        slice = Reference to the slice of the raw IRC string.
+
+    Throws: `dialect.common.IRCParseException` on unknown CTCP types.
  +/
 void onPRIVMSG(const ref IRCParser parser, ref IRCEvent event, ref string slice) pure
 in (slice.length, "Tried to process `onPRIVMSG` on an empty slice")
@@ -1766,18 +1766,18 @@ in (slice.length, "Tried to process `onPRIVMSG` on an empty slice")
         import std.traits : EnumMembers;
 
         /++
-         +  This iterates through all `dialect.defs.IRCEvent.Type`s that
-         +  begin with `CTCP_` and generates switch cases for the string of
-         +  each. Inside it will assign `event.type` to the corresponding
-         +  `dialect.defs.IRCEvent.Type`.
-         +
-         +  Like so, except automatically generated through compile-time
-         +  introspection:
-         +
-         +      case "CTCP_PING":
-         +          event.type = CTCP_PING;
-         +          event.aux = "PING";
-         +          break;
+            This iterates through all `dialect.defs.IRCEvent.Type`s that
+            begin with `CTCP_` and generates switch cases for the string of
+            each. Inside it will assign `event.type` to the corresponding
+            `dialect.defs.IRCEvent.Type`.
+
+            Like so, except automatically generated through compile-time
+            introspection:
+
+                case "CTCP_PING":
+                    event.type = CTCP_PING;
+                    event.aux = "PING";
+                    break;
          +/
 
         with (IRCEvent.Type)
@@ -1818,12 +1818,12 @@ in (slice.length, "Tried to process `onPRIVMSG` on an empty slice")
 
 // onMode
 /++
- +  Handle `dialect.defs.IRCEvent.Type.MODE` changes.
- +
- +  Params:
- +      parser = Reference to the current `IRCParser`.
- +      event = Reference to the `dialect.defs.IRCEvent` to continue working on.
- +      slice = Reference to the slice of the raw IRC string.
+    Handle `dialect.defs.IRCEvent.Type.MODE` changes.
+
+    Params:
+        parser = Reference to the current `IRCParser`.
+        event = Reference to the `dialect.defs.IRCEvent` to continue working on.
+        slice = Reference to the slice of the raw IRC string.
  +/
 void onMode(ref IRCParser parser, ref IRCEvent event, ref string slice) pure
 in (slice.length, "Tried to process `onMode` on an empty slice")
@@ -1954,19 +1954,19 @@ unittest
 
 // onISUPPORT
 /++
- +  Handles `dialect.defs.IRCEvent.Type.RPL_ISUPPORT` events.
- +
- +  `dialect.defs.IRCEvent.Type.RPL_ISUPPORT` contains a bunch of interesting information that changes how we
- +  look at the `dialect.defs.IRCServer`. Notably which *network* the server
- +  is of and its max channel and nick lengths, and available modes. Then much
- +  more that we're currently ignoring.
- +
- +  Params:
- +      parser = Reference to the current `IRCParser`.
- +      event = Reference to the `dialect.defs.IRCEvent` to continue working on.
- +      slice = Reference to the slice of the raw IRC string.
- +
- +  Throws: `dialect.common.IRCParseException` if something could not be parsed or converted.
+    Handles `dialect.defs.IRCEvent.Type.RPL_ISUPPORT` events.
+
+    `dialect.defs.IRCEvent.Type.RPL_ISUPPORT` contains a bunch of interesting information that changes how we
+    look at the `dialect.defs.IRCServer`. Notably which *network* the server
+    is of and its max channel and nick lengths, and available modes. Then much
+    more that we're currently ignoring.
+
+    Params:
+        parser = Reference to the current `IRCParser`.
+        event = Reference to the `dialect.defs.IRCEvent` to continue working on.
+        slice = Reference to the slice of the raw IRC string.
+
+    Throws: `dialect.common.IRCParseException` if something could not be parsed or converted.
  +/
 void onISUPPORT(ref IRCParser parser, ref IRCEvent event, ref string slice) pure
 in (slice.length, "Tried to process `onISUPPORT` on an empty slice")
@@ -2034,16 +2034,16 @@ in (slice.length, "Tried to process `onISUPPORT` on an empty slice")
 
             case "CHANMODES":
                 /++
-                 +  This is a list of channel modes according to 4 types.
-                 +
-                 +  A = Mode that adds or removes a nick or address to a list.
-                 +      Always has a parameter.
-                 +  B = Mode that changes a setting and always has a parameter.
-                 +  C = Mode that changes a setting and only has a parameter when
-                 +      set.
-                 +  D = Mode that changes a setting and never has a parameter.
-                 +
-                 +  Freenode: CHANMODES=eIbq,k,flj,CFLMPQScgimnprstz
+                    This is a list of channel modes according to 4 types.
+
+                    A = Mode that adds or removes a nick or address to a list.
+                        Always has a parameter.
+                    B = Mode that changes a setting and always has a parameter.
+                    C = Mode that changes a setting and only has a parameter when
+                        set.
+                    D = Mode that changes a setting and never has a parameter.
+
+                    Freenode: CHANMODES=eIbq,k,flj,CFLMPQScgimnprstz
                  +/
                 string modeslice = value;
                 aModes = modeslice.nom(',');
@@ -2138,17 +2138,17 @@ in (slice.length, "Tried to process `onISUPPORT` on an empty slice")
 
 // onMyInfo
 /++
- +  Handle `dialect.defs.IRCEvent.Type.RPL_MYINFO` events.
- +
- +  `MYINFO` contains information about which *daemon* the server is running.
- +  We want that to be able to meld together a good `typenums` array.
- +
- +  It fires before `dialect.defs.IRCEvent.Type.RPL_ISUPPORT`.
- +
- +  Params:
- +      parser = Reference to the current `IRCParser`.
- +      event = Reference to the `dialect.defs.IRCEvent` to continue working on.
- +      slice = Reference to the slice of the raw IRC string.
+    Handle `dialect.defs.IRCEvent.Type.RPL_MYINFO` events.
+
+    `MYINFO` contains information about which *daemon* the server is running.
+    We want that to be able to meld together a good `typenums` array.
+
+    It fires before `dialect.defs.IRCEvent.Type.RPL_ISUPPORT`.
+
+    Params:
+        parser = Reference to the current `IRCParser`.
+        event = Reference to the `dialect.defs.IRCEvent` to continue working on.
+        slice = Reference to the slice of the raw IRC string.
  +/
 void onMyInfo(ref IRCParser parser, ref IRCEvent event, ref string slice) pure
 in (slice.length, "Tried to process `onMyInfo` on an empty slice")
@@ -2303,72 +2303,72 @@ public:
 
 // IRCParser
 /++
- +  Parser that takes raw IRC strings and produces `dialect.defs.IRCEvent`s based on them.
- +
- +  Parsing requires state, which means that `IRCParser`s must be equipped with
- +  a `dialect.defs.IRCServer` and a `dialect.defs.IRCClient` for context when parsing.
- +  Because of this it has its postblit `@disable`d, so as not to make copies
- +  when only one instance should exist.
- +
- +  The alternative is to make it a class, which works too.
- +
- +  See the `/tests` directory for unit tests.
- +
- +  Example:
- +  ---
- +  IRCClient client;
- +  client.nickname = "...";
- +
- +  IRCServer server;
- +  server.address = "...";
- +
- +  IRCParser parser = IRCParser(client, server);
- +
- +  string fromServer = ":zorael!~NaN@address.tld MODE #channel +v nickname";
- +  IRCEvent event = parser.toIRCEvent(fromServer);
- +
- +  with (event)
- +  {
- +      assert(type == IRCEvent.Type.MODE);
- +      assert(sender.nickname == "zorael");
- +      assert(sender.ident == "~NaN");
- +      assert(sender.address == "address.tld");
- +      assert(target.nickname == "nickname");
- +      assert(channel == "#channel");
- +      assert(aux = "+v");
- +  }
- +
- +  string alsoFromServer = ":cherryh.freenode.net 435 oldnick newnick #d :Cannot change nickname while banned on channel";
- +  IRCEvent event2 = parser.toIRCEvent(alsoFromServer);
- +
- +  with (event2)
- +  {
- +      assert(type == IRCEvent.Type.ERR_BANONCHAN);
- +      assert(sender.address == "cherryh.freenode.net");
- +      assert(channel == "#d");
- +      assert(target.nickname == "oldnick");
- +      assert(content == "Cannot change nickname while banned on channel");
- +      assert(aux == "newnick");
- +      assert(num == 435);
- +  }
- +
- +  // Requires Twitch support via build configuration "twitch"
- +  string fullExample = "@badge-info=subscriber/15;badges=subscriber/12;color=;display-name=SomeoneOnTwitch;emotes=;flags=;id=d6729804-2bf3-495d-80ce-a2fe8ed00a26;login=someoneontwitch;mod=0;msg-id=submysterygift;msg-param-mass-gift-count=1;msg-param-origin-id=49\\s9d\\s3e\\s68\\sca\\s26\\se9\\s2a\\s6e\\s44\\sd4\\s60\\s9b\\s3d\\saa\\sb9\\s4c\\sad\\s43\\s5c;msg-param-sender-count=4;msg-param-sub-plan=1000;room-id=71092938;subscriber=1;system-msg=someoneOnTwitch\\sis\\sgifting\\s1\\sTier\\s1\\sSubs\\sto\\sxQcOW's\\scommunity!\\sThey've\\sgifted\\sa\\stotal\\sof\\s4\\sin\\sthe\\schannel!;tmi-sent-ts=1569013433362;user-id=224578549;user-type= :tmi.twitch.tv USERNOTICE #xqcow"
- +  IRCEvent event4 = parser.toIRCEvent(fullExample);
- +
- +  with (event)
- +  {
- +      assert(type == IRCEvent.Type.TWITCH_BULKGIFT);
- +      assert(sender.nickname == "someoneontwitch");
- +      assert(sender.displayName == "SomeoneOnTwitch");
- +      assert(sender.badges == "subscriber/12");
- +      assert(channel == "#xqcow");
- +      assert(content == "SomeoneOnTwitch is gifting 1 Tier 1 Subs to xQcOW's community! They've gifted a total of 4 in the channel!");
- +      assert(aux == "1000");
- +      assert(count == 1);
- +      assert(altcount == 4);
- +  }
- +  ---
+    Parser that takes raw IRC strings and produces `dialect.defs.IRCEvent`s based on them.
+
+    Parsing requires state, which means that `IRCParser`s must be equipped with
+    a `dialect.defs.IRCServer` and a `dialect.defs.IRCClient` for context when parsing.
+    Because of this it has its postblit `@disable`d, so as not to make copies
+    when only one instance should exist.
+
+    The alternative is to make it a class, which works too.
+
+    See the `/tests` directory for unit tests.
+
+    Example:
+    ---
+    IRCClient client;
+    client.nickname = "...";
+
+    IRCServer server;
+    server.address = "...";
+
+    IRCParser parser = IRCParser(client, server);
+
+    string fromServer = ":zorael!~NaN@address.tld MODE #channel +v nickname";
+    IRCEvent event = parser.toIRCEvent(fromServer);
+
+    with (event)
+    {
+        assert(type == IRCEvent.Type.MODE);
+        assert(sender.nickname == "zorael");
+        assert(sender.ident == "~NaN");
+        assert(sender.address == "address.tld");
+        assert(target.nickname == "nickname");
+        assert(channel == "#channel");
+        assert(aux = "+v");
+    }
+
+    string alsoFromServer = ":cherryh.freenode.net 435 oldnick newnick #d :Cannot change nickname while banned on channel";
+    IRCEvent event2 = parser.toIRCEvent(alsoFromServer);
+
+    with (event2)
+    {
+        assert(type == IRCEvent.Type.ERR_BANONCHAN);
+        assert(sender.address == "cherryh.freenode.net");
+        assert(channel == "#d");
+        assert(target.nickname == "oldnick");
+        assert(content == "Cannot change nickname while banned on channel");
+        assert(aux == "newnick");
+        assert(num == 435);
+    }
+
+    // Requires Twitch support via build configuration "twitch"
+    string fullExample = "@badge-info=subscriber/15;badges=subscriber/12;color=;display-name=SomeoneOnTwitch;emotes=;flags=;id=d6729804-2bf3-495d-80ce-a2fe8ed00a26;login=someoneontwitch;mod=0;msg-id=submysterygift;msg-param-mass-gift-count=1;msg-param-origin-id=49\\s9d\\s3e\\s68\\sca\\s26\\se9\\s2a\\s6e\\s44\\sd4\\s60\\s9b\\s3d\\saa\\sb9\\s4c\\sad\\s43\\s5c;msg-param-sender-count=4;msg-param-sub-plan=1000;room-id=71092938;subscriber=1;system-msg=someoneOnTwitch\\sis\\sgifting\\s1\\sTier\\s1\\sSubs\\sto\\sxQcOW's\\scommunity!\\sThey've\\sgifted\\sa\\stotal\\sof\\s4\\sin\\sthe\\schannel!;tmi-sent-ts=1569013433362;user-id=224578549;user-type= :tmi.twitch.tv USERNOTICE #xqcow"
+    IRCEvent event4 = parser.toIRCEvent(fullExample);
+
+    with (event)
+    {
+        assert(type == IRCEvent.Type.TWITCH_BULKGIFT);
+        assert(sender.nickname == "someoneontwitch");
+        assert(sender.displayName == "SomeoneOnTwitch");
+        assert(sender.badges == "subscriber/12");
+        assert(channel == "#xqcow");
+        assert(content == "SomeoneOnTwitch is gifting 1 Tier 1 Subs to xQcOW's community! They've gifted a total of 4 in the channel!");
+        assert(aux == "1000");
+        assert(count == 1);
+        assert(altcount == 4);
+    }
+    ---
  +/
 struct IRCParser
 {
@@ -2386,25 +2386,25 @@ struct IRCParser
     IRCEvent.Type[1024] typenums = Typenums.base;
 
     /++
-     +  Array of active `dialect.common.Postprocessor`s, to be iterated through
-     +  and processed after parsing is complete.
+        Array of active `dialect.common.Postprocessor`s, to be iterated through
+        and processed after parsing is complete.
      +/
     Postprocessor[] postprocessors;
 
     // toIRCEvent
     /++
-     +  Parses an IRC string into an `dialect.defs.IRCEvent`.
-     +
-     +  The return type is kept as `auto` to infer purity. It will be `pure` if
-     +  there are no postprocessors available, and merely `@safe` if there are.
-     +
-     +  Proxies the call to the top-level `.toIRCEvent(IRCParser, string)`.
-     +
-     +  Params:
-     +      raw = Raw IRC string as received from a server.
-     +
-     +  Returns:
-     +      A complete `dialect.defs.IRCEvent`.
+        Parses an IRC string into an `dialect.defs.IRCEvent`.
+
+        The return type is kept as `auto` to infer purity. It will be `pure` if
+        there are no postprocessors available, and merely `@safe` if there are.
+
+        Proxies the call to the top-level `.toIRCEvent(IRCParser, string)`.
+
+        Params:
+            raw = Raw IRC string as received from a server.
+
+        Returns:
+            A complete `dialect.defs.IRCEvent`.
      +/
     auto toIRCEvent(const string raw)
     {
@@ -2427,8 +2427,8 @@ struct IRCParser
     }
 
     /++
-     +  Create a new `IRCParser` with the passed `dialect.defs.IRCClient` and
-     +  `dialect.defs.IRCServer` as base context for parsing.
+        Create a new `IRCParser` with the passed `dialect.defs.IRCClient` and
+        `dialect.defs.IRCServer` as base context for parsing.
      +/
     this(IRCClient client, IRCServer server) pure nothrow
     {
@@ -2445,7 +2445,7 @@ struct IRCParser
     @disable this(this);
 
     /++
-     +  Initialises defined postprocessors.
+        Initialises defined postprocessors.
      +/
     void initPostprocessors() pure nothrow
     in (!this.postprocessors.length, "Tried to double-init postprocessors")

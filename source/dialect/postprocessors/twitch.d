@@ -1,9 +1,9 @@
 /++
- +  The Twitch postprocessor processes `dialect.defs.IRCEvent`s after
- +  they are parsed, and deals with Twitch-specifics. Those include extracting
- +  the colour someone's name should be printed in, their alias/"display name"
- +  (generally their nickname cased), converting the event to some event types
- +  unique to Twitch, etc.
+    The Twitch postprocessor processes `dialect.defs.IRCEvent`s after
+    they are parsed, and deals with Twitch-specifics. Those include extracting
+    the colour someone's name should be printed in, their alias/"display name"
+    (generally their nickname cased), converting the event to some event types
+    unique to Twitch, etc.
  +/
 module dialect.postprocessors.twitch;
 
@@ -21,13 +21,13 @@ import dialect.common : Postprocessor;
 
 // parseTwitchTags
 /++
- +  Parses a Twitch event's IRCv3 tags.
- +
- +  The event is passed by ref as many tags necessitate changes to it.
- +
- +  Params:
- +      parser = Current `dialect.parsing.IRCParser`.
- +      event = Reference to the `dialect.defs.IRCEvent` whose tags should be parsed.
+    Parses a Twitch event's IRCv3 tags.
+
+    The event is passed by ref as many tags necessitate changes to it.
+
+    Params:
+        parser = Current `dialect.parsing.IRCParser`.
+        event = Reference to the `dialect.defs.IRCEvent` whose tags should be parsed.
  +/
 void parseTwitchTags(ref IRCParser parser, ref IRCEvent event)
 {
@@ -996,23 +996,23 @@ public:
 
 // TwitchPostprocessor
 /++
- +  Twitch-specific postprocessor.
- +
- +  Twitch events are initially very basic with only skeletal functionality,
- +  until you enable capabilities that unlock their IRCv3 tags, at which point
- +  events become a flood of information.
+    Twitch-specific postprocessor.
+
+    Twitch events are initially very basic with only skeletal functionality,
+    until you enable capabilities that unlock their IRCv3 tags, at which point
+    events become a flood of information.
  +/
 final class TwitchPostprocessor : Postprocessor
 {
     // postprocess
     /++
-     +  Handle Twitch specifics, modifying the `dialect.defs.IRCEvent` to add
-     +  things like `dialect.defs.IRCEvent.colour` and differentiate between
-     +  temporary and permanent bans.
-     +
-     +  Params:
-     +      parser = Current `dialect.parsing.IRCParser`.
-     +      event = `dialect.defs.IRCEvent` in flight.
+        Handle Twitch specifics, modifying the `dialect.defs.IRCEvent` to add
+        things like `dialect.defs.IRCEvent.colour` and differentiate between
+        temporary and permanent bans.
+
+        Params:
+            parser = Current `dialect.parsing.IRCParser`.
+            event = `dialect.defs.IRCEvent` in flight.
      +/
     void postprocess(ref IRCParser parser, ref IRCEvent event)
     {
