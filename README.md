@@ -1,6 +1,6 @@
 # dialect [![Linux/macOS](https://img.shields.io/circleci/project/github/zorael/dialect/master.svg?maxAge=3600&logo=circleci)](https://circleci.com/gh/zorael/dialect) [![Linux/macOS](https://img.shields.io/travis/zorael/dialect/master.svg?maxAge=3600&logo=travis)](https://travis-ci.com/zorael/dialect) [![Windows](https://img.shields.io/appveyor/ci/zorael/dialect/master.svg?maxAge=3600&logo=appveyor)](https://ci.appveyor.com/project/zorael/dialect) [![GitHub commits since last release](https://img.shields.io/github/commits-since/zorael/dialect/v0.6.1.svg?maxAge=3600&logo=github)](https://github.com/zorael/dialect/compare/v0.6.1...master)
 
-IRC parsing library with support for a wide variety of server daemons.
+IRC parsing library.
 
 It uses exceptions to signal errors during parsing, so it's not `nothrow`. Some parts of it create new strings, so it can't be `@nogc`. It is however `pure` and `@safe` with the default "library" build configuration.
 
@@ -34,6 +34,9 @@ struct IRCEvent
 
 struct IRCUser
 {
+    enum Class { ... }  // enum of IRC user types; operator, staff, and similar
+
+    Class class_;
     string nickname;
     string ident;
     string address;
@@ -43,12 +46,12 @@ struct IRCUser
 
 struct IRCChannel
 {
-    struct Mode { ... }
+    struct Mode { ... }  // embodies the notion of a channel mode
 
     string name;
     string topic;
     string modechars;
-    Mode[] modes
+    Mode[] modes;
     bool[string] users;
     string[][char] mods;
     long created;
@@ -56,6 +59,9 @@ struct IRCChannel
 
 struct IRCServer
 {
+    enum Daemon { ... } // enum of various IRC daemons
+
+    Daemon daemon;
     string address;
     ushort port;
 
@@ -76,7 +82,7 @@ struct IRCParser
     IRCServer server;
     this(IRCClient, IRCServer);
 
-    IRCEvent toIRCEvent(const string);  // <--
+    IRCEvent toIRCEvent(const string);  // <-- entry point of use
 }
 ```
 
@@ -85,7 +91,7 @@ struct IRCParser
 > This assumes you have a program set up to read from an IRC server. This is not a bot framework; for that you're better off with the full [kameloso](https://github.com/zorael/kameloso) and writing a plugin that suits your needs.
 
 * Instantiate an `IRCClient` and configure its members. (required for context when parsing)
-* Instantiate an `IRCServer` and configure its members. (it may work without but just give it a host address)
+* Instantiate an `IRCServer` and configure its members. (it may work without but just give it at minimum a host address)
 * Instantiate an `IRCParser` with your client and server via constructor. Pass it by `ref` if passed around between functions.
 * Read a string from the server and parse it into an `IRCEvent` with `yourParser.toIRCEvent(string)`.
 
@@ -184,7 +190,7 @@ Enter server address (irc.freenode.net): irc.server.tld
 
 * [**D**](https://dlang.org)
 * [`dub`](https://code.dlang.org)
-* [`lu`](https://github.com/zorael/lu) ([dub](http://lu.dub.pm))
+* [`lu`](https://github.com/zorael/lu) ([dub](http://code.dlang.org/packages/lu))
 
 # License
 
