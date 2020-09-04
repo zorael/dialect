@@ -29,7 +29,7 @@ import dialect.common : Postprocessor;
         parser = Current `dialect.parsing.IRCParser`.
         event = Reference to the `dialect.defs.IRCEvent` whose tags should be parsed.
  +/
-void parseTwitchTags(ref IRCParser parser, ref IRCEvent event)
+auto parseTwitchTags(ref IRCParser parser, ref IRCEvent event)
 {
     import dialect.common : decodeIRCv3String;
     import std.algorithm.iteration : splitter;
