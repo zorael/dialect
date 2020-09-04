@@ -1178,9 +1178,9 @@ struct IRCUser
         Returns:
             A hash.
      +/
-    size_t toHash() const pure nothrow
+    size_t toHash() const pure @nogc nothrow
     {
-        return (nickname ~ ident ~ address).hashOf;
+        return nickname.hashOf + ident.hashOf + address.hashOf;
     }
 
     // toString
