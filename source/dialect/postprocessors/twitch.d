@@ -64,7 +64,7 @@ auto parseTwitchTags(ref IRCParser parser, ref IRCEvent event)
         }
     }
 
-    with (IRCEvent)
+    with (IRCEvent.Type)
     foreach (tag; tagRange)
     {
         import lu.string : contains, nom;
@@ -119,7 +119,7 @@ auto parseTwitchTags(ref IRCParser parser, ref IRCEvent event)
             case "resub":
                 // Subscription. Disambiguate subs from resubs by other tags, set
                 // in count and altcount.
-                event.type = Type.TWITCH_SUB;
+                event.type = TWITCH_SUB;
                 break;
 
             case "subgift":
@@ -137,35 +137,35 @@ auto parseTwitchTags(ref IRCParser parser, ref IRCEvent event)
                     https://discuss.dev.twitch.tv/t/msg-id-purchase/22067/8
                  +/
                 // In reality the sender is "ananonymousgifter".
-                event.type = Type.TWITCH_SUBGIFT;
+                event.type = TWITCH_SUBGIFT;
                 break;
 
             case "submysterygift":
                 // Gifting several subs to random people in one event.
                 // "A is gifting 1 Tier 1 Subs to C's community! They've gifted a total of n in the channel!"
-                event.type = Type.TWITCH_BULKGIFT;
+                event.type = TWITCH_BULKGIFT;
                 break;
 
             case "ritual":
                 // Oneliner upon joining chat.
                 // content: "HeyGuys"
-                event.type = Type.TWITCH_RITUAL;
+                event.type = TWITCH_RITUAL;
                 break;
 
             case "rewardgift":
-                event.type = Type.TWITCH_REWARDGIFT;
+                event.type = TWITCH_REWARDGIFT;
                 break;
 
             case "raid":
                 // Raid start. Seen in target channel.
                 // "3322 raiders from A have joined!"
-                event.type = Type.TWITCH_RAID;
+                event.type = TWITCH_RAID;
                 break;
 
             case "unraid":
                 // Manual raid abort.
                 // "The raid has been cancelled."
-                event.type = Type.TWITCH_UNRAID;
+                event.type = TWITCH_UNRAID;
                 break;
 
             case "charity":
@@ -177,7 +177,7 @@ auto parseTwitchTags(ref IRCParser parser, ref IRCEvent event)
 
                 import std.typecons : Flag, No, Yes;
 
-                event.type = Type.TWITCH_CHARITY;
+                event.type = TWITCH_CHARITY;
 
                 string[string] charityAA;
                 auto charityTags = tagRange
@@ -265,25 +265,25 @@ auto parseTwitchTags(ref IRCParser parser, ref IRCEvent event)
             case "anongiftpaidupgrade":
                 // "Continuing a gift sub" by gifting a sub you were gifted (?)
                 // "A is continuing the Gift Sub they got from B!"
-                event.type = Type.TWITCH_GIFTCHAIN;
+                event.type = TWITCH_GIFTCHAIN;
                 break;
 
             case "primepaidupgrade":
                 // User upgrading a prime sub to a normal paid one.
                 // "A converted from a Twitch Prime sub to a Tier 1 sub!"
-                event.type = Type.TWITCH_SUBUPGRADE;
+                event.type = TWITCH_SUBUPGRADE;
                 break;
 
             case "bitsbadgetier":
                 // User just earned a badge for a tier of bits
                 // content is the message body, e.g. "GG"
-                event.type = Type.TWITCH_BITSBADGETIER;
+                event.type = TWITCH_BITSBADGETIER;
                 break;
 
             case "extendsub":
                 // User extended their sub, always by a month?
                 // "A extended their Tier 1 subscription through April!"
-                event.type = Type.TWITCH_EXTENDSUB;
+                event.type = TWITCH_EXTENDSUB;
                 break;
 
             case "highlighted-message":
@@ -294,13 +294,13 @@ auto parseTwitchTags(ref IRCParser parser, ref IRCEvent event)
 
             case "primecommunitygiftreceived":
                 // "A viewer was gifted a World of Tanks: Care Package, courtesy of a Prime member!"
-                event.type = Type.TWITCH_GIFTRECEIVED;
+                event.type = TWITCH_GIFTRECEIVED;
                 break;
 
             case "standardpayforward":  // has a target
             case "communitypayforward": // toward community, no target
                 // "A is paying forward the Gift they got from B to #channel!"
-                event.type = Type.TWITCH_PAYFORWARD;
+                event.type = TWITCH_PAYFORWARD;
                 break;
 
             /*case "bad_ban_admin":
@@ -385,7 +385,7 @@ auto parseTwitchTags(ref IRCParser parser, ref IRCEvent event)
             case "turbo_only_color":
             case "unavailable_command":
                 // Generic Twitch error.
-                event.type = Type.TWITCH_ERROR;
+                event.type = TWITCH_ERROR;
                 event.aux = value;
                 break;
 
@@ -458,7 +458,7 @@ auto parseTwitchTags(ref IRCParser parser, ref IRCEvent event)
             case "no_vips":
             case "no_mods":
                 // Generic Twitch server reply.
-                event.type = Type.TWITCH_NOTICE;
+                event.type = TWITCH_NOTICE;
                 event.aux = value;
                 break;
 
@@ -479,12 +479,12 @@ auto parseTwitchTags(ref IRCParser parser, ref IRCEvent event)
 
                 if (value.beginsWith("bad_"))
                 {
-                    event.type = Type.TWITCH_ERROR;
+                    event.type = TWITCH_ERROR;
                     break;
                 }
                 else if (value.beginsWith("usage_"))
                 {
-                    event.type = Type.TWITCH_NOTICE;
+                    event.type = TWITCH_NOTICE;
                     break;
                 }
 
@@ -509,14 +509,14 @@ auto parseTwitchTags(ref IRCParser parser, ref IRCEvent event)
 
             immutable displayName = decodeIRCv3String(value).strippedRight;
 
-            if ((event.type == Type.USERSTATE) || (event.type == Type.GLOBALUSERSTATE))
+            if ((event.type == USERSTATE) || (event.type == GLOBALUSERSTATE))
             {
                 // USERSTATE describes the bot in the context of a specific channel,
                 // such as what badges are available. It's *always* about the bot,
                 // so expose the display name in event.target and let Persistence store it.
                 event.target = event.sender;  // get badges etc
                 event.target.nickname = parser.client.nickname;
-                event.target.class_ = (event.type == Type.GLOBALUSERSTATE) ?
+                event.target.class_ = (event.type == GLOBALUSERSTATE) ?
                     IRCUser.Class.admin : IRCUser.Class.unset;
                 event.target.displayName = displayName;
                 event.target.address = string.init;
@@ -563,7 +563,7 @@ auto parseTwitchTags(ref IRCParser parser, ref IRCEvent event)
                 .strippedRight
                 .removeControlCharacters;
 
-            if (event.type == Type.TWITCH_RITUAL)
+            if (event.type == TWITCH_RITUAL)
             {
                 event.aux = message;
             }
@@ -627,7 +627,7 @@ auto parseTwitchTags(ref IRCParser parser, ref IRCEvent event)
                   1000-4999, purple for 100-999, gray for 1-99
                 * size – A digit between 1 and 4
             */
-            event.type = Type.TWITCH_CHEER;
+            event.type = TWITCH_CHEER;
 
             version(TwitchWarnings)
             {
@@ -790,7 +790,7 @@ auto parseTwitchTags(ref IRCParser parser, ref IRCEvent event)
 
         case "room-id":
             // The channel ID.
-            if (event.type == Type.ROOMSTATE) event.aux = value;
+            if (event.type == ROOMSTATE) event.aux = value;
             break;
 
         case "reply-parent-display-name":
@@ -826,7 +826,7 @@ auto parseTwitchTags(ref IRCParser parser, ref IRCEvent event)
             case "emote-only":
                 // We don't conflate ACTION emotes and emote-only messages anymore
                 /*if (value == "0") break;
-                if (event.type == Type.CHAN) event.type = Type.EMOTE;
+                if (event.type == CHAN) event.type = EMOTE;
                 break;*/
             case "msg-param-gift-months":
                 // Number of months in a gifted sub?
