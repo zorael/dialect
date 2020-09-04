@@ -7,3 +7,4 @@ module dialect;
 public import dialect.defs;
 public import dialect.parsing;
 public import dialect.common;
+public import dialect.semver;
