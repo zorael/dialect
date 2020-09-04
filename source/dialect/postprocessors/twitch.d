@@ -967,6 +967,9 @@ auto parseTwitchTags(ref IRCParser parser, ref IRCEvent event)
                 // The msg-id of the message that is being replied to
                 // reply-parent-msg-id = 81b6262b-7ce3-4686-be4f-1f5c548c9d16
                 // Ignore. Let plugins who want it grep event.tags
+            case "msg-param-was-gifted":
+                // msg-param-was-gifted = false
+                // On subscription events, whether or not the sub was from a gift.
 
                 // Ignore these events.
                 break;
