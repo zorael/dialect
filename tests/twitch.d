@@ -981,4 +981,29 @@ unittest
             assert((id == "e2901dc8-b247-4aaa-8ff2-78e4e472c3a8"), id);
         }
     }
+    {
+        // @badge-info=subscriber/3;badges=subscriber/3;color=;display-name=poome;emotes=;flags=;id=8670eeb3-9cf3-4d80-934a-34a0cdc52a76;login=poome;mod=0;msg-id=resub;msg-param-anon-gift=false;msg-param-cumulative-months=3;msg-param-gift-month-being-redeemed=3;msg-param-gift-months=3;msg-param-gifter-id=125181523;msg-param-gifter-login=alaynars;msg-param-gifter-name=alaynars;msg-param-months=0;msg-param-should-share-streak=1;msg-param-streak-months=3;msg-param-sub-plan-name=Channel\sSubscription\s(xqcow);msg-param-sub-plan=1000;msg-param-was-gifted=true;room-id=71092938;subscriber=1;system-msg=poome\ssubscribed\sat\sTier\s1.\sThey've\ssubscribed\sfor\s3\smonths,\scurrently\son\sa\s3\smonth\sstreak!;tmi-sent-ts=1599278081397;user-id=141120106;user-type= :tmi.twitch.tv USERNOTICE #xqcow :WELCOME TO THE JUNGLE Pog
+        immutable event = parser.toIRCEvent("@badge-info=subscriber/3;badges=subscriber/3;color=;display-name=poome;emotes=;flags=;id=8670eeb3-9cf3-4d80-934a-34a0cdc52a76;login=poome;mod=0;msg-id=resub;msg-param-anon-gift=false;msg-param-cumulative-months=3;msg-param-gift-month-being-redeemed=3;msg-param-gift-months=3;msg-param-gifter-id=125181523;msg-param-gifter-login=alaynars;msg-param-gifter-name=alaynars;msg-param-months=0;msg-param-should-share-streak=1;msg-param-streak-months=3;msg-param-sub-plan-name=Channel\\sSubscription\\s(xqcow);msg-param-sub-plan=1000;msg-param-was-gifted=true;room-id=71092938;subscriber=1;system-msg=poome\\ssubscribed\\sat\\sTier\\s1.\\sThey've\\ssubscribed\\sfor\\s3\\smonths,\\scurrently\\son\\sa\\s3\\smonth\\sstreak!;tmi-sent-ts=1599278081397;user-id=141120106;user-type= :tmi.twitch.tv USERNOTICE #xqcow :WELCOME TO THE JUNGLE Pog");
+        with (event)
+        {
+            assert((type == IRCEvent.Type.TWITCH_SUB), Enum!(IRCEvent.Type).toString(type));
+            assert((sender.nickname == "poome"), sender.nickname);
+            assert((sender.address == "tmi.twitch.tv"), sender.address);
+            assert((sender.account == "poome"), sender.account);
+            assert((sender.displayName == "poome"), sender.displayName);
+            assert((sender.badges == "subscriber/3"), sender.badges);
+            assert((sender.id == 141120106), sender.id.to!string);
+            assert((channel == "#xqcow"), channel);
+            assert((target.nickname == "alaynars"), target.nickname);
+            assert((target.account == "alaynars"), target.account);
+            assert((target.displayName == "alaynars"), target.displayName);
+            assert((target.id == 125181523), target.id.to!string);
+            assert((content == "WELCOME TO THE JUNGLE Pog"), content);
+            assert((aux == "1000"), aux);
+            assert((tags == "badge-info=subscriber/3;badges=subscriber/3;color=;display-name=poome;emotes=;flags=;id=8670eeb3-9cf3-4d80-934a-34a0cdc52a76;login=poome;mod=0;msg-id=resub;msg-param-anon-gift=false;msg-param-cumulative-months=3;msg-param-gift-month-being-redeemed=3;msg-param-gift-months=3;msg-param-gifter-id=125181523;msg-param-gifter-login=alaynars;msg-param-gifter-name=alaynars;msg-param-months=0;msg-param-should-share-streak=1;msg-param-streak-months=3;msg-param-sub-plan-name=Channel\\sSubscription\\s(xqcow);msg-param-sub-plan=1000;msg-param-was-gifted=true;room-id=71092938;subscriber=1;system-msg=poome\\ssubscribed\\sat\\sTier\\s1.\\sThey've\\ssubscribed\\sfor\\s3\\smonths,\\scurrently\\son\\sa\\s3\\smonth\\sstreak!;tmi-sent-ts=1599278081397;user-id=141120106;user-type="), tags);
+            assert((count == 3), count.to!string);
+            assert((altcount == 3), altcount.to!string);
+            assert((id == "8670eeb3-9cf3-4d80-934a-34a0cdc52a76"), id);
+        }
+    }
 }
