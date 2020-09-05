@@ -739,6 +739,8 @@ auto parseTwitchTags(ref IRCParser parser, ref IRCEvent event)
             // Number of gift subs a user has given in the channel, on a SUBGIFT event
         case "msg-param-cumulative-months":
             // Total number of months subscribed, over time. Replaces msg-param-months
+        //case "msg-param-gift-month-being-redeemed":
+            // No room for this but it rightly belongs here
             version(TwitchWarnings)
             {
                 if (event.altcount != 0)
@@ -784,7 +786,11 @@ auto parseTwitchTags(ref IRCParser parser, ref IRCEvent event)
             break;
 
         case "target-user-id":
+        case "reply-parent-user-id":
+        case "msg-param-gifter-id":
             // The target's user ID
+            // The user id of the author of the message that is being replied to
+            // reply-parent-user-id = 50081302
             if (value.length) event.target.id = value.to!uint;
             break;
 
@@ -794,6 +800,7 @@ auto parseTwitchTags(ref IRCParser parser, ref IRCEvent event)
             break;
 
         case "reply-parent-display-name":
+        case "msg-param-gifter-name":
             // The display name of the user that is being replied to
             // reply-parent-display-name = zenArc
             event.target.displayName = value;
@@ -805,13 +812,8 @@ auto parseTwitchTags(ref IRCParser parser, ref IRCEvent event)
             event.aux = decodeIRCv3String(value);
             break;
 
-        case "reply-parent-user-id":
-            // The user id of the author of the message that is being replied to
-            // reply-parent-user-id = 50081302
-            if (value.length) event.target.id = value.to!int;
-            break;
-
         case "reply-parent-user-login":
+        case "msg-param-gifter-login":
             // The account name of the author of the message that is being replied to
             // reply-parent-user-login = zenarc
             event.target.nickname = value;
@@ -970,6 +972,10 @@ auto parseTwitchTags(ref IRCParser parser, ref IRCEvent event)
             case "msg-param-was-gifted":
                 // msg-param-was-gifted = false
                 // On subscription events, whether or not the sub was from a gift.
+            case "msg-param-anon-gift":
+                // msg-param-anon-gift = false
+            case "msg-param-gift-month-being-redeemed":
+                // msg-param-gift-month-being-redeemed = 3
 
                 // Ignore these events.
                 break;
