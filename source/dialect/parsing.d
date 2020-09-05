@@ -1287,7 +1287,11 @@ void parseGeneralCases(const ref IRCParser parser, ref IRCEvent event, ref strin
         // Has colon-content
         string targets = slice.nom(" :");
 
-        if (targets.contains(' '))
+        if (!targets.length)
+        {
+            // Do nothing
+        }
+        else if (targets.contains(' '))
         {
             // More than one target
             immutable firstTarget = targets.nom(' ');
@@ -1411,7 +1415,11 @@ void parseGeneralCases(const ref IRCParser parser, ref IRCEvent event, ref strin
             // More than one target
             immutable target = slice.nom(' ');
 
-            if (target.beginsWithOneOf(parser.server.chantypes))
+            if (!target.length)
+            {
+                // Do nothing
+            }
+            else if (target.beginsWithOneOf(parser.server.chantypes))
             {
                 // More than one target, first is a channel
                 // Assume second is content
