@@ -361,7 +361,6 @@ void main() @system
     while ((input = readln()) !is null)
     {
         import dialect.common : IRCParseException;
-        import lu.string : beginsWithOneOf;
 
         scope(exit)
         {

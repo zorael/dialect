@@ -513,7 +513,6 @@ bool isValidChannel(const string channel, const IRCServer server) pure nothrow @
 in (channel.length, "Tried to determine whether a channel was valid but no channel was given")
 do
 {
-    import lu.string : beginsWithOneOf;
     import std.string : representation;
 
     /++
@@ -532,7 +531,7 @@ do
         return false;
     }
 
-    if (!channel.beginsWithOneOf(server.chantypes)) return false;
+    if (!server.chantypes.contains(channel[0])) return false;
 
     if (channel.contains(' ') ||
         channel.contains(',') ||
@@ -542,8 +541,8 @@ do
         return false;
     }
 
-    if (channel.length == 2) return !channel[1].beginsWithOneOf(server.chantypes);
-    else if (channel.length == 3) return !channel[2].beginsWithOneOf(server.chantypes);
+    if (channel.length == 2) return !server.chantypes.contains(channel[1]);
+    else if (channel.length == 3) return !server.chantypes.contains(channel[2]);
     else if (channel.length > 3)
     {
         // Allow for two ##s (or &&s) in the name but no more

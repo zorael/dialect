@@ -1275,9 +1275,13 @@ void parseSpecialcases(ref IRCParser parser, ref IRCEvent event, ref string slic
  +/
 void parseGeneralCases(const ref IRCParser parser, ref IRCEvent event, ref string slice) pure @nogc
 {
-    import lu.string : beginsWith, beginsWithOneOf;
+    import lu.string : beginsWith;
 
-    if (slice.beginsWith(':'))
+    if (!slice.length)
+    {
+        // Do nothing
+    }
+    else if (slice.beginsWith(':'))
     {
         // Merely nickname!ident@address.tld TYPESTRING :content
         event.content = slice[1..$];
@@ -1289,7 +1293,8 @@ void parseGeneralCases(const ref IRCParser parser, ref IRCEvent event, ref strin
 
         if (!targets.length)
         {
-            // Do nothing
+            // This should never happen, but ward against range errors
+            event.content = slice;
         }
         else if (targets.contains(' '))
         {
@@ -1301,7 +1306,7 @@ void parseGeneralCases(const ref IRCParser parser, ref IRCEvent event, ref strin
                 // More than one target, first is bot
                 // Can't use isChan here since targets may contain spaces
 
-                if (targets.beginsWithOneOf(parser.server.chantypes))
+                if (parser.server.chantypes.contains(targets[0]))
                 {
                     // More than one target, first is bot
                     // Second target is/begins with a channel
@@ -1317,48 +1322,35 @@ void parseGeneralCases(const ref IRCParser parser, ref IRCEvent event, ref strin
                     else
                     {
                         // More than one target, first is bot
-                        // Only one second
-
-                        if (targets.beginsWithOneOf(parser.server.chantypes))
-                        {
-                            // First is bot, second is channel
-                            event.channel = targets;
-                        }
-                        else
-                        {
-                            /*logger.warning("Non-channel second target. Report this.");
-                            logger.trace(event.raw);*/
-                            event.target.nickname = targets;
-                        }
+                        // Only one channel
+                        event.channel = targets;
                     }
                 }
                 else
                 {
+                    import std.algorithm.searching : count;
+
                     // More than one target, first is bot
                     // Second is not a channel
 
-                    if (targets.contains(' '))
-                    {
-                        // More than one target, first is bot
-                        import std.algorithm.searching : count;
+                    immutable numSpaces = targets.count(' ');
 
-                        if (targets.count(' ') == 1)
-                        {
-                            // Two extra targets; assume nickname and channel
-                            event.target.nickname = targets.nom(' ');
-                            event.channel = targets;
-                        }
-                        else
-                        {
-                            // A lot of spaces; cannot say for sure what is what
-                            event.aux = targets;
-                        }
+                    if (numSpaces == 1)
+                    {
+                        // Two extra targets; assume nickname and channel
+                        event.target.nickname = targets.nom(' ');
+                        event.channel = targets;
                     }
-                    else
+                    else if (numSpaces > 1)
+                    {
+                        // A lot of spaces; cannot say for sure what is what
+                        event.aux = targets;
+                    }
+                    else /*if (numSpaces == 0)*/
                     {
                         // Only one second target
 
-                        if (targets.beginsWithOneOf(parser.server.chantypes))
+                        if (parser.server.chantypes.contains(targets[0]))
                         {
                             // Second is a channel
                             event.channel = targets;
@@ -1380,7 +1372,7 @@ void parseGeneralCases(const ref IRCParser parser, ref IRCEvent event, ref strin
             {
                 // More than one target, first is not bot
 
-                if (firstTarget.beginsWithOneOf(parser.server.chantypes))
+                if (parser.server.chantypes.contains(firstTarget[0]))
                 {
                     // First target is a channel
                     // Assume second is a nickname
@@ -1396,7 +1388,7 @@ void parseGeneralCases(const ref IRCParser parser, ref IRCEvent event, ref strin
                 }
             }
         }
-        else if (targets.beginsWithOneOf(parser.server.chantypes))
+        else if (parser.server.chantypes.contains(targets[0]))
         {
             // Only one target, it is a channel
             event.channel = targets;
@@ -1417,9 +1409,10 @@ void parseGeneralCases(const ref IRCParser parser, ref IRCEvent event, ref strin
 
             if (!target.length)
             {
-                // Do nothing
+                // This should never happen, but ward against range errors
+                event.content = slice;
             }
-            else if (target.beginsWithOneOf(parser.server.chantypes))
+            else if (parser.server.chantypes.contains(target[0]))
             {
                 // More than one target, first is a channel
                 // Assume second is content
@@ -1441,7 +1434,7 @@ void parseGeneralCases(const ref IRCParser parser, ref IRCEvent event, ref strin
                     // :irc.run.net 367 kameloso #Help *!*@broadband-5-228-255-*.moscow.rt.ru
                     // :irc.atw-inter.net 344 kameloso #debian.de towo!towo@littlelamb.szaf.org
 
-                    if (slice.beginsWithOneOf(parser.server.chantypes))
+                    if (parser.server.chantypes.contains(slice[0]))
                     {
                         // Second target is channel
                         event.channel = slice.nom(' ');
@@ -1478,7 +1471,7 @@ void parseGeneralCases(const ref IRCParser parser, ref IRCEvent event, ref strin
         {
             // Only one target
 
-            if (slice.beginsWithOneOf(parser.server.chantypes))
+            if (parser.server.chantypes.contains(slice[0]))
             {
                 // Target is a channel
                 event.channel = slice;
