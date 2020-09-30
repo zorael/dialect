@@ -976,6 +976,12 @@ auto parseTwitchTags(ref IRCParser parser, ref IRCEvent event)
                 // msg-param-anon-gift = false
             case "msg-param-gift-month-being-redeemed":
                 // msg-param-gift-month-being-redeemed = 3
+            case "msg-param-multimonth-duration":
+                // msg-param-multimonth-duration = 0
+                // Seen in a sub event
+            case "msg-param-multimonth-tenure":
+                // msg-param-multimonth-tenure = 0
+                // Ditto
 
                 // Ignore these events.
                 break;

@@ -1006,4 +1006,24 @@ unittest
             assert((id == "8670eeb3-9cf3-4d80-934a-34a0cdc52a76"), id);
         }
     }
+    {
+        // @badge-info=subscriber/0;badges=subscriber/0,premium/1;color=;display-name=rockoleitor_;emotes=;flags=;id=00433938-cf6b-4435-b427-bc160ccc6a2c;login=rockoleitor_;mod=0;msg-id=sub;msg-param-cumulative-months=1;msg-param-months=0;msg-param-multimonth-duration=0;msg-param-multimonth-tenure=0;msg-param-should-share-streak=0;msg-param-sub-plan-name=Entrar\sal\scentro\sPOWER\sRANGER\s(bruno_pro21);msg-param-sub-plan=Prime;msg-param-was-gifted=false;room-id=94757023;subscriber=1;system-msg=rockoleitor_\ssubscribed\swith\sTwitch\sPrime.;tmi-sent-ts=1601499733907;user-id=513875830;user-type= :tmi.twitch.tv USERNOTICE #brunenge
+        immutable event = parser.toIRCEvent("@badge-info=subscriber/0;badges=subscriber/0,premium/1;color=;display-name=rockoleitor_;emotes=;flags=;id=00433938-cf6b-4435-b427-bc160ccc6a2c;login=rockoleitor_;mod=0;msg-id=sub;msg-param-cumulative-months=1;msg-param-months=0;msg-param-multimonth-duration=0;msg-param-multimonth-tenure=0;msg-param-should-share-streak=0;msg-param-sub-plan-name=Entrar\\sal\\scentro\\sPOWER\\sRANGER\\s(bruno_pro21);msg-param-sub-plan=Prime;msg-param-was-gifted=false;room-id=94757023;subscriber=1;system-msg=rockoleitor_\\ssubscribed\\swith\\sTwitch\\sPrime.;tmi-sent-ts=1601499733907;user-id=513875830;user-type= :tmi.twitch.tv USERNOTICE #brunenge");
+        with (event)
+        {
+            assert((type == IRCEvent.Type.TWITCH_SUB), Enum!(IRCEvent.Type).toString(type));
+            assert((sender.nickname == "rockoleitor_"), sender.nickname);
+            assert((sender.address == "tmi.twitch.tv"), sender.address);
+            assert((sender.account == "rockoleitor_"), sender.account);
+            assert((sender.displayName == "rockoleitor_"), sender.displayName);
+            assert((sender.badges == "subscriber/0,premium/1"), sender.badges);
+            assert((sender.id == 513875830), sender.id.to!string);
+            assert((channel == "#brunenge"), channel);
+            assert((content == "rockoleitor_ subscribed with Twitch Prime."), content);
+            assert((aux == "Prime"), aux);
+            assert((tags == "badge-info=subscriber/0;badges=subscriber/0,premium/1;color=;display-name=rockoleitor_;emotes=;flags=;id=00433938-cf6b-4435-b427-bc160ccc6a2c;login=rockoleitor_;mod=0;msg-id=sub;msg-param-cumulative-months=1;msg-param-months=0;msg-param-multimonth-duration=0;msg-param-multimonth-tenure=0;msg-param-should-share-streak=0;msg-param-sub-plan-name=Entrar\\sal\\scentro\\sPOWER\\sRANGER\\s(bruno_pro21);msg-param-sub-plan=Prime;msg-param-was-gifted=false;room-id=94757023;subscriber=1;system-msg=rockoleitor_\\ssubscribed\\swith\\sTwitch\\sPrime.;tmi-sent-ts=1601499733907;user-id=513875830;user-type="), tags);
+            assert((altcount == 1), altcount.to!string);
+            assert((id == "00433938-cf6b-4435-b427-bc160ccc6a2c"), id);
+        }
+    }
 }
