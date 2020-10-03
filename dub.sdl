@@ -15,7 +15,7 @@ subPackage {
     targetType "executable"
     targetName "assertgen"
 
-    dependency "lu" version="~>0.4.0"
+    dependency "lu" version="~>0.5.0"
 
     sourcePaths "source"
     importPaths "source"
@@ -30,7 +30,7 @@ subPackage {
         "AssertGeneration"
 }
 
-dependency "lu" version="~>0.4.0"
+dependency "lu" version="~>0.5.0"
 
 sourcePaths "source"
 importPaths "source"
