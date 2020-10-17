@@ -698,13 +698,6 @@ auto parseTwitchTags(ref IRCParser parser, ref IRCEvent event)
             event.emotes = value;
             break;
 
-        case "ban-duration":
-            // @ban-duration=<ban-duration>;ban-reason=<ban-reason> :tmi.twitch.tv CLEARCHAT #<channel> :<user>
-            // (Optional) Duration of the timeout, in seconds. If omitted,
-            // the ban is permanent.
-        case "msg-param-viewerCount":
-            // RAID; viewer count of raiding channel
-            // msg-param-viewerCount = '9'
         case "msg-param-bits-amount":
             //msg-param-bits-amount = '199'
         case "msg-param-mass-gift-count":
@@ -717,6 +710,19 @@ auto parseTwitchTags(ref IRCParser parser, ref IRCEvent event)
         case "msg-param-streak-tenure-months":
         case "msg-param-sub-benefit-end-month":
             /// "...extended their Tier 1 sub to {month}"
+
+            // These events are generally present with value of 0, so in most case they're noise
+            if (value == "0") break;
+            goto case;
+
+        case "ban-duration":
+            // @ban-duration=<ban-duration>;ban-reason=<ban-reason> :tmi.twitch.tv CLEARCHAT #<channel> :<user>
+            // (Optional) Duration of the timeout, in seconds. If omitted,
+            // the ban is permanent.
+        case "msg-param-viewerCount":
+            // RAID; viewer count of raiding channel
+            // msg-param-viewerCount = '9'
+
             version(TwitchWarnings)
             {
                 if (event.count != int.min)
@@ -741,6 +747,8 @@ auto parseTwitchTags(ref IRCParser parser, ref IRCEvent event)
             // Total number of months subscribed, over time. Replaces msg-param-months
         //case "msg-param-gift-month-being-redeemed":
             // No room for this but it rightly belongs here
+            if (value == "0") break;
+
             version(TwitchWarnings)
             {
                 if (event.altcount != int.min)
