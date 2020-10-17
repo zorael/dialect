@@ -631,7 +631,7 @@ auto parseTwitchTags(ref IRCParser parser, ref IRCEvent event)
 
             version(TwitchWarnings)
             {
-                if (event.count != 0)
+                if (event.count != int.min)
                 {
                     import std.stdio : writeln;
                     writeln(key, " overwrote a count: ", event.count);
@@ -719,7 +719,7 @@ auto parseTwitchTags(ref IRCParser parser, ref IRCEvent event)
             /// "...extended their Tier 1 sub to {month}"
             version(TwitchWarnings)
             {
-                if (event.count != 0)
+                if (event.count != int.min)
                 {
                     import std.stdio : writeln;
                     writeln(key, " overwrote a count: ", event.count);
@@ -743,7 +743,7 @@ auto parseTwitchTags(ref IRCParser parser, ref IRCEvent event)
             // No room for this but it rightly belongs here
             version(TwitchWarnings)
             {
-                if (event.altcount != 0)
+                if (event.altcount != int.min)
                 {
                     import std.stdio : writeln;
                     writeln(key, " overwrote an altcount: ", event.altcount);
