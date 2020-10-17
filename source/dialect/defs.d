@@ -857,10 +857,10 @@ struct IRCEvent
     uint num;
 
     /// A count, an amount or "times" modifier, where such are applicable.
-    int count;
+    int count = int.min;
 
     /// A secondary count, for where `count` by itself is insufficient.
-    int altcount;
+    int altcount = int.min;
 
     /// A timestamp of when the event transpired.
     @Hidden long time;
