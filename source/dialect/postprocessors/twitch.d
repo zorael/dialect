@@ -628,19 +628,7 @@ auto parseTwitchTags(ref IRCParser parser, ref IRCEvent event)
                 * size – A digit between 1 and 4
             */
             event.type = TWITCH_CHEER;
-
-            version(TwitchWarnings)
-            {
-                if (event.count != int.min)
-                {
-                    import std.stdio : writeln;
-                    writeln(key, " overwrote a count: ", event.count);
-                    printTagsOnExit = true;
-                }
-            }
-
-            event.count = value.to!int;
-            break;
+            goto case "ban-duration";
 
         case "msg-param-sub-plan":
             // The type of subscription plan being used.
@@ -722,6 +710,7 @@ auto parseTwitchTags(ref IRCParser parser, ref IRCEvent event)
         case "msg-param-viewerCount":
             // RAID; viewer count of raiding channel
             // msg-param-viewerCount = '9'
+        //case "bits": // goto'ed here
 
             version(TwitchWarnings)
             {
