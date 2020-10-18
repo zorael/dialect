@@ -722,7 +722,7 @@ auto parseTwitchTags(ref IRCParser parser, ref IRCEvent event)
                 }
             }
 
-            event.count = value.to!int;
+            event.count = (value == "0") ? 0 : value.to!int;
             break;
 
         case "msg-param-selected-count":
