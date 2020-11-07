@@ -1,11 +1,11 @@
 /++
     Definitions of struct aggregates used throughout the library, representing
-    `IRCEvent`s and thereto related objects like `IRCServer` and `IRCUser`.
+    $(REF IRCEvent)s and thereto related objects like $(REF IRCServer) and $(REF IRCUser).
 
     Things related to actually parsing IRC do not belong here; what's here should only be
     applicable to be used as a header.
 
-    The only lu dependency should be `lu.uda`.
+    The only lu dependency should be $(REF lu.uda).
  +/
 module dialect.defs;
 
@@ -22,14 +22,14 @@ nothrow:
 /++
     A single IRC event, parsed from server input.
 
-    The `IRCEvent` struct is a construct with fields extracted from raw server
-    strings. Since structs are not polymorphic the `Type` enum dictates what
+    The $(REF IRCEvent) struct is a construct with fields extracted from raw server
+    strings. Since structs are not polymorphic the $(REF Type) enum dictates what
     kind of event it is.
  +/
 struct IRCEvent
 {
     /++
-        `Type`s of `IRCEvent`s.
+        $(REF Type)s of $(REF IRCEvent)s.
 
         Taken from https://tools.ietf.org/html/rfc1459 with many additions.
 
@@ -37,16 +37,16 @@ struct IRCEvent
 
         - https://defs.ircdocs.horse
 
-        Some are outright fabrications of ours, like `Type.CHAN` and `Type.QUERY`.
+        Some are outright fabrications of ours, like $(REF Type.CHAN) and $(REF Type.QUERY).
         These are not prefixed with `RPL_` and `ERR_` (but not all such are made up,
-        like `Type.AWAY` and `Type.CHGHOST` that are properly `Type.AWAY` and `Type.CHGHOST`).
+        like $(REF Type.AWAY) and $(REF Type.CHGHOST) that are properly $(REF Type.AWAY) and $(REF Type.CHGHOST)).
      +/
     enum Type
     {
-        UNSET,      /// Invalid `IRCEvent` with no `Type`.
-        ANY,        /// Meta-`Type` for *any* kind of `IRCEvent`.
-        ERROR,      /// Generic error `Type`.
-        NUMERIC,    /// *Numeric* event of an unknown `Type`.
+        UNSET,      /// Invalid $(REF IRCEvent) with no $(REF Type).
+        ANY,        /// Meta-$(REF Type) for *any* kind of $(REF IRCEvent).
+        ERROR,      /// Generic error $(REF Type).
+        NUMERIC,    /// *Numeric* event of an unknown $(REF Type).
         PRIVMSG,    /// Private message or channel message.
         CHAN,       /// Channel message.
         QUERY,      /// Private query message.
@@ -859,7 +859,7 @@ struct IRCEvent
     /// A count, an amount or "times" modifier, where such are applicable.
     int count = int.min;
 
-    /// A secondary count, for where `count` by itself is insufficient.
+    /// A secondary count, for where $(REF count) by itself is insufficient.
     int altcount = int.min;
 
     /// A timestamp of when the event transpired.
@@ -1015,7 +1015,7 @@ struct IRCServer
         /// The modechar for invite exceptions.
         char invexChar = 'I';
 
-        /// Contents of the `IRCEvent.Type.RPL_ISUPPORT` response(s).
+        /// Contents of the $(REF IRCEvent.Type.RPL_ISUPPORT) response(s).
         string supports;
     }
 }
@@ -1077,7 +1077,7 @@ struct IRCUser
         uint id;
     }
 
-    /// Create a new `IRCUser` based on a `*!*@*` mask string.
+    /// Create a new $(REF IRCUser) based on a `*!*@*` mask string.
     this(string userstring) pure
     {
         import std.format : formattedRead;
@@ -1112,7 +1112,7 @@ struct IRCUser
     }
 
     /++
-        Create a new `IRCUser` inheriting passed `nickname`, `ident`, and
+        Create a new $(REF IRCUser) inheriting passed `nickname`, `ident`, and
         `address` strings.
      +/
     this(const string nickname, const string ident, const string address) pure nothrow @nogc
@@ -1157,7 +1157,7 @@ struct IRCUser
     }
 
     /++
-        Compares two `IRCUser`s with each other, ignoring members considered to
+        Compares two $(REF IRCUser)s with each other, ignoring members considered to
         be extra or optional.
 
         Params:
@@ -1173,7 +1173,7 @@ struct IRCUser
     }
 
     /++
-        Produces a hash for this `IRCUser`.
+        Produces a hash for this $(REF IRCUser).
 
         Returns:
             A hash.
@@ -1185,7 +1185,7 @@ struct IRCUser
 
     // toString
     /++
-        Formats this `IRCUser` into a hostmask representing its values.
+        Formats this $(REF IRCUser) into a hostmask representing its values.
         Stores the result in the passed output range sink.
 
         Params:
@@ -1204,8 +1204,8 @@ struct IRCUser
 
     // hostmask
     /++
-        Formats this `IRCUser` into a hostmask representing its values.
-        Merely wraps `toString` and returns a newly allocated string.
+        Formats this $(REF IRCUser) into a hostmask representing its values.
+        Merely wraps $(REF toString) and returns a newly allocated string.
 
         Returns:
             A hostmask "*!*@*" string.
@@ -1250,7 +1250,7 @@ struct IRCUser
 
 // Typenums
 /++
-    Reverse mappings of *numerics* to `IRCEvent.Type`s.
+    Reverse mappings of *numerics* to $(REF IRCEvent.Type)s.
 
     One `base` table that covers most cases, and then specialised arrays for
     different server daemons, to meld into `base` for a union of the two
@@ -2260,36 +2260,36 @@ struct IRCChannel
      +/
     struct Mode
     {
-        /// The character that implies this `Mode` (`i`, `z`, `l` ...).
+        /// The character that implies this $(REF Mode) (`i`, `z`, `l` ...).
         char modechar;
 
         /++
-            The data associated with the `Mode`, if applicable. This is often a
+            The data associated with the $(REF Mode), if applicable. This is often a
             number, such as what `l` takes (join limit).
          +/
         string data;
 
-        /// The user associated with the `Mode`, when it is not just `data`.
+        /// The user associated with the $(REF Mode), when it is not just $(REF data).
         IRCUser user;
 
         /// The channel this mode refers to, where applicable.
         string channel;
 
-        /// Users that are explicitly exempt from the `Mode`.
+        /// Users that are explicitly exempt from the $(REF Mode).
         IRCUser[] exceptions;
 
-        /// Whether or not this `Mode` should be considered to be its own antithesis.
+        /// Whether or not this $(REF Mode) should be considered to be its own antithesis.
         bool negated;
 
         /++
-            Compare two `Mode`s with each other to see if they are both of the
-            same type, as well as having the same `data` and/or `user`.
+            Compare two $(REF Mode)s with each other to see if they are both of the
+            same type, as well as having the same $(REF data) and/or $(REF user).
 
             Params:
-                that = Other `Mode` to compare this one with.
+                that = Other $(REF Mode) to compare this one with.
 
             Returns:
-                `true` if the `Mode`s match, `false` if not.
+                `true` if the $(REF Mode)s match, `false` if not.
          +/
         bool opEquals(const Mode that) const pure nothrow @nogc
         {
@@ -2304,7 +2304,7 @@ struct IRCChannel
         }
 
         /++
-            Produces a hash for this `Mode`.
+            Produces a hash for this $(REF Mode).
 
             Returns:
                 A hash.
@@ -2322,10 +2322,10 @@ struct IRCChannel
     /// The current topic of the channel, as set by operators.
     string topic;
 
-    /// The current non-`data`-sporting `Mode`s of the channel.
+    /// The current non-$(REF data)-sporting $(REF Mode)s of the channel.
     string modechars;
 
-    /// Array of all `Mode`s that are not simply represented in `modechars`.
+    /// Array of all $(REF Mode)s that are not simply represented in $(REF modechars).
     Mode[] modes;
 
     /// Associative array of all the nicknames inhabiting the channel.
@@ -2396,7 +2396,7 @@ struct IRCClient
         /// The original client nickname before connecting, in case it changed.
         string origNickname;
 
-        /// Client IDENT identifier. Defaults to ~`user`. Unused but keep for future expansion.
+        /// Client IDENT identifier. Defaults to "~`user`". Unused but keep for future expansion.
         string ident;
 
         version(TwitchSupport)

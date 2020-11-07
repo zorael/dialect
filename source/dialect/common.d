@@ -1,5 +1,5 @@
 /++
-    Helper functions needed to parse raw IRC event strings into `dialect.defs.IRCEvent`s.
+    Helper functions needed to parse raw IRC event strings into $(REF dialect.defs.IRCEvent)s.
 
     Also things that don't belong anywhere else.
  +/
@@ -17,7 +17,7 @@ import lu.string : contains, nom;
 
 // typenumsOf
 /++
-    Returns the `typenums` mapping for a given `dialect.defs.IRCServer.Daemon`.
+    Returns the `typenums` mapping for a given $(REF dialect.defs.IRCServer.Daemon).
 
     Example:
     ---
@@ -31,10 +31,10 @@ import lu.string : contains, nom;
     ---
 
     Params:
-        daemon = The `dialect.defs.IRCServer.Daemon` to get the typenums for.
+        daemon = The $(REF dialect.defs.IRCServer.Daemon) to get the typenums for.
 
     Returns:
-        A `typenums` array of `dialect.defs.IRCEvent`s mapped to numerics.
+        A `typenums` array of $(REF dialect.defs.IRCEvent)s mapped to numerics.
  +/
 auto typenumsOf(const IRCServer.Daemon daemon) pure nothrow @nogc
 {
@@ -331,7 +331,7 @@ unittest
 
 // isAuthService
 /++
-    Inspects an `dialect.defs.IRCUser` and judges whether or not it is
+    Inspects an $(REF dialect.defs.IRCUser) and judges whether or not it is
     authentication services.
 
     This is very ad-hoc.
@@ -347,8 +347,8 @@ unittest
     ---
 
     Params:
-        sender = `dialect.defs.IRCUser` to examine.
-        parser = Reference to the current `dialect.parsing.IRCParser`.
+        sender = $(REF dialect.defs.IRCUser) to examine.
+        parser = Reference to the current $(REF dialect.parsing.IRCParser).
 
     Returns:
         `true` if the `sender` is judged to be from nickname services, `false` if not.
@@ -489,9 +489,9 @@ unittest
 /++
     Examines a string and judges whether or not it *looks* like a channel.
 
-    It needs to be passed an `dialect.defs.IRCServer` to know the max
+    It needs to be passed an $(REF dialect.defs.IRCServer) to know the max
     channel name length. An alternative would be to change the
-    `dialect.defs.IRCServer` parameter to be an `uint`.
+    $(REF dialect.defs.IRCServer) parameter to be an `uint`.
 
     Example:
     ---
@@ -504,7 +504,7 @@ unittest
 
     Params:
         channel = String of a potential channel name.
-        server = The current `dialect.defs.IRCServer` with all its settings.
+        server = The current $(REF dialect.defs.IRCServer) with all its settings.
 
     Returns:
         `true` if the string content is judged to be a channel, `false` if not.
@@ -601,7 +601,7 @@ unittest
 
     Params:
         nickname = String nickname.
-        server = The current `dialect.defs.IRCServer` with all its settings.
+        server = The current $(REF dialect.defs.IRCServer) with all its settings.
 
     Returns:
         `true` if the nickname string is judged to be a nickname, `false` if not.
@@ -758,7 +758,7 @@ unittest
 
     Params:
         nickname = String with a signed nickname.
-        server = `dialect.defs.IRCServer`, with all its settings.
+        server = $(REF dialect.defs.IRCServer), with all its settings.
         modesigns = Reference string to write the stripped modesigns to.
 
     Returns:
@@ -822,7 +822,7 @@ unittest
 
 // stripModesign
 /++
-    Convenience function to `stripModesign` that doesn't take a ref string
+    Convenience function to $(REF stripModesign) that doesn't take a ref string
     parameter to store the stripped modesign characters in.
 
     Example:
@@ -836,7 +836,7 @@ unittest
 
     Params:
         nickname = The (potentially) signed nickname to strip the prefix off.
-        server = The `dialect.defs.IRCServer` whose prefix characters to strip.
+        server = The $(REF dialect.defs.IRCServer) whose prefix characters to strip.
 
     Returns:
         The raw nickname, unsigned.
@@ -868,11 +868,11 @@ unittest
 
 // setMode
 /++
-    Sets a new or removes a `dialect.defs.IRCChannel.Mode`.
+    Sets a new or removes a $(REF dialect.defs.IRCChannel.Mode).
 
-    `dialect.defs.IRCChannel.Mode`s that are merely a character in `modechars` are simply removed if
+    $(REF dialect.defs.IRCChannel.Mode)s that are merely a character in `modechars` are simply removed if
      the *sign* of the mode change is negative, whereas a more elaborate
-    `dialect.defs.IRCChannel.Mode` in the `modes` array are only replaced or removed if they match a
+    $(REF dialect.defs.IRCChannel.Mode) in the `modes` array are only replaced or removed if they match a
      comparison test.
 
     Several modes can be specified at once, including modes that take a
@@ -893,12 +893,12 @@ unittest
     ---
 
     Params:
-        channel = `dialect.defs.IRCChannel` whose modes are being set.
+        channel = $(REF dialect.defs.IRCChannel) whose modes are being set.
         signedModestring = String of the raw mode command, including the
             prefixing sign (+ or -).
         data = Appendix to the signed modestring; arguments to the modes that
             are being set.
-        server = The current `dialect.defs.IRCServer` with all its settings.
+        server = The current $(REF dialect.defs.IRCServer) with all its settings.
  +/
 void setMode(ref IRCChannel channel, const string signedModestring,
     const string data, const IRCServer server) pure
@@ -1372,17 +1372,17 @@ unittest
 /++
     IRC Parsing Exception, thrown when there were errors parsing.
 
-    It is a normal `object.Exception` but with an attached `dialect.defs.IRCEvent`.
+    It is a normal $(REF object.Exception) but with an attached $(REF dialect.defs.IRCEvent).
  +/
 final class IRCParseException : Exception
 {
 @safe:
-    /// Bundled `dialect.defs.IRCEvent`, parsing which threw this exception.
+    /// Bundled $(REF dialect.defs.IRCEvent), parsing which threw this exception.
     IRCEvent event;
 
     /++
-        Create a new `IRCParseException`, without attaching an
-        `dialect.defs.IRCEvent`.
+        Create a new $(REF IRCParseException), without attaching an
+        $(REF dialect.defs.IRCEvent).
      +/
     this(const string message, const string file = __FILE__,
         const size_t line = __LINE__, Throwable nextInChain = null) pure nothrow @nogc @safe
@@ -1391,8 +1391,8 @@ final class IRCParseException : Exception
     }
 
     /++
-        Create a new `IRCParseException`, attaching an
-        `dialect.defs.IRCEvent` to it.
+        Create a new $(REF IRCParseException), attaching an
+        $(REF dialect.defs.IRCEvent) to it.
      +/
     this(const string message, const IRCEvent event, const string file = __FILE__,
         const size_t line = __LINE__, Throwable nextInChain = null) pure nothrow @nogc @safe
@@ -1443,7 +1443,7 @@ enum IRCControlCharacter
 
 // matchesByMask
 /++
-    Compares this `dialect.defs.IRCUser` with a second one, treating fields with
+    Compares this $(REF dialect.defs.IRCUser) with a second one, treating fields with
     asterisks as glob wildcards, mimicking `*!*@*` mask matching.
 
     Example:
@@ -1469,13 +1469,13 @@ enum IRCControlCharacter
     ---
 
     Params:
-        this_ = `dialect.defs.IRCUser` to compare.
-        that = `dialect.defs.IRCUser` to compare `this_` with.
-        caseMapping = `dialect.defs.IRCServer.CaseMapping` with which to translate
+        this_ = $(REF dialect.defs.IRCUser) to compare.
+        that = $(REF dialect.defs.IRCUser) to compare `this_` with.
+        caseMapping = $(REF dialect.defs.IRCServer.CaseMapping) with which to translate
             the nicknames in the relevant masks to lowercase.
 
     Returns:
-        `true` if the `dialect.defs.IRCUser`s are deemed to match, `false` if not.
+        `true` if the $(REF dialect.defs.IRCUser)s are deemed to match, `false` if not.
  +/
 auto matchesByMask(const IRCUser this_, const IRCUser that,
     const IRCServer.CaseMapping caseMapping = IRCServer.CaseMapping.rfc1459) pure nothrow
@@ -1667,7 +1667,7 @@ char toLower(const char c, const IRCServer.CaseMapping caseMapping) pure nothrow
     Produces the passed string in lowercase as per the supplied case mappings.
 
     This function is `@trusted` to be able to cast the internal `output` char array
-    to string. `std.array.Appender` does this with its `.data`/`opSlice` method.
+    to string. $(REF std.array.Appender) does this with its `.data`/`opSlice` method.
 
     ---
     @property inout(ElementEncodingType!A)[] opSlice() inout @trusted pure nothrow
@@ -1867,8 +1867,8 @@ unittest
 
     Params:
         hostmask = Hostmask string to examine.
-        server = The current `dialect.defs.IRCServer` with its
-            `dialect.defs.IRCServer.CaseMapping`.
+        server = The current $(REF dialect.defs.IRCServer) with its
+            $(REF dialect.defs.IRCServer.CaseMapping).
 
     Returns:
         true if the hostmask seems to be valid, false if it obviously is not.
@@ -2007,7 +2007,7 @@ unittest
 /++
     Postprocessor interface for concrete postprocessors to inherit from.
 
-    Postprocessors modify `dialect.defs.IRCEvent`s after they are parsed, before
+    Postprocessors modify $(REF dialect.defs.IRCEvent)s after they are parsed, before
     returning the final object to the caller. This is used to provide support
     for Twitch servers, where most information is carried in IRCv3 tags prepended
     to the raw server strings. The normal parser routine just separates the tags
@@ -2017,7 +2017,7 @@ unittest
 interface Postprocessor
 {
     /++
-        Postprocesses an `dialect.defs.IRCEvent`.
+        Postprocesses an $(REF dialect.defs.IRCEvent).
      +/
     void postprocess(ref IRCParser, ref IRCEvent);
 }
