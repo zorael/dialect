@@ -1767,6 +1767,99 @@ unittest
 }
 
 
+// opEqualsCaseInsensitive
+/++
+    Compares two strings to see if they match if case is ignored.
+
+    Only works with ASCII.
+
+    Params:
+        lhs = Left-hand side of the comparison.
+        rhs = Right-hand side of the comparison.
+        mapping = The server case mapping to apply.
+
+    Returns:
+        true if `lhs` and `rhs` are deemed to be case-insensitively equal; false if not.
+ +/
+bool opEqualsCaseInsensitive(const string lhs, const string rhs,
+    const IRCServer.CaseMapping mapping) pure nothrow @nogc
+{
+    if (lhs.length != rhs.length) return false;
+    if (lhs is rhs) return true;
+
+    foreach (immutable i; 0..lhs.length)
+    {
+        immutable c = lhs[i];
+        immutable rc = rhs[i];
+
+        if (c == rc) continue;
+
+        with (IRCServer.CaseMapping)
+        switch (c)
+        {
+        case 'A':
+        ..
+        case 'Z':
+            if (rc == c+32) continue;
+            return false;
+
+        case 'a':
+        ..
+        case 'z':
+            if (rc == c-32) continue;
+            return false;
+
+        case '[':
+            if (((mapping == rfc1459) || (mapping == strict_rfc1459)) &&
+                (rc == '{'))
+            {
+                continue;
+            }
+            return false;
+
+        case ']':
+            if (((mapping == rfc1459) || (mapping == strict_rfc1459)) &&
+                (rc == '}'))
+            {
+                continue;
+            }
+            return false;
+
+        case '\\':
+            if (((mapping == rfc1459) || (mapping == strict_rfc1459)) &&
+                (rc == '|'))
+            {
+                continue;
+            }
+            return false;
+
+        case '^':
+            if ((mapping == rfc1459) && (rc == '~')) continue;
+            return false;
+
+        default:
+            return false;
+        }
+    }
+
+    return true;
+}
+
+///
+unittest
+{
+    immutable c = IRCServer.CaseMapping.rfc1459;
+
+    assert("joe".opEqualsCaseInsensitive("JOE", c));
+    assert("joe".opEqualsCaseInsensitive("joe", c));
+    assert(!"joe".opEqualsCaseInsensitive("Bengt", c));
+    assert(!"joe".opEqualsCaseInsensitive("", c));
+    assert("^o^".opEqualsCaseInsensitive("~o~", c));
+    assert("[derp]FACE".opEqualsCaseInsensitive("{DERP]face", c));
+    assert("C:\\".opEqualsCaseInsensitive("c:|", c));
+}
+
+
 // isValidHostmask
 /++
     Makes a cursory verification of a hostmask, ensuring that it doesn't contain
