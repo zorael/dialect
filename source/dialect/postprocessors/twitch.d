@@ -748,7 +748,7 @@ auto parseTwitchTags(ref IRCParser parser, ref IRCEvent event)
                 }
             }
 
-            event.altcount = (value == "0") ? 0 : value.to!int;
+            event.altcount = value.to!int;
             break;
 
         case "badge-info":
