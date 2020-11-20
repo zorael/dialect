@@ -1959,7 +1959,7 @@ in (slice.length, "Tried to process `onISUPPORT` on an empty slice")
 {
     import lu.conv : Enum;
     import std.algorithm.iteration : splitter;
-    import std.conv : ConvException, to;
+    import std.conv : /*ConvException,*/ to;
 
     // :barjavel.freenode.net 005 kameloso^ CHARSET=ascii NICKLEN=16 CHANNELLEN=50 TOPICLEN=390 DEAF=D FNC TARGMAX=NAMES:1,LIST:1,KICK:1,WHOIS:1,PRIVMSG:4,NOTICE:4,ACCEPT:,MONITOR: EXTBAN=$,ajrxz CLIENTVER=3.0 WHOX KNOCK CPRIVMSG :are supported by this server
     // :barjavel.freenode.net 005 kameloso^ CHANTYPES=# EXCEPTS INVEX CHANMODES=eIbq,k,flj,CFLMPQScgimnprstuz CHANLIMIT=#:120 PREFIX=(ov)@+ MAXLIST=bqeI:100 MODES=4 NETWORK=freenode STATUSMSG=@+ CALLERID=g CASEMAPPING=rfc1459 :are supported by this server
@@ -2111,10 +2111,10 @@ in (slice.length, "Tried to process `onISUPPORT` on an empty slice")
 
         version(FlagAsUpdated) parser.serverUpdated = true;
     }
-    catch (ConvException e)
+    /*catch (ConvException e)
     {
         throw new IRCParseException(e.msg, event, e.file, e.line);
-    }
+    }*/
     catch (Exception e)
     {
         throw new IRCParseException(e.msg, event, e.file, e.line);
