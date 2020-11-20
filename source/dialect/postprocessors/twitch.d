@@ -177,10 +177,13 @@ auto parseTwitchTags(ref IRCParser parser, ref IRCEvent event)
                 // Cram as much into aux as possible
                 import lu.string : beginsWith;
                 import std.algorithm.iteration : filter;
-
+                import std.array : Appender;
                 import std.typecons : Flag, No, Yes;
 
                 event.type = TWITCH_CHARITY;
+
+                Appender!(char[]) sink;
+                sink.reserve(128);  // guesstimate
 
                 string[string] charityAA;
                 auto charityTags = tagRange
@@ -197,47 +200,42 @@ auto parseTwitchTags(ref IRCParser parser, ref IRCEvent event)
                 {
                     import lu.string : removeControlCharacters, strippedRight;
 
-                    version(TwitchWarnings)
-                    {
-                        if (event.aux.length)
-                        {
-                            import std.stdio : writeln;
-                            writeln("msg-id charity subtag msg-param-charity-name " ~
-                                "overwrote an aux: ", event.aux);
-                            printTagsOnExit = true;
-                        }
-                    }
-
                     //msg-param-charity-name = Direct\sRelief
-                    event.aux = (*charityName)
+
+                    sink.put((*charityName)
                         .decodeIRCv3String
                         .strippedRight
-                        .removeControlCharacters;
+                        .removeControlCharacters);
                 }
 
                 if (const charityLink = "msg-param-charity-learn-more" in charityAA)
                 {
                     //msg-param-charity-learn-more = https://link.twitch.tv/blizzardofbits
-                    if (event.aux.length)
+
+                    if (sink.data.length)
                     {
-                        event.aux ~= " (" ~ *charityLink ~ ')';
+                        sink.put(" (");
+                        sink.put(*charityLink);
+                        sink.put(')');
                     }
                     else
                     {
-                        event.aux = *charityLink;
+                        sink.put(*charityLink);
                     }
                 }
 
                 if (const charityHashtag = "msg-param-charity-hashtag" in charityAA)
                 {
                     //msg-param-charity-hashtag = #charity
-                    if (event.aux.length)
+
+                    if (sink.data.length)
                     {
-                        event.aux ~= ' ' ~ *charityHashtag;
+                        sink.put(' ');
+                        sink.put(*charityHashtag);
                     }
                     else
                     {
-                        event.aux = *charityHashtag;
+                        sink.put(*charityHashtag);
                     }
                 }
 
@@ -256,9 +254,23 @@ auto parseTwitchTags(ref IRCParser parser, ref IRCEvent event)
                 /*if (const charityDaysRemaining = "msg-param-charity-days-remaining" in charityAA)
                 {
                     //msg-param-charity-days-remaining = 11
+
                     // No event.tricount...
                     // Seems to be included in hours-remaining. Ignore?
                 }*/
+
+                version(TwitchWarnings)
+                {
+                    if (event.aux.length)
+                    {
+                        import std.stdio : writeln;
+                        writeln("msg-id charity tags overwrote an aux: ", event.aux);
+                        printTagsOnExit = true;
+                    }
+                }
+
+                // Store combined text in aux
+                event.aux = sink.data.idup;
 
                 // Remove once we have a recorded parse
                 version(TwitchWarnings) printTagsOnExit = true;
