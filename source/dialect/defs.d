@@ -787,8 +787,11 @@ struct IRCEvent
     }
 
     /*
-        /// Run this to generate the Type[n] map.
-        /// WARNING: This has not been used in a long time. Don't expect it to work.
+        /++
+            Run this to generate the Type[n] map.
+
+            HAS NOT BEEN TESTED IN YEARS. There's been no need for it. Don't expect it to work.
+         +/
         void generateTypenums()
         {
             import std.regex;
