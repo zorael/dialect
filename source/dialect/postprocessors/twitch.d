@@ -113,6 +113,9 @@ auto parseTwitchTags(ref IRCParser parser, ref IRCEvent event)
                 unrecognized_cmd        Unrecognized command: <command>
                 raid                    Raiders from <other channel> have joined!\n
             */
+
+            if (!value.length) continue;  // Rare occurence but happens
+
             switch (value)
             {
             case "sub":
