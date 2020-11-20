@@ -462,9 +462,8 @@ in (slice.length, "Tried to parse typestring on an empty slice")
 
     if ((typestring[0] >= '0') && (typestring[0] <= '9'))
     {
-        immutable number = typestring.to!uint;
-        event.num = number;
-        event.type = parser.typenums[number];
+        event.num = typestring.to!uint;
+        event.type = parser.typenums[event.num];
 
         alias T = IRCEvent.Type;
         event.type = (event.type == T.UNSET) ? T.NUMERIC : event.type;
