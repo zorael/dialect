@@ -767,7 +767,7 @@ unittest
         The nickname without any prepended prefix signs.
  +/
 string stripModesign(const string nickname, const IRCServer server,
-    ref string modesigns) pure nothrow @nogc
+    out string modesigns) pure nothrow @nogc
 in (nickname.length, "Tried to strip modesigns off an empty nickname")
 do
 {
@@ -824,7 +824,7 @@ unittest
 
 // stripModesign
 /++
-    Convenience function to $(REF stripModesign) that doesn't take a ref string
+    Convenience function to $(REF stripModesign) that doesn't take an out string
     parameter to store the stripped modesign characters in.
 
     Example:
