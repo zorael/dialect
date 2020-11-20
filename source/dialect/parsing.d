@@ -1579,103 +1579,89 @@ in (slice.length, "Tried to process `onNotice` on an empty slice")
         event.channel = channelOrNickname;
     }
 
-    with (parser)
+    import dialect.common : isAuthService;
+
+    if (!event.content.length) return;
+
+    if (!parser.server.resolvedAddress.length && event.content.beginsWith("***"))
     {
-        import dialect.common : isAuthService;
+        // This is where we catch the resolved address
+        assert(!event.sender.nickname.length, "Unexpected nickname: " ~ event.sender.nickname);
+        parser.server.resolvedAddress = event.sender.address;
+        version(FlagAsUpdated) parser.serverUpdated = true;
+    }
 
-        if (!event.content.length) return;
+    if (!event.sender.isServer && event.sender.isAuthService(parser))
+    {
+        import std.algorithm.searching : canFind;
+        import std.algorithm.comparison : among;
+        import std.uni : asLowerCase;
 
-        if (!server.resolvedAddress.length && event.content.beginsWith("***"))
+        enum AuthChallenge
         {
-            // This is where we catch the resolved address
-            assert(!event.sender.nickname.length, "Unexpected nickname: " ~ event.sender.nickname);
-            server.resolvedAddress = event.sender.address;
-            version(FlagAsUpdated) parser.serverUpdated = true;
+            dalnet = "This nick is owned by someone else. Please choose another.",
+            oftc = "This nickname is registered and protected.",
         }
 
-        if (!event.sender.isServer && event.sender.isAuthService(parser))
+        if (event.content.asLowerCase.canFind("/msg nickserv identify") ||
+            (event.content == AuthChallenge.dalnet) ||
+            event.content.beginsWith(AuthChallenge.oftc))
         {
-            import std.algorithm.searching : canFind;
-            import std.uni : asLowerCase;
+            event.type = IRCEvent.Type.AUTH_CHALLENGE;
+            return;
+        }
 
-            enum AuthChallenge
-            {
-                dalnet = "This nick is owned by someone else. Please choose another.",
-                oftc = "This nickname is registered and protected.",
-            }
+        enum AuthSuccess
+        {
+            freenode = "You are now identified for",
+            rizon = "Password accepted - you are now recognized.",  // also gimpnet
+            quakenet = "You are now logged in as",  // also mozilla, snoonet
+            gamesurge = "I recognize you.",
+            dalnet = "Password accepted for",
+            oftc = "You are successfully identified as",
+        }
 
-            with (event)
-            with (AuthChallenge)
-            {
-                if (content.asLowerCase.canFind("/msg nickserv identify") ||
-                    (content == dalnet) ||
-                    content.beginsWith(oftc))
-                {
-                    type = IRCEvent.Type.AUTH_CHALLENGE;
-                    return;
-                }
-            }
+        alias AS = AuthSuccess;
 
-            enum AuthSuccess
-            {
-                freenode = "You are now identified for",
-                rizon = "Password accepted - you are now recognized.",  // also gimpnet
-                quakenet = "You are now logged in as",  // also mozilla, snoonet
-                gamesurge = "I recognize you.",
-                dalnet = "Password accepted for",
-                oftc = "You are successfully identified as",
-            }
+        if ((event.content.beginsWith(AS.freenode)) ||
+            (event.content.beginsWith(AS.quakenet)) || // also Freenode SASL
+            (event.content.beginsWith(AS.dalnet)) ||
+            (event.content.beginsWith(AS.oftc)) ||
+            event.content.among!(AS.rizon, AS.gamesurge))
+        {
+            event.type = IRCEvent.Type.RPL_LOGGEDIN;
 
-            with (event)
-            with (AuthSuccess)
-            {
-                if ((content.beginsWith(freenode)) ||
-                    (content.beginsWith(quakenet)) || // also Freenode SASL
-                    (content.beginsWith(dalnet)) ||
-                    (content.beginsWith(oftc)) ||
-                    (content == rizon) ||
-                    (content == gamesurge))
-                {
-                    type = IRCEvent.Type.RPL_LOGGEDIN;
+            // Restart with the new type
+            return parser.parseSpecialcases(event, slice);
+        }
 
-                    // Restart with the new type
-                    return parser.parseSpecialcases(event, slice);
-                }
-            }
+        enum AuthFailure
+        {
+            rizon = "Your nick isn't registered.",
+            quakenet = "Username or password incorrect.",
+            freenodeInvalid = "is not a registered nickname.",
+            freenodeRejected = "Invalid password for",
+            dalnetInvalid = "is not registered.",  // also OFTC
+            dalnetRejected = "The password supplied for",
+            unreal = "isn't registered.",
+            gamesurgeInvalid = "Could not find your account -- did you register yet?",
+            gamesurgeRejected = "Incorrect password; please try again.",
+            geekshedRejected = "Password incorrect.",  // also irchighway, rizon, rusnet
+            oftcRejected = "Identify failed as",
+        }
 
-            enum AuthFailure
-            {
-                rizon = "Your nick isn't registered.",
-                quakenet = "Username or password incorrect.",
-                freenodeInvalid = "is not a registered nickname.",
-                freenodeRejected = "Invalid password for",
-                dalnetInvalid = "is not registered.",  // also OFTC
-                dalnetRejected = "The password supplied for",
-                unreal = "isn't registered.",
-                gamesurgeInvalid = "Could not find your account -- did you register yet?",
-                gamesurgeRejected = "Incorrect password; please try again.",
-                geekshedRejected = "Password incorrect.",  // also irchighway, rizon, rusnet
-                oftcRejected = "Identify failed as",
-            }
+        alias AF = AuthFailure;
 
-            with (event)
-            with (AuthFailure)
-            {
-                if ((content == rizon) ||
-                    (content == quakenet) ||
-                    (content == gamesurgeInvalid) ||
-                    (content == gamesurgeRejected) ||
-                    (content == geekshedRejected) ||
-                     content.contains(cast(string)freenodeInvalid) ||
-                     content.beginsWith(cast(string)freenodeRejected) ||
-                     content.contains(cast(string)dalnetInvalid) ||
-                     content.beginsWith(cast(string)dalnetRejected) ||
-                     content.contains(cast(string)unreal) ||
-                     content.beginsWith(cast(string)oftcRejected))
-                {
-                    event.type = IRCEvent.Type.AUTH_FAILURE;
-                }
-            }
+        if (event.content.among!(AF.rizon, AF.quakenet, AF.gamesurgeInvalid,
+                AF.gamesurgeRejected, AF.geekshedRejected) ||
+            event.content.contains(cast(string)AF.freenodeInvalid) ||
+            event.content.beginsWith(cast(string)AF.freenodeRejected) ||
+            event.content.contains(cast(string)AF.dalnetInvalid) ||
+            event.content.beginsWith(cast(string)AF.dalnetRejected) ||
+            event.content.contains(cast(string)AF.unreal) ||
+            event.content.beginsWith(cast(string)AF.oftcRejected))
+        {
+            event.type = IRCEvent.Type.AUTH_FAILURE;
         }
     }
 
@@ -2007,7 +1993,6 @@ in (slice.length, "Tried to process `onISUPPORT` on an empty slice")
 
             /// http://www.irc.org/tech_docs/005.html
 
-            with (parser.server)
             switch (key)
             {
             case "PREFIX":
@@ -2018,18 +2003,18 @@ in (slice.length, "Tried to process `onISUPPORT` on an empty slice")
 
                 // formattedRead can throw but just let the main loop pick it up
                 value.formattedRead("(%s)%s", modechars, modesigns);
-                prefixes = modechars;
+                parser.server.prefixes = modechars;
 
                 foreach (immutable i; 0..modechars.length)
                 {
-                    prefixchars[modesigns[i]] = modechars[i];
+                    parser.server.prefixchars[modesigns[i]] = modechars[i];
                 }
                 break;
 
             case "CHANTYPES":
                 // CHANTYPES=#
                 // ...meaning which characters may prefix channel names.
-                chantypes = value;
+                parser.server.chantypes = value;
                 break;
 
             case "CHANMODES":
@@ -2046,11 +2031,12 @@ in (slice.length, "Tried to process `onISUPPORT` on an empty slice")
                     Freenode: CHANMODES=eIbq,k,flj,CFLMPQScgimnprstz
                  +/
                 string modeslice = value;
-                aModes = modeslice.nom(',');
-                bModes = modeslice.nom(',');
-                cModes = modeslice.nom(',');
-                dModes = modeslice;
-                assert(!dModes.contains(','), "Bad chanmodes; dModes has comma: " ~ dModes);
+                parser.server.aModes = modeslice.nom(',');
+                parser.server.bModes = modeslice.nom(',');
+                parser.server.cModes = modeslice.nom(',');
+                parser.server.dModes = modeslice;
+                assert(!parser.server.dModes.contains(','),
+                    "Bad chanmodes; dModes has comma: " ~ parser.server.dModes);
                 break;
 
             case "NETWORK":
@@ -2090,15 +2076,15 @@ in (slice.length, "Tried to process `onISUPPORT` on an empty slice")
                 break;
 
             case "NICKLEN":
-                maxNickLength = value.to!uint;
+                parser.server.maxNickLength = value.to!uint;
                 break;
 
             case "CHANNELLEN":
-                maxChannelLength = value.to!uint;
+                parser.server.maxChannelLength = value.to!uint;
                 break;
 
             case "CASEMAPPING":
-                caseMapping = Enum!(IRCServer.CaseMapping).fromString(value);
+                parser.server.caseMapping = Enum!(IRCServer.CaseMapping).fromString(value);
                 break;
 
             case "EXTBAN":
@@ -2106,16 +2092,16 @@ in (slice.length, "Tried to process `onISUPPORT` on an empty slice")
                 // EXTBAN=
                 // no character means implicitly $, I believe?
                 immutable prefix = value.nom(',');
-                extbanPrefix = prefix.length ? prefix.to!char : '$';
-                extbanTypes = value;
+                parser.server.extbanPrefix = prefix.length ? prefix.to!char : '$';
+                parser.server.extbanTypes = value;
                 break;
 
             case "EXCEPTS":
-                exceptsChar = value.length ? value.to!char : 'e';
+                parser.server.exceptsChar = value.length ? value.to!char : 'e';
                 break;
 
             case "INVEX":
-                invexChar = value.length ? value.to!char : 'I';
+                parser.server.invexChar = value.length ? value.to!char : 'I';
                 break;
 
             default:
