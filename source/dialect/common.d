@@ -1431,13 +1431,13 @@ unittest
 /// Certain characters that signal specific meaning in an IRC context.
 enum IRCControlCharacter
 {
-    ctcp = 1,       /// Client-to-client Protocol marker.
-    bold = 2,       /// Bold text.
-    colour = 3,     /// Colour marker.
-    reset = 15,     /// Colour/formatting reset marker.
-    invert = 22,    /// Inverse text marker.
-    italics = 29,   /// Italics marker.
-    underlined = 31,/// Underscore marker.
+    ctcp        = 1,   /// Client-to-client Protocol marker.
+    bold        = 2,   /// Bold text.
+    colour      = 3,   /// Colour marker.
+    reset       = 15,  /// Colour/formatting reset marker.
+    invert      = 22,  /// Inverse text marker.
+    italics     = 29,  /// Italics marker.
+    underlined  = 31,  /// Underscore marker.
 }
 
 

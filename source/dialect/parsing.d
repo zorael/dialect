@@ -122,7 +122,7 @@ public IRCEvent toIRCEvent(ref IRCParser parser, const string raw) pure
             // @badges=subscriber/3;color=;display-name=asdcassr;emotes=560489:0-6,8-14,16-22,24-30/560510:39-46;id=4d6bbafb-427d-412a-ae24-4426020a1042;mod=0;room-id=23161357;sent-ts=1510059590512;subscriber=1;tmi-sent-ts=1510059591528;turbo=0;user-id=38772474;user-type= :asdcsa!asdcss@asdcsd.tmi.twitch.tv PRIVMSG #lirik :lirikFR lirikFR lirikFR lirikFR :sled: lirikLUL
 
             // Get rid of the prepended @
-            string newRaw = event.raw[1..$];
+            string newRaw = event.raw[1..$];  // mutable
             immutable tags = newRaw.nom(' ');
             event = .toIRCEvent(parser, newRaw);
             event.tags = tags;
@@ -135,7 +135,7 @@ public IRCEvent toIRCEvent(ref IRCParser parser, const string raw) pure
         }
     }
 
-    string slice = event.raw[1..$]; // advance past first colon
+    string slice = event.raw[1..$]; // mutable. advance past first colon
 
     // First pass: prefixes. This is the sender
     parser.parsePrefix(event, slice);
@@ -815,7 +815,7 @@ void parseSpecialcases(ref IRCParser parser, ref IRCEvent event, ref string slic
         {
             import std.uni : isNumber;
 
-            string midfield = slice.nom(" :");
+            string midfield = slice.nom(" :");  // mutable
             event.content = slice;
 
             immutable first = midfield.nom!(Yes.inherit)(' ');
@@ -2000,7 +2000,7 @@ in (slice.length, "Tried to process `onISUPPORT` on an empty slice")
         {
             if (!value.contains('='))
             {
-                // switch on value for things like EXCEPTS, INVEX, CPRIVMSG, etc
+                // insert switch on value for things like EXCEPTS, INVEX, CPRIVMSG, etc
                 continue;
             }
 
@@ -2215,6 +2215,7 @@ in (slice.length, "Tried to process `onMyInfo` on an empty slice")
     version(TwitchSupport)
     {
         import std.algorithm.searching : endsWith;
+
         if ((slice == ":-") && (parser.server.address.endsWith(".twitch.tv")))
         {
             parser.typenums = typenumsOf(IRCServer.Daemon.twitch);
@@ -2373,10 +2374,11 @@ public:
  +/
 struct IRCParser
 {
-    @safe:
+@safe:
+private:
+    import dialect.postprocessors : Postprocessors;
 
-    private import dialect.postprocessors : Postprocessors;
-
+public:
     /// The current $(REF dialect.defs.IRCClient) with all the context needed for parsing.
     IRCClient client;
 
