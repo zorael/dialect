@@ -1026,4 +1026,40 @@ unittest
             assert((id == "00433938-cf6b-4435-b427-bc160ccc6a2c"), id);
         }
     }
+    {
+        immutable event = parser.toIRCEvent("@badge-info=;badges=;color=;custom-reward-id=;display-name=weirdhistory;emotes=;flags=43-46:P.5;id=ea4fae82-d0af-42c1-9990-eff1e40d0816;mod=0;msg-id=;room-id=118170488;subscriber=0;tmi-sent-ts=1605883972498;turbo=0;user-id=424874845;user-type= :weirdhistory!weirdhistory@weirdhistory.tmi.twitch.tv PRIVMSG #epicenter_en1 :Zyori is more and more prettier day by day wtff");
+        with (event)
+        {
+            assert((type == IRCEvent.Type.CHAN), Enum!(IRCEvent.Type).toString(type));
+            assert((sender.nickname == "weirdhistory"), sender.nickname);
+            assert((sender.ident == "weirdhistory"), sender.ident);
+            assert((sender.address == "weirdhistory.tmi.twitch.tv"), sender.address);
+            assert((sender.account == "weirdhistory"), sender.account);
+            assert((sender.displayName == "weirdhistory"), sender.displayName);
+            assert((sender.badges == "*"), sender.badges);
+            assert((sender.id == 424874845), sender.id.to!string);
+            assert((channel == "#epicenter_en1"), channel);
+            assert((content == "Zyori is more and more prettier day by day wtff"), content);
+            assert((tags == "badge-info=;badges=;color=;custom-reward-id=;display-name=weirdhistory;emotes=;flags=43-46:P.5;id=ea4fae82-d0af-42c1-9990-eff1e40d0816;mod=0;msg-id=;room-id=118170488;subscriber=0;tmi-sent-ts=1605883972498;turbo=0;user-id=424874845;user-type="), tags);
+            assert((id == "ea4fae82-d0af-42c1-9990-eff1e40d0816"), id);
+        }
+    }
+    {
+        immutable event = parser.toIRCEvent("@badge-info=;badges=;color=;custom-reward-id=;display-name=kabiznal003;emotes=;flags=32-35:S.5;id=bd21ac26-6468-44e8-a119-754c2f21a748;mod=0;msg-id=;room-id=100814397;subscriber=0;tmi-sent-ts=1605887439126;turbo=0;user-id=127958974;user-type= :kabiznal003!kabiznal003@kabiznal003.tmi.twitch.tv PRIVMSG #dota2ruhub :@beermonsterdota Аххаха чел это рофл))");
+        with (event)
+        {
+            assert((type == IRCEvent.Type.CHAN), Enum!(IRCEvent.Type).toString(type));
+            assert((sender.nickname == "kabiznal003"), sender.nickname);
+            assert((sender.ident == "kabiznal003"), sender.ident);
+            assert((sender.address == "kabiznal003.tmi.twitch.tv"), sender.address);
+            assert((sender.account == "kabiznal003"), sender.account);
+            assert((sender.displayName == "kabiznal003"), sender.displayName);
+            assert((sender.badges == "*"), sender.badges);
+            assert((sender.id == 127958974), sender.id.to!string);
+            assert((channel == "#dota2ruhub"), channel);
+            assert((content == "@beermonsterdota Аххаха чел это рофл))"), content);
+            assert((tags == "badge-info=;badges=;color=;custom-reward-id=;display-name=kabiznal003;emotes=;flags=32-35:S.5;id=bd21ac26-6468-44e8-a119-754c2f21a748;mod=0;msg-id=;room-id=100814397;subscriber=0;tmi-sent-ts=1605887439126;turbo=0;user-id=127958974;user-type="), tags);
+            assert((id == "bd21ac26-6468-44e8-a119-754c2f21a748"), id);
+        }
+    }
 }
