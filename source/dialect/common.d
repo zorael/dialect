@@ -5,6 +5,8 @@
  +/
 module dialect.common;
 
+private:
+
 import dialect.defs;
 import dialect.parsing;
 
