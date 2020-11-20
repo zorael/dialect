@@ -1898,14 +1898,14 @@ bool isValidHostmask(const string hostmask, const IRCServer server) pure nothrow
         case '-':
         case '_':
         case '*':
+            break;
 
         static if (address)
         {
             case ':':
             case '.':
+                break;
         }
-
-            break;
 
         default:
             return false;
