@@ -1,6 +1,8 @@
 /++
-    This is a package file for all the IRC modules. It only publicly imports
-    them and does not contain any code itself.
+    $(B dialect) is an IRC parser. It parses strings as read from an IRC server
+    into useful $(REF dialect.defs.IRCEvent) structs.
+
+    It only handles parsing; for a bot, try $(B kameloso) at https://github.com/zorael/kameloso.
  +/
 module dialect;
 
