@@ -103,7 +103,7 @@ import std.typecons : Flag, No, Yes;
     ---
     IRCClient client;
     IRCServer server;
-    Appender!string sink;
+    Appender!(char[]) sink;
 
     sink.formatClientAssignment(client, server);
     ---
@@ -134,7 +134,7 @@ unittest
 {
     import std.array : Appender;
 
-    Appender!string sink;
+    Appender!(char[]) sink;
     sink.reserve(128);
 
     IRCClient client;
@@ -175,7 +175,7 @@ with (parser)
     Example:
     ---
     IRCEvent event;
-    Appender!string sink;
+    Appender!(char[]) sink;
     sink.formatEventAssertBlock(event);
     ---
 
@@ -219,7 +219,7 @@ unittest
     import std.array : Appender;
     import std.format : formattedWrite;
 
-    Appender!string sink;
+    Appender!(char[]) sink;
     sink.reserve(1024);
 
     IRCClient client;

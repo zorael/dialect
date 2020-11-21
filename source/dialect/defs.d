@@ -1217,7 +1217,7 @@ struct IRCUser
     {
         import std.array : Appender;
 
-        Appender!string sink;
+        Appender!(char[]) sink;
         sink.reserve(nickname.length + ident.length + address.length + 5);  // for ! and @ as well as ***
 
         this.toString(sink);
