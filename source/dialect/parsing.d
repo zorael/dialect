@@ -633,7 +633,7 @@ void parseSpecialcases(ref IRCParser parser, ref IRCEvent event, ref string slic
 
         if (event.content.beginsWith("Quit: "))
         {
-            event.content.nom("Quit: ");
+            event.content = event.content[6..$];
         }
         break;
 
