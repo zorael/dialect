@@ -83,7 +83,7 @@ package:
 
 // toIRCEvent
 /++
-    Parses an IRC string into an $(REF dialect.defs.IRCEvent).
+    Parses an IRC string into an [dialect.defs.IRCEvent].
 
     Parsing goes through several phases (prefix, typestring, specialcases) and
     this is the function that calls them, in order.
@@ -91,13 +91,13 @@ package:
     See the files in `/tests` for unittest examples.
 
     Params:
-        parser = Reference to the current $(REF IRCParser).
+        parser = Reference to the current [IRCParser].
         raw = Raw IRC string to parse.
 
     Returns:
-        A finished $(REF dialect.defs.IRCEvent).
+        A finished [dialect.defs.IRCEvent].
 
-    Throws: $(REF dialect.common.IRCParseException) if an empty string was passed.
+    Throws: [dialect.common.IRCParseException] if an empty string was passed.
  +/
 public IRCEvent toIRCEvent(ref IRCParser parser, const string raw) pure
 {
@@ -159,7 +159,7 @@ unittest
 {
     IRCParser parser;
 
-    // `parser.toIRCEvent` technically calls $(REF IRCParser.toIRCEvent), but it in turn
+    // `parser.toIRCEvent` technically calls [IRCParser.toIRCEvent], but it in turn
     // just passes on to this `.toIRCEvent`
 
     // See the files in `/tests` for more
@@ -193,20 +193,20 @@ unittest
 
 // parseBasic
 /++
-    Parses the most basic of IRC events; $(REF dialect.defs.IRCEvent.Type.PING),
-    $(REF dialect.defs.IRCEvent.Type.ERROR), $(REF dialect.defs.IRCEvent.Type.PONG),
-    $(REF dialect.defs.IRCEvent.Type.NOTICE) (plus `NOTICE AUTH`), and `AUTHENTICATE`.
+    Parses the most basic of IRC events; [dialect.defs.IRCEvent.Type.PING],
+    [dialect.defs.IRCEvent.Type.ERROR], [dialect.defs.IRCEvent.Type.PONG],
+    [dialect.defs.IRCEvent.Type.NOTICE] (plus `NOTICE AUTH`), and `AUTHENTICATE`.
 
     They syntactically differ from other events in that they are not prefixed
     by their sender.
 
-    The $(REF dialect.defs.IRCEvent) is finished at the end of this function.
+    The [dialect.defs.IRCEvent] is finished at the end of this function.
 
     Params:
-        parser = Reference to the current $(REF IRCParser).
-        event = Reference to the $(REF dialect.defs.IRCEvent) to start working on.
+        parser = Reference to the current [IRCParser].
+        event = Reference to the [dialect.defs.IRCEvent] to start working on.
 
-    Throws: $(REF dialect.common.IRCParseException) if an unknown type was encountered.
+    Throws: [dialect.common.IRCParseException] if an unknown type was encountered.
  +/
 void parseBasic(ref IRCParser parser, ref IRCEvent event) pure @nogc
 {
@@ -334,16 +334,16 @@ unittest
 // parsePrefix
 /++
     Takes a slice of a raw IRC string and starts parsing it into an
-    $(REF dialect.defs.IRCEvent) struct.
+    [dialect.defs.IRCEvent] struct.
 
     This function only focuses on the prefix; the sender, be it nickname and
     ident or server address.
 
-    The $(REF dialect.defs.IRCEvent) is not finished at the end of this function.
+    The [dialect.defs.IRCEvent] is not finished at the end of this function.
 
     Params:
-        parser = Reference to the current $(REF IRCParser).
-        event = Reference to the $(REF dialect.defs.IRCEvent) to start working on.
+        parser = Reference to the current [IRCParser].
+        event = Reference to the [dialect.defs.IRCEvent] to start working on.
         slice = Reference to the *slice* of the raw IRC string.
  +/
 void parsePrefix(ref IRCParser parser, ref IRCEvent event, ref string slice) pure
@@ -431,22 +431,22 @@ unittest
 // parseTypestring
 /++
     Takes a slice of a raw IRC string and continues parsing it into an
-    $(REF dialect.defs.IRCEvent) struct.
+    [dialect.defs.IRCEvent] struct.
 
     This function only focuses on the *typestring*; the part that tells what
-    kind of event happened, like $(REF dialect.defs.IRCEvent.Type.PRIVMSG) or
-    $(REF dialect.defs.IRCEvent.Type.MODE) or $(REF dialect.defs.IRCEvent.Type.NICK)
-    or $(REF dialect.defs.IRCEvent.Type.KICK), etc; in string format.
+    kind of event happened, like [dialect.defs.IRCEvent.Type.PRIVMSG] or
+    [dialect.defs.IRCEvent.Type.MODE] or [dialect.defs.IRCEvent.Type.NICK]
+    or [dialect.defs.IRCEvent.Type.KICK], etc; in string format.
 
-    The $(REF dialect.defs.IRCEvent) is not finished at the end of this function.
+    The [dialect.defs.IRCEvent] is not finished at the end of this function.
 
     Params:
-        parser = Reference to the current $(REF IRCParser).
-        event = Reference to the $(REF dialect.defs.IRCEvent) to continue working on.
+        parser = Reference to the current [IRCParser].
+        event = Reference to the [dialect.defs.IRCEvent] to continue working on.
         slice = Reference to the slice of the raw IRC string.
 
-    Throws: $(REF dialect.common.IRCParseException) if conversion from typestring to
-        $(REF dialect.defs.IRCEvent.Type) or typestring to a number failed.
+    Throws: [dialect.common.IRCParseException] if conversion from typestring to
+        [dialect.defs.IRCEvent.Type] or typestring to a number failed.
  +/
 void parseTypestring(ref IRCParser parser, ref IRCEvent event, ref string slice) pure
 in (slice.length, "Tried to parse typestring on an empty slice")
@@ -530,7 +530,7 @@ unittest
 // parseSpecialcases
 /++
     Takes a slice of a raw IRC string and continues parsing it into an
-    $(REF dialect.defs.IRCEvent) struct.
+    [dialect.defs.IRCEvent] struct.
 
     This function only focuses on specialcasing the remaining line, dividing it
     into fields like `target`, `channel`, `content`, etc.
@@ -538,14 +538,14 @@ unittest
     IRC events are *riddled* with inconsistencies and specialcasings, so this
     function is very very long, but by necessity.
 
-    The $(REF dialect.defs.IRCEvent) is finished at the end of this function.
+    The [dialect.defs.IRCEvent] is finished at the end of this function.
 
     Params:
-        parser = Reference to the current $(REF IRCParser).
-        event = Reference to the $(REF dialect.defs.IRCEvent) to continue working on.
+        parser = Reference to the current [IRCParser].
+        event = Reference to the [dialect.defs.IRCEvent] to continue working on.
         slice = Reference to the slice of the raw IRC string.
 
-    Throws: $(REF dialect.common.IRCParseException) if an unknown to-connect-type event was
+    Throws: [dialect.common.IRCParseException] if an unknown to-connect-type event was
         encountered, or if the event was not recognised at all, as neither a
         normal type nor a numeric.
  +/
@@ -1254,17 +1254,17 @@ void parseSpecialcases(ref IRCParser parser, ref IRCEvent event, ref string slic
 // parseGeneralCases
 /++
     Takes a slice of a raw IRC string and continues parsing it into an
-    $(REF dialect.defs.IRCEvent) struct.
+    [dialect.defs.IRCEvent] struct.
 
     This function only focuses on applying general heuristics to the remaining
     line, dividing it into fields like `target`, `channel`, `content`, etc; not
     based by its type but rather by how the string looks.
 
-    The $(REF dialect.defs.IRCEvent) is finished at the end of this function.
+    The [dialect.defs.IRCEvent] is finished at the end of this function.
 
     Params:
-        parser = Reference to the current $(REF IRCParser).
-        event = Reference to the $(REF dialect.defs.IRCEvent) to continue working on.
+        parser = Reference to the current [IRCParser].
+        event = Reference to the [dialect.defs.IRCEvent] to continue working on.
         slice = Reference to the slice of the raw IRC string.
  +/
 void parseGeneralCases(const ref IRCParser parser, ref IRCEvent event, ref string slice) pure @nogc
@@ -1490,13 +1490,13 @@ void parseGeneralCases(const ref IRCParser parser, ref IRCEvent event, ref strin
 
 // postparseSanityCheck
 /++
-    Checks for some specific erroneous edge cases in an $(REF dialect.defs.IRCEvent).
+    Checks for some specific erroneous edge cases in an [dialect.defs.IRCEvent].
 
     Descriptions of the errors are stored in `event.errors`.
 
     Params:
-        parser = Reference to the current $(REF IRCParser).
-        event = Reference to the $(REF dialect.defs.IRCEvent) to continue working on.
+        parser = Reference to the current [IRCParser].
+        event = Reference to the [dialect.defs.IRCEvent] to continue working on.
  +/
 public void postparseSanityCheck(const ref IRCParser parser, ref IRCEvent event) pure nothrow
 {
@@ -1545,14 +1545,14 @@ public void postparseSanityCheck(const ref IRCParser parser, ref IRCEvent event)
 
 // onNotice
 /++
-    Handle $(REF dialect.defs.IRCEvent.Type.NOTICE) events.
+    Handle [dialect.defs.IRCEvent.Type.NOTICE] events.
 
     These are all(?) sent by the server and/or services. As such they often
     convey important special things, so parse those.
 
     Params:
-        parser = Reference to the current $(REF IRCParser).
-        event = Reference to the $(REF dialect.defs.IRCEvent) to continue working on.
+        parser = Reference to the current [IRCParser].
+        event = Reference to the [dialect.defs.IRCEvent] to continue working on.
         slice = Reference to the slice of the raw IRC string.
  +/
 void onNotice(ref IRCParser parser, ref IRCEvent event, ref string slice) pure
@@ -1667,8 +1667,8 @@ in (slice.length, "Tried to process `onNotice` on an empty slice")
 
 // onPRIVMSG
 /++
-    Handle $(REF dialect.defs.IRCEvent.Type.QUERY) and $(REF dialect.defs.IRCEvent.Type.CHAN)
-    messages ($(REF dialect.defs.IRCEvent.Type.PRIVMSG)).
+    Handle [dialect.defs.IRCEvent.Type.QUERY] and [dialect.defs.IRCEvent.Type.CHAN]
+    messages ([dialect.defs.IRCEvent.Type.PRIVMSG]).
 
     Whether or not it is a private query message or a channel message is only obvious
     by looking at the target field of it; if it starts with a `#`, it is a
@@ -1678,11 +1678,11 @@ in (slice.length, "Tried to process `onNotice` on an empty slice")
     the type to `CTCP_`-types if applicable.
 
     Params:
-        parser = Reference to the current $(REF IRCParser).
-        event = Reference to the $(REF dialect.defs.IRCEvent) to continue working on.
+        parser = Reference to the current [IRCParser].
+        event = Reference to the [dialect.defs.IRCEvent] to continue working on.
         slice = Reference to the slice of the raw IRC string.
 
-    Throws: $(REF dialect.common.IRCParseException) on unknown CTCP types.
+    Throws: [dialect.common.IRCParseException] on unknown CTCP types.
  +/
 void onPRIVMSG(const ref IRCParser parser, ref IRCEvent event, ref string slice) pure
 in (slice.length, "Tried to process `onPRIVMSG` on an empty slice")
@@ -1747,10 +1747,10 @@ in (slice.length, "Tried to process `onPRIVMSG` on an empty slice")
         import std.traits : EnumMembers;
 
         /++
-            This iterates through all $(REF dialect.defs.IRCEvent.Type)s that
+            This iterates through all [dialect.defs.IRCEvent.Type]s that
             begin with `CTCP_` and generates switch cases for the string of
             each. Inside it will assign `event.type` to the corresponding
-            $(REF dialect.defs.IRCEvent.Type).
+            [dialect.defs.IRCEvent.Type].
 
             Like so, except automatically generated through compile-time
             introspection:
@@ -1799,11 +1799,11 @@ in (slice.length, "Tried to process `onPRIVMSG` on an empty slice")
 
 // onMode
 /++
-    Handle $(REF dialect.defs.IRCEvent.Type.MODE) changes.
+    Handle [dialect.defs.IRCEvent.Type.MODE] changes.
 
     Params:
-        parser = Reference to the current $(REF IRCParser).
-        event = Reference to the $(REF dialect.defs.IRCEvent) to continue working on.
+        parser = Reference to the current [IRCParser].
+        event = Reference to the [dialect.defs.IRCEvent] to continue working on.
         slice = Reference to the slice of the raw IRC string.
  +/
 void onMode(ref IRCParser parser, ref IRCEvent event, ref string slice) pure
@@ -1935,19 +1935,19 @@ unittest
 
 // onISUPPORT
 /++
-    Handles $(REF dialect.defs.IRCEvent.Type.RPL_ISUPPORT) events.
+    Handles [dialect.defs.IRCEvent.Type.RPL_ISUPPORT] events.
 
-    $(REF dialect.defs.IRCEvent.Type.RPL_ISUPPORT) contains a bunch of interesting information that changes how we
-    look at the $(REF dialect.defs.IRCServer). Notably which *network* the server
+    [dialect.defs.IRCEvent.Type.RPL_ISUPPORT] contains a bunch of interesting information that changes how we
+    look at the [dialect.defs.IRCServer]. Notably which *network* the server
     is of and its max channel and nick lengths, and available modes. Then much
     more that we're currently ignoring.
 
     Params:
-        parser = Reference to the current $(REF IRCParser).
-        event = Reference to the $(REF dialect.defs.IRCEvent) to continue working on.
+        parser = Reference to the current [IRCParser].
+        event = Reference to the [dialect.defs.IRCEvent] to continue working on.
         slice = Reference to the slice of the raw IRC string.
 
-    Throws: $(REF dialect.common.IRCParseException) if something could not be parsed or converted.
+    Throws: [dialect.common.IRCParseException] if something could not be parsed or converted.
  +/
 void onISUPPORT(ref IRCParser parser, ref IRCEvent event, ref string slice) pure
 in (slice.length, "Tried to process `onISUPPORT` on an empty slice")
@@ -2119,16 +2119,16 @@ in (slice.length, "Tried to process `onISUPPORT` on an empty slice")
 
 // onMyInfo
 /++
-    Handle $(REF dialect.defs.IRCEvent.Type.RPL_MYINFO) events.
+    Handle [dialect.defs.IRCEvent.Type.RPL_MYINFO] events.
 
     `MYINFO` contains information about which *daemon* the server is running.
     We want that to be able to meld together a good `typenums` array.
 
-    It fires before $(REF dialect.defs.IRCEvent.Type.RPL_ISUPPORT).
+    It fires before [dialect.defs.IRCEvent.Type.RPL_ISUPPORT].
 
     Params:
-        parser = Reference to the current $(REF IRCParser).
-        event = Reference to the $(REF dialect.defs.IRCEvent) to continue working on.
+        parser = Reference to the current [IRCParser].
+        event = Reference to the [dialect.defs.IRCEvent] to continue working on.
         slice = Reference to the slice of the raw IRC string.
  +/
 void onMyInfo(ref IRCParser parser, ref IRCEvent event, ref string slice) pure
@@ -2284,10 +2284,10 @@ public:
 
 // IRCParser
 /++
-    Parser that takes raw IRC strings and produces $(REF dialect.defs.IRCEvent)s based on them.
+    Parser that takes raw IRC strings and produces [dialect.defs.IRCEvent]s based on them.
 
-    Parsing requires state, which means that $(REF IRCParser)s must be equipped with
-    a $(REF dialect.defs.IRCServer) and a $(REF dialect.defs.IRCClient) for context when parsing.
+    Parsing requires state, which means that [IRCParser]s must be equipped with
+    a [dialect.defs.IRCServer] and a [dialect.defs.IRCClient] for context when parsing.
     Because of this it has its postblit `@disable`d, so as not to make copies
     when only one instance should exist.
 
@@ -2358,24 +2358,24 @@ private:
     import dialect.postprocessors : Postprocessors;
 
 public:
-    /// The current $(REF dialect.defs.IRCClient) with all the context needed for parsing.
+    /// The current [dialect.defs.IRCClient] with all the context needed for parsing.
     IRCClient client;
 
-    /// The current $(REF dialect.defs.IRCServer) with all the context needed for parsing.
+    /// The current [dialect.defs.IRCServer] with all the context needed for parsing.
     IRCServer server;
 
     /// An `dialect.defs.IRCEvent.Type[1024]` reverse lookup table for fast numeric lookups.
     IRCEvent.Type[1024] typenums = Typenums.base;
 
     /++
-        Array of active $(REF dialect.common.Postprocessor)s, to be iterated through
+        Array of active [dialect.common.Postprocessor]s, to be iterated through
         and processed after parsing is complete.
      +/
     Postprocessor[] postprocessors;
 
     // toIRCEvent
     /++
-        Parses an IRC string into an $(REF dialect.defs.IRCEvent).
+        Parses an IRC string into an [dialect.defs.IRCEvent].
 
         The return type is kept as `auto` to infer purity. It will be `pure` if
         there are no postprocessors available, and merely `@safe` if there are.
@@ -2386,7 +2386,7 @@ public:
             raw = Raw IRC string as received from a server.
 
         Returns:
-            A complete $(REF dialect.defs.IRCEvent).
+            A complete [dialect.defs.IRCEvent].
      +/
     auto toIRCEvent(const string raw)
     {
@@ -2409,8 +2409,8 @@ public:
     }
 
     /++
-        Create a new $(REF IRCParser) with the passed $(REF dialect.defs.IRCClient) and
-        $(REF dialect.defs.IRCServer) as base context for parsing.
+        Create a new [IRCParser] with the passed [dialect.defs.IRCClient] and
+        [dialect.defs.IRCServer] as base context for parsing.
      +/
     this(IRCClient client, IRCServer server) pure nothrow
     {
@@ -2468,10 +2468,10 @@ public:
 
     version(FlagAsUpdated)
     {
-        /// Whether or not parsing updated its internal $(REF dialect.defs.IRCClient).
+        /// Whether or not parsing updated its internal [dialect.defs.IRCClient].
         bool clientUpdated;
 
-        /// Whether or not parsing updated its internal $(REF dialect.defs.IRCServer).
+        /// Whether or not parsing updated its internal [dialect.defs.IRCServer].
         bool serverUpdated;
     }
 }

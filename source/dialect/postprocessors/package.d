@@ -1,6 +1,6 @@
 /++
     Postprocessor package module. Only enumerates the postprocessors into an
-    $(REF std.meta.AliasSeq) for easy foreaching.
+    [std.meta.AliasSeq] for easy foreaching.
  +/
 module dialect.postprocessors;
 
