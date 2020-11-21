@@ -227,7 +227,6 @@ void parseBasic(ref IRCParser parser, ref IRCEvent event) pure @nogc
     }
 
     with (IRCEvent.Type)
-    with (parser)
     switch (typestring)
     {
     case "PING":
@@ -352,25 +351,22 @@ in (slice.length, "Tried to parse prefix on an empty slice")
 {
     string prefix = slice.nom(' ');
 
-    with (event.sender)
+    if (prefix.contains('!'))
     {
-        if (prefix.contains('!'))
-        {
-            // user!~ident@address
-            nickname = prefix.nom('!');
-            ident = prefix.nom('@');
-            address = prefix;
-        }
-        else if (prefix.contains('.'))
-        {
-            // dots signify an address
-            address = prefix;
-        }
-        else
-        {
-            // When does this happen?
-            nickname = prefix;
-        }
+        // user!~ident@address
+        event.sender.nickname = prefix.nom('!');
+        event.sender.ident = prefix.nom('@');
+        event.sender.address = prefix;
+    }
+    else if (prefix.contains('.'))
+    {
+        // dots signify an address
+        event.sender.address = prefix;
+    }
+    else
+    {
+        // When does this happen?
+        event.sender.nickname = prefix;
     }
 }
 
@@ -560,7 +556,6 @@ void parseSpecialcases(ref IRCParser parser, ref IRCEvent event, ref string slic
     import std.conv : to;
     import std.typecons : Flag, No, Yes;
 
-    with (parser)
     with (IRCEvent.Type)
     switch (event.type)
     {
@@ -572,7 +567,7 @@ void parseSpecialcases(ref IRCParser parser, ref IRCEvent event, ref string slic
         // :nick!~identh@unaffiliated/nick JOIN #freenode login :realname
         // :kameloso^!~NaN@81-233-105-62-no80.tbcn.telia.com JOIN #flerrp
         // :kameloso^^!~NaN@C2802314.E23AD7D8.E9841504.IP JOIN :#flerrp
-        event.type = (event.sender.nickname == client.nickname) ? SELFJOIN : JOIN;
+        event.type = (event.sender.nickname == parser.client.nickname) ? SELFJOIN : JOIN;
 
         if (slice.contains(' '))
         {
@@ -595,7 +590,7 @@ void parseSpecialcases(ref IRCParser parser, ref IRCEvent event, ref string slic
         // :kameloso^!~NaN@81-233-105-62-no80.tbcn.telia.com PART #flerrp
         // :Swatas!~4--Uos3UH@9e19ee35.915b96ad.a7c9320c.IP4 PART :#cncnet-mo
         // :gallon!~MO.11063@482c29a5.e510bf75.97653814.IP4 PART :#cncnet-yr
-        event.type = (event.sender.nickname == client.nickname) ? SELFPART : PART;
+        event.type = (event.sender.nickname == parser.client.nickname) ? SELFPART : PART;
 
         if (slice.contains(' '))
         {
@@ -616,10 +611,10 @@ void parseSpecialcases(ref IRCParser parser, ref IRCEvent event, ref string slic
         // :kameloso^!~NaN@81-233-105-62-no80.tbcn.telia.com NICK :kameloso_
         event.target.nickname = slice[1..$];
 
-        if (event.sender.nickname == client.nickname)
+        if (event.sender.nickname == parser.client.nickname)
         {
             event.type = SELFNICK;
-            client.nickname = event.target.nickname;
+            parser.client.nickname = event.target.nickname;
             version(FlagAsUpdated) parser.clientUpdated = true;
         }
         break;
@@ -628,7 +623,7 @@ void parseSpecialcases(ref IRCParser parser, ref IRCEvent event, ref string slic
         import lu.string : unquoted;
 
         // :g7zon!~gertsson@178.174.245.107 QUIT :Client Quit
-        event.type = (event.sender.nickname == client.nickname) ? SELFQUIT : QUIT;
+        event.type = (event.sender.nickname == parser.client.nickname) ? SELFQUIT : QUIT;
         event.content = slice[1..$].unquoted;
 
         if (event.content.beginsWith("Quit: "))
@@ -651,7 +646,7 @@ void parseSpecialcases(ref IRCParser parser, ref IRCEvent event, ref string slic
         // :zorael!~NaN@ns3363704.ip-94-23-253.eu KICK #flerrp kameloso^ :this is a reason
         event.channel = slice.nom(' ');
         event.target.nickname = slice.nom(" :");
-        event.type = (event.target.nickname == client.nickname) ? SELFKICK : KICK;
+        event.type = (event.target.nickname == parser.client.nickname) ? SELFKICK : KICK;
         event.content = slice;
         break;
 
@@ -2229,60 +2224,59 @@ in (slice.length, "Tried to process `onMyInfo` on an empty slice")
 
     // https://upload.wikimedia.org/wikipedia/commons/d/d5/IRCd_software_implementations3.svg
 
-    with (IRCServer.Daemon)
+    alias D = IRCServer.Daemon;
+
+    IRCServer.Daemon daemon;
+
+    if (daemonstringLower.contains("unreal"))
     {
-        IRCServer.Daemon daemon;
-
-        if (daemonstringLower.contains("unreal"))
-        {
-            daemon = unreal;
-        }
-        else if (daemonstringLower.contains("inspircd"))
-        {
-            daemon = inspircd;
-        }
-        else if (daemonstringLower.contains("snircd"))
-        {
-            daemon = snircd;
-        }
-        else if (daemonstringLower.contains("u2."))
-        {
-            daemon = u2;
-        }
-        else if (daemonstringLower.contains("bahamut"))
-        {
-            daemon = bahamut;
-        }
-        else if (daemonstringLower.contains("hybrid"))
-        {
-            daemon = hybrid;
-        }
-        else if (daemonstringLower.contains("ratbox"))
-        {
-            daemon = ratbox;
-        }
-        else if (daemonstringLower.contains("charybdis"))
-        {
-            daemon = charybdis;
-        }
-        else if (daemonstringLower.contains("ircd-seven"))
-        {
-            daemon = ircdseven;
-        }
-        else if (daemonstring == "BSDUnix")
-        {
-            daemon = bsdunix;
-        }
-        else
-        {
-            daemon = unknown;
-        }
-
-        parser.typenums = typenumsOf(daemon);
-        parser.server.daemon = daemon;
-        parser.server.daemonstring = daemonstring;
-        version(FlagAsUpdated) parser.serverUpdated = true;
+        daemon = D.unreal;
     }
+    else if (daemonstringLower.contains("inspircd"))
+    {
+        daemon = D.inspircd;
+    }
+    else if (daemonstringLower.contains("snircd"))
+    {
+        daemon = D.snircd;
+    }
+    else if (daemonstringLower.contains("u2."))
+    {
+        daemon = D.u2;
+    }
+    else if (daemonstringLower.contains("bahamut"))
+    {
+        daemon = D.bahamut;
+    }
+    else if (daemonstringLower.contains("hybrid"))
+    {
+        daemon = D.hybrid;
+    }
+    else if (daemonstringLower.contains("ratbox"))
+    {
+        daemon = D.ratbox;
+    }
+    else if (daemonstringLower.contains("charybdis"))
+    {
+        daemon = D.charybdis;
+    }
+    else if (daemonstringLower.contains("ircd-seven"))
+    {
+        daemon = D.ircdseven;
+    }
+    else if (daemonstring == "BSDUnix")
+    {
+        daemon = D.bsdunix;
+    }
+    else
+    {
+        daemon = D.unknown;
+    }
+
+    parser.typenums = typenumsOf(daemon);
+    parser.server.daemon = daemon;
+    parser.server.daemonstring = daemonstring;
+    version(FlagAsUpdated) parser.serverUpdated = true;
 }
 
 
@@ -2490,12 +2484,9 @@ unittest
 
     alias T = IRCEvent.Type;
 
-    with (parser)
-    {
-        typenums = Typenums.base;
+    parser.typenums = Typenums.base;
 
-        assert(typenums[344] == T.init);
-        Typenums.hybrid.meldInto!(MeldingStrategy.aggressive)(typenums);
-        assert(typenums[344] != T.init);
-    }
+    assert(parser.typenums[344] == T.init);
+    Typenums.hybrid.meldInto!(MeldingStrategy.aggressive)(parser.typenums);
+    assert(parser.typenums[344] != T.init);
 }
