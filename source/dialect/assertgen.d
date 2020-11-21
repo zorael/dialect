@@ -339,14 +339,16 @@ void main() @system
     parser.server.address = readln().stripped;
     if (!parser.server.address.length) parser.server.address = "irc.freenode.net";
 
+    enum scissors = "8<  --  8<  --  8<  --  8<  --  8<  --  8<  --  8<  --  8<  --  8<";
+
     writeln();
-    writeln("8<  --  8<  --  8<  --  8<  --  8<  --  8<  --  8<  --  8<  --  8<");
+    writeln(scissors);
     writeln();
     stdout.lockingTextWriter.formatClientAssignment(parser.client, parser.server);
     writeln();
     writeln("parser.typenums = typenumsOf(parser.server.daemon);");
     writeln();
-    writeln("8<  --  8<  --  8<  --  8<  --  8<  --  8<  --  8<  --  8<  --  8<");
+    writeln(scissors);
     writeln();
     writeln("// Paste a raw event string and hit Enter to generate an assert block. " ~
         "Ctrl+C to exit.");
