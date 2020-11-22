@@ -1080,7 +1080,7 @@ void parseSpecialcases(ref IRCParser parser, ref IRCEvent event, ref string slic
         {
             event.target.nickname = slice.nom(' ');  // bot nick
             slice.nom('!');  // user
-            event.target.ident = slice.nom('@');
+            /*event.target.ident =*/ slice.nom('@');  // Doesn't seem to be the true ~ident
             event.target.address = slice.nom(' ');
             event.target.account = slice.nom(" :");
         }
