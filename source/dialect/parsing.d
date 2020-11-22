@@ -819,11 +819,22 @@ void parseSpecialcases(ref IRCParser parser, ref IRCEvent event, ref string slic
             {
                 if (first[0].isNumber)
                 {
-                    event.count = first.to!int;
+                    import std.conv : ConvException;
 
-                    if (second.length && second[0].isNumber)
+                    try
                     {
-                        event.altcount = second.to!int;
+                        event.count = first.to!int;
+
+                        if (second.length && second[0].isNumber)
+                        {
+                            event.altcount = second.to!int;
+                        }
+                    }
+                    catch (ConvException e)
+                    {
+                        // :hitchcock.freenode.net 432 * 1234567890123456789012345 :Erroneous Nickname
+                        // Treat as though not a number
+                        event.aux = first;
                     }
                 }
                 else
