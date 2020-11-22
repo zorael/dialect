@@ -1083,12 +1083,6 @@ void parseSpecialcases(ref IRCParser parser, ref IRCEvent event, ref string slic
             event.target.ident = slice.nom('@');
             event.target.address = slice.nom(' ');
             event.target.account = slice.nom(" :");
-
-            if (parser.client.nickname != event.target.nickname)
-            {
-                parser.client.nickname = event.target.nickname;
-                version(FlagAsUpdated) parser.clientUpdated = true;
-            }
         }
         event.content = slice;
         break;
