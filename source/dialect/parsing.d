@@ -1076,7 +1076,6 @@ void parseSpecialcases(ref IRCParser parser, ref IRCEvent event, ref string slic
 
     case RPL_LOGGEDIN: // 900
         // :weber.freenode.net 900 kameloso kameloso!NaN@194.117.188.126 kameloso :You are now logged in as kameloso.
-        // :NickServ!NickServ@services. NOTICE kameloso^ :You are now identified for kameloso.
         if (slice.contains('!'))
         {
             event.target.nickname = slice.nom(' ');  // bot nick
@@ -1084,6 +1083,12 @@ void parseSpecialcases(ref IRCParser parser, ref IRCEvent event, ref string slic
             event.target.ident = slice.nom('@');
             event.target.address = slice.nom(' ');
             event.target.account = slice.nom(" :");
+
+            if (parser.client.nickname != event.target.nickname)
+            {
+                parser.client.nickname = event.target.nickname;
+                version(FlagAsUpdated) parser.clientUpdated = true;
+            }
         }
         event.content = slice;
         break;
