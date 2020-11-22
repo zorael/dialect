@@ -1093,6 +1093,18 @@ void parseSpecialcases(ref IRCParser parser, ref IRCEvent event, ref string slic
         event.content = slice;
         break;
 
+    case RPL_WELCOME: // 001
+        // :adams.freenode.net 001 kameloso^ :Welcome to the freenode Internet Relay Chat Network kameloso^
+        event.target.nickname = slice.nom(" :");
+        event.content = slice;
+
+        if (parser.client.nickname != event.target.nickname)
+        {
+            parser.client.nickname = event.target.nickname;
+            version(FlagAsUpdated) parser.clientUpdated = true;
+        }
+        break;
+
     case ACCOUNT:
         //:ski7777!~quassel@ip5b435007.dynamic.kabel-deutschland.de ACCOUNT ski7777
         event.sender.account = slice;
