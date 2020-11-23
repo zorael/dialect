@@ -1,13 +1,14 @@
 language: d
 
 sudo: required
-dist: bionic
+dist: focal
 
 branches:
   except:
     - /appveyor-.*/
     - /circleci-.*/
     - gh-pages
+    - /dustmite-.*/
 
 d:
   - dmd
