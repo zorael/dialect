@@ -1052,7 +1052,7 @@ unittest
             assert((sender.ident == "~quassel"), sender.ident);
             assert((sender.address == "ip5b435007.dynamic.kabel-deutschland.de"), sender.address);
             assert((sender.account == "skix77"), sender.account);
-            assert((aux == "skix77"), aux);
+            assert((content == "skix77"), aux);
         }
     }
     {
