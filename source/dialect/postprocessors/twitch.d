@@ -729,7 +729,7 @@ auto parseTwitchTags(ref IRCParser parser, ref IRCEvent event)
 
             version(TwitchWarnings)
             {
-                if (event.count != int.min)
+                if (event.count != long.min)
                 {
                     import std.stdio : writeln;
                     writeln(key, " overwrote a count: ", event.count);
@@ -737,7 +737,7 @@ auto parseTwitchTags(ref IRCParser parser, ref IRCEvent event)
                 }
             }
 
-            event.count = (value == "0") ? 0 : value.to!int;
+            event.count = (value == "0") ? 0 : value.to!long;
             break;
 
         case "msg-param-selected-count":
@@ -755,7 +755,7 @@ auto parseTwitchTags(ref IRCParser parser, ref IRCEvent event)
 
             version(TwitchWarnings)
             {
-                if (event.altcount != int.min)
+                if (event.altcount != long.min)
                 {
                     import std.stdio : writeln;
                     writeln(key, " overwrote an altcount: ", event.altcount);
@@ -763,7 +763,7 @@ auto parseTwitchTags(ref IRCParser parser, ref IRCEvent event)
                 }
             }
 
-            event.altcount = value.to!int;
+            event.altcount = value.to!long;
             break;
 
         case "badge-info":

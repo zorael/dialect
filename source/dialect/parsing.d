@@ -745,7 +745,7 @@ void parseSpecialcases(ref IRCParser parser, ref IRCEvent event, ref string slic
         event.channel = slice.contains(" q ") ? slice.nom(" q ") : slice.nom(' ');
         event.content = slice.nom(' ');
         event.aux = slice.nom(' ');
-        event.count = slice.to!int;
+        event.count = slice.to!long;
         break;
 
     case RPL_WHOISHOST: // 378
@@ -778,8 +778,8 @@ void parseSpecialcases(ref IRCParser parser, ref IRCEvent event, ref string slic
         // :rajaniemi.freenode.net 317 kameloso zorael 0 1510219961 :seconds idle, signon time
         slice.nom(' ');  // bot nickname
         event.target.nickname = slice.nom(' ');
-        event.count = slice.nom(' ').to!int;
-        event.altcount = slice.nom(" :").to!int;
+        event.count = slice.nom(' ').to!long;
+        event.altcount = slice.nom(" :").to!long;
         event.aux = slice;
         break;
 
@@ -823,11 +823,11 @@ void parseSpecialcases(ref IRCParser parser, ref IRCEvent event, ref string slic
 
                     try
                     {
-                        event.count = first.to!int;
+                        event.count = first.to!long;
 
                         if (second.length && second[0].isNumber)
                         {
-                            event.altcount = second.to!int;
+                            event.altcount = second.to!long;
                         }
                     }
                     catch (ConvException e)
@@ -980,7 +980,7 @@ void parseSpecialcases(ref IRCParser parser, ref IRCEvent event, ref string slic
         slice.nom(" User "); // bot nickname
         event.aux = slice.nom(' '); // "class"
         event.content = slice.nom(" :");
-        event.count = slice.to!int; // unsure
+        event.count = slice.to!long; // unsure
         break;
 
     case RPL_LINKS: // 364
@@ -988,7 +988,7 @@ void parseSpecialcases(ref IRCParser parser, ref IRCEvent event, ref string slic
         slice.nom(' '); // bot nickname
         slice.nom(' '); // "mask"
         event.aux = slice.nom(" :"); // server address
-        event.count = slice.nom(' ').to!int; // hop count
+        event.count = slice.nom(' ').to!long; // hop count
         event.content = slice; // "server info"
         break;
 
@@ -1047,7 +1047,7 @@ void parseSpecialcases(ref IRCParser parser, ref IRCEvent event, ref string slic
             event.sender.nickname = event.channel[1..$];
             event.sender.address = string.init;
             event.target.nickname = slice.nom(' ');  // target channel
-            event.count = (slice == "-") ? 0 : slice.to!int;
+            event.count = (slice == "-") ? 0 : slice.to!long;
             break;
 
         case TWITCH_HOSTEND:
@@ -1055,7 +1055,7 @@ void parseSpecialcases(ref IRCParser parser, ref IRCEvent event, ref string slic
             event.channel = slice.nom(" :- ");
             event.sender.nickname = event.channel[1..$];
             event.sender.address = string.init;
-            event.count = (slice == "-") ? 0 : slice.to!int;
+            event.count = (slice == "-") ? 0 : slice.to!long;
             break;
 
         case CLEARCHAT:
@@ -1167,7 +1167,7 @@ void parseSpecialcases(ref IRCParser parser, ref IRCEvent event, ref string slic
         // :kornbluth.freenode.net 329 kameloso #flerrp 1512995737
         slice.nom(' ');
         event.channel = slice.nom(' ');
-        event.count = slice.to!int;
+        event.count = slice.to!long;
         break;
 
     case RPL_LIST: // 322
@@ -1182,7 +1182,7 @@ void parseSpecialcases(ref IRCParser parser, ref IRCEvent event, ref string slic
          */
         slice.nom(' '); // bot nickname
         event.channel = slice.nom(' ');
-        event.count = slice.nom(" :").to!int;
+        event.count = slice.nom(" :").to!long;
         event.content = slice;
         break;
 
@@ -1244,7 +1244,7 @@ void parseSpecialcases(ref IRCParser parser, ref IRCEvent event, ref string slic
         {
             event.content = slice.nom(' ');
             event.aux = slice.nom(' ');  // nickname that set the mode
-            event.count = slice.to!int;
+            event.count = slice.to!long;
         }
         else
         {
