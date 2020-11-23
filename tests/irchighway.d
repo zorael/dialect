@@ -191,7 +191,6 @@ unittest
             assert((type == IRCEvent.Type.RPL_LOGGEDIN), Enum!(IRCEvent.Type).toString(type));
             assert((sender.address == "ceres.dk.eu.irchighway.net"), sender.address);
             assert((target.nickname == "kameloso"), target.nickname);
-            assert((target.ident == "kameloso"), target.ident);
             assert((target.address == "ihw-3lt.aro.117.194.IP"), target.address);
             assert((target.account == "kameloso"), target.account);
             assert((content == "You are now logged in as kameloso"), content);

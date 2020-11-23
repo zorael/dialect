@@ -1036,7 +1036,6 @@ unittest
             assert((type == RPL_LOGGEDIN), Enum!(IRCEvent.Type).toString(type));
             assert((sender.address == "weber.freenode.net"), sender.address);
             assert((target.nickname == "kameloso"), target.nickname);
-            assert((target.ident == "NaN"), target.ident);
             assert((target.address == "194.117.188.126"), target.address);
             assert((target.account == "kameloso"), target.account);
             assert((content == "You are now logged in as kameloso."), content);
