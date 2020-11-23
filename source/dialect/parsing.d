@@ -780,7 +780,7 @@ void parseSpecialcases(ref IRCParser parser, ref IRCEvent event, ref string slic
         event.target.nickname = slice.nom(' ');
         event.count = slice.nom(' ').to!long;
         event.altcount = slice.nom(" :").to!long;
-        event.aux = slice;
+        event.content = slice;
         break;
 
     case RPL_LUSEROP: // 252
