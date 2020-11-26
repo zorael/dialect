@@ -284,7 +284,6 @@ int main(string[] args) @system
         auto results = getopt(args,
             config.caseSensitive,
             config.bundling,
-            config.passThrough,
             "o|output",
                 "Output file (specify '-' to disable) [" ~ defaultOutputFilename ~ "]",
                 &outputFile,
