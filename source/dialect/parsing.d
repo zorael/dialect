@@ -1222,7 +1222,16 @@ void parseSpecialcases(ref IRCParser parser, ref IRCEvent event, ref string slic
         // :cadance.canternet.org 379 kameloso kameloso :is using modes +ix
         slice.nom(' '); // bot nickname
         event.target.nickname = slice.nom(" :is using modes ");
-        event.aux = slice;
+
+        if (slice.contains(' '))
+        {
+            event.aux = slice.nom(' ');
+            event.content = slice;
+        }
+        else
+        {
+            event.aux = slice;
+        }
         break;
 
     case RPL_WHOWASUSER: // 314
