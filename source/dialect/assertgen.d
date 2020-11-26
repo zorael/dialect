@@ -369,6 +369,8 @@ void main() @system
             .strippedLeft(" /")  // Remove indents and commentating slashes
             .chomp; //strippedRight;
 
+        if (input.length && (input[$-1] == '$')) input = input[0..$-1];
+
         if (!input.length)
         {
             writeln("// ... empty line. (Ctrl+C to exit)");
