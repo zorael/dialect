@@ -98,7 +98,10 @@ struct IRCEvent
         SPAMFILTERLIST,   // = 941,
         NICKUNLOCKED,     // = 945,
         NICKNOTLOCKED,    // = 946,
-        ENDOFEXEMPTOPSLIST,// = 953 ///End of exempt channel ops list.
+        ENDOFEXEMPTOPSLIST,// = 953 // End of exempt channel ops list.
+        MODELIST,         // = 961 /// +noctcp +nickflood 5:60 +nonotice +flood 30:5 +joinflood 5:1 +noextmsg +topiclock +globalflood 10:5
+        ENDOFMODELIST,    // = 960 // End of mode list.
+        ENDOFCHANNELACCLIST, // = 911 // End of Channel Access List
 
         // Twitch specifics
         USERSTATE,        /// Twitch user information.
@@ -1723,6 +1726,9 @@ struct Typenums
         906 : Type.ERR_SASLABORTED,
         907 : Type.ERR_SASLALREADY,
         908 : Type.RPL_SASLMECHS,
+        911 : Type.ENDOFCHANNELACCLIST,
+        960 : Type.ENDOFMODELIST,
+        961 : Type.MODELIST,
         931 : Type.BOTSNOTWELCOME,
         926 : Type.CHANNELFORBIDDEN,
         936 : Type.ERR_WORDFILTERED,
