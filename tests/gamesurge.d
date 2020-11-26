@@ -87,8 +87,8 @@ unittest
         {
             assert((type == RPL_HOSTHIDDEN), Enum!(IRCEvent.Type).toString(type));
             assert((sender.address == "TAL.DE.EU.GameSurge.net"), sender.address);
-            assert((content == "~NaN@1b24f4a7.243f02a4.5cd6f3e3.IP4"), content);
-            assert((aux == "is now your hidden host"), aux);
+            assert((content == "is now your hidden host"), aux);
+            assert((aux == "~NaN@1b24f4a7.243f02a4.5cd6f3e3.IP4"), content);
             assert((num == 396), num.to!string);
         }
     }
@@ -134,7 +134,7 @@ unittest
         immutable event = parser.toIRCEvent(":AuthServ!AuthServ@Services.GameSurge.net NOTICE kameloso :I recognize you.");
         with (event)
         {
-            assert((type == IRCEvent.Type.RPL_LOGGEDIN), Enum!(IRCEvent.Type).toString(type));
+            assert((type == IRCEvent.Type.AUTH_SUCCESS), Enum!(IRCEvent.Type).toString(type));
             assert((sender.nickname == "AuthServ"), sender.nickname);
             assert((sender.ident == "AuthServ"), sender.ident);
             assert((sender.address == "Services.GameSurge.net"), sender.address);

@@ -115,7 +115,7 @@ unittest
         immutable event = parser.toIRCEvent(":NickServ!service@RusNet NOTICE kameloso :Password accepted for nick kameloso.");
         with (event)
         {
-            assert((type == IRCEvent.Type.RPL_LOGGEDIN), Enum!(IRCEvent.Type).toString(type));
+            assert((type == IRCEvent.Type.AUTH_SUCCESS), Enum!(IRCEvent.Type).toString(type));
             assert((sender.nickname == "NickServ"), sender.nickname);
             assert((sender.ident == "service"), sender.ident);
             assert((sender.address == "RusNet"), sender.address);
