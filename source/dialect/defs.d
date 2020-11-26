@@ -90,6 +90,7 @@ struct IRCEvent
         SASL_AUTHENTICATE,/// SASL authentication negotiation.
         AUTH_CHALLENGE,   /// Authentication challenge.
         AUTH_FAILURE,     /// Authentication failure.
+        AUTH_SUCCESS,     /// Authentication success.
         CHGHOST,          /// User "changes host", which is a thing on some networks.
         CHANNELFORBIDDEN, // = 926,     // <nickname> <channel> :Channel <channel> is forbidden: This channel is closed by request of the channel operators.
         BOTSNOTWELCOME,   // = 931,     // <nickname> :Malicious bot, spammers, and other automated systems of dubious origins are NOT welcome here.
