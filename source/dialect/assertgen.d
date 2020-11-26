@@ -259,20 +259,43 @@ public:
  +/
 version(unittest) {}
 else
-void main() @system
+int main(string[] args) @system
 {
     import dialect.defs : IRCServer;
     import dialect.parsing : IRCParser;
     import lu.string : contains, nom, stripped, strippedLeft, strippedRight;
+    import std.array : Appender;
     import std.conv : ConvException;
+    import std.format : formattedWrite;
+    import std.getopt : GetOptException, config, getopt;
     import std.range : chunks, only;
-    import std.stdio : stdout, readln, write, writeln, writefln;
+    import std.stdio : File, readln, stdin, stdout, write, writeln, writefln;
     import std.string : chomp;
     import std.traits : EnumMembers;
     import std.typecons : No, Yes;
 
+    string outputFile = "unittests.log";
+
+    try
+    {
+        cast(void)getopt(args,
+            config.caseSensitive,
+            config.bundling,
+            config.passThrough,
+            "f|file", &outputFile,
+        );
+    }
+    catch (GetOptException e)
+    {
+        writeln(e.msg);
+        return 1;
+    }
+
     IRCParser parser;
     parser.initPostprocessors();  // Normally done in IRCParser(IRCClient) constructor
+
+    Appender!(char[]) buffer;
+    buffer.reserve(2048);
 
     writeln("-- Available daemons --");
     writefln("%(%(%-14s%)\n%)", EnumMembers!(IRCServer.Daemon).only.chunks(3));
@@ -300,7 +323,7 @@ void main() @system
         writeln("-- Conversion exception caught when parsing daemon: ", e.msg);
         version(PrintStacktraces) writeln(e.info);
         stdout.flush();
-        return;
+        return 1;
     }
 
     write("Enter network (freenode): ");
@@ -336,19 +359,45 @@ void main() @system
 
     enum scissors = "8<  --  8<  --  8<  --  8<  --  8<  --  8<  --  8<  --  8<  --  8<";
 
+    buffer.formatClientAssignment(parser.client, parser.server);
+    buffer.put("\n\nparser.typenums = typenumsOf(parser.server.daemon);\n");
+
     writeln();
     writeln(scissors);
     writeln();
-    stdout.lockingTextWriter.formatClientAssignment(parser.client, parser.server);
-    writeln();
-    writeln("parser.typenums = typenumsOf(parser.server.daemon);");
-    writeln();
+    writeln(buffer.data);
     writeln(scissors);
     writeln();
     writeln("// Paste a raw event string and hit Enter to generate an assert block. " ~
         "Ctrl+C to exit.");
     writeln();
     stdout.flush();
+
+    File file;
+
+    if (outputFile.length)
+    {
+        import std.datetime.systime : Clock;
+        import std.file : exists;
+        import core.time : msecs;
+
+        immutable shouldPad = outputFile.exists;
+
+        file = File(outputFile, "a");
+
+        if (shouldPad)
+        {
+            file.writeln('\n');
+        }
+
+        auto now = Clock.currTime;
+        now.fracSecs = 0.msecs;
+        file.writeln("// ========== ", args[0], ": ", now, '\n');
+        file.writeln(buffer.data);
+        file.flush();
+    }
+
+    buffer.clear();
 
     IRCClient oldClient = parser.client;
     IRCServer oldServer = parser.server;
@@ -362,7 +411,7 @@ void main() @system
         {
             // Reset input so double enter doesn't display the same event
             input = string.init;
-            stdout.flush();
+            stdin.flush();
         }
 
         input = input
@@ -381,21 +430,17 @@ void main() @system
         {
             IRCEvent event = parser.toIRCEvent(input);
 
-            writeln();
-            stdout.lockingTextWriter.formatEventAssertBlock(event);
-            writeln();
+            buffer.formatEventAssertBlock(event);
 
             if (parser.clientUpdated || parser.serverUpdated)
             {
                 parser.clientUpdated = false;
                 parser.serverUpdated = false;
 
-                writeln("with (parser)");
-                writeln("{");
-                stdout.lockingTextWriter.formatDeltaInto!(Yes.asserts)(oldClient, parser.client, 1, "client");
-                stdout.lockingTextWriter.formatDeltaInto!(Yes.asserts)(oldServer, parser.server, 1, "server");
-                writeln("}");
-                writeln();
+                buffer.put("\n\nwith (parser)\n{\n");
+                buffer.formatDeltaInto!(Yes.asserts)(oldClient, parser.client, 1, "client");
+                buffer.formatDeltaInto!(Yes.asserts)(oldServer, parser.server, 1, "server");
+                buffer.put("}\n");
 
                 oldClient = parser.client;
                 oldServer = parser.server;
@@ -403,29 +448,40 @@ void main() @system
         }
         catch (IRCParseException e)
         {
-            writeln();
-            writefln("// IRC Parse Exception at %s:%d: %s", e.file, e.line, e.msg);
+            buffer.formattedWrite("\n// IRC Parse Exception at %s:%d: %s", e.file, e.line, e.msg);
 
             version(PrintStacktraces)
             {
-                writeln("/*");
-                writeln(e.info);
-                writeln("*/");
-                writeln();
+                import std.conv : text;
+
+                buffer.put("/*\n");
+                buffer.put(e.info.text);
+                buffer.put("*/\n");
             }
         }
         catch (Exception e)
         {
-            writeln();
-            writefln("// Exception at %s:%d: %s", e.file, e.line, e.msg);
+            buffer.formattedWrite("\n// Exception at %s:%d: %s", e.file, e.line, e.msg);
 
             version(PrintStacktraces)
             {
-                writeln("/*");
-                writeln(e.toString);
-                writeln("*/");
-                writeln();
+                buffer.put("/*\n");
+                buffer.put(e.toString);
+                buffer.put("*/\n");
             }
         }
+
+        if (outputFile.length)
+        {
+            file.writeln(buffer.data);
+            file.flush();
+        }
+
+        writeln();
+        writeln(buffer.data);
+        writeln();
+        buffer.clear();
     }
+
+    return 0;
 }
