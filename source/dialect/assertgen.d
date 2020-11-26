@@ -443,6 +443,7 @@ int main(string[] args) @system
             // Reset input so double enter doesn't display the same event
             input = string.init;
             stdin.flush();
+            stdout.flush();
         }
 
         input = input
