@@ -470,7 +470,7 @@ int main(string[] args) @system
         }
         catch (IRCParseException e)
         {
-            buffer.formattedWrite("\n// IRC Parse Exception at %s:%d: %s", e.file, e.line, e.msg);
+            buffer.formattedWrite("\n// IRC Parse Exception at %s:%d: %s\n", e.file, e.line, e.msg);
 
             version(PrintStacktraces)
             {
@@ -478,18 +478,18 @@ int main(string[] args) @system
 
                 buffer.put("/*\n");
                 buffer.put(e.info.text);
-                buffer.put("*/\n");
+                buffer.put("\n*/\n");
             }
         }
         catch (Exception e)
         {
-            buffer.formattedWrite("\n// Exception at %s:%d: %s", e.file, e.line, e.msg);
+            buffer.formattedWrite("\n// Exception at %s:%d: %s\n", e.file, e.line, e.msg);
 
             version(PrintStacktraces)
             {
                 buffer.put("/*\n");
                 buffer.put(e.toString);
-                buffer.put("*/\n");
+                buffer.put("\n*/\n");
             }
         }
 
