@@ -51,6 +51,7 @@ auto typenumsOf(const IRCServer.Daemon daemon) pure nothrow @nogc
     final switch (daemon)
     {
     case unreal:
+    case mfvx:
         Typenums.unreal.meldInto!strategy(typenums);
         break;
 

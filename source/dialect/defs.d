@@ -918,6 +918,7 @@ struct IRCServer
         ircdseven,
         twitch,
         bsdunix,
+        mfvx,
 
         charybdis,
         sorircd,

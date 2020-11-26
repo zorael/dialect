@@ -2295,6 +2295,10 @@ in (slice.length, "Tried to process `onMyInfo` on an empty slice")
     {
         daemon = D.bsdunix;
     }
+    else if (daemonstring.contains("MFVX"))
+    {
+        daemon = D.mfvx;
+    }
     else
     {
         daemon = D.unknown;
