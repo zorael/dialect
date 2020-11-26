@@ -313,7 +313,7 @@ void main() @system
     {
         nickname = "kameloso";
         user = "kameloso";
-        ident = "NaN";
+        ident = "~kameloso";
         realName = "kameloso IRC bot";
     }
 
