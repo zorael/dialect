@@ -287,7 +287,7 @@ int main(string[] args) @system
             "o|output",
                 "Output file (specify '-' to disable) [" ~ defaultOutputFilename ~ "]",
                 &outputFile,
-            "overwrite",
+            "O|overwrite",
                 "Overwrite file instead of appending to it",
                 &overwrite,
         );
