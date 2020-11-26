@@ -1739,7 +1739,13 @@ in (slice.length, "Tried to process `onPRIVMSG` on an empty slice")
 {
     import dialect.common : IRCControlCharacter, isValidChannel;
 
-    immutable target = slice.nom(" :");
+    string target = slice.nom(' ');
+
+    if (slice.length && slice[0] == ':')
+    {
+        slice = slice[1..$];
+    }
+
     event.content = slice;
 
     /*  When a server sends a PRIVMSG/NOTICE to someone else on behalf of a
