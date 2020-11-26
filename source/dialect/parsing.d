@@ -1087,6 +1087,11 @@ void parseSpecialcases(ref IRCParser parser, ref IRCEvent event, ref string slic
         event.content = slice;
         break;
 
+    case AUTH_SUCCESS:  // NOTICE
+        // //:NickServ!services@services.oftc.net NOTICE kameloso :You are successfully identified as kameloso.$
+        event.content = slice;
+        break;
+
     case RPL_WELCOME: // 001
         // :adams.freenode.net 001 kameloso^ :Welcome to the freenode Internet Relay Chat Network kameloso^
         event.target.nickname = slice.nom(" :");
