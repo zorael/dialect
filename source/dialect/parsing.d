@@ -1646,7 +1646,7 @@ in (slice.length, "Tried to process `onNotice` on an empty slice")
             (event.content.beginsWith(AS.oftc)) ||
             event.content.among!(AS.rizon, AS.gamesurge))
         {
-            event.type = IRCEvent.Type.RPL_LOGGEDIN;
+            event.type = IRCEvent.Type.AUTH_SUCCESS;
 
             // Restart with the new type
             return parser.parseSpecialcases(event, slice);
