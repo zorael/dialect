@@ -888,10 +888,24 @@ void parseSpecialcases(ref IRCParser parser, ref IRCEvent event, ref string slic
 
     case RPL_WHOISACTUALLY: // 75
         // :kinetic.oftc.net 338 kameloso wh00nix 255.255.255.255 :actually using host
+        // :efnet.port80.se 338 kameloso kameloso 255.255.255.255 :actually using host
+        // :irc.rizon.club 338 kameloso^ kameloso^ :is actually ~kameloso@194.117.188.126 [194.117.188.126]
+        import std.string : indexOf;
+
         slice.nom(' '); // bot nickname
         event.target.nickname = slice.nom(' ');
-        event.target.address = slice.nom(" :");
-        event.content = slice;
+        immutable colonPos = slice.indexOf(':');
+
+        if (slice[0..colonPos].contains('.'))
+        {
+            event.target.address = slice.nom(" :");
+            event.aux = event.target.address;  // FIXME
+            event.content = slice;
+        }
+        else
+        {
+            event.content = slice[colonPos+1..$];
+        }
         break;
 
     case PONG:
