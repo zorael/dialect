@@ -274,16 +274,31 @@ int main(string[] args) @system
     import std.traits : EnumMembers;
     import std.typecons : No, Yes;
 
-    string outputFile = "unittests.log";
+    enum defaultOutputFilename = "unittest.log";
+
+    string outputFile = defaultOutputFilename;
+    bool overwrite;
 
     try
     {
-        cast(void)getopt(args,
+        auto results = getopt(args,
             config.caseSensitive,
             config.bundling,
             config.passThrough,
-            "f|file", &outputFile,
+            "o|output",
+                "Output file (specify '-' to disable) [" ~ defaultOutputFilename ~ "]",
+                &outputFile,
+            "overwrite",
+                "Overwrite file instead of appending to it",
+                &overwrite,
         );
+
+        if (results.helpWanted)
+        {
+            import std.getopt : defaultGetoptPrinter;
+            defaultGetoptPrinter("Available flags:\n", results.options);
+            return 0;
+        }
     }
     catch (GetOptException e)
     {
@@ -375,19 +390,31 @@ int main(string[] args) @system
 
     File file;
 
+    if (outputFile == "-")
+    {
+        outputFile = string.init;
+    }
+
     if (outputFile.length)
     {
         import std.datetime.systime : Clock;
         import std.file : exists;
         import core.time : msecs;
 
-        immutable shouldPad = outputFile.exists;
-
-        file = File(outputFile, "a");
-
-        if (shouldPad)
+        if (overwrite)
         {
-            file.writeln('\n');
+            file = File(outputFile, "w");
+        }
+        else
+        {
+            immutable shouldPad = outputFile.exists;
+
+            file = File(outputFile, "a");
+
+            if (shouldPad)
+            {
+                file.writeln('\n');
+            }
         }
 
         auto now = Clock.currTime;
