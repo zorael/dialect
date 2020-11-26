@@ -311,6 +311,16 @@ int main(string[] args) @system
     Appender!(char[]) buffer;
     buffer.reserve(2048);
 
+    if (outputFile == "-")
+    {
+        outputFile = string.init;
+    }
+
+    if (outputFile.length)
+    {
+        writefln("Writing output to %s, overwrite:%s\n", outputFile, overwrite);
+    }
+
     writeln("-- Available daemons --");
     writefln("%(%(%-14s%)\n%)", EnumMembers!(IRCServer.Daemon).only.chunks(3));
     writeln();
@@ -388,11 +398,6 @@ int main(string[] args) @system
     stdout.flush();
 
     File file;
-
-    if (outputFile == "-")
-    {
-        outputFile = string.init;
-    }
 
     if (outputFile.length)
     {
