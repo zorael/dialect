@@ -446,12 +446,7 @@ int main(string[] args) @system
             .chomp; //strippedRight;
 
         if (input.length && (input[$-1] == '$')) input = input[0..$-1];
-
-        if (!input.length)
-        {
-            writeln("// ... empty line. (Ctrl+C to exit)");
-            continue;
-        }
+        if (!input.length) continue;
 
         try
         {
