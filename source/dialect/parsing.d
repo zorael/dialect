@@ -1125,12 +1125,17 @@ void parseSpecialcases(ref IRCParser parser, ref IRCEvent event, ref string slic
         break;
 
     case RPL_HOSTHIDDEN: // 396
-    case RPL_VERSION: // 351
-        // :irc.rizon.no 351 kameloso^^ plexus-4(hybrid-8.1.20)(20170821_0-607). irc.rizon.no :TS6ow
         // :TAL.DE.EU.GameSurge.net 396 kameloso ~NaN@1b24f4a7.243f02a4.5cd6f3e3.IP4 :is now your hidden host
         slice.nom(' '); // bot nickname
         event.aux = slice.nom(" :");
         event.content = slice;
+        break;
+
+    case RPL_VERSION: // 351
+        // :irc.rizon.no 351 kameloso^^ plexus-4(hybrid-8.1.20)(20170821_0-607). irc.rizon.no :TS6ow
+        slice.nom(' '); // bot nickname
+        event.content = slice.nom(" :");
+        event.aux = slice;
         break;
 
     case RPL_YOURID: // 42
