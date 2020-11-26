@@ -267,6 +267,7 @@ void main() @system
     import std.conv : ConvException;
     import std.range : chunks, only;
     import std.stdio : stdout, readln, write, writeln, writefln;
+    import std.string : chomp;
     import std.traits : EnumMembers;
     import std.typecons : No, Yes;
 
@@ -366,7 +367,7 @@ void main() @system
 
         input = input
             .strippedLeft(" /")  // Remove indents and commentating slashes
-            .strippedRight;
+            .chomp; //strippedRight;
 
         if (!input.length)
         {
