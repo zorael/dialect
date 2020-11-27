@@ -282,6 +282,7 @@ void parseBasic(ref IRCParser parser, ref IRCEvent event) pure @nogc
         {
             event.type = UNSET;
             event.aux = event.raw;
+            event.errors = typestring;
             /*throw new IRCParseException("Unknown basic type: " ~
                 typestring ~ ": please report this", event);*/
         }
@@ -1561,8 +1562,15 @@ public void postparseSanityCheck(const ref IRCParser parser, ref IRCEvent event)
     Appender!string sink;
     // The sink will very rarely be used; treat it as an edge case and don't reserve
 
+    if ((event.type == IRCEvent.Type.UNSET) && event.errors.length)
+    {
+        sink.put("Unknown typestring: ");
+        sink.put(event.errors);
+    }
+
     if (event.target.nickname.contains(' ') || event.channel.contains(' '))
     {
+        if (sink.data.length) sink.put(". ");
         sink.put("Spaces in target nickname or channel");
     }
 
@@ -1592,9 +1600,10 @@ public void postparseSanityCheck(const ref IRCParser parser, ref IRCEvent event)
         sink.put("Channel is not a channel");
     }
 
-    if (!sink.data.length) return;
-
-    event.errors = sink.data;
+    if (sink.data.length)
+    {
+        event.errors = sink.data;
+    }
 }
 
 
