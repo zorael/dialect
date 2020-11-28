@@ -1306,8 +1306,11 @@ void parseSpecialcases(ref IRCParser parser, ref IRCEvent event, ref string slic
         // :irc.uworld.se 314 kameloso^^ kameloso ~NaN C2802314.E23AD7D8.E9841504.IP * : kameloso!
         slice.nom(' '); // bot nickname
         event.target.nickname = slice.nom(' ');
-        event.content = slice.nom(" :");
-        event.aux = slice.stripped;
+        event.target.ident = slice.nom(' ');
+        event.aux = slice.nom(" * :");
+        event.target.address = event.aux;
+        event.content = slice.stripped;
+        event.target.realName = event.content;
         break;
 
     case CHGHOST:
