@@ -1030,8 +1030,8 @@ void parseSpecialcases(ref IRCParser parser, ref IRCEvent event, ref string slic
         // <linkname> <sendq> <sent messages> <sent bytes> <received messages> <received bytes> <time open>
         // :verne.freenode.net 211 kameloso^ kameloso^[~NaN@194.117.188.126] 0 109 8 15 0 :40 0 -
         slice.nom(' '); // bot nickname
-        event.content = slice.nom(' ');
-        event.aux = slice;
+        event.aux = slice.nom(' ');
+        event.content = slice;
         break;
 
     case RPL_TRACEUSER: // 205
