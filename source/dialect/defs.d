@@ -1053,6 +1053,9 @@ struct IRCUser
     /// The user's nickname.
     string nickname;
 
+    /// The user's GECOS/"real name".
+    string realName;
+
     /// The user's IDENT identification.
     string ident;
 
