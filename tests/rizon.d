@@ -193,13 +193,16 @@ unittest
     }
     {
         immutable event = parser.toIRCEvent(":irc.uworld.se 314 kameloso^^ kameloso ~NaN C2802314.E23AD7D8.E9841504.IP * : kameloso!");
-        with (IRCEvent.Type)
         with (event)
         {
-            assert((type == RPL_WHOWASUSER), Enum!(IRCEvent.Type).toString(type));
+            assert((type == IRCEvent.Type.RPL_WHOWASUSER), Enum!(IRCEvent.Type).toString(type));
             assert((sender.address == "irc.uworld.se"), sender.address);
-            assert((content == "~NaN C2802314.E23AD7D8.E9841504.IP *"), content);
-            assert((aux == "kameloso!"), aux);
+            assert((target.nickname == "kameloso"), target.nickname);
+            assert((target.realName == "kameloso!"), target.realName);
+            assert((target.ident == "~NaN"), target.ident);
+            assert((target.address == "C2802314.E23AD7D8.E9841504.IP"), target.address);
+            assert((content == "kameloso!"), content);
+            assert((aux == "C2802314.E23AD7D8.E9841504.IP"), aux);
             assert((num == 314), num.to!string);
         }
     }
