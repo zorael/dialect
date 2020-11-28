@@ -572,13 +572,15 @@ void parseSpecialcases(ref IRCParser parser, ref IRCEvent event, ref string slic
 
         if (slice.contains(' '))
         {
+            import lu.string : stripped;
+
             // :nick!user@host JOIN #channelname accountname :Real Name
             // :nick!user@host JOIN #channelname * :Real Name
             // :nick!~identh@unaffiliated/nick JOIN #freenode login :realname
             // :kameloso!~NaN@2001:41d0:2:80b4:: JOIN #hirrsteff2 kameloso : kameloso!
             event.channel = slice.nom(' ');
             event.sender.account = slice.nom(" :");
-            //event.content = slice.stripped;  // no need for full name...
+            event.sender.realName = slice.stripped;
         }
         else
         {
@@ -720,6 +722,7 @@ void parseSpecialcases(ref IRCParser parser, ref IRCEvent event, ref string slic
         import lu.string : strippedLeft;
         slice.nom(' ');  // hopcount
         event.content = slice.strippedLeft;
+        event.sender.realName = event.content;
         break;
 
     case RPL_ENDOFWHO: // 315
