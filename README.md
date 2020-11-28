@@ -26,8 +26,8 @@ struct IRCEvent
     string aux;
     string tags;
     uint num;
-    int count;
-    int altcount;
+    long count;
+    long altcount;
     long time;
     string errors;
 }
@@ -38,6 +38,7 @@ struct IRCUser
 
     Class class_;
     string nickname;
+    string realName;
     string ident;
     string address;
     string account;
@@ -72,7 +73,6 @@ struct IRCClient
 {
     string nickname;
     string user;
-    string ident;
     string realName;
 }
 
@@ -118,8 +118,7 @@ with (event)
     assert(aux = "+v");
 }
 
-string alsoFromServer = ":cherryh.freenode.net 435 oldnick newnick #d " ~
-    ":Cannot change nickname while banned on channel";
+string alsoFromServer = ":cherryh.freenode.net 435 oldnick newnick #d :Cannot change nickname while banned on channel";
 IRCEvent event2 = parser.toIRCEvent(alsoFromServer);
 
 with (event2)
@@ -135,9 +134,9 @@ with (event2)
 
 // Requires Twitch support via build configuration "twitch"
 string fullExample = "@badge-info=subscriber/15;badges=subscriber/12;color=;display-name=SomeoneOnTwitch;emotes=;flags=;id=d6729804-2bf3-495d-80ce-a2fe8ed00a26;login=someoneontwitch;mod=0;msg-id=submysterygift;msg-param-mass-gift-count=1;msg-param-origin-id=49\\s9d\\s3e\\s68\\sca\\s26\\se9\\s2a\\s6e\\s44\\sd4\\s60\\s9b\\s3d\\saa\\sb9\\s4c\\sad\\s43\\s5c;msg-param-sender-count=4;msg-param-sub-plan=1000;room-id=71092938;subscriber=1;system-msg=someoneOnTwitch\\sis\\sgifting\\s1\\sTier\\s1\\sSubs\\sto\\sxQcOW's\\scommunity!\\sThey've\\sgifted\\sa\\stotal\\sof\\s4\\sin\\sthe\\schannel!;tmi-sent-ts=1569013433362;user-id=224578549;user-type= :tmi.twitch.tv USERNOTICE #xqcow"
-IRCEvent event4 = parser.toIRCEvent(fullExample);
+IRCEvent event3 = parser.toIRCEvent(fullExample);
 
-with (event)
+with (event3)
 {
     assert(type == IRCEvent.Type.TWITCH_BULKGIFT);
     assert(sender.nickname == "someoneontwitch");
@@ -182,9 +181,11 @@ Enter server address (irc.freenode.net): irc.server.tld
 }
 ```
 
+The output will by default also be saved to a `unittest.log` file in the current directory. See the `--help` listing for more details, passed through dub with `dub run :assertgen -- --help`.
+
 # Roadmap
 
-* nothing right now, ideas needed
+* consider ripping out `isAuthService` and related bits (that translate `NOTICE` events into fake `AUTH_{CHALLENGE,SUCCESS,FAILURE}` types) and moving it to importing projects
 
 # Built with
 
