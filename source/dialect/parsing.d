@@ -1008,7 +1008,21 @@ void parseSpecialcases(ref IRCParser parser, ref IRCEvent event, ref string slic
         // :verne.freenode.net 262 kameloso^ verne.freenode.net :End of TRACE
         // :irc.rizon.no 263 kameloso^ :Server load is temporarily too heavy. Please wait a while and try again.
         slice.nom(' '); // bot nickname
-        event.aux = slice.nom(" :");
+
+        if (!slice.length)
+        {
+            // Unsure if this ever happens but check before indexing
+            break;
+        }
+        else if (slice[0] == ':')
+        {
+            slice = slice[1..$];
+        }
+        else
+        {
+            event.aux = slice.nom(" :");
+        }
+
         event.content = slice;
         break;
 
