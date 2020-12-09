@@ -1139,9 +1139,11 @@ void parseSpecialcases(ref IRCParser parser, ref IRCEvent event, ref string slic
     case RPL_LOGGEDIN: // 900
         // <nickname>!<ident>@<address> <nickname> :You are now logged in as <nickname>
         // :weber.freenode.net 900 kameloso kameloso!NaN@194.117.188.126 kameloso :You are now logged in as kameloso.
+        // :kornbluth.freenode.net 900 * *!unknown@194.117.188.126 kameloso :You are now logged in as kameloso.
         if (slice.contains('!'))
         {
-            event.target.nickname = slice.nom(' ');  // bot nick
+            event.target.nickname = slice.nom(' ');  // bot nick, or an asterisk if unknown
+            if (event.target.nickname == "*") event.target.nickname = string.init;
             slice.nom('!');  // user
             /*event.target.ident =*/ slice.nom('@');  // Doesn't seem to be the true ~ident
             event.target.address = slice.nom(' ');
