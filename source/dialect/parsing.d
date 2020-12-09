@@ -1363,6 +1363,12 @@ void parseSpecialcases(ref IRCParser parser, ref IRCEvent event, ref string slic
         event.content = slice;
         break;
 
+    case RPL_SASLSUCCESS: // 903
+        // :weber.freenode.net 903 * :SASL authentication successful
+        slice.nom(" :");  // asterisk, possible nickname?
+        event.content = slice;
+        break;
+
     default:
         if ((event.type == NUMERIC) || (event.type == UNSET))
         {
