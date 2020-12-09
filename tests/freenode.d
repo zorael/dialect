@@ -1366,4 +1366,14 @@ unittest
             assert((content == "Ahead of services maintenance later we need to move a few services to a different hub. This will be a little noisey but should be quick."), content);
         }
     }
+    {
+        immutable event = parser.toIRCEvent(":weber.freenode.net 903 * :SASL authentication successful");
+        with (event)
+        {
+            assert((type == IRCEvent.Type.RPL_SASLSUCCESS), Enum!(IRCEvent.Type).toString(type));
+            assert((sender.address == "weber.freenode.net"), sender.address);
+            assert((content == "SASL authentication successful"), content);
+            assert((num == 903), num.to!string);
+        }
+    }
 }
