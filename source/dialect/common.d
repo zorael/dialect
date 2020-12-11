@@ -1943,10 +1943,27 @@ bool isValidHostmask(const string hostmask, const IRCServer server) pure nothrow
         return true;
     }
 
+    static bool isValidNicknameGlob(const string nickname, const IRCServer server)
+    {
+        import std.string : representation;
+
+        if (nickname.length > server.maxNickLength)
+        {
+            return false;
+        }
+
+        foreach (immutable c; nickname.representation)
+        {
+            if (!c.isValidNicknameCharacter && (c != '*')) return false;
+        }
+
+        return true;
+    }
+
     immutable bangPos = slice.indexOf('!');
     if (bangPos == -1) return false;
     immutable nickname = slice[0..bangPos];
-    if ((nickname != "*") && !nickname.isValidNickname(server)) return false;
+    if (!isValidNicknameGlob(nickname, server)) return false;
     slice = slice[bangPos+1..$];
     if (!slice.length) return false;
 
@@ -2001,6 +2018,10 @@ unittest
     }
     {
         immutable hostmask = "kameloso!~kameloso@2001*";
+        assert(hostmask.isValidHostmask(server));
+    }
+    {
+        immutable hostmask = "harbl*!~dolmen@*";
         assert(hostmask.isValidHostmask(server));
     }
 }
