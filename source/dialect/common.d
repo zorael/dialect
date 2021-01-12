@@ -1476,7 +1476,7 @@ enum IRCControlCharacter
     Returns:
         `true` if the [dialect.defs.IRCUser]s are deemed to match, `false` if not.
  +/
-auto matchesByMask(const IRCUser this_, const IRCUser that,
+bool matchesByMask(const IRCUser this_, const IRCUser that,
     const IRCServer.CaseMapping caseMapping = IRCServer.CaseMapping.rfc1459) pure nothrow
 {
     // unpatternedGlobMatch
@@ -1594,7 +1594,7 @@ unittest
     Returns:
         `true` if the passed `c` is in uppercase, `false` if not.
  +/
-char isUpper(const char c, const IRCServer.CaseMapping caseMapping) pure nothrow @nogc
+bool isUpper(const char c, const IRCServer.CaseMapping caseMapping) pure nothrow @nogc
 {
     import std.ascii : isUpper;
 
