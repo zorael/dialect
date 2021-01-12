@@ -513,8 +513,6 @@ unittest
         `true` if the string content is judged to be a channel, `false` if not.
  +/
 bool isValidChannel(const string channel, const IRCServer server) pure nothrow @nogc
-in (channel.length, "Tried to determine whether a channel was valid but no channel was given")
-do
 {
     import std.string : representation;
 
@@ -610,12 +608,10 @@ unittest
         `true` if the nickname string is judged to be a nickname, `false` if not.
  +/
 bool isValidNickname(const string nickname, const IRCServer server) pure nothrow @nogc
-in (nickname.length, "Tried to determine whether a nickname was valid but no nickname was given")
-do
 {
     import std.string : representation;
 
-    if (nickname.length > server.maxNickLength)
+    if (!nickname.length || (nickname.length > server.maxNickLength))
     {
         return false;
     }
