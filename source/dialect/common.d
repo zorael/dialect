@@ -1383,8 +1383,10 @@ final class IRCParseException : Exception
         Create a new [IRCParseException], without attaching an
         [dialect.defs.IRCEvent].
      +/
-    this(const string message, const string file = __FILE__,
-        const size_t line = __LINE__, Throwable nextInChain = null) pure nothrow @nogc @safe
+    this(const string message,
+        const string file = __FILE__,
+        const size_t line = __LINE__,
+        Throwable nextInChain = null) pure nothrow @nogc @safe
     {
         super(message, file, line, nextInChain);
     }
@@ -1393,8 +1395,11 @@ final class IRCParseException : Exception
         Create a new [IRCParseException], attaching an
         [dialect.defs.IRCEvent] to it.
      +/
-    this(const string message, const IRCEvent event, const string file = __FILE__,
-        const size_t line = __LINE__, Throwable nextInChain = null) pure nothrow @nogc @safe
+    this(const string message,
+        const IRCEvent event,
+        const string file = __FILE__,
+        const size_t line = __LINE__,
+        Throwable nextInChain = null) pure nothrow @nogc @safe
     {
         this.event = event;
         super(message, file, line, nextInChain);
