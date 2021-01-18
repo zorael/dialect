@@ -677,7 +677,7 @@ unittest
     The IRC standard describes nicknames as being a string of any of the
     following characters:
 
-    `[a-z] [A-Z] [0-9] _-\[]{}^`|`
+    `[a-z] [A-Z] [0-9] _-\\[]{}^\`|`
 
     Example:
     ---
