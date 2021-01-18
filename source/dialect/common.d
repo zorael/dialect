@@ -1884,7 +1884,7 @@ bool isValidHostmask(const string hostmask, const IRCServer server) pure nothrow
 
     string slice = hostmask;  // mutable
 
-    static bool isValidIdentOrAddressCharacter(Flag!"address" address)(const char c)
+    static bool isValidIdentOrAddressCharacter(const char c, const Flag!"address" address)
     {
         switch (c)
         {
@@ -1902,12 +1902,16 @@ bool isValidHostmask(const string hostmask, const IRCServer server) pure nothrow
         case '*':
             break;
 
-        static if (address)
-        {
-            case ':':
-            case '.':
+        case ':':
+        case '.':
+            if (address)
+            {
                 break;
-        }
+            }
+            else
+            {
+                goto default;
+            }
 
         default:
             return false;
@@ -1924,7 +1928,7 @@ bool isValidHostmask(const string hostmask, const IRCServer server) pure nothrow
 
         foreach (immutable c; ident.representation)
         {
-            if (!isValidIdentOrAddressCharacter!(No.address)(c)) return false;
+            if (!isValidIdentOrAddressCharacter(c, No.address)) return false;
         }
 
         return true;
@@ -1938,7 +1942,7 @@ bool isValidHostmask(const string hostmask, const IRCServer server) pure nothrow
 
         foreach (immutable c; address.representation)
         {
-            if (!isValidIdentOrAddressCharacter!(Yes.address)(c)) return false;
+            if (!isValidIdentOrAddressCharacter(c, Yes.address)) return false;
         }
 
         return true;
