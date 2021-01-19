@@ -1627,7 +1627,7 @@ void parseGeneralCases(const ref IRCParser parser, ref IRCEvent event, ref strin
         parser = Reference to the current [IRCParser].
         event = Reference to the [dialect.defs.IRCEvent] to continue working on.
  +/
-public void postparseSanityCheck(const ref IRCParser parser, ref IRCEvent event) pure nothrow
+void postparseSanityCheck(const ref IRCParser parser, ref IRCEvent event) pure nothrow
 {
     import lu.string : beginsWith;
     import std.array : Appender;
