@@ -72,11 +72,12 @@
  +/
 module dialect.parsing;
 
+private:
+
 import dialect.defs;
 import dialect.common : IRCParseException, Postprocessor;
 import lu.string : contains, nom;
 
-package:
 
 @safe:
 
