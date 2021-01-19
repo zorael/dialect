@@ -10,7 +10,7 @@ Note that while IRC is standardised, servers still come in [many flavours](https
 
 # What it looks like
 
-API documentation can be found [here](https://zorael.github.io/dialect).
+API documentation can be found [here](http://dialect.dpldocs.info).
 
 ```d
 struct IRCEvent
