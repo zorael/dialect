@@ -447,11 +447,13 @@ unittest
     IRCParser parser;
 
     {
-        immutable event = parser.toIRCEvent(":Q!TheQBot@CServe.quakenet.org NOTICE kameloso :You are now logged in as kameloso.");
+        immutable event = parser.toIRCEvent(":Q!TheQBot@CServe.quakenet.org " ~
+            "NOTICE kameloso :You are now logged in as kameloso.");
         assert(event.sender.isAuthService(parser));
     }
     {
-        immutable event = parser.toIRCEvent(":NickServ!NickServ@services. NOTICE kameloso :This nickname is registered.");
+        immutable event = parser.toIRCEvent(":NickServ!NickServ@services. " ~
+            "NOTICE kameloso :This nickname is registered.");
         assert(event.sender.isAuthService(parser));
     }
 
@@ -459,7 +461,8 @@ unittest
     parser.server.resolvedAddress = "irc.uworld.se";
 
     {
-        immutable event = parser.toIRCEvent(":NickServ!service@rizon.net NOTICE kameloso^^ :nick, type /msg NickServ IDENTIFY password. Otherwise,");
+        immutable event = parser.toIRCEvent(":NickServ!service@rizon.net " ~
+            "NOTICE kameloso^^ :nick, type /msg NickServ IDENTIFY password. Otherwise,");
         assert(event.sender.isAuthService(parser));
     }
 }
