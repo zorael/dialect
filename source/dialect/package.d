@@ -2,7 +2,7 @@
     $(B dialect) is an IRC parser. It parses strings as read from an IRC server
     into useful [dialect.defs.IRCEvent] structs.
 
-    It only handles parsing; for a bot, try $(B kameloso) at https://github.com/zorael/kameloso.
+    It only handles parsing; for a bot, try $(B kameloso) at [https://github.com/zorael/kameloso].
  +/
 module dialect;
 
