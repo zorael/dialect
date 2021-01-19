@@ -206,6 +206,7 @@ if (isOutputRange!(Sink, char[]))
     }
 }
 
+///
 unittest
 {
     import dialect.parsing : IRCParser;

@@ -442,6 +442,7 @@ bool isAuthService(const IRCUser sender, const ref IRCParser parser) pure
         (sharedDomains(sender.address, parser.server.resolvedAddress) >= 2);
 }
 
+///
 unittest
 {
     IRCParser parser;
