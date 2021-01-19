@@ -12,11 +12,12 @@ version(TwitchSupport):
 //version = TwitchWarnings;
 
 private:
-@safe:
 
 import dialect.defs;
 import dialect.parsing;
 import dialect.common : Postprocessor;
+
+@safe:
 
 
 // parseTwitchTags

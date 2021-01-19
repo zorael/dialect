@@ -9,7 +9,11 @@
  +/
 module dialect.defs;
 
+private:
+
 import lu.uda;
+
+public:
 
 final:
 @safe:

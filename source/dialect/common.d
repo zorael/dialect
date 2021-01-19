@@ -9,10 +9,9 @@ private:
 
 import dialect.defs;
 import dialect.parsing;
+import lu.string : contains, nom;
 
 public:
-
-import lu.string : contains, nom;
 
 @safe:
 
