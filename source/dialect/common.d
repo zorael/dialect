@@ -447,44 +447,22 @@ unittest
 {
     IRCParser parser;
 
-    IRCEvent e1;
-    with (e1)
     {
-        raw = ":Q!TheQBot@CServe.quakenet.org NOTICE kameloso :You are now logged in as kameloso.";
-        string slice = raw[1..$];  // mutable
-        parser.parsePrefix(e1, slice);
-        assert(e1.sender.isAuthService(parser));
+        immutable event = parser.toIRCEvent(":Q!TheQBot@CServe.quakenet.org NOTICE kameloso :You are now logged in as kameloso.");
+        assert(event.sender.isAuthService(parser));
+    }
+    {
+        immutable event = parser.toIRCEvent(":NickServ!NickServ@services. NOTICE kameloso :This nickname is registered.");
+        assert(event.sender.isAuthService(parser));
     }
 
-    IRCEvent e2;
-    with (e2)
-    {
-        raw = ":NickServ!NickServ@services. NOTICE kameloso :This nickname is registered.";
-        string slice = raw[1..$];
-        parser.parsePrefix(e2, slice);
-        assert(e2.sender.isAuthService(parser));
-    }
+    parser.server.address = "irc.rizon.net";
+    parser.server.resolvedAddress = "irc.uworld.se";
 
-    IRCEvent e3;
-    with (e3)
     {
-        parser.server.address = "irc.rizon.net";
-        parser.server.resolvedAddress = "irc.uworld.se";
-        raw = ":NickServ!service@rizon.net NOTICE kameloso^^ :nick, type /msg NickServ IDENTIFY password. Otherwise,";
-        string slice = raw[1..$];
-        parser.parsePrefix(e3, slice);
-        assert(e3.sender.isAuthService(parser));
+        immutable event = parser.toIRCEvent(":NickServ!service@rizon.net NOTICE kameloso^^ :nick, type /msg NickServ IDENTIFY password. Otherwise,");
+        assert(event.sender.isAuthService(parser));
     }
-
-    // Enabling this stops us from being alerted of unknown services
-    /*IRCEvent e4;
-    with (e4)
-    {
-        raw = ":zorael!~NaN@ns3363704.ip-94-23-253.eu PRIVMSG kameloso^ :sudo privmsg zorael :derp";
-        string slice = raw[1..$];
-        parser.parsePrefix(e4, slice);
-        assert(!e4.sender.isAuthService(parser));
-    }*/
 }
 
 
