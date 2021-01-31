@@ -579,7 +579,8 @@ void parseSpecialcases(ref IRCParser parser, ref IRCEvent event, ref string slic
             // :nick!~identh@unaffiliated/nick JOIN #freenode login :realname
             // :kameloso!~NaN@2001:41d0:2:80b4:: JOIN #hirrsteff2 kameloso : kameloso!
             event.channel = slice.nom(' ');
-            event.sender.account = slice.nom(" :");
+            immutable account = slice.nom(" :");
+            event.sender.account = (account != "*") ? account : string.init;
             event.sender.realName = slice.stripped;
         }
         else
