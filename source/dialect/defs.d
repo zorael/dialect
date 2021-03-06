@@ -1048,6 +1048,7 @@ struct IRCUser
         unset,      /// Unknown, yet to be determined.
         blacklist,  /// A blacklisted user.
         anyone,     /// Any user.
+        registered, /// A user registered with services.
         whitelist,  /// A whitelisted user.
         operator,   /// A user enjoying operator (or moderator) privileges.
         staff,      /// The owner of a channel; an elevated user but not a full administrator.
