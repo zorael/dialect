@@ -2376,6 +2376,10 @@ in (slice.length, "Tried to process `onMyInfo` on an empty slice")
     {
         daemon = D.unreal;
     }
+    else if (daemonstringLower.contains("solanum"))
+    {
+        daemon = D.solanum;
+    }
     else if (daemonstringLower.contains("inspircd"))
     {
         daemon = D.inspircd;

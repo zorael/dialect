@@ -911,6 +911,7 @@ struct IRCServer
         unknown,    /// Reported but unknown daemon.
 
         unreal,
+        solanum,
         inspircd,
         bahamut,
         ratbox,
@@ -1967,6 +1968,16 @@ struct Typenums
         503 : Type.ERR_GHOSTEDCLIENT,
         524 : Type.ERR_HELPNOTFOUND,
         715 : Type.ERR_TOOMANYINVITE,
+    ];
+
+    /++
+        Delta typenum mappings for servers running the `Solanum` daemon.
+
+        - https://github.com/solanum-ircd/solanum
+     +/
+    static immutable Type[250] solanum =
+    [
+        249 : Type.RPL_STATSPLINE,
     ];
 
     /++

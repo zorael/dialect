@@ -54,6 +54,10 @@ auto typenumsOf(const IRCServer.Daemon daemon) pure nothrow @nogc
         Typenums.unreal.meldInto!strategy(typenums);
         break;
 
+    case solanum:
+        Typenums.solanum[].meldInto!strategy(typenums);
+        break;
+
     case inspircd:
         Typenums.inspIRCd.meldInto!strategy(typenums);
         break;
