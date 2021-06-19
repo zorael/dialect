@@ -2432,6 +2432,61 @@ in (slice.length, "Tried to process `onMyInfo` on an empty slice")
 }
 
 
+// applyTags
+/++
+    This is technically a postprocessor but it's small enough that we can just
+    keep it in here (and provide the functionality as `pure` and `@safe`).
+
+    Params:
+        event = Reference to the [dialect.defs.IRCEvent] whose tags to apply to itself.
+ +/
+void applyTags(ref IRCEvent event) pure @safe @nogc
+{
+    import std.algorithm.iteration : splitter;
+
+    foreach (tag; event.tags.splitter(";"))
+    {
+        import lu.string : contains, nom;
+
+        if (tag.contains('='))
+        {
+            immutable key = tag.nom('=');
+            immutable value = tag;
+
+            switch (key)
+            {
+            case "account":
+                event.sender.account = value;
+                break;
+
+            default:
+                // Unknown tag
+                break;
+            }
+        }
+        /*else
+        {
+            switch (tag)
+            {
+            case "solanum.chat/identify-msg":
+                // mquin | I don't think you'd get account tags for an unverified account
+                // mquin | yep, account= but no solanum.chat/identified while I was mquin__
+                // Currently no use for
+                break;
+
+            case "solanum.chat/ip":
+                // Currently no use for
+                break;
+
+            default:
+                // Unknown tag
+                break;
+            }
+        }*/
+    }
+}
+
+
 public:
 
 // IRCParser
