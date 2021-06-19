@@ -326,7 +326,7 @@ int main(string[] args) @system
     writefln("%(%(%-14s%)\n%)", EnumMembers!(IRCServer.Daemon).only.chunks(3));
     writeln();
 
-    write("Enter daemon [optional daemon literal] (ircdseven): ");
+    write("Enter daemon [optional daemon literal] (solanum): ");
     stdout.flush();
     string slice = readln().stripped;  // mutable so we can nom it
     immutable daemonstring = slice.nom!(Yes.inherit)(' ');
@@ -338,7 +338,7 @@ int main(string[] args) @system
         import lu.conv : Enum;
 
         parser.server.daemon = daemonstring.length ?
-            Enum!(IRCServer.Daemon).fromString(daemonstring) : IRCServer.Daemon.ircdseven;
+            Enum!(IRCServer.Daemon).fromString(daemonstring) : IRCServer.Daemon.solanum;
         parser.typenums = typenumsOf(parser.server.daemon);
         parser.server.daemonstring = daemonLiteral;
     }
@@ -351,10 +351,10 @@ int main(string[] args) @system
         return 1;
     }
 
-    write("Enter network (freenode): ");
+    write("Enter network (Libera.Chat): ");
     stdout.flush();
     immutable network = readln().stripped;
-    parser.server.network = network.length ? network : "freenode";
+    parser.server.network = network.length ? network : "Libera.Chat";
 
     // Provide skeletal user defaults.
     with (parser.client)
@@ -365,22 +365,22 @@ int main(string[] args) @system
         realName = "kameloso IRC bot";
     }
 
-    // Provide Freenode defaults here, now that they're no longer in IRCServer.init
+    // Provide Libera.Chat defaults here, now that they're no longer in IRCServer.init
     // If we need different values we'll have to provide a RPL_MYINFO event.
     with (parser.server)
     {
         aModes = "eIbq";
         bModes = "k";
         cModes = "flj";
-        dModes = "CFLMPQScgimnprstz";
+        dModes = "CFLMPQScgimnprstuz";
         prefixes = "ov";
         prefixchars = [ 'o' : '@', 'v' : '+' ];
     }
 
-    write("Enter server address (irc.freenode.net): ");
+    write("Enter server address (irc.libera.chat): ");
     stdout.flush();
     parser.server.address = readln().stripped;
-    if (!parser.server.address.length) parser.server.address = "irc.freenode.net";
+    if (!parser.server.address.length) parser.server.address = "irc.libera.chat";
 
     enum scissors = "8<  --  8<  --  8<  --  8<  --  8<  --  8<  --  8<  --  8<  --  8<";
 
