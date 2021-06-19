@@ -2639,6 +2639,6 @@ unittest
     parser.typenums = Typenums.base;
 
     assert(parser.typenums[344] == T.init);
-    Typenums.hybrid.meldInto!(MeldingStrategy.aggressive)(parser.typenums);
+    Typenums.hybrid[].meldInto!(MeldingStrategy.aggressive)(parser.typenums);
     assert(parser.typenums[344] != T.init);
 }

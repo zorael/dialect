@@ -51,7 +51,7 @@ auto typenumsOf(const IRCServer.Daemon daemon) pure nothrow @nogc
     {
     case unreal:
     case mfvx:
-        Typenums.unreal.meldInto!strategy(typenums);
+        Typenums.unreal[].meldInto!strategy(typenums);
         break;
 
     case solanum:
@@ -59,15 +59,15 @@ auto typenumsOf(const IRCServer.Daemon daemon) pure nothrow @nogc
         break;
 
     case inspircd:
-        Typenums.inspIRCd.meldInto!strategy(typenums);
+        Typenums.inspIRCd[].meldInto!strategy(typenums);
         break;
 
     case bahamut:
-        Typenums.bahamut.meldInto!strategy(typenums);
+        Typenums.bahamut[].meldInto!strategy(typenums);
         break;
 
     case ratbox:
-        Typenums.ratBox.meldInto!strategy(typenums);
+        Typenums.ratBox[].meldInto!strategy(typenums);
         break;
 
     case u2:
@@ -76,100 +76,100 @@ auto typenumsOf(const IRCServer.Daemon daemon) pure nothrow @nogc
 
     case rizon:
         // Rizon is hybrid but has some own extras
-        Typenums.hybrid.meldInto!strategy(typenums);
-        Typenums.rizon.meldInto!strategy(typenums);
+        Typenums.hybrid[].meldInto!strategy(typenums);
+        Typenums.rizon[].meldInto!strategy(typenums);
         break;
 
     case hybrid:
-        Typenums.hybrid.meldInto!strategy(typenums);
+        Typenums.hybrid[].meldInto!strategy(typenums);
         break;
 
     case ircu:
-        Typenums.ircu.meldInto!strategy(typenums);
+        Typenums.ircu[].meldInto!strategy(typenums);
         break;
 
     case aircd:
-        Typenums.aircd.meldInto!strategy(typenums);
+        Typenums.aircd[].meldInto!strategy(typenums);
         break;
 
     case rfc1459:
-        Typenums.rfc1459.meldInto!strategy(typenums);
+        Typenums.rfc1459[].meldInto!strategy(typenums);
         break;
 
     case rfc2812:
-        Typenums.rfc2812.meldInto!strategy(typenums);
+        Typenums.rfc2812[].meldInto!strategy(typenums);
         break;
 
     case snircd:
         // snircd is based on ircu
-        Typenums.ircu.meldInto!strategy(typenums);
-        Typenums.snircd.meldInto!strategy(typenums);
+        Typenums.ircu[].meldInto!strategy(typenums);
+        Typenums.snircd[].meldInto!strategy(typenums);
         break;
 
     case nefarious:
         // Both nefarious and nefarious2 are based on ircu
-        Typenums.ircu.meldInto!strategy(typenums);
-        Typenums.nefarious.meldInto!strategy(typenums);
+        Typenums.ircu[].meldInto!strategy(typenums);
+        Typenums.nefarious[].meldInto!strategy(typenums);
         break;
 
     case rusnet:
-        Typenums.rusnet.meldInto!strategy(typenums);
+        Typenums.rusnet[].meldInto!strategy(typenums);
         break;
 
     case austhex:
-        Typenums.austHex.meldInto!strategy(typenums);
+        Typenums.austHex[].meldInto!strategy(typenums);
         break;
 
     case ircnet:
-        Typenums.ircNet.meldInto!strategy(typenums);
+        Typenums.ircNet[].meldInto!strategy(typenums);
         break;
 
     case ptlink:
-        Typenums.ptlink.meldInto!strategy(typenums);
+        Typenums.ptlink[].meldInto!strategy(typenums);
         break;
 
     case ultimate:
-        Typenums.ultimate.meldInto!strategy(typenums);
+        Typenums.ultimate[].meldInto!strategy(typenums);
         break;
 
     case charybdis:
-        Typenums.charybdis.meldInto!strategy(typenums);
+        Typenums.charybdis[].meldInto!strategy(typenums);
         break;
 
     case ircdseven:
         // Nei | freenode is based in charybdis which is based on ratbox iirc
-        Typenums.hybrid.meldInto!strategy(typenums);
-        Typenums.ratBox.meldInto!strategy(typenums);
-        Typenums.charybdis.meldInto!strategy(typenums);
+        Typenums.hybrid[].meldInto!strategy(typenums);
+        Typenums.ratBox[].meldInto!strategy(typenums);
+        Typenums.charybdis[].meldInto!strategy(typenums);
         break;
 
     case undernet:
-        Typenums.undernet.meldInto!strategy(typenums);
+        Typenums.undernet[].meldInto!strategy(typenums);
         break;
 
     case anothernet:
-        //Typenums.anothernet.meldInto!strategy(typenums);
+        //Typenums.anothernet[].meldInto!strategy(typenums);
         break;
 
     case sorircd:
-        Typenums.charybdis.meldInto!strategy(typenums);
-        Typenums.sorircd.meldInto!strategy(typenums);
+        Typenums.charybdis[].meldInto!strategy(typenums);
+        Typenums.sorircd[].meldInto!strategy(typenums);
         break;
 
     case bdqircd:
-        //Typenums.bdqIrcD.meldInto!strategy(typenums);
+        //Typenums.bdqIrcD[].meldInto!strategy(typenums);
         break;
 
     case chatircd:
-        //Typenums.chatIRCd.meldInto!strategy(typenums);
+        //Typenums.chatIRCd[].meldInto!strategy(typenums);
         break;
 
     case irch:
-        //Typenums.irch.meldInto!strategy(typenums);
+        //Typenums.irch[].meldInto!strategy(typenums);
         break;
 
     case ithildin:
-        //Typenums.ithildin.meldInto!strategy(typenums);
+        //Typenums.ithildin[].meldInto!strategy(typenums);
         break;
 
     case twitch:
