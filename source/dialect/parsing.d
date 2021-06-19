@@ -120,12 +120,17 @@ public IRCEvent toIRCEvent(ref IRCParser parser, const string raw) pure
             // @badges=broadcaster/1;color=;display-name=Zorael;emote-sets=0;mod=0;subscriber=0;user-type= :tmi.twitch.tv USERSTATE #zorael
             // @broadcaster-lang=;emote-only=0;followers-only=-1;mercury=0;r9k=0;room-id=22216721;slow=0;subs-only=0 :tmi.twitch.tv ROOMSTATE #zorael
             // @badges=subscriber/3;color=;display-name=asdcassr;emotes=560489:0-6,8-14,16-22,24-30/560510:39-46;id=4d6bbafb-427d-412a-ae24-4426020a1042;mod=0;room-id=23161357;sent-ts=1510059590512;subscriber=1;tmi-sent-ts=1510059591528;turbo=0;user-id=38772474;user-type= :asdcsa!asdcss@asdcsd.tmi.twitch.tv PRIVMSG #lirik :lirikFR lirikFR lirikFR lirikFR :sled: lirikLUL
+            // @solanum.chat/ip=42.116.30.146 :Guest4!~Guest4@42.116.30.146 QUIT :Quit: Connection closed
+            // @account=AdaYuong;solanum.chat/identified :AdaYuong!AdaYuong@user/adayuong PART #libera
+            // @account=sna;solanum.chat/ip=2a01:420:17:1::ffff:536;solanum.chat/identified :sna!sna@im.vpsfree.se AWAY :I'm not here right now
+            // @solanum.chat/ip=211.51.131.179 :Guest6187!~Guest61@211-51-131-179.fiber7.init7.net NICK :carbo
 
             // Get rid of the prepended @
             string newRaw = event.raw[1..$];  // mutable
             immutable tags = newRaw.nom(' ');
             event = .toIRCEvent(parser, newRaw);
             event.tags = tags;
+            applyTags(event);
             return event;
         }
         else
