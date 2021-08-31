@@ -995,6 +995,15 @@ auto parseTwitchTags(ref IRCParser parser, ref IRCEvent event)
             case "msg-param-multimonth-tenure":
                 // msg-param-multimonth-tenure = 0
                 // Ditto
+            case "first-msg":
+                // first-msg = 0
+                // Whether or not it's the user's first message after joining the channel?
+            case "msg-param-gift-theme":
+                // msg-param-gift-theme = party
+                // Theme of a bulkgift?
+            case "crowd-chant-parent-msg-id":
+                // crowd-chant-parent-msg-id = <uuid>
+                // Chant? Seems to be a reply/quote
 
                 // Ignore these events.
                 break;
