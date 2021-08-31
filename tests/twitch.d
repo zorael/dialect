@@ -1062,4 +1062,45 @@ unittest
             assert((id == "bd21ac26-6468-44e8-a119-754c2f21a748"), id);
         }
     }
+    {
+        // @badge-info=subscriber/22;badges=subscriber/12,bits/1000;color=#008000;display-name=ithinkican;emotes=;flags=;id=9ece0157-f458-4e5a-b314-e0bb1674bc2f;login=ithinkican;mod=0;msg-id=submysterygift;msg-param-gift-theme=party;msg-param-mass-gift-count=5;msg-param-origin-id=74\s74\s42\s57\scd\sc4\sf7\s8c\se8\s67\s36\sf3\s43\s29\s8c\s8c\sd1\s61\sbe\s0b;msg-param-sender-count=5;msg-param-sub-plan=1000;room-id=23936415;subscriber=1;system-msg=ithinkican\sis\sgifting\s5\sTier\s1\sSubs\sto\sJerma985's\scommunity!\sThey've\sgifted\sa\stotal\sof\s5\sin\sthe\schannel!;tmi-sent-ts=1629502318806;user-id=471292233;user-type= :tmi.twitch.tv USERNOTICE #jerma985
+        immutable event = parser.toIRCEvent("@badge-info=subscriber/22;badges=subscriber/12,bits/1000;color=#008000;display-name=ithinkican;emotes=;flags=;id=9ece0157-f458-4e5a-b314-e0bb1674bc2f;login=ithinkican;mod=0;msg-id=submysterygift;msg-param-gift-theme=party;msg-param-mass-gift-count=5;msg-param-origin-id=74\\s74\\s42\\s57\\scd\\sc4\\sf7\\s8c\\se8\\s67\\s36\\sf3\\s43\\s29\\s8c\\s8c\\sd1\\s61\\sbe\\s0b;msg-param-sender-count=5;msg-param-sub-plan=1000;room-id=23936415;subscriber=1;system-msg=ithinkican\\sis\\sgifting\\s5\\sTier\\s1\\sSubs\\sto\\sJerma985's\\scommunity!\\sThey've\\sgifted\\sa\\stotal\\sof\\s5\\sin\\sthe\\schannel!;tmi-sent-ts=1629502318806;user-id=471292233;user-type= :tmi.twitch.tv USERNOTICE #jerma985");
+        with (event)
+        {
+            assert((type == IRCEvent.Type.TWITCH_BULKGIFT), Enum!(IRCEvent.Type).toString(type));
+            assert((sender.nickname == "ithinkican"), sender.nickname);
+            assert((sender.address == "tmi.twitch.tv"), sender.address);
+            assert((sender.account == "ithinkican"), sender.account);
+            assert((sender.displayName == "ithinkican"), sender.displayName);
+            assert((sender.badges == "subscriber/12,bits/1000"), sender.badges);
+            assert((sender.colour == "008000"), sender.colour);
+            assert((sender.id == 471292233), sender.id.to!string);
+            assert((channel == "#jerma985"), channel);
+            assert((content == "ithinkican is gifting 5 Tier 1 Subs to Jerma985's community! They've gifted a total of 5 in the channel!"), content);
+            assert((aux == "1000"), aux);
+            assert((tags == "badge-info=subscriber/22;badges=subscriber/12,bits/1000;color=#008000;display-name=ithinkican;emotes=;flags=;id=9ece0157-f458-4e5a-b314-e0bb1674bc2f;login=ithinkican;mod=0;msg-id=submysterygift;msg-param-gift-theme=party;msg-param-mass-gift-count=5;msg-param-origin-id=74\\s74\\s42\\s57\\scd\\sc4\\sf7\\s8c\\se8\\s67\\s36\\sf3\\s43\\s29\\s8c\\s8c\\sd1\\s61\\sbe\\s0b;msg-param-sender-count=5;msg-param-sub-plan=1000;room-id=23936415;subscriber=1;system-msg=ithinkican\\sis\\sgifting\\s5\\sTier\\s1\\sSubs\\sto\\sJerma985's\\scommunity!\\sThey've\\sgifted\\sa\\stotal\\sof\\s5\\sin\\sthe\\schannel!;tmi-sent-ts=1629502318806;user-id=471292233;user-type="), tags);
+            assert((count == 5), count.to!string);
+            assert((altcount == 5), altcount.to!string);
+            assert((id == "9ece0157-f458-4e5a-b314-e0bb1674bc2f"), id);
+        }
+    }
+    {
+        immutable event = parser.toIRCEvent("@badge-info=;badges=;client-nonce=15e0e0fcd371976418dbcf8a729e538a;color=#FF10B8;crowd-chant-parent-msg-id=d85e2b19-7199-4a41-88eb-c763938db2a4;display-name=prtzl_;emotes=;flags=;id=b21bffad-aed3-4906-a83c-2d84eb6888db;mod=0;room-id=23936415;subscriber=0;tmi-sent-ts=1629584274262;turbo=0;user-id=169018557;user-type= :prtzl_!prtzl_@prtzl_.tmi.twitch.tv PRIVMSG #jerma985 :You're doing alright there buddy peepoHappy");
+        with (event)
+        {
+            assert((type == IRCEvent.Type.CHAN), Enum!(IRCEvent.Type).toString(type));
+            assert((sender.nickname == "prtzl_"), sender.nickname);
+            assert((sender.ident == "prtzl_"), sender.ident);
+            assert((sender.address == "prtzl_.tmi.twitch.tv"), sender.address);
+            assert((sender.account == "prtzl_"), sender.account);
+            assert((sender.displayName == "prtzl_"), sender.displayName);
+            assert((sender.badges == "*"), sender.badges);
+            assert((sender.colour == "FF10B8"), sender.colour);
+            assert((sender.id == 169018557), sender.id.to!string);
+            assert((channel == "#jerma985"), channel);
+            assert((content == "You're doing alright there buddy peepoHappy"), content);
+            assert((tags == "badge-info=;badges=;client-nonce=15e0e0fcd371976418dbcf8a729e538a;color=#FF10B8;crowd-chant-parent-msg-id=d85e2b19-7199-4a41-88eb-c763938db2a4;display-name=prtzl_;emotes=;flags=;id=b21bffad-aed3-4906-a83c-2d84eb6888db;mod=0;room-id=23936415;subscriber=0;tmi-sent-ts=1629584274262;turbo=0;user-id=169018557;user-type="), tags);
+            assert((id == "b21bffad-aed3-4906-a83c-2d84eb6888db"), id);
+        }
+    }
 }
