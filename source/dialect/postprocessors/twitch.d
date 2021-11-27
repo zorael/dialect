@@ -115,7 +115,8 @@ auto parseTwitchTags(ref IRCParser parser, ref IRCEvent event)
                 raid                    Raiders from <other channel> have joined!\n
             */
 
-            if (!value.length) continue;  // Rare occurence but happens
+            alias msgID = value;
+            if (!msgID.length) continue;  // Rare occurence but happens
 
             switch (value)
             {
@@ -305,7 +306,7 @@ auto parseTwitchTags(ref IRCParser parser, ref IRCEvent event)
             case "highlighted-message":
             case "skip-subs-mode-message":
                 // These are PRIVMSGs
-                event.aux = value;
+                event.aux = msgID;
                 break;
 
             case "primecommunitygiftreceived":
@@ -402,7 +403,7 @@ auto parseTwitchTags(ref IRCParser parser, ref IRCEvent event)
             case "unavailable_command":
                 // Generic Twitch error.
                 event.type = TWITCH_ERROR;
-                event.aux = value;
+                event.aux = msgID;
                 break;
 
             case "emote_only_on":
@@ -475,7 +476,7 @@ auto parseTwitchTags(ref IRCParser parser, ref IRCEvent event)
             case "no_mods":
                 // Generic Twitch server reply.
                 event.type = TWITCH_NOTICE;
-                event.aux = value;
+                event.aux = msgID;
                 break;
 
             default:
@@ -491,14 +492,14 @@ auto parseTwitchTags(ref IRCParser parser, ref IRCEvent event)
                     }
                 }
 
-                event.aux = value;
+                event.aux = msgID;
 
-                if (value.beginsWith("bad_"))
+                if (msgID.beginsWith("bad_"))
                 {
                     event.type = TWITCH_ERROR;
                     break;
                 }
-                else if (value.beginsWith("usage_"))
+                else if (msgID.beginsWith("usage_"))
                 {
                     event.type = TWITCH_NOTICE;
                     break;
