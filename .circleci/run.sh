@@ -49,11 +49,9 @@ use_lu_master() {
 }
 
 build() {
-    local DC compiler_switch arch_switch arch_ext
+    local compiler_switch arch_switch
 
-    DC="$1"
-    [[ "$2" == "x86_64" ]] && arch_ext="" || arch_ext="-$2"
-    compiler_switch="--compiler=$DC"
+    compiler_switch="--compiler=$1"
     arch_switch="--arch=$2"
 
     shift 2  # shift away compiler and arch
