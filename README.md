@@ -8,7 +8,7 @@ Note that while IRC is standardised, servers still come in [many flavours](https
 
 **Please report bugs. Unreported bugs can only be fixed by accident.**
 
-# What it looks like
+## What it looks like
 
 API documentation can be found [here](http://dialect.dpldocs.info).
 
@@ -86,7 +86,7 @@ struct IRCParser
 }
 ```
 
-# How to use
+## How to use
 
 > This assumes you have a program set up to read from an IRC server. This is not a bot framework; for that you're better off with the full [kameloso](https://github.com/zorael/kameloso) and writing a plugin that suits your needs.
 
@@ -152,7 +152,7 @@ with (event3)
 
 See the [`/tests`](/tests) directory for more example parses.
 
-# Unit test generation
+## Unit test generation
 
 Compiling the `assertgen` dub subpackage builds a command-line tool with which it is easy to generate assert blocks like the one above. These can then be pasted into an according file in [`/tests`](/tests), then ideally submitted as a GitHub pull request for upstream inclusion. You can use it to contribute known-good parses and increase coverage of event types.
 
@@ -183,16 +183,16 @@ Enter server address (irc.freenode.net): irc.server.tld
 
 The output will by default also be saved to a `unittest.log` file in the current directory. See the `--help` listing for more details, passed through dub with `dub run :assertgen -- --help`.
 
-# Roadmap
+## Roadmap
 
 * consider ripping out `isAuthService` and related bits (that translate `NOTICE` events into fake `AUTH_{CHALLENGE,SUCCESS,FAILURE}` types) and moving it to importing projects
 
-# Built with
+## Built with
 
 * [**D**](https://dlang.org)
 * [`dub`](https://code.dlang.org)
 * [`lu`](https://github.com/zorael/lu) ([dub](http://code.dlang.org/packages/lu))
 
-# License
+## License
 
 This project is licensed under the **MIT** license - see the [LICENSE](LICENSE) file for details.
