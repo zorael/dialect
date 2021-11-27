@@ -48,6 +48,13 @@ auto parseTwitchTags(ref IRCParser parser, ref IRCEvent event)
         /// upon leaving the function.
         bool printTagsOnExit;
 
+        static void appendToErrors(ref IRCEvent event, const string msg)
+        {
+            import std.conv : text;
+            immutable punctuation = (event.errors.length ? ". " : string.init);
+            event.errors ~= text(punctuation, msg);
+        }
+
         static void printTags(typeof(tagRange) tagRange, const IRCEvent event)
         {
             import lu.string : nom;
@@ -265,8 +272,12 @@ auto parseTwitchTags(ref IRCParser parser, ref IRCEvent event)
                 {
                     if (event.aux.length)
                     {
+                        import std.conv : text;
                         import std.stdio : writeln;
-                        writeln("msg-id charity tags overwrote an aux: ", event.aux);
+
+                        immutable msg = text("msg-id charity tags overwrote an aux: ", event.aux);
+                        appendToErrors(event, msg);
+                        writeln(msg);
                         printTagsOnExit = true;
                     }
                 }
@@ -275,7 +286,11 @@ auto parseTwitchTags(ref IRCParser parser, ref IRCEvent event)
                 event.aux = sink.data.idup;
 
                 // Remove once we have a recorded parse
-                version(TwitchWarnings) printTagsOnExit = true;
+                version(TwitchWarnings)
+                {
+                    appendToErrors(event, "RECORD TWITCH CHARITY");
+                    printTagsOnExit = true;
+                }
                 break;
 
             case "giftpaidupgrade":
@@ -486,8 +501,12 @@ auto parseTwitchTags(ref IRCParser parser, ref IRCEvent event)
                 {
                     if (event.aux.length)
                     {
+                        import std.conv : text;
                         import std.stdio : writeln;
-                        writeln("msg-id ", value, " overwrote an aux: ", event.aux);
+
+                        immutable msg = text("msg-id ", msgID, " overwrote an aux: ", event.aux);
+                        appendToErrors(event, msg);
+                        writeln(msg);
                         printTagsOnExit = true;
                     }
                 }
@@ -507,8 +526,12 @@ auto parseTwitchTags(ref IRCParser parser, ref IRCEvent event)
 
                 version(TwitchWarnings)
                 {
+                    import std.conv : text;
                     import std.stdio : writeln;
-                    writeln("Unknown Twitch msg-id: ", value);
+
+                    immutable msg = text("Unknown Twitch msg-id: ", msgID);
+                    appendToErrors(event, msg);
+                    writeln(msg);
                     printTagsOnExit = true;
                 }
                 break;
@@ -675,8 +698,12 @@ auto parseTwitchTags(ref IRCParser parser, ref IRCEvent event)
             {
                 if (event.aux.length)
                 {
+                    import std.conv : text;
                     import std.stdio : writeln;
-                    writeln(key, " overwrote an aux: ", event.aux);
+
+                    immutable msg = text(key, " overwrote an aux: ", event.aux);
+                    appendToErrors(event, msg);
+                    writeln(msg);
                     printTagsOnExit = true;
                 }
             }
@@ -733,8 +760,12 @@ auto parseTwitchTags(ref IRCParser parser, ref IRCEvent event)
             {
                 if (event.count != long.min)
                 {
+                    import std.conv : text;
                     import std.stdio : writeln;
-                    writeln(key, " overwrote a count: ", event.count);
+
+                    immutable msg = text(key, " overwrote a count: ", event.count);
+                    appendToErrors(event, msg);
+                    writeln(msg);
                     printTagsOnExit = true;
                 }
             }
@@ -759,8 +790,12 @@ auto parseTwitchTags(ref IRCParser parser, ref IRCEvent event)
             {
                 if (event.altcount != long.min)
                 {
+                    import std.conv : text;
                     import std.stdio : writeln;
-                    writeln(key, " overwrote an altcount: ", event.altcount);
+
+                    immutable msg = text(key, " overwrote an altcount: ", event.altcount);
+                    appendToErrors(event, msg);
+                    writeln(msg);
                     printTagsOnExit = true;
                 }
             }
@@ -1013,9 +1048,12 @@ auto parseTwitchTags(ref IRCParser parser, ref IRCEvent event)
         default:
             version(TwitchWarnings)
             {
-                import std.stdio : writefln, writeln;
+                import std.conv : text;
+                import std.stdio : writeln;
 
-                writefln("Unknown Twitch tag: %s = %s", key, value);
+                immutable msg = text("Unknown Twitch tag: ", key, " = ", value);
+                appendToErrors(event, msg);
+                writeln(msg);
                 printTagsOnExit = true;
             }
             break;
