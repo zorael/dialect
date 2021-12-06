@@ -125,7 +125,7 @@ auto parseTwitchTags(ref IRCParser parser, ref IRCEvent event)
             alias msgID = value;
             if (!msgID.length) continue;  // Rare occurence but happens
 
-            switch (value)
+            switch (msgID)
             {
             case "sub":
             case "resub":
