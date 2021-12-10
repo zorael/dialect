@@ -1103,4 +1103,22 @@ unittest
             assert((id == "b21bffad-aed3-4906-a83c-2d84eb6888db"), id);
         }
     }
+    {
+        immutable event = parser.toIRCEvent("@badge-info=subscriber/14;badges=moderator/1,subscriber/3012;color=#DAA520;display-name=gizmozgamer;emotes=;first-msg=0;flags=;id=cfad3699-6d3b-4bbd-8e58-0f1561778b22;mod=1;msg-id=crowd-chant;room-id=156037856;subscriber=1;tmi-sent-ts=1639141977565;turbo=0;user-id=589846663;user-type=mod :gizmozgamer!gizmozgamer@gizmozgamer.tmi.twitch.tv PRIVMSG #fextralife :Clap Clap FeelsBirthdayMan");
+        with (event)
+        {
+            assert((type == IRCEvent.Type.TWITCH_CROWDCHANT), Enum!(IRCEvent.Type).toString(type));
+            assert((sender.nickname == "gizmozgamer"), sender.nickname);
+            assert((sender.ident == "gizmozgamer"), sender.ident);
+            assert((sender.address == "gizmozgamer.tmi.twitch.tv"), sender.address);
+            assert((sender.account == "gizmozgamer"), sender.account);
+            assert((sender.displayName == "gizmozgamer"), sender.displayName);
+            assert((sender.badges == "moderator/1,subscriber/3012"), sender.badges);
+            assert((sender.colour == "DAA520"), sender.colour);
+            assert((sender.id == 589846663), sender.id.to!string);
+            assert((channel == "#fextralife"), channel);
+            assert((content == "Clap Clap FeelsBirthdayMan"), content);
+            assert((tags == "badge-info=subscriber/14;badges=moderator/1,subscriber/3012;color=#DAA520;display-name=gizmozgamer;emotes=;first-msg=0;flags=;id=cfad3699-6d3b-4bbd-8e58-0f1561778b22;mod=1;msg-id=crowd-chant;room-id=156037856;subscriber=1;tmi-sent-ts=1639141977565;turbo=0;user-id=589846663;user-type=mod"), tags);
+        }
+    }
 }
