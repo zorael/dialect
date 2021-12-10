@@ -335,6 +335,12 @@ auto parseTwitchTags(ref IRCParser parser, ref IRCEvent event)
                 event.type = TWITCH_PAYFORWARD;
                 break;
 
+            case "crowd-chant":
+                // PRIVMSG #fextralife :Clap Clap FeelsBirthdayMan
+                // Seemingly no other interesting tags
+                event.type = TWITCH_CROWDCHANT;
+                break;
+
             /*case "bad_ban_admin":
             case "bad_ban_anon":
             case "bad_ban_broadcaster":
