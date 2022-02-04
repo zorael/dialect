@@ -624,7 +624,7 @@ void parseSpecialcases(ref IRCParser parser, ref IRCEvent event, ref string slic
         {
             event.type = SELFNICK;
             parser.client.nickname = event.target.nickname;
-            version(FlagAsUpdated) parser.clientUpdated = true;
+            version(FlagAsUpdated) parser.updates |= IRCParser.Update.client;
         }
         break;
 
@@ -1172,7 +1172,7 @@ void parseSpecialcases(ref IRCParser parser, ref IRCEvent event, ref string slic
         if (parser.client.nickname != event.target.nickname)
         {
             parser.client.nickname = event.target.nickname;
-            version(FlagAsUpdated) parser.clientUpdated = true;
+            version(FlagAsUpdated) parser.updates |= IRCParser.Update.client;
         }
         break;
 
@@ -1334,7 +1334,7 @@ void parseSpecialcases(ref IRCParser parser, ref IRCEvent event, ref string slic
         slice.nom(" :");
         event.content = slice;
         parser.server.resolvedAddress = event.sender.address;
-        version(FlagAsUpdated) parser.serverUpdated = true;
+        version(FlagAsUpdated) parser.updates |= IRCParser.Update.server;
         break;
 
     case SPAMFILTERLIST: // 941
@@ -1726,7 +1726,7 @@ in (slice.length, "Tried to process `onNotice` on an empty slice")
         // This is where we catch the resolved address
         assert(!event.sender.nickname.length, "Unexpected nickname: " ~ event.sender.nickname);
         parser.server.resolvedAddress = event.sender.address;
-        version(FlagAsUpdated) parser.serverUpdated = true;
+        version(FlagAsUpdated) parser.updates |= IRCParser.Update.server;
     }
 
     if (!event.sender.isServer && event.sender.isAuthService(parser))
@@ -2044,7 +2044,7 @@ in (slice.length, "Tried to process `onMode` on an empty slice")
                 .idup;
         }
 
-        version(FlagAsUpdated) parser.clientUpdated = true;
+        version(FlagAsUpdated) parser.updates |= IRCParser.Update.client;
     }
 }
 
@@ -2216,7 +2216,7 @@ in (slice.length, "Tried to process `onISUPPORT` on an empty slice")
                 }
 
                 parser.server.network = value;
-                version(FlagAsUpdated) parser.serverUpdated = true;
+                version(FlagAsUpdated) parser.updates |= IRCParser.Update.server;
                 break;
 
             case "NICKLEN":
@@ -2253,7 +2253,7 @@ in (slice.length, "Tried to process `onISUPPORT` on an empty slice")
             }
         }
 
-        version(FlagAsUpdated) parser.serverUpdated = true;
+        version(FlagAsUpdated) parser.updates |= IRCParser.Update.server;
     }
     /*catch (ConvException e)
     {
@@ -2360,7 +2360,7 @@ in (slice.length, "Tried to process `onMyInfo` on an empty slice")
                 maxNickLength = 25;
             }
 
-            version(FlagAsUpdated) parser.serverUpdated = true;
+            version(FlagAsUpdated) parser.updates |= IRCParser.Update.server;
             return;
         }
     }
@@ -2433,7 +2433,7 @@ in (slice.length, "Tried to process `onMyInfo` on an empty slice")
     parser.typenums = typenumsOf(daemon);
     parser.server.daemon = daemon;
     parser.server.daemonstring = daemonstring;
-    version(FlagAsUpdated) parser.serverUpdated = true;
+    version(FlagAsUpdated) parser.updates |= IRCParser.Update.server;
 }
 
 
@@ -2680,11 +2680,96 @@ public:
 
     version(FlagAsUpdated)
     {
-        /// Whether or not parsing updated its internal [dialect.defs.IRCClient].
-        bool clientUpdated;
+        // Update
+        /++
+            Bitfield enum of what member of an instance of `IRCParser` was updated (if any).
+         +/
+        enum Update
+        {
+            /++
+                Nothing marked as updated. Initial value.
+             +/
+            nothing = 0,
+            /++
+                Parsing updated the internal [dialect.defs.IRCClient].
+             +/
+            client = 1 << 0,
 
-        /// Whether or not parsing updated its internal [dialect.defs.IRCServer].
-        bool serverUpdated;
+            /++
+                Parsing updated the internal [dialect.defs.IRCServer].
+             +/
+            server = 1 << 1,
+        }
+
+        // updates
+        /++
+            Bitfield of in what way the parser's internal state was altered during parsing.
+
+            Example:
+            ---
+            if (parser.updates & IRCParser.Update.client)
+            {
+                // parser.client was marked as updated
+                parser.updates |= IRCParser.Update.server;
+                // parser.server now marked as updated
+            }
+            ---
+         +/
+        Update updates;
+
+        // clientUpdated
+        /++
+            Wrapper for backwards compatibility with pre-bitfield update-signaling.
+
+            Returns:
+                Whether or not the internal client was updated.
+         +/
+        pragma(inline, true)
+        bool clientUpdated() const pure @safe @nogc nothrow
+        {
+            return cast(bool)(updates & Update.client);
+        }
+
+        // serverUpdated
+        /++
+            Wrapper for backwards compatibility with pre-bitfield update-signaling.
+
+            Returns:
+                Whether or not the internal server was updated.
+         +/
+        pragma(inline, true)
+        bool serverUpdated() const pure @safe @nogc nothrow
+        {
+            return cast(bool)(updates & Update.server);
+        }
+
+        // clientUpdated
+        /++
+            Wrapper for backwards compatibility with pre-bitfield update-signaling.
+
+            Params:
+                updated = Whether or not the internal client should be flagged as updated.
+         +/
+        pragma(inline, true)
+        void clientUpdated(const bool updated) pure @safe @nogc nothrow
+        {
+            if (updated) updates |= Update.client;
+            else updates ^= Update.client;
+        }
+
+        // serverUpdated
+        /++
+            Wrapper for backwards compatibility with pre-bitfield update-signaling.
+
+            Params:
+                updated = Whether or not the internal server should be flagged as updated.
+         +/
+        pragma(inline, true)
+        void serverUpdated(const bool updated) pure @safe @nogc nothrow
+        {
+            if (updated) updates |= Update.server;
+            else updates ^= Update.server;
+        }
     }
 }
 

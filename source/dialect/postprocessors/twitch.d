@@ -574,7 +574,7 @@ auto parseTwitchTags(ref IRCParser parser, ref IRCEvent event)
                     // Also store the alias in the IRCClient, for highlighting purposes
                     // *ASSUME* it never changes during runtime.
                     parser.client.displayName = displayName;
-                    version(FlagAsUpdated) parser.clientUpdated = true;
+                    version(FlagAsUpdated) parser.updates |= typeof(parser).Update.client;
                 }
             }
             else
