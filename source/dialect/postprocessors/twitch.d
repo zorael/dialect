@@ -562,8 +562,6 @@ auto parseTwitchTags(ref IRCParser parser, ref IRCEvent event)
                 // so expose the display name in event.target and let Persistence store it.
                 event.target = event.sender;  // get badges etc
                 event.target.nickname = parser.client.nickname;
-                event.target.class_ = (event.type == GLOBALUSERSTATE) ?
-                    IRCUser.Class.admin : IRCUser.Class.unset;
                 event.target.displayName = displayName;
                 event.target.address = string.init;
                 event.sender.colour = string.init;
