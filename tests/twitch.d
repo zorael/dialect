@@ -1121,4 +1121,24 @@ unittest
             assert((tags == "badge-info=subscriber/14;badges=moderator/1,subscriber/3012;color=#DAA520;display-name=gizmozgamer;emotes=;first-msg=0;flags=;id=cfad3699-6d3b-4bbd-8e58-0f1561778b22;mod=1;msg-id=crowd-chant;room-id=156037856;subscriber=1;tmi-sent-ts=1639141977565;turbo=0;user-id=589846663;user-type=mod"), tags);
         }
     }
+    {
+        // @badge-info=;badges=premium/1;color=;display-name=starblazers;emotes=;flags=;id=550d0b45-dee7-4fa4-9910-7ad1003f0d79;login=starblazers;mod=0;msg-id=sub;msg-param-cumulative-months=1;msg-param-goal-contribution-type=SUB_POINTS;msg-param-goal-current-contributions=902;msg-param-goal-description=Lali-this\sis\sa\sgoal-ho;msg-param-goal-target-contributions=600;msg-param-goal-user-contributions=1;msg-param-months=0;msg-param-multimonth-duration=0;msg-param-multimonth-tenure=0;msg-param-should-share-streak=0;msg-param-sub-plan-name=Channel\sSubscription\s(mousierl);msg-param-sub-plan=Prime;msg-param-was-gifted=false;room-id=46969360;subscriber=1;system-msg=starblazers\ssubscribed\swith\sPrime.;tmi-sent-ts=1644090143655;user-id=48760906;user-type= :tmi.twitch.tv USERNOTICE #mousie
+        immutable event = parser.toIRCEvent("@badge-info=;badges=premium/1;color=;display-name=starblazers;emotes=;flags=;id=550d0b45-dee7-4fa4-9910-7ad1003f0d79;login=starblazers;mod=0;msg-id=sub;msg-param-cumulative-months=1;msg-param-goal-contribution-type=SUB_POINTS;msg-param-goal-current-contributions=902;msg-param-goal-description=Lali-this\\sis\\sa\\sgoal-ho;msg-param-goal-target-contributions=600;msg-param-goal-user-contributions=1;msg-param-months=0;msg-param-multimonth-duration=0;msg-param-multimonth-tenure=0;msg-param-should-share-streak=0;msg-param-sub-plan-name=Channel\\sSubscription\\s(mousierl);msg-param-sub-plan=Prime;msg-param-was-gifted=false;room-id=46969360;subscriber=1;system-msg=starblazers\\ssubscribed\\swith\\sPrime.;tmi-sent-ts=1644090143655;user-id=48760906;user-type= :tmi.twitch.tv USERNOTICE #mousie");
+        with (event)
+        {
+            assert((type == IRCEvent.Type.TWITCH_SUB), Enum!(IRCEvent.Type).toString(type));
+            assert((sender.nickname == "starblazers"), sender.nickname);
+            assert((sender.address == "tmi.twitch.tv"), sender.address);
+            assert((sender.account == "starblazers"), sender.account);
+            assert((sender.displayName == "starblazers"), sender.displayName);
+            assert((sender.badges == "premium/1"), sender.badges);
+            assert((sender.id == 48760906), sender.id.to!string);
+            assert((channel == "#mousie"), channel);
+            assert((content == "starblazers subscribed with Prime."), content);
+            assert((aux == "Prime"), aux);
+            assert((tags == "badge-info=;badges=premium/1;color=;display-name=starblazers;emotes=;flags=;id=550d0b45-dee7-4fa4-9910-7ad1003f0d79;login=starblazers;mod=0;msg-id=sub;msg-param-cumulative-months=1;msg-param-goal-contribution-type=SUB_POINTS;msg-param-goal-current-contributions=902;msg-param-goal-description=Lali-this\\sis\\sa\\sgoal-ho;msg-param-goal-target-contributions=600;msg-param-goal-user-contributions=1;msg-param-months=0;msg-param-multimonth-duration=0;msg-param-multimonth-tenure=0;msg-param-should-share-streak=0;msg-param-sub-plan-name=Channel\\sSubscription\\s(mousierl);msg-param-sub-plan=Prime;msg-param-was-gifted=false;room-id=46969360;subscriber=1;system-msg=starblazers\\ssubscribed\\swith\\sPrime.;tmi-sent-ts=1644090143655;user-id=48760906;user-type="), tags);
+            assert((altcount == 1), altcount.to!string);
+            assert((id == "550d0b45-dee7-4fa4-9910-7ad1003f0d79"), id);
+        }
+    }
 }
