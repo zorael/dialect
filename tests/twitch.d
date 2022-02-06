@@ -242,7 +242,7 @@ unittest
             assert((sender.address == "tmi.twitch.tv"), sender.address);
             assert((target.nickname == "zorael"), target.nickname);
             assert((target.displayName == "Zorael"), target.displayName);
-            assert((target.class_ == IRCUser.Class.admin), Enum!(IRCUser.Class).toString(target.class_));
+            assert((target.class_ == IRCUser.Class.unset), Enum!(IRCUser.Class).toString(target.class_));
             assert((target.badges == "*"), target.badges);
             assert((target.colour == "5F9EA0"), target.colour);
             assert((tags == "badge-info=;badges=;color=#5F9EA0;display-name=Zorael;emote-sets=0,185411,771823,1511983;user-id=22216721;user-type="), tags);
