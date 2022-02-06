@@ -1044,6 +1044,19 @@ auto parseTwitchTags(ref IRCParser parser, ref IRCEvent event)
             case "crowd-chant-parent-msg-id":
                 // crowd-chant-parent-msg-id = <uuid>
                 // Chant? Seems to be a reply/quote
+            case "msg-param-goal-contribution-type":
+                // msg-param-goal-contribution-type = SUB_POINTS
+                // Nowhere to put this without an altaux.
+            case "msg-param-goal-description":
+                // msg-param-goal-description = Lali-this\sis\sa\sgoal-ho
+                // Nowhere to put this without a triaux.
+            case "msg-param-goal-target-contributions":
+                // msg-param-goal-target-contributions = 600
+                // Nowhere to put this without a tricount.
+            case "msg-param-goal-current-contributions":
+                // msg-param-goal-current-contributions = 90
+            case "msg-param-goal-user-contributions":
+                // msg-param-goal-user-contributions = 1
 
                 // Ignore these events.
                 break;
