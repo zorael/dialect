@@ -2,8 +2,8 @@
     Definitions of struct aggregates used throughout the library, representing
     [IRCEvent]s and thereto related objects like [IRCServer] and [IRCUser].
 
-    Things related to actually parsing IRC do not belong here; what's here should only be
-    applicable to be used as a header.
+    Things related to actually parsing IRC do not belong here; what's here
+    should only be applicable to be used as a header.
 
     The only lu dependency should be [lu.uda].
  +/
@@ -27,8 +27,8 @@ nothrow:
     A single IRC event, parsed from server input.
 
     The [IRCEvent] struct is a construct with fields extracted from raw server
-    strings. Since structs are not polymorphic the [Type] enum dictates what
-    kind of event it is.
+    strings. Since structs are not polymorphic the [IRCEvent.Type|Type] enum
+    dictates what kind of event it is.
  +/
 struct IRCEvent
 {
@@ -41,9 +41,11 @@ struct IRCEvent
 
         - https://defs.ircdocs.horse
 
-        Some are outright fabrications of ours, like [Type.CHAN] and [Type.QUERY].
-        These are not prefixed with `RPL_` and `ERR_` (but not all such are made up,
-        like [Type.AWAY] and [Type.CHGHOST] that are properly [Type.AWAY] and [Type.CHGHOST]).
+        Some are outright fabrications of ours, like [Type.CHAN|CHAN] and
+        [Type.QUERY|QUERY]. These are not prefixed with `RPL_` and `ERR_`
+        (but not all such are made up, like [Type.AWAY|AWAY] and
+        [Type.CHGHOST|CHGHOST] that are properly [Type.AWAY|AWAY] and
+        [Type.CHGHOST|CHGHOST]).
      +/
     enum Type
     {
@@ -799,7 +801,8 @@ struct IRCEvent
         /++
             Run this to generate the Type[n] map.
 
-            HAS NOT BEEN TESTED IN YEARS. There's been no need for it. Don't expect it to work.
+            HAS NOT BEEN TESTED IN YEARS. There's been no need for it.
+            Don't expect it to work.
          +/
         void generateTypenums()
         {
@@ -1010,7 +1013,8 @@ struct IRCServer
 
         /++
             Supported channel prefix characters, as announced by the server in
-            the `ISUPPORT` event, before the MOTD.
+            the [dialect.defs.IRCEvent.Type.RPL_ISUPPORT|RPL_ISUPPORT]` event,
+            before the MOTD.
          +/
         string chantypes = "#";
 
@@ -1029,7 +1033,7 @@ struct IRCServer
         /// The modechar for invite exceptions.
         char invexChar = 'I';
 
-        /// Contents of the [IRCEvent.Type.RPL_ISUPPORT] response(s).
+        /// Contents of the [IRCEvent.Type.RPL_ISUPPORT|RPL_ISUPPORT] response(s).
         string supports;
     }
 
@@ -1277,7 +1281,7 @@ struct IRCUser
 
 // Typenums
 /++
-    Reverse mappings of *numerics* to [IRCEvent.Type]s.
+    Reverse mappings of *numerics* to [IRCEvent.Type|Type]s.
 
     One `base` table that covers most cases, and then specialised arrays for
     different server daemons, to meld into `base` for a union of the two
@@ -2436,7 +2440,10 @@ struct IRCClient
         /// The original client nickname before connecting, in case it changed.
         string origNickname;
 
-        /// Client IDENT identifier. Defaults to "~`user`". Unused but keep for future expansion.
+        /++
+            Client IDENT identifier. Defaults to "~`user`".
+            Unused but keep for future expansion.
+         +/
         string ident;
 
         version(TwitchSupport)

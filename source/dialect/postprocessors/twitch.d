@@ -1,5 +1,5 @@
 /++
-    The Twitch postprocessor processes [dialect.defs.IRCEvent]s after
+    The Twitch postprocessor processes [dialect.defs.IRCEvent|IRCEvent]s after
     they are parsed, and deals with Twitch-specifics. Those include extracting
     the colour someone's name should be printed in, their alias/"display name"
     (generally their nickname cased), converting the event to some event types
@@ -27,8 +27,9 @@ import dialect.common : Postprocessor;
     The event is passed by ref as many tags necessitate changes to it.
 
     Params:
-        parser = Current [dialect.parsing.IRCParser].
-        event = Reference to the [dialect.defs.IRCEvent] whose tags should be parsed.
+        parser = Current [dialect.parsing.IRCParser|IRCParser].
+        event = Reference to the [dialect.defs.IRCEvent|IRCEvent] whose tags
+            should be parsed.
  +/
 auto parseTwitchTags(ref IRCParser parser, ref IRCEvent event)
 {
@@ -1099,13 +1100,13 @@ final class TwitchPostprocessor : Postprocessor
 {
     // postprocess
     /++
-        Handle Twitch specifics, modifying the [dialect.defs.IRCEvent] to add
-        things like [dialect.defs.IRCEvent.colour] and differentiate between
-        temporary and permanent bans.
+        Handle Twitch specifics, modifying the [dialect.defs.IRCEvent|IRCEvent]
+        to add things like [dialect.defs.IRCEvent.colour|IRCEvent.colour] and
+        differentiate between temporary and permanent bans.
 
         Params:
-            parser = Current [dialect.parsing.IRCParser].
-            event = [dialect.defs.IRCEvent] in flight.
+            parser = Current [dialect.parsing.IRCParser|IRCParser].
+            event = [dialect.defs.IRCEvent|IRCEvent] in flight.
      +/
     void postprocess(ref IRCParser parser, ref IRCEvent event)
     {

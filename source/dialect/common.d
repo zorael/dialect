@@ -1,5 +1,6 @@
 /++
-    Helper functions needed to parse raw IRC event strings into [dialect.defs.IRCEvent]s.
+    Helper functions needed to parse raw IRC event strings into
+    [dialect.defs.IRCEvent|IRCEvent]s.
 
     Also things that don't belong anywhere else.
  +/
@@ -18,7 +19,8 @@ public:
 
 // typenumsOf
 /++
-    Returns the `typenums` mapping for a given [dialect.defs.IRCServer.Daemon].
+    Returns the `typenums` mapping for a given
+    [dialect.defs.IRCServer.Daemon|IRCServer.Daemon].
 
     Example:
     ---
@@ -32,10 +34,11 @@ public:
     ---
 
     Params:
-        daemon = The [dialect.defs.IRCServer.Daemon] to get the typenums for.
+        daemon = The [dialect.defs.IRCServer.Daemon|IRCServer.Daemon] to get
+            the typenums for.
 
     Returns:
-        A `typenums` array of [dialect.defs.IRCEvent]s mapped to numerics.
+        A `typenums` array of [dialect.defs.IRCEvent|IRCEvent]s mapped to numerics.
  +/
 auto typenumsOf(const IRCServer.Daemon daemon) pure nothrow @nogc
 {
@@ -337,7 +340,7 @@ unittest
 
 // isAuthService
 /++
-    Inspects an [dialect.defs.IRCUser] and judges whether or not it is
+    Inspects an [dialect.defs.IRCUser|IRCUser] and judges whether or not it is
     authentication services.
 
     This is very ad-hoc.
@@ -353,8 +356,8 @@ unittest
     ---
 
     Params:
-        sender = [dialect.defs.IRCUser] to examine.
-        parser = Reference to the current [dialect.parsing.IRCParser].
+        sender = [dialect.defs.IRCUser|IRCUser] to examine.
+        parser = Reference to the current [dialect.parsing.IRCParser|IRCParser].
 
     Returns:
         `true` if the `sender` is judged to be from nickname services, `false` if not.
@@ -477,9 +480,9 @@ unittest
 /++
     Examines a string and judges whether or not it *looks* like a channel.
 
-    It needs to be passed an [dialect.defs.IRCServer] to know the max
+    It needs to be passed an [dialect.defs.IRCServer|IRCServer] to know the max
     channel name length. An alternative would be to change the
-    [dialect.defs.IRCServer] parameter to be an `uint`.
+    [dialect.defs.IRCServer|IRCServer] parameter to be an `uint`.
 
     Example:
     ---
@@ -492,7 +495,7 @@ unittest
 
     Params:
         channel = String of a potential channel name.
-        server = The current [dialect.defs.IRCServer] with all its settings.
+        server = The current [dialect.defs.IRCServer|IRCServer] with all its settings.
 
     Returns:
         `true` if the string content is judged to be a channel, `false` if not.
@@ -587,7 +590,7 @@ unittest
 
     Params:
         nickname = String nickname.
-        server = The current [dialect.defs.IRCServer] with all its settings.
+        server = The current [dialect.defs.IRCServer|IRCServer] with all its settings.
 
     Returns:
         `true` if the nickname string is judged to be a nickname, `false` if not.
@@ -742,7 +745,7 @@ unittest
 
     Params:
         nickname = String with a signed nickname.
-        server = [dialect.defs.IRCServer], with all its settings.
+        server = [dialect.defs.IRCServer|IRCServer], with all its settings.
         modesigns = Reference string to write the stripped modesigns to.
 
     Returns:
@@ -820,7 +823,7 @@ unittest
 
     Params:
         nickname = The (potentially) signed nickname to strip the prefix off.
-        server = The [dialect.defs.IRCServer] whose prefix characters to strip.
+        server = The [dialect.defs.IRCServer|IRCServer] whose prefix characters to strip.
 
     Returns:
         The raw nickname, unsigned.
@@ -852,12 +855,12 @@ unittest
 
 // setMode
 /++
-    Sets a new or removes a [dialect.defs.IRCChannel.Mode].
+    Sets a new or removes a [dialect.defs.IRCChannel.Mode|IRCChannel.Mode].
 
-    [dialect.defs.IRCChannel.Mode]s that are merely a character in `modechars` are simply removed if
-     the *sign* of the mode change is negative, whereas a more elaborate
-    [dialect.defs.IRCChannel.Mode] in the `modes` array are only replaced or removed if they match a
-     comparison test.
+    [dialect.defs.IRCChannel.Mode|IRCChannel.Mode]s that are merely a character
+    in `modechars` are simply removed if the *sign* of the mode change is negative,
+    whereas a more elaborate [dialect.defs.IRCChannel.Mode|IRCChannel.Mode]
+    in the `modes` array are only replaced or removed if they match a comparison test.
 
     Several modes can be specified at once, including modes that take a
     `data` argument, assuming they are in the proper order (where the
@@ -882,7 +885,7 @@ unittest
             prefixing sign (+ or -).
         data = Appendix to the signed modestring; arguments to the modes that
             are being set.
-        server = The current [dialect.defs.IRCServer] with all its settings.
+        server = The current [dialect.defs.IRCServer|IRCServer] with all its settings.
  +/
 void setMode(ref IRCChannel channel, const string signedModestring,
     const string data, const IRCServer server) pure
@@ -947,7 +950,8 @@ void setMode(ref IRCChannel channel, const string signedModestring,
             continue;
         }
 
-        if (!datastring.beginsWith(server.extbanPrefix) && datastring.contains('!') && datastring.contains('@'))
+        if (!datastring.beginsWith(server.extbanPrefix) &&
+            datastring.contains('!') && datastring.contains('@'))
         {
             // Looks like a user and not an extban
             newMode.user = IRCUser(datastring);
@@ -1139,7 +1143,8 @@ void setMode(ref IRCChannel channel, const string signedModestring,
                  +/
 
                 // If a comparison matches, remove
-                channel.modes = channel.modes.remove!((listed => listed == newMode), SwapStrategy.unstable);
+                channel.modes = channel.modes
+                    .remove!((listed => listed == newMode), SwapStrategy.unstable);
             }
             else if (server.bModes.contains(modechar) || server.cModes.contains(modechar))
             {
@@ -1356,17 +1361,18 @@ unittest
 /++
     IRC Parsing Exception, thrown when there were errors parsing.
 
-    It is a normal [object.Exception] but with an attached [dialect.defs.IRCEvent].
+    It is a normal [object.Exception] but with an attached
+    [dialect.defs.IRCEvent|IRCEvent].
  +/
 final class IRCParseException : Exception
 {
 @safe:
-    /// Bundled [dialect.defs.IRCEvent], parsing which threw this exception.
+    /// Bundled [dialect.defs.IRCEvent|IRCEvent], parsing which threw this exception.
     IRCEvent event;
 
     /++
         Create a new [IRCParseException], without attaching an
-        [dialect.defs.IRCEvent].
+        [dialect.defs.IRCEvent|IRCEvent].
      +/
     this(const string message,
         const string file = __FILE__,
@@ -1378,7 +1384,7 @@ final class IRCParseException : Exception
 
     /++
         Create a new [IRCParseException], attaching an
-        [dialect.defs.IRCEvent] to it.
+        [dialect.defs.IRCEvent|IRCEvent] to it.
      +/
     this(const string message,
         const IRCEvent event,
@@ -1417,7 +1423,10 @@ unittest
 }
 
 
-/// Certain characters that signal specific meaning in an IRC context.
+// IRCControlCharacter
+/++
+    Certain characters that signal specific meaning in an IRC context.
+ +/
 enum IRCControlCharacter
 {
     ctcp        = 1,   /// Client-to-client Protocol marker.
@@ -1432,8 +1441,8 @@ enum IRCControlCharacter
 
 // matchesByMask
 /++
-    Compares this [dialect.defs.IRCUser] with a second one, treating fields with
-    asterisks as glob wildcards, mimicking `*!*@*` mask matching.
+    Compares this [dialect.defs.IRCUser|IRCUser] with a second one, treating
+    fields with asterisks as glob wildcards, mimicking `*!*@*` mask matching.
 
     Example:
     ---
@@ -1458,13 +1467,13 @@ enum IRCControlCharacter
     ---
 
     Params:
-        this_ = [dialect.defs.IRCUser] to compare.
-        that = [dialect.defs.IRCUser] to compare `this_` with.
-        caseMapping = [dialect.defs.IRCServer.CaseMapping] with which to translate
-            the nicknames in the relevant masks to lowercase.
+        this_ = [dialect.defs.IRCUser|IRCUser] to compare.
+        that = [dialect.defs.IRCUser|IRCUser] to compare `this_` with.
+        caseMapping = [dialect.defs.IRCServer.CaseMapping|IRCServer.CaseMapping]
+            with which to translate the nicknames in the relevant masks to lowercase.
 
     Returns:
-        `true` if the [dialect.defs.IRCUser]s are deemed to match, `false` if not.
+        `true` if the [dialect.defs.IRCUser|IRCUser]s are deemed to match, `false` if not.
  +/
 bool matchesByMask(const IRCUser this_, const IRCUser that,
     const IRCServer.CaseMapping caseMapping = IRCServer.CaseMapping.rfc1459) pure nothrow
@@ -1655,8 +1664,9 @@ char toLower(const char c, const IRCServer.CaseMapping caseMapping) pure nothrow
 /++
     Produces the passed string in lowercase as per the supplied case mappings.
 
-    This function is `@trusted` to be able to cast the internal `output` char array
-    to string. [std.array.Appender] does this with its `.data`/`opSlice` method.
+    This function is `@trusted` to be able to cast the internal `output` char
+    array to string. [std.array.Appender|Appender] does this with its
+    [std.array.Appender.data|data]/[std.array.Appender.opSlice|opSlice] methods.
 
     ---
     @property inout(ElementEncodingType!A)[] opSlice() inout @trusted pure nothrow
@@ -1768,7 +1778,8 @@ unittest
         mapping = The server case mapping to apply.
 
     Returns:
-        true if `lhs` and `rhs` are deemed to be case-insensitively equal; false if not.
+        `true` if `lhs` and `rhs` are deemed to be case-insensitively equal;
+        `false` if not.
  +/
 bool opEqualsCaseInsensitive(const string lhs, const string rhs,
     const IRCServer.CaseMapping mapping) pure nothrow @nogc
@@ -1856,11 +1867,11 @@ unittest
 
     Params:
         hostmask = Hostmask string to examine.
-        server = The current [dialect.defs.IRCServer] with its
-            [dialect.defs.IRCServer.CaseMapping].
+        server = The current [dialect.defs.IRCServer|IRCServer] with its
+            [dialect.defs.IRCServer.CaseMapping|IRCServer.CaseMapping].
 
     Returns:
-        true if the hostmask seems to be valid, false if it obviously is not.
+        `true` if the hostmask seems to be valid, `false` if it obviously is not.
  +/
 bool isValidHostmask(const string hostmask, const IRCServer server) pure nothrow @nogc
 {
@@ -2021,8 +2032,8 @@ unittest
 /++
     Postprocessor interface for concrete postprocessors to inherit from.
 
-    Postprocessors modify [dialect.defs.IRCEvent]s after they are parsed, before
-    returning the final object to the caller. This is used to provide support
+    Postprocessors modify [dialect.defs.IRCEvent|IRCEvent]s after they are parsed,
+    before returning the final object to the caller. This is used to provide support
     for Twitch servers, where most information is carried in IRCv3 tags prepended
     to the raw server strings. The normal parser routine just separates the tags
     from the normal string, parses it as per usual, and lets postprocessors
@@ -2031,7 +2042,7 @@ unittest
 interface Postprocessor
 {
     /++
-        Postprocesses an [dialect.defs.IRCEvent].
+        Postprocesses an [dialect.defs.IRCEvent|IRCEvent].
      +/
     void postprocess(ref IRCParser, ref IRCEvent);
 }

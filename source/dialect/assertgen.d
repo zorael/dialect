@@ -91,7 +91,7 @@ import std.typecons : Flag, No, Yes;
 // formatClientAssignment
 /++
     Constructs statement lines for each changed field of an
-    [dialect.defs.IRCClient], including instantiating a fresh one.
+    [dialect.defs.IRCClient|IRCClient], including instantiating a fresh one.
 
     Example:
     ---
@@ -104,8 +104,8 @@ import std.typecons : Flag, No, Yes;
 
     Params:
         sink = Output buffer to write to.
-        client = [dialect.defs.IRCClient] to simulate the assignment of.
-        server = [dialect.defs.IRCServer] to simulate the assignment of.
+        client = [dialect.defs.IRCClient|IRCClient] to simulate the assignment of.
+        server = [dialect.defs.IRCServer|IRCServer] to simulate the assignment of.
  +/
 void formatClientAssignment(Sink)(auto ref Sink sink, const IRCClient client, const IRCServer server)
 if (isOutputRange!(Sink, char[]))
@@ -164,7 +164,7 @@ with (parser)
 // formatEventAssertBlock
 /++
     Constructs assert statement blocks for each changed field of an
-    [dialect.defs.IRCEvent].
+    [dialect.defs.IRCEvent|IRCEvent].
 
     Example:
     ---
@@ -175,7 +175,7 @@ with (parser)
 
     Params:
         sink = Output buffer to write to.
-        event = [dialect.defs.IRCEvent] to construct assert statements for.
+        event = [dialect.defs.IRCEvent|IRCEvent] to construct assert statements for.
  +/
 void formatEventAssertBlock(Sink)(auto ref Sink sink, const IRCEvent event)
 if (isOutputRange!(Sink, char[]))
@@ -256,7 +256,7 @@ public:
     Entry point when compiling the `assertgen` dub configuration.
 
     Reads raw server strings from `stdin`, parses them into
-    [dialect.defs.IRCEvent]s and constructs assert blocks of their contents.
+    [dialect.defs.IRCEvent|IRCEvent]s and constructs assert blocks of their contents.
  +/
 version(unittest) {}
 else
