@@ -1032,6 +1032,15 @@ struct IRCServer
         /// Contents of the [IRCEvent.Type.RPL_ISUPPORT] response(s).
         string supports;
     }
+
+    /++
+        Constructor.
+     +/
+    this(const string address, const ushort port)
+    {
+        this.address = address;
+        this.port = port;
+    }
 }
 
 
