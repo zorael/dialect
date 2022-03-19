@@ -2176,7 +2176,7 @@ struct Typenums
     [
         270 : Type.RPL_MAPUSERS,
         304 : Type.RPL_SYNTAX,
-        379 : Type.RPL_WHOWASIP,
+        379 : Type.RPL_WHOWASIP,  // also encountered as Type.RPL_WHOISMODES?
         495 : Type.ERR_DELAYREJOIN,
         501 : Type.ERR_UNKNOWNSNOMASK,
         702 : Type.RPL_COMMANDS,
