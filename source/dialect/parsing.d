@@ -1393,6 +1393,27 @@ void parseSpecialcases(ref IRCParser parser, ref IRCEvent event, ref string slic
         event.content = slice;
         break;
 
+    case THISSERVERINSTEAD: // 010
+        // :irc.link-net.be 010 zorael irc.link-net.be +6697 :Please use this Server/Port instead$
+        import std.conv : ConvException, to;
+
+        slice.nom(' '); // bot nickname
+        event.aux = slice.nom(' ');
+        string portstring = slice.nom(" :");  // mutable
+        event.content = slice;
+
+        if (portstring.beginsWith('+')) portstring = portstring[1..$];
+
+        try
+        {
+            event.count = portstring.to!int;
+        }
+        catch (ConvException _)
+        {
+            event.aux = event.aux ~ ':' ~ portstring;
+        }
+        break;
+
     default:
         if ((event.type == NUMERIC) || (event.type == UNSET))
         {

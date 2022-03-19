@@ -108,6 +108,7 @@ struct IRCEvent
         MODELIST,         // = 961 /// +noctcp +nickflood 5:60 +nonotice +flood 30:5 +joinflood 5:1 +noextmsg +topiclock +globalflood 10:5
         ENDOFMODELIST,    // = 960 // End of mode list.
         ENDOFCHANNELACCLIST, // = 911 // End of Channel Access List
+        THISSERVERINSTEAD,// = 010 // <nickname> <new server> +<port> :Please use this Server/Port instead$
 
         // Twitch specifics
         USERSTATE,        /// Twitch user information.
@@ -153,7 +154,7 @@ struct IRCEvent
         RPL_SNOMASK, // = 008,          // Server notice mask (hex)
         RPL_STATMEMTOT, // = 009,
         //RPL_BOUNCE, // = 010,         // CONFLICT "<hostname> <port> :<info>",
-        RPL_STATMEM, // = 010,          // deprecated
+        //RPL_STATMEM, // = 010,        // deprecated, prefer THISSERVERINSTEAD
         RPL_YOURCOOKIE, // = 014,
         //RPL_MAP, // = 015,
         RPL_MAPMORE, // = 016,
@@ -1304,7 +1305,7 @@ struct Typenums
         7   : Type.RPL_MAPEND,
         8   : Type.RPL_SNOMASK,
         9   : Type.RPL_STATMEMTOT,
-        10  : Type.RPL_STATMEM,
+        10  : Type.THISSERVERINSTEAD,  // was Type.RPL_STATMEM
         14  : Type.RPL_YOURCOOKIE,
         15  : Type.RPL_MAP,
         16  : Type.RPL_MAPMORE,
