@@ -935,21 +935,55 @@ void parseSpecialcases(ref IRCParser parser, ref IRCEvent event, ref string slic
         // :kinetic.oftc.net 338 kameloso wh00nix 255.255.255.255 :actually using host
         // :efnet.port80.se 338 kameloso kameloso 255.255.255.255 :actually using host
         // :irc.rizon.club 338 kameloso^ kameloso^ :is actually ~kameloso@194.117.188.126 [194.117.188.126]
+        // :irc.link-net.be 338 zorael zorael is actually ~kameloso@195.196.10.12 [195.196.10.12]
+        // :Prothid.NY.US.GameSurge.net 338 zorael zorael ~kameloso@195.196.10.12 195.196.10.12 :Actual user@host, Actual IP$
         import std.string : indexOf;
 
         slice.nom(' '); // bot nickname
         event.target.nickname = slice.nom(' ');
         immutable colonPos = slice.indexOf(':');
 
-        if (slice[0..colonPos].contains('.'))
+        if ((colonPos == -1) || (colonPos == 0))
         {
-            event.target.address = slice.nom(" :");
-            event.aux = event.target.address;  // FIXME
-            event.content = slice;
+            // :irc.link-net.be 338 zorael zorael is actually ~kameloso@195.196.10.12 [195.196.10.12]
+            // :irc.rizon.club 338 kameloso^ kameloso^ :is actually ~kameloso@194.117.188.126 [194.117.188.126]
+            slice.nom("is actually ");
+            event.aux = slice.nom(' ');
+
+            if ((slice[0] == '[') && (slice[$-1] == ']'))
+            {
+                event.target.address = slice[1..$-1];
+            }
+            else
+            {
+                event.content = slice;
+            }
         }
         else
         {
-            event.content = slice[colonPos+1..$];
+            if (slice[0..colonPos].contains('.'))
+            {
+                string addstring = slice.nom(" :");  // mutable
+
+                if (addstring.contains(' '))
+                {
+                    // :Prothid.NY.US.GameSurge.net 338 zorael zorael ~kameloso@195.196.10.12 195.196.10.12 :Actual user@host, Actual IP$
+                    event.aux = addstring.nom(' ');
+                    event.target.address = addstring;
+                }
+                else
+                {
+                    event.aux = addstring;
+                    if (addstring.contains('@')) addstring.nom('@');
+                    event.target.address = addstring;
+                }
+
+                event.content = slice;
+            }
+            else
+            {
+                event.content = slice[colonPos+1..$];
+            }
         }
         break;
 
