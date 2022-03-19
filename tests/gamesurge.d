@@ -141,4 +141,17 @@ unittest
             assert((content == "I recognize you."), content);
         }
     }
+    {
+        immutable event = parser.toIRCEvent(":Prothid.NY.US.GameSurge.net 338 zorael zorael ~kameloso@195.196.10.12 195.196.10.12 :Actual user@host, Actual IP");
+        with (event)
+        {
+            assert((type == IRCEvent.Type.RPL_WHOISACTUALLY), Enum!(IRCEvent.Type).toString(type));
+            assert((sender.address == "Prothid.NY.US.GameSurge.net"), sender.address);
+            assert((target.nickname == "zorael"), target.nickname);
+            assert((target.address == "195.196.10.12"), target.address);
+            assert((content == "Actual user@host, Actual IP"), content);
+            assert((aux == "~kameloso@195.196.10.12"), aux);
+            assert((num == 338), num.to!string);
+        }
+    }
 }

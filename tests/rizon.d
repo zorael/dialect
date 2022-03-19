@@ -277,4 +277,16 @@ unittest
             assert((content == "Password accepted - you are now recognized."), content);
         }
     }
+    {
+        immutable event = parser.toIRCEvent(":irc.rizon.club 338 kameloso^ kameloso^ :is actually ~kameloso@194.117.188.126 [194.117.188.126]");
+        with (event)
+        {
+            assert((type == IRCEvent.Type.RPL_WHOISACTUALLY), Enum!(IRCEvent.Type).toString(type));
+            assert((sender.address == "irc.rizon.club"), sender.address);
+            assert((target.nickname == "kameloso^"), target.nickname);
+            assert((target.address == "194.117.188.126"), target.address);
+            assert((aux == "~kameloso@194.117.188.126"), aux);
+            assert((num == 338), num.to!string);
+        }
+    }
 }

@@ -462,4 +462,17 @@ unittest
     {
         assert((modes == "Rix"), modes);
     }
+
+    {
+        immutable event = parser.toIRCEvent(":irc.link-net.be 010 zorael irc.link-net.be +6697 :Please use this Server/Port instead");
+        with (event)
+        {
+            assert((type == IRCEvent.Type.THISSERVERINSTEAD), Enum!(IRCEvent.Type).toString(type));
+            assert((sender.address == "irc.link-net.be"), sender.address);
+            assert((content == "Please use this Server/Port instead"), content);
+            assert((aux == "irc.link-net.be"), aux);
+            assert((num == 10), num.to!string);
+            assert((count == 6697), count.to!string);
+        }
+    }
 }

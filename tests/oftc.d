@@ -195,4 +195,15 @@ unittest
             assert((content == "You are successfully identified as kameloso."), content);
         }
     }
+    {
+        immutable event = parser.toIRCEvent(":helix.oftc.net 479 zorael|8 - :Illegal channel name");
+        with (event)
+        {
+            assert((type == IRCEvent.Type.ERR_BADCHANNAME), Enum!(IRCEvent.Type).toString(type));
+            assert((sender.address == "helix.oftc.net"), sender.address);
+            assert((content == "Illegal channel name"), content);
+            assert((aux == "-"), aux);
+            assert((num == 479), num.to!string);
+        }
+    }
 }
