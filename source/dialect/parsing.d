@@ -1448,6 +1448,13 @@ void parseSpecialcases(ref IRCParser parser, ref IRCEvent event, ref string slic
         }
         break;
 
+    case ERR_BADCHANNAME: // 479
+        // :helix.oftc.net 479 zorael|8 - :Illegal channel name
+        slice.nom(' '); // bot nickname
+        event.aux = slice.nom(" :");
+        event.content = slice;
+        break;
+
     default:
         if ((event.type == NUMERIC) || (event.type == UNSET))
         {
