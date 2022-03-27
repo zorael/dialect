@@ -604,7 +604,18 @@ bool isValidNickname(const string nickname, const IRCServer server) pure nothrow
         return false;
     }
 
-    foreach (immutable c; nickname.representation)
+    immutable rep = nickname.representation;
+
+    if (((rep[0] >= '0') && (rep[0] <= '9')) || (rep[0] == '-'))
+    {
+        return false;
+    }
+    else if (!rep[0].isValidNicknameCharacter)
+    {
+        return false;
+    }
+
+    foreach (immutable c; rep[1..$])
     {
         if (!c.isValidNicknameCharacter) return false;
     }
@@ -635,7 +646,7 @@ unittest
     immutable invalidNicknames =
     [
         //"",
-        "X".repeat(s.maxNickLength+1).to!string,
+        'X'.repeat(s.maxNickLength+1).to!string,
         "åäöÅÄÖ",
         "\n",
         "¨",
@@ -644,6 +655,8 @@ unittest
         "&hobbes",
         "#channel",
         "$deity",
+        "0kameloso",
+        "-kameloso",
     ];
 
     foreach (immutable nickname; validNicknames)
