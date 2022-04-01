@@ -706,6 +706,10 @@ auto parseTwitchTags(ref IRCParser parser, ref IRCEvent event)
             // "msg-param-prior-gifter-display-name" = "CoopaManTV"
             // Prefer msg-param-prior-gifter-user-name as we can deduce the
             // display name from that but not the other way around.
+        case "msg-param-color":
+            // msg-param-color = PRIMARY
+            // msg-param-color = PURPLE
+            // seen in a TWITCH_ANNOUNCEMENT
 
             version(TwitchWarnings)
             {
