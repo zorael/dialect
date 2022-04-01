@@ -342,6 +342,14 @@ auto parseTwitchTags(ref IRCParser parser, ref IRCEvent event)
                 event.type = TWITCH_CROWDCHANT;
                 break;
 
+            case "announcement":
+                // USERNOTICE #zorael :test
+                // by /announcement test
+                // Unknown Twitch msg-id: announcement
+                // Unknown Twitch tag: msg-param-color = PRIMARY
+                event.type = TWITCH_ANNOUNCEMENT;
+                break;
+
             /*case "bad_ban_admin":
             case "bad_ban_anon":
             case "bad_ban_broadcaster":

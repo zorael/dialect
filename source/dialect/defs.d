@@ -142,6 +142,7 @@ struct IRCEvent
         TWITCH_GIFTRECEIVED , /// Twitch Prime community gift received.
         TWITCH_PAYFORWARD,/// Twitch paying forward of gifts.
         TWITCH_CROWDCHANT,/// Twitch message with some emotes.
+        TWITCH_ANNOUNCEMENT, /// Twitch channel announcement.
 
         RPL_WELCOME, // = 001,          // ":Welcome to <server name> <user>"
         RPL_YOURHOST, // = 002,         // ":Your host is <servername>, running version <version>"
