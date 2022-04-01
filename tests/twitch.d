@@ -1141,4 +1141,23 @@ unittest
             assert((id == "550d0b45-dee7-4fa4-9910-7ad1003f0d79"), id);
         }
     }
+    {
+        immutable event = parser.toIRCEvent("@badge-info=;badges=broadcaster/1;color=#5F9EA0;display-name=zorael;emotes=;flags=;id=d312a414-a1d3-45b1-abd1-2b3b11b65eb7;login=zorael;mod=0;msg-id=announcement;msg-param-color=PURPLE;room-id=22216721;subscriber=0;system-msg=;tmi-sent-ts=1648851705977;user-id=22216721;user-type= :tmi.twitch.tv USERNOTICE #zorael :this is a test announcement");
+        with (event)
+        {
+            assert((type == IRCEvent.Type.TWITCH_ANNOUNCEMENT), Enum!(IRCEvent.Type).toString(type));
+            assert((sender.nickname == "zorael"), sender.nickname);
+            assert((sender.address == "tmi.twitch.tv"), sender.address);
+            assert((sender.account == "zorael"), sender.account);
+            assert((sender.displayName == "zorael"), sender.displayName);
+            assert((sender.badges == "broadcaster/1"), sender.badges);
+            assert((sender.colour == "5F9EA0"), sender.colour);
+            assert((sender.id == 22216721), sender.id.to!string);
+            assert((channel == "#zorael"), channel);
+            assert((content == "this is a test announcement"), content);
+            assert((aux == "PURPLE"), aux);
+            assert((tags == "badge-info=;badges=broadcaster/1;color=#5F9EA0;display-name=zorael;emotes=;flags=;id=d312a414-a1d3-45b1-abd1-2b3b11b65eb7;login=zorael;mod=0;msg-id=announcement;msg-param-color=PURPLE;room-id=22216721;subscriber=0;system-msg=;tmi-sent-ts=1648851705977;user-id=22216721;user-type="), tags);
+            assert((id == "d312a414-a1d3-45b1-abd1-2b3b11b65eb7"), id);
+        }
+    }
 }
