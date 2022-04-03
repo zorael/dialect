@@ -545,8 +545,8 @@ struct IRCEvent
         ERR_NEEDREGGEDNICK, // = 477    // <nickname> <channel> :Cannot join channel (+r) - you need to be identified with services
         ERR_BANLISTFULL, // = 478,
         ERR_NOCOLOR, // = 479,          // CONFLICT
-        ERR_BADCHANNAME, // = 479,      // CONFLICT
-        ERR_LINKFAIL, // = 479,
+        ERR_BADCHANNAME, // = 479,
+        ERR_LINKFAIL, // = 479,         // CONFLICT
         ERR_THROTTLE, // = 480,         // CONFLICT
         ERR_NOWALLOP, // = 480,         // CONFLICT
         ERR_SSLONLYCHAN, // = 480,      // CONFLICT
@@ -1580,7 +1580,7 @@ struct Typenums
         476 : Type.ERR_BADCHANMASK,
         477 : Type.ERR_NEEDREGGEDNICK,
         478 : Type.ERR_BANLISTFULL,
-        479 : Type.ERR_LINKFAIL,
+        479 : Type.ERR_BADCHANNAME,
         480 : Type.ERR_CANNOTKNOCK,
         481 : Type.ERR_NOPRIVILEGES,
         482 : Type.ERR_CHANOPRIVSNEEDED,
