@@ -195,4 +195,4 @@ The output will by default also be saved to a `unittest.log` file in the current
 
 ## License
 
-This project is licensed under the **MIT** license - see the [LICENSE](LICENSE) file for details.
+This project is licensed under the **Boost Software License 1.0** - see the [LICENSE_1_0.txt](LICENSE_1_0.txt) file for details.
