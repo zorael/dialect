@@ -795,11 +795,15 @@ void parseSpecialcases(ref IRCParser parser, ref IRCEvent event, ref string slic
     case ERR_UNKNOWNCOMMAND: // 421
         // <command> :Unknown command
         slice.nom(' ');  // bot nickname
-        if (slice.contains(':'))
+        if (slice.contains(" :Unknown command"))
         {
+            import std.string : lastIndexOf;
             // :asimov.freenode.net 421 kameloso^ sudo :Unknown command
-            event.aux = slice.nom(" :");
-            event.content = slice;
+            // :tmi.twitch.tv 421 kamelosobot ZORAEL!ZORAEL@TMI.TWITCH.TV PRIVMSG #ZORAEL :HELLO :Unknown command
+            immutable spaceColonPos = slice.lastIndexOf(" :");
+            event.aux = slice[0..spaceColonPos];
+            event.content = slice[spaceColonPos+2..$];
+            slice = string.init;
         }
         else
         {
