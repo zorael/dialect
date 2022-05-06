@@ -2,12 +2,6 @@
 
 IRC parsing library.
 
-It uses exceptions to signal errors during parsing, so it's not `nothrow`. Some parts of it create new strings, so it can't be `@nogc`. It is however `pure` and `@safe` with the default "library" build configuration.
-
-Note that while IRC is standardised, servers still come in [many flavours](https://upload.wikimedia.org/wikipedia/commons/thumb/d/d5/IRCd_software_implementations3.svg/1533px-IRCd_software_implementations3.svg.png), some of which [outright conflict](http://defs.ircdocs.horse/defs/numerics.html) with others. If something doesn't immediately work, generally it's because we simply haven't encountered that type of event before, and so no rules for how to parse it have yet been written.
-
-**Please report bugs. Unreported bugs can only be fixed by accident.**
-
 ## What it looks like
 
 API documentation can be found [here](http://dialect.dpldocs.info).
@@ -182,6 +176,12 @@ Enter server address (irc.freenode.net): irc.server.tld
 ```
 
 The output will by default also be saved to a `unittest.log` file in the current directory. See the `--help` listing for more details, passed through dub with `dub run :assertgen -- --help`.
+
+## Caveats
+
+Note that while IRC is standardised, servers still come in [many flavours](https://upload.wikimedia.org/wikipedia/commons/thumb/d/d5/IRCd_software_implementations3.svg/1533px-IRCd_software_implementations3.svg.png), some of which [outright conflict](http://defs.ircdocs.horse/defs/numerics.html) with others.
+
+**Please report bugs. Unreported bugs can only be fixed by accident.**
 
 ## Roadmap
 
