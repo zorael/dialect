@@ -1160,4 +1160,15 @@ unittest
             assert((id == "d312a414-a1d3-45b1-abd1-2b3b11b65eb7"), id);
         }
     }
+    {
+        immutable event = parser.toIRCEvent(":tmi.twitch.tv 421 kamelosobot ZORAEL!ZORAEL@TMI.TWITCH.TV PRIVMSG #ZORAEL :HELLO :Unknown command");
+        with (event)
+        {
+            assert((type == IRCEvent.Type.ERR_UNKNOWNCOMMAND), Enum!(IRCEvent.Type).toString(type));
+            assert((sender.address == "tmi.twitch.tv"), sender.address);
+            assert((content == "Unknown command"), content);
+            assert((aux == "ZORAEL!ZORAEL@TMI.TWITCH.TV PRIVMSG #ZORAEL :HELLO"), aux);
+            assert((num == 421), num.to!string);
+        }
+    }
 }
