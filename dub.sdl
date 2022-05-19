@@ -7,7 +7,7 @@ license "BSL-1.0"
 
 targetType "library"
 dflags "-dip25" "-dip1008"
-dflags "-linkonce-templates" platform="ldc"
+#dflags "-linkonce-templates" platform="ldc"
 x:ddoxTool "scod"
 
 subPackage {
