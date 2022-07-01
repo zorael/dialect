@@ -1171,4 +1171,24 @@ unittest
             assert((num == 421), num.to!string);
         }
     }
+    {
+        immutable event = parser.toIRCEvent("@badge-info=subscriber/7;badges=subscriber/6;client-nonce=fc6c123438b3a146a8a6683af5bbb94e;color=#1E90FF;display-name=LonesomeWalker91;emotes=;first-msg=0;flags=;id=1799090a-f43f-4078-a547-d2008552d2d2;mod=0;returning-chatter=0;room-id=22510310;subscriber=1;tmi-sent-ts=1656536970406;turbo=0;user-id=149935854;user-type= :lonesomewalker91!lonesomewalker91@lonesomewalker91.tmi.twitch.tv PRIVMSG #gamesdonequick :take BULBA!");
+        with (event)
+        {
+            assert((type == IRCEvent.Type.CHAN), Enum!(IRCEvent.Type).toString(type));
+            assert((sender.nickname == "lonesomewalker91"), sender.nickname);
+            assert((sender.ident == "lonesomewalker91"), sender.ident);
+            assert((sender.address == "lonesomewalker91.tmi.twitch.tv"), sender.address);
+            assert((sender.account == "lonesomewalker91"), sender.account);
+            assert((sender.displayName == "LonesomeWalker91"), sender.displayName);
+            assert((sender.badges == "subscriber/6"), sender.badges);
+            assert((sender.colour == "1E90FF"), sender.colour);
+            assert((sender.id == 149935854), sender.id.to!string);
+            assert((channel == "#gamesdonequick"), channel);
+            assert((content == "take BULBA!"), content);
+            assert((tags == "badge-info=subscriber/7;badges=subscriber/6;client-nonce=fc6c123438b3a146a8a6683af5bbb94e;color=#1E90FF;display-name=LonesomeWalker91;emotes=;first-msg=0;flags=;id=1799090a-f43f-4078-a547-d2008552d2d2;mod=0;returning-chatter=0;room-id=22510310;subscriber=1;tmi-sent-ts=1656536970406;turbo=0;user-id=149935854;user-type="), tags);
+            assert((id == "1799090a-f43f-4078-a547-d2008552d2d2"), id);
+        }
+    }
+
 }

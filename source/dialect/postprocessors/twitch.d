@@ -1070,6 +1070,9 @@ auto parseTwitchTags(ref IRCParser parser, ref IRCEvent event)
                 // msg-param-goal-current-contributions = 90
             case "msg-param-goal-user-contributions":
                 // msg-param-goal-user-contributions = 1
+            case "returning-chatter":
+                // returning-chatter = 0
+                // Unsure.
 
                 // Ignore these events.
                 break;
