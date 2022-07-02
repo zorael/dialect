@@ -317,6 +317,9 @@ int main(string[] args) @system
 
     enum defaultOutputFilename = "unittest.log";
 
+    string nicknameOverride;
+    string userOverride;
+    string identOverride;
     string outputFile = defaultOutputFilename;
     bool overwrite;
     bool twitch;
@@ -335,6 +338,15 @@ int main(string[] args) @system
         auto results = getopt(args,
             config.caseSensitive,
             config.bundling,
+            "n|nickname",
+                "Override initial nickname",
+                &nicknameOverride,
+            "u|user",
+                "Override initial user",
+                &userOverride,
+            "i|ident",
+                "Override initial ident",
+                &identOverride,
             "o|output",
                 "Output file (specify '-' to disable) [" ~ defaultOutputFilename ~ "]",
                 &outputFile,
@@ -391,9 +403,9 @@ int main(string[] args) @system
             with (parser.client)
             {
                 // nickname, user and ident are always identical
-                nickname = "kameloso";
-                user = "kameloso";
-                ident = "kameloso";
+                nickname = nicknameOverride.length ? nicknameOverride : "kameloso";
+                user = nickname;
+                ident = nickname;
                 //realName = "kameloso IRC bot";  // Not used on Twitch
             }
 
@@ -421,9 +433,9 @@ int main(string[] args) @system
         // Provide skeletal user defaults.
         with (parser.client)
         {
-            nickname = "kameloso";
-            user = "kameloso";
-            ident = "~kameloso";
+            nickname = nicknameOverride.length ? nicknameOverride : "kameloso";
+            user = userOverride.length ? userOverride : "kameloso";
+            ident = identOverride.length ? identOverride : "~kameloso";
             realName = "kameloso IRC bot";
         }
 
