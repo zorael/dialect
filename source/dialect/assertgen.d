@@ -81,6 +81,7 @@ version(AssertGeneration):
 private:
 
 import dialect.defs;
+import dialect.parsing : IRCParser;
 import lu.deltastrings : formatDeltaInto;
 import std.range.primitives : isOutputRange;
 import std.typecons : Flag, No, Yes;
@@ -209,7 +210,6 @@ if (isOutputRange!(Sink, char[]))
 ///
 unittest
 {
-    import dialect.parsing : IRCParser;
     import lu.string : tabs;
     import std.array : Appender;
     import std.format : formattedWrite;
@@ -248,6 +248,52 @@ unittest
 }
 
 
+// inputServerInformation
+/++
+    Asks the user to input server information via standard input.
+
+    Params:
+        parser = [dialect.parsing.IRCParser] to populate with information.
+ +/
+void inputServerInformation(ref IRCParser parser) @system
+{
+    import dialect.common : typenumsOf;
+    import lu.conv : Enum;
+    import lu.string : nom, stripped;
+    import std.range : chunks, only;
+    import std.traits : EnumMembers;
+    import std.stdio : readln, stdin, stdout, write, writefln, writeln;
+
+    writeln("-- Available daemons --");
+    writefln("%(%(%-14s%)\n%)", EnumMembers!(IRCServer.Daemon).only.chunks(3));
+    writeln();
+
+    write("Enter daemon [optional daemon literal] (solanum): ");
+    stdout.flush();
+    stdin.flush();
+    string slice = readln().stripped;  // mutable so we can nom it
+    immutable daemonstring = slice.nom!(Yes.inherit)(' ');
+    immutable daemonLiteral = slice.length ? slice : daemonstring;
+
+    parser.server.daemon = daemonstring.length ?
+        Enum!(IRCServer.Daemon).fromString(daemonstring) : IRCServer.Daemon.solanum;
+    parser.typenums = typenumsOf(parser.server.daemon);
+    parser.server.daemonstring = daemonLiteral;
+
+    write("Enter network (Libera.Chat): ");
+    stdout.flush();
+    stdin.flush();
+    parser.server.network = readln().stripped;
+    if (!parser.server.network.length) parser.server.network = "Libera.Chat";
+
+    write("Enter server address (irc.libera.chat): ");
+    stdout.flush();
+    stdin.flush();
+    parser.server.address = readln().stripped;
+    if (!parser.server.address.length) parser.server.address = "irc.libera.chat";
+}
+
+
 public:
 
 
@@ -263,25 +309,29 @@ else
 int main(string[] args) @system
 {
     import dialect.defs : IRCServer;
-    import dialect.parsing : IRCParser;
-    import lu.string : contains, nom, stripped, strippedLeft, strippedRight;
+    import lu.string : strippedLeft;
     import std.array : Appender;
-    import std.conv : ConvException;
-    import std.format : formattedWrite;
     import std.getopt : GetOptException, config, getopt;
-    import std.range : chunks, only;
-    import std.stdio : File, readln, stdin, stdout, write, writeln, writefln;
+    import std.stdio : File, readln, stdin, stdout, write, writefln, writeln;
     import std.string : chomp;
-    import std.traits : EnumMembers;
-    import std.typecons : No, Yes;
 
     enum defaultOutputFilename = "unittest.log";
 
     string outputFile = defaultOutputFilename;
     bool overwrite;
+    bool twitch;
 
     try
     {
+        version(TwitchSupport)
+        {
+            enum twitchString = "Shortcut to Twitch input";
+        }
+        else
+        {
+            enum twitchString = "(Only available when compiled with Twitch support)";
+        }
+
         auto results = getopt(args,
             config.caseSensitive,
             config.bundling,
@@ -291,6 +341,9 @@ int main(string[] args) @system
             "O|overwrite",
                 "Overwrite file instead of appending to it",
                 &overwrite,
+            "twitch",
+                twitchString,
+                &twitch,
         );
 
         if (results.helpWanted)
@@ -319,68 +372,73 @@ int main(string[] args) @system
 
     if (outputFile.length)
     {
-        writefln("Writing output to %s, overwrite:%s\n", outputFile, overwrite);
+        writefln("Writing output to %s, overwrite:%s", outputFile, overwrite);
     }
 
-    writeln("-- Available daemons --");
-    writefln("%(%(%-14s%)\n%)", EnumMembers!(IRCServer.Daemon).only.chunks(3));
-    writeln();
-
-    write("Enter daemon [optional daemon literal] (solanum): ");
-    stdout.flush();
-    string slice = readln().stripped;  // mutable so we can nom it
-    immutable daemonstring = slice.nom!(Yes.inherit)(' ');
-    immutable daemonLiteral = slice.length ? slice : daemonstring;
-
-    try
+    version (TwitchSupport)
     {
-        import dialect.common : typenumsOf;
-        import lu.conv : Enum;
+        if (twitch)
+        {
+            import dialect.common : typenumsOf;
 
-        parser.server.daemon = daemonstring.length ?
-            Enum!(IRCServer.Daemon).fromString(daemonstring) : IRCServer.Daemon.solanum;
-        parser.typenums = typenumsOf(parser.server.daemon);
-        parser.server.daemonstring = daemonLiteral;
+            parser.server.daemon = IRCServer.Daemon.twitch;
+            parser.typenums = typenumsOf(IRCServer.Daemon.twitch);
+            parser.server.network = "Twitch";
+            parser.server.daemonstring = "twitch";
+            parser.server.address = "irc.chat.twitch.tv";
+
+            // Provide skeletal user defaults.
+            with (parser.client)
+            {
+                // nickname, user and ident are always identical
+                nickname = "kameloso";
+                user = "kameloso";
+                ident = "kameloso";
+                //realName = "kameloso IRC bot";  // Not used on Twitch
+            }
+
+            writeln("Server set to Twitch as per command-line argument.");
+        }
     }
-    catch (ConvException e)
+
+    if (!twitch)
     {
-        writeln();
-        writeln("-- Conversion exception caught when parsing daemon: ", e.msg);
-        version(PrintStacktraces) writeln(e.info);
-        stdout.flush();
-        return 1;
+        import std.conv : ConvException;
+
+        try
+        {
+            inputServerInformation(parser);
+        }
+        catch (ConvException e)
+        {
+            writeln();
+            writeln("-- Conversion exception caught when parsing daemon: ", e.msg);
+            version(PrintStacktraces) writeln(e.info);
+            stdout.flush();
+            return 1;
+        }
+
+        // Provide skeletal user defaults.
+        with (parser.client)
+        {
+            nickname = "kameloso";
+            user = "kameloso";
+            ident = "~kameloso";
+            realName = "kameloso IRC bot";
+        }
+
+        // Provide Libera.Chat defaults here, now that they're no longer in IRCServer.init
+        // If we need different values we'll have to provide a RPL_MYINFO event.
+        with (parser.server)
+        {
+            aModes = "eIbq";
+            bModes = "k";
+            cModes = "flj";
+            dModes = "CFLMPQScgimnprstuz";
+            prefixes = "ov";
+            prefixchars = [ 'o' : '@', 'v' : '+' ];
+        }
     }
-
-    write("Enter network (Libera.Chat): ");
-    stdout.flush();
-    immutable network = readln().stripped;
-    parser.server.network = network.length ? network : "Libera.Chat";
-
-    // Provide skeletal user defaults.
-    with (parser.client)
-    {
-        nickname = "kameloso";
-        user = "kameloso";
-        ident = "~kameloso";
-        realName = "kameloso IRC bot";
-    }
-
-    // Provide Libera.Chat defaults here, now that they're no longer in IRCServer.init
-    // If we need different values we'll have to provide a RPL_MYINFO event.
-    with (parser.server)
-    {
-        aModes = "eIbq";
-        bModes = "k";
-        cModes = "flj";
-        dModes = "CFLMPQScgimnprstuz";
-        prefixes = "ov";
-        prefixchars = [ 'o' : '@', 'v' : '+' ];
-    }
-
-    write("Enter server address (irc.libera.chat): ");
-    stdout.flush();
-    parser.server.address = readln().stripped;
-    if (!parser.server.address.length) parser.server.address = "irc.libera.chat";
 
     enum scissors = "8<  --  8<  --  8<  --  8<  --  8<  --  8<  --  8<  --  8<  --  8<";
 
@@ -438,6 +496,7 @@ int main(string[] args) @system
     while ((input = readln()) !is null)
     {
         import dialect.common : IRCParseException;
+        import std.format : formattedWrite;
 
         scope(exit)
         {
