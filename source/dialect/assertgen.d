@@ -263,6 +263,7 @@ void inputServerInformation(ref IRCParser parser) @system
     import std.range : chunks, only;
     import std.traits : EnumMembers;
     import std.stdio : readln, stdin, stdout, write, writefln, writeln;
+    import std.uni : toLower;
 
     writeln("-- Available daemons --");
     writefln("%(%(%-14s%)\n%)", EnumMembers!(IRCServer.Daemon).only.chunks(3));
@@ -272,7 +273,7 @@ void inputServerInformation(ref IRCParser parser) @system
     stdout.flush();
     stdin.flush();
     string slice = readln().stripped;  // mutable so we can nom it
-    immutable daemonstring = slice.nom!(Yes.inherit)(' ');
+    immutable daemonstring = slice.nom!(Yes.inherit)(' ').toLower;
     immutable daemonLiteral = slice.length ? slice : daemonstring;
 
     parser.server.daemon = daemonstring.length ?
