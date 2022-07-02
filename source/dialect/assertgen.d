@@ -452,17 +452,14 @@ int main(string[] args) @system
         }
     }
 
-    enum scissors = "8<  --  8<  --  8<  --  8<  --  8<  --  8<  --  8<  --  8<  --  8<";
+    enum scissors = "\n8<  --  8<  --  8<  --  8<  --  8<  --  8<  --  8<  --  8<  --  8<\n";
 
     buffer.formatClientAssignment(parser.client, parser.server);
-    buffer.put("\n\nparser.typenums = typenumsOf(parser.server.daemon);\n");
+    buffer.put("\n\nparser.typenums = typenumsOf(parser.server.daemon);");
 
-    writeln();
     writeln(scissors);
-    writeln();
     writeln(buffer.data);
     writeln(scissors);
-    writeln();
     writeln("// Paste a raw event string and hit Enter to generate an assert block. " ~
         "Ctrl+C to exit.");
     writeln();
