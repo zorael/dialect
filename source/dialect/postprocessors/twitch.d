@@ -1073,6 +1073,9 @@ auto parseTwitchTags(ref IRCParser parser, ref IRCEvent event)
             case "returning-chatter":
                 // returning-chatter = 0
                 // Unsure.
+            case "vip":
+                // vip = 1
+                // Whether or not the sender is a VIP. Superfluous; we can tell from the badges
 
                 // Ignore these events.
                 break;
