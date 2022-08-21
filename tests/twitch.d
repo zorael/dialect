@@ -1190,5 +1190,22 @@ unittest
             assert((id == "1799090a-f43f-4078-a547-d2008552d2d2"), id);
         }
     }
-
+    {
+        immutable event = parser.toIRCEvent("@badge-info=subscriber/39;badges=vip/1,subscriber/36,partner/1;client-nonce=fb285f92d8391e2d192e7e6fc7c65cae;color=;display-name=bacter1a_;emotes=;first-msg=0;flags=;id=cba41a74-9335-4bd5-bb95-a9467187c221;mod=0;returning-chatter=0;room-id=49207184;subscriber=1;tmi-sent-ts=1661079096568;turbo=0;user-id=28510438;user-type=;vip=1 :bacter1a_!bacter1a_@bacter1a_.tmi.twitch.tv PRIVMSG #fps_shaka :content");
+        with (event)
+        {
+            assert((type == IRCEvent.Type.CHAN), Enum!(IRCEvent.Type).toString(type));
+            assert((sender.nickname == "bacter1a_"), sender.nickname);
+            assert((sender.ident == "bacter1a_"), sender.ident);
+            assert((sender.address == "bacter1a_.tmi.twitch.tv"), sender.address);
+            assert((sender.account == "bacter1a_"), sender.account);
+            assert((sender.displayName == "bacter1a_"), sender.displayName);
+            assert((sender.badges == "vip/1,subscriber/36,partner/1"), sender.badges);
+            assert((sender.id == 28510438), sender.id.to!string);
+            assert((channel == "#fps_shaka"), channel);
+            assert((content == "content"), content);
+            assert((tags == "badge-info=subscriber/39;badges=vip/1,subscriber/36,partner/1;client-nonce=fb285f92d8391e2d192e7e6fc7c65cae;color=;display-name=bacter1a_;emotes=;first-msg=0;flags=;id=cba41a74-9335-4bd5-bb95-a9467187c221;mod=0;returning-chatter=0;room-id=49207184;subscriber=1;tmi-sent-ts=1661079096568;turbo=0;user-id=28510438;user-type=;vip=1"), tags);
+            assert((id == "cba41a74-9335-4bd5-bb95-a9467187c221"), id);
+        }
+    }
 }
