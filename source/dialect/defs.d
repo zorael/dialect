@@ -1067,6 +1067,7 @@ struct IRCUser
         anyone,     /// Any user.
         registered, /// A user registered with services.
         whitelist,  /// A whitelisted user.
+        elevated,   /// An elevated user, something in between `whitelist` and `operator`.
         operator,   /// A user enjoying operator (or moderator) privileges.
         staff,      /// The owner of a channel; an elevated user but not a full administrator.
         admin,      /// An administrator, in a bot-like context.
