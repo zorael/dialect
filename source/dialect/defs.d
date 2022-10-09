@@ -1060,22 +1060,28 @@ struct IRCServer
  +/
 struct IRCUser
 {
-    /// Classifiers; roles which a user is one of.
-    enum Class
-    {
-        unset,      /// Unknown, yet to be determined.
-        blacklist,  /// A blacklisted user.
-        anyone,     /// Any user.
-        registered, /// A user registered with services.
-        whitelist,  /// A whitelisted user.
-        elevated,   /// An elevated user, something in between `whitelist` and `operator`.
-        operator,   /// A user enjoying operator (or moderator) privileges.
-        staff,      /// The owner of a channel; an elevated user but not a full administrator.
-        admin,      /// An administrator, in a bot-like context.
-    }
-
     /// The user's nickname.
     string nickname;
+
+    version(BotElements)
+    {
+        /// Classifiers; roles which a user is one of.
+        enum Class
+        {
+            unset,      /// Unknown, yet to be determined.
+            blacklist,  /// A blacklisted user.
+            anyone,     /// Any user.
+            registered, /// A user registered with services.
+            whitelist,  /// A whitelisted user.
+            elevated,   /// An elevated user, something in between `whitelist` and `operator`.
+            operator,   /// A user enjoying operator (or moderator) privileges.
+            staff,      /// The owner of a channel; an elevated user but not a full administrator.
+            admin,      /// An administrator, in a bot-like context.
+        }
+
+        /// User classifier.
+        Class class_;
+    }
 
     /// The user's GECOS/"real name".
     string realName;
@@ -1091,9 +1097,6 @@ struct IRCUser
 
     /// Timestamp when the user was last modified.
     @Hidden long updated;
-
-    /// User classifier.
-    Class class_;
 
     version(TwitchSupport)
     {

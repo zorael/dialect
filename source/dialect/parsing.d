@@ -1421,7 +1421,7 @@ void parseSpecialcases(ref IRCParser parser, ref IRCEvent event, ref string slic
         slice.nom(' '); // bot nickname
         event.sender.nickname = slice.nom(" :");
         event.sender.address = string.init;
-        event.sender.class_ = IRCUser.Class.unset;
+        version(BotElements) event.sender.class_ = IRCUser.Class.unset;
         event.content = slice;
         break;
 
