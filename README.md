@@ -28,9 +28,12 @@ struct IRCEvent
 
 struct IRCUser
 {
-    enum Class { ... }  // enum of IRC user types; operator, staff, and similar
+    version(BotElements)
+    {
+        enum Class { ... }  // enum of IRC user types; operator, staff, and similar
+        Class class_;
+    }
 
-    Class class_;
     string nickname;
     string realName;
     string ident;
@@ -126,7 +129,7 @@ with (event2)
     assert(num == 435);
 }
 
-// Requires Twitch support via build configuration "twitch"
+// Requires Twitch support via build configuration "twitch" or "twitchagnostic"
 string fullExample = "@badge-info=subscriber/15;badges=subscriber/12;color=;display-name=SomeoneOnTwitch;emotes=;flags=;id=d6729804-2bf3-495d-80ce-a2fe8ed00a26;login=someoneontwitch;mod=0;msg-id=submysterygift;msg-param-mass-gift-count=1;msg-param-origin-id=49\\s9d\\s3e\\s68\\sca\\s26\\se9\\s2a\\s6e\\s44\\sd4\\s60\\s9b\\s3d\\saa\\sb9\\s4c\\sad\\s43\\s5c;msg-param-sender-count=4;msg-param-sub-plan=1000;room-id=71092938;subscriber=1;system-msg=someoneOnTwitch\\sis\\sgifting\\s1\\sTier\\s1\\sSubs\\sto\\sxQcOW's\\scommunity!\\sThey've\\sgifted\\sa\\stotal\\sof\\s4\\sin\\sthe\\schannel!;tmi-sent-ts=1569013433362;user-id=224578549;user-type= :tmi.twitch.tv USERNOTICE #xqcow"
 IRCEvent event3 = parser.toIRCEvent(fullExample);
 
