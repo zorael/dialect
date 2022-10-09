@@ -24,6 +24,7 @@ subPackage {
     mainSourceFile "source/dialect/assertgen.d"
 
     versions \
+        "BotElements" \
         "FlagAsUpdated" \
         "TwitchSupport" \
         "TwitchWarnings" \
@@ -38,30 +39,57 @@ importPaths "source"
 
 versions "FlagAsUpdated"
 
+/**
+    library: Meant to be used in a bot
+ */
 configuration "library" {
+    excludedSourceFiles "source/dialect/assertgen.d"
+    versions \
+        "BotElements"
+}
+
+/**
+    agnostic: With no bot elements
+ */
+configuration "agnostic" {
     excludedSourceFiles "source/dialect/assertgen.d"
 }
 
+/**
+    twitch: Meant to be used in a bot with Twitch support
+ */
 configuration "twitch" {
     excludedSourceFiles "source/dialect/assertgen.d"
-
     versions \
         "TwitchSupport"
 }
 
+/**
+    twitchagnostic: With no bot elements nor Twitch support
+ */
+configuration "twitchagnostic" {
+    excludedSourceFiles "source/dialect/assertgen.d"
+}
+
+/**
+    dev: Developer build with more warnings
+ */
 configuration "dev" {
     excludedSourceFiles "source/dialect/assertgen.d"
-
     versions \
+        "BotElements" \
         "TwitchSupport" \
         "TwitchWarnings"
 }
 
+/**
+    unittest: Unittest build testing everything
+ */
 configuration "unittest" {
     sourcePaths "source" "tests"
     importPaths "source" "tests"
-
     versions \
+        "BotElements" \
         "TwitchSupport" \
         "TwitchWarnings" \
         "PrintStacktraces" \
