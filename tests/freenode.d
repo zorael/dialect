@@ -278,7 +278,6 @@ unittest
     {
         immutable event = parser.toIRCEvent(":livingstone.freenode.net 249 kameloso p :dax (dax@freenode/staff/dax)");
         with (IRCEvent.Type)
-        with (IRCUser.Class)
         with (event)
         {
             assert((type == RPL_STATSDEBUG), Enum!(IRCEvent.Type).toString(type));
@@ -291,7 +290,6 @@ unittest
     {
         immutable event = parser.toIRCEvent(":livingstone.freenode.net 219 kameloso p :End of /STATS report");
         with (IRCEvent.Type)
-        with (IRCUser.Class)
         with (event)
         {
             assert((type == RPL_ENDOFSTATS), Enum!(IRCEvent.Type).toString(type));

@@ -89,7 +89,6 @@ unittest
     {
         immutable event = parser.toIRCEvent(":Iasdf666!~Iasdf666@The.Breakfast.Club PRIVMSG #uk :be more welcoming you negative twazzock");
         with (IRCEvent.Type)
-        with (IRCUser.Class)
         with (event)
         {
             assert((type == CHAN), Enum!(IRCEvent.Type).toString(type));
@@ -103,7 +102,6 @@ unittest
     {
         immutable event = parser.toIRCEvent(":gallon!~MO.11063@482c29a5.e510bf75.97653814.IP4 PART :#cncnet-yr");
         with (IRCEvent.Type)
-        with (IRCUser.Class)
         with (event)
         {
             assert((type == PART), Enum!(IRCEvent.Type).toString(type));
@@ -157,7 +155,6 @@ unittest
     {
         immutable event = parser.toIRCEvent(":irc.portlane.se 020 * :Please wait while we process your connection.");
         with (IRCEvent.Type)
-        with (IRCUser.Class)
         with (event)
         {
             assert((type == RPL_HELLO), Enum!(IRCEvent.Type).toString(type));

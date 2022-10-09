@@ -177,7 +177,6 @@ unittest
     {
         immutable event = parser.toIRCEvent(":medusa.us.SpotChat.org 005 kameloso AWAYLEN=200 CALLERID=g CASEMAPPING=rfc1459 CHANMODES=Ibeg,k,Jl,ACKMNOPQRSTcimnprstz CHANNELLEN=64 CHANTYPES=# CHARSET=ascii ELIST=MU EXCEPTS=e EXTBAN=,ACNOQRSTUcmz FNC INVEX=I KICKLEN=255 :are supported by this server");
         with (IRCEvent.Type)
-        with (IRCUser.Class)
         with (event)
         {
             assert((type == RPL_ISUPPORT), Enum!(IRCEvent.Type).toString(type));

@@ -89,7 +89,6 @@ unittest
     {
         immutable event = parser.toIRCEvent(":irc.atw-inter.net 344 kameloso #debian.de towo!towo@littlelamb.szaf.org");
         with (IRCEvent.Type)
-        with (IRCUser.Class)
         with (event)
         {
             assert((type == RPL_REOPLIST), Enum!(IRCEvent.Type).toString(type));
@@ -102,7 +101,6 @@ unittest
     {
         immutable event = parser.toIRCEvent(":irc.atw-inter.net 345 kameloso #debian.de :End of Channel Reop List");
         with (IRCEvent.Type)
-        with (IRCUser.Class)
         with (event)
         {
             assert((type == RPL_ENDOFREOPLIST), Enum!(IRCEvent.Type).toString(type));
