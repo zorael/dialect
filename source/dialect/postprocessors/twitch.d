@@ -52,7 +52,7 @@ auto parseTwitchTags(ref IRCParser parser, ref IRCEvent event)
         static void appendToErrors(ref IRCEvent event, const string msg)
         {
             import std.conv : text;
-            immutable punctuation = (event.errors.length ? ". " : string.init);
+            immutable punctuation = (event.errors.length ? " | " : string.init);
             event.errors ~= text(punctuation, msg);
         }
 
