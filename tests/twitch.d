@@ -1208,4 +1208,46 @@ unittest
             assert((id == "cba41a74-9335-4bd5-bb95-a9467187c221"), id);
         }
     }
+    {
+        // @badge-info=subscriber/30;badges=subscriber/30,premium/1;color=#00FF7F;display-name=SilvergunRP;emotes=;flags=;id=8071df4a-29c7-4fe2-867e-7558a9e4efb0;login=silvergunrp;mod=0;msg-id=midnightsquid;msg-param-amount=600;msg-param-currency=BRL;msg-param-emote-id=emotesv2_4c4b1157b8d34edba9bcb0aa8198197f;msg-param-exponent=2;msg-param-is-highlighted=false;msg-param-pill-type=Success;room-id=181077473;subscriber=1;system-msg=SilvergunRP\sCheered\swith\sR$6.00;tmi-sent-ts=1665339696298;user-id=238696431;user-type= :tmi.twitch.tv USERNOTICE #gaules
+        immutable event = parser.toIRCEvent("@badge-info=subscriber/30;badges=subscriber/30,premium/1;color=#00FF7F;display-name=SilvergunRP;emotes=;flags=;id=8071df4a-29c7-4fe2-867e-7558a9e4efb0;login=silvergunrp;mod=0;msg-id=midnightsquid;msg-param-amount=600;msg-param-currency=BRL;msg-param-emote-id=emotesv2_4c4b1157b8d34edba9bcb0aa8198197f;msg-param-exponent=2;msg-param-is-highlighted=false;msg-param-pill-type=Success;room-id=181077473;subscriber=1;system-msg=SilvergunRP\\sCheered\\swith\\sR$6.00;tmi-sent-ts=1665339696298;user-id=238696431;user-type= :tmi.twitch.tv USERNOTICE #gaules");
+        with (event)
+        {
+            assert((type == IRCEvent.Type.TWITCH_DIRECTCHEER), Enum!(IRCEvent.Type).toString(type));
+            assert((sender.nickname == "silvergunrp"), sender.nickname);
+            assert((sender.address == "tmi.twitch.tv"), sender.address);
+            assert((sender.account == "silvergunrp"), sender.account);
+            assert((sender.displayName == "SilvergunRP"), sender.displayName);
+            assert((sender.badges == "subscriber/30,premium/1"), sender.badges);
+            assert((sender.colour == "00FF7F"), sender.colour);
+            assert((sender.id == 238696431), sender.id.to!string);
+            assert((channel == "#gaules"), channel);
+            assert((content == "SilvergunRP Cheered with R$6.00"), content);
+            assert((aux == "BRL"), aux);
+            assert((tags == "badge-info=subscriber/30;badges=subscriber/30,premium/1;color=#00FF7F;display-name=SilvergunRP;emotes=;flags=;id=8071df4a-29c7-4fe2-867e-7558a9e4efb0;login=silvergunrp;mod=0;msg-id=midnightsquid;msg-param-amount=600;msg-param-currency=BRL;msg-param-emote-id=emotesv2_4c4b1157b8d34edba9bcb0aa8198197f;msg-param-exponent=2;msg-param-is-highlighted=false;msg-param-pill-type=Success;room-id=181077473;subscriber=1;system-msg=SilvergunRP\\sCheered\\swith\\sR$6.00;tmi-sent-ts=1665339696298;user-id=238696431;user-type="), tags);
+            assert((count == 600), count.to!string);
+            assert((id == "8071df4a-29c7-4fe2-867e-7558a9e4efb0"), id);
+        }
+    }
+    {
+        immutable event = parser.toIRCEvent("@badge-info=;badges=glhf-pledge/1;color=#FF69B4;display-name=bethiehem;emotes=;first-msg=0;flags=;id=2ff6d2fb-7a9a-47f3-b64a-01b9abf08765;mod=0;pinned-chat-paid-amount=500;pinned-chat-paid-canonical-amount=5;pinned-chat-paid-currency=USD;pinned-chat-paid-exponent=2;returning-chatter=0;room-id=125387632;subscriber=0;tmi-sent-ts=1665358650971;turbo=0;user-id=478167598;user-type= :bethiehem!bethiehem@bethiehem.tmi.twitch.tv PRIVMSG #amouranth :Can we get a L for the camera guy pls?");
+        with (event)
+        {
+            assert((type == IRCEvent.Type.CHAN), Enum!(IRCEvent.Type).toString(type));
+            assert((sender.nickname == "bethiehem"), sender.nickname);
+            assert((sender.ident == "bethiehem"), sender.ident);
+            assert((sender.address == "bethiehem.tmi.twitch.tv"), sender.address);
+            assert((sender.account == "bethiehem"), sender.account);
+            assert((sender.displayName == "bethiehem"), sender.displayName);
+            assert((sender.badges == "glhf-pledge/1"), sender.badges);
+            assert((sender.colour == "FF69B4"), sender.colour);
+            assert((sender.id == 478167598), sender.id.to!string);
+            assert((channel == "#amouranth"), channel);
+            assert((content == "Can we get a L for the camera guy pls?"), content);
+            assert((aux == "USD"), aux);
+            assert((tags == "badge-info=;badges=glhf-pledge/1;color=#FF69B4;display-name=bethiehem;emotes=;first-msg=0;flags=;id=2ff6d2fb-7a9a-47f3-b64a-01b9abf08765;mod=0;pinned-chat-paid-amount=500;pinned-chat-paid-canonical-amount=5;pinned-chat-paid-currency=USD;pinned-chat-paid-exponent=2;returning-chatter=0;room-id=125387632;subscriber=0;tmi-sent-ts=1665358650971;turbo=0;user-id=478167598;user-type="), tags);
+            assert((count == 500), count.to!string);
+            assert((id == "2ff6d2fb-7a9a-47f3-b64a-01b9abf08765"), id);
+        }
+    }
 }
