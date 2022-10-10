@@ -509,6 +509,12 @@ auto parseTwitchTags(ref IRCParser parser, ref IRCEvent event)
                 event.aux = msgID;
                 break;
 
+            case "midnightsquid":
+                // New direct cheer with real currency
+                event.type = TWITCH_DIRECTCHEER;
+                //event.aux = msgID;  // reserve for msg-param-currency
+                break;
+
             default:
                 import lu.string : beginsWith;
 
@@ -710,6 +716,10 @@ auto parseTwitchTags(ref IRCParser parser, ref IRCEvent event)
             // msg-param-color = PRIMARY
             // msg-param-color = PURPLE
             // seen in a TWITCH_ANNOUNCEMENT
+        case "msg-param-currency":
+            // New midnightsquid direct cheer currency
+        case "pinned-chat-paid-currency":
+            // elevated message currency
 
             version(TwitchWarnings)
             {
@@ -772,6 +782,10 @@ auto parseTwitchTags(ref IRCParser parser, ref IRCEvent event)
             // RAID; viewer count of raiding channel
             // msg-param-viewerCount = '9'
         //case "bits": // goto'ed here
+        case "msg-param-amount":
+            // New midnightsquid direct cheer
+        case "pinned-chat-paid-amount":
+            // elevated message amount
 
             version(TwitchWarnings)
             {
@@ -801,6 +815,7 @@ auto parseTwitchTags(ref IRCParser parser, ref IRCEvent event)
             // Total number of months subscribed, over time. Replaces msg-param-months
         //case "msg-param-gift-month-being-redeemed":
             // No room for this but it rightly belongs here
+
             if (value == "0") break;
 
             version(TwitchWarnings)
@@ -1076,6 +1091,19 @@ auto parseTwitchTags(ref IRCParser parser, ref IRCEvent event)
             case "vip":
                 // vip = 1
                 // Whether or not the sender is a VIP. Superfluous; we can tell from the badges
+            case "msg-param-exponent":
+                // something with new midnightsquid direct cheers
+            case "msg-param-emote-id":
+                // ditto
+            case "msg-param-is-highlighted":
+                // ditto
+            case "msg-param-pill-type":
+                // ditto
+            case "pinned-chat-paid-canonical-amount":
+                // elevated message, amount in real currency)
+                // we can infer it from pinned-chat-paid-amount in event.count
+            case "pinned-chat-paid-exponent":
+                // something with elevated messages
 
                 // Ignore these events.
                 break;
