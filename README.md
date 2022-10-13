@@ -83,14 +83,21 @@ struct IRCParser
 }
 ```
 
+## Available build configurations
+
+* `library` is the default and includes some code specifically useful for bot applications
+* `twitch` is `library` but with extra support added for Twitch servers
+* `agnostic` is `library` but with bot code omitted
+* `twitchagnostic` is `agnostic` but with Twitch support included
+
 ## How to use
 
 > This assumes you have a program set up to read from an IRC server. This is not a bot framework; for that you're better off with the full [kameloso](https://github.com/zorael/kameloso) and writing a plugin that suits your needs.
 
-* Instantiate an `IRCClient` and configure its members. (required for context when parsing)
-* Instantiate an `IRCServer` and configure its members. (it may work without but just give it at minimum a host address)
-* Instantiate an `IRCParser` with your client and server via constructor. Pass it by `ref` if passed around between functions.
-* Read a string from the server and parse it into an `IRCEvent` with `yourParser.toIRCEvent(string)`.
+* Create an [`IRCClient`](http://dialect.dpldocs.info/dialect.defs.IRCClient.html) and configure its members. (required for context when parsing)
+* Create an [`IRCServer`](http://dialect.dpldocs.info/dialect.defs.IRCServer.html) and configure its members. (it may work without but just give it at minimum a host address)
+* Create an [`IRCParser`](http://dialect.dpldocs.info/dialect.parsing.IRCParser.html) with your client and server via constructor. Pass it by `ref` if passed around between functions.
+* Read a string from the server and parse it into an [`IRCEvent`](http://dialect.dpldocs.info/dialect.defs.IRCEvent.html) with [`yourParser.toIRCEvent(string)`](http://dialect.dpldocs.info/dialect.parsing.toIRCEvent.html).
 
 ```d
 IRCClient client;
@@ -149,7 +156,7 @@ with (event3)
 
 See the [`/tests`](/tests) directory for more example parses.
 
-## Unit test generation
+## Unittest generation
 
 Compiling the `assertgen` dub subpackage builds a command-line tool with which it is easy to generate assert blocks like the one above. These can then be pasted into an according file in [`/tests`](/tests), then ideally submitted as a GitHub pull request for upstream inclusion. You can use it to contribute known-good parses and increase coverage of event types.
 
@@ -188,7 +195,7 @@ Note that while IRC is standardised, servers still come in [many flavours](https
 
 ## Roadmap
 
-* consider ripping out `isAuthService` and related bits (that translate `NOTICE` events into fake `AUTH_{CHALLENGE,SUCCESS,FAILURE}` types) and moving it to importing projects
+* nothing right now, ideas needed
 
 ## Built with
 
