@@ -61,6 +61,7 @@ configuration "agnostic" {
 configuration "twitch" {
     excludedSourceFiles "source/dialect/assertgen.d"
     versions \
+        "BotElements" \
         "TwitchSupport"
 }
 
@@ -69,6 +70,8 @@ configuration "twitch" {
  */
 configuration "twitchagnostic" {
     excludedSourceFiles "source/dialect/assertgen.d"
+    versions \
+        "TwitchSupport"
 }
 
 /**
