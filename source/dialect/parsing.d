@@ -2470,61 +2470,62 @@ in (slice.length, "Tried to process `onMyInfo` on an empty slice")
 
     // https://upload.wikimedia.org/wikipedia/commons/d/d5/IRCd_software_implementations3.svg
 
-    alias D = IRCServer.Daemon;
-
     IRCServer.Daemon daemon;
 
-    if (daemonstringLower.contains("unreal"))
+    with (IRCServer.Daemon)
     {
-        daemon = D.unreal;
-    }
-    else if (daemonstringLower.contains("solanum"))
-    {
-        daemon = D.solanum;
-    }
-    else if (daemonstringLower.contains("inspircd"))
-    {
-        daemon = D.inspircd;
-    }
-    else if (daemonstringLower.contains("snircd"))
-    {
-        daemon = D.snircd;
-    }
-    else if (daemonstringLower.contains("u2."))
-    {
-        daemon = D.u2;
-    }
-    else if (daemonstringLower.contains("bahamut"))
-    {
-        daemon = D.bahamut;
-    }
-    else if (daemonstringLower.contains("hybrid"))
-    {
-        daemon = D.hybrid;
-    }
-    else if (daemonstringLower.contains("ratbox"))
-    {
-        daemon = D.ratbox;
-    }
-    else if (daemonstringLower.contains("charybdis"))
-    {
-        daemon = D.charybdis;
-    }
-    else if (daemonstringLower.contains("ircd-seven"))
-    {
-        daemon = D.ircdseven;
-    }
-    else if (daemonstring == "BSDUnix")
-    {
-        daemon = D.bsdunix;
-    }
-    else if (daemonstring.contains("MFVX"))
-    {
-        daemon = D.mfvx;
-    }
-    else
-    {
-        daemon = D.unknown;
+        if (daemonstringLower.contains("unreal"))
+        {
+            daemon = unreal;
+        }
+        else if (daemonstringLower.contains("solanum"))
+        {
+            daemon = solanum;
+        }
+        else if (daemonstringLower.contains("inspircd"))
+        {
+            daemon = inspircd;
+        }
+        else if (daemonstringLower.contains("snircd"))
+        {
+            daemon = snircd;
+        }
+        else if (daemonstringLower.contains("u2."))
+        {
+            daemon = u2;
+        }
+        else if (daemonstringLower.contains("bahamut"))
+        {
+            daemon = bahamut;
+        }
+        else if (daemonstringLower.contains("hybrid"))
+        {
+            daemon = hybrid;
+        }
+        else if (daemonstringLower.contains("ratbox"))
+        {
+            daemon = ratbox;
+        }
+        else if (daemonstringLower.contains("charybdis"))
+        {
+            daemon = charybdis;
+        }
+        else if (daemonstringLower.contains("ircd-seven"))
+        {
+            daemon = ircdseven;
+        }
+        else if (daemonstring == "BSDUnix")
+        {
+            daemon = bsdunix;
+        }
+        else if (daemonstring.contains("MFVX"))
+        {
+            daemon = mfvx;
+        }
+        else
+        {
+            daemon = unknown;
+        }
     }
 
     parser.typenums = typenumsOf(daemon);
