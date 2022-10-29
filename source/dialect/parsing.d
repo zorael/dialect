@@ -1724,7 +1724,7 @@ void postparseSanityCheck(const ref IRCParser parser, ref IRCEvent event) pure n
     import lu.string : beginsWith;
     import std.array : Appender;
 
-    Appender!string sink;
+    Appender!(char[]) sink;
     // The sink will very rarely be used; treat it as an edge case and don't reserve
 
     if ((event.type == IRCEvent.Type.UNSET) && event.errors.length)

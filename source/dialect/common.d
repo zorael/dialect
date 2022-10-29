@@ -229,7 +229,7 @@ auto decodeIRCv3String(const string line) pure nothrow
 
     if (!line.length) return string.init;
 
-    Appender!string sink;
+    Appender!(char[]) sink;
 
     bool escaping;
     bool dirty;
