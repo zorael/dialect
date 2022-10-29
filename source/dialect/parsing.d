@@ -104,13 +104,9 @@ import lu.string : contains, nom;
  +/
 public IRCEvent toIRCEvent(ref IRCParser parser, const string raw) pure
 {
+    import std.uni : toLower;
+
     if (!raw.length) throw new IRCParseException("Tried to parse empty string");
-
-    IRCEvent event;
-
-    // We don't need to .idup here; it has already been done in the Generator
-    // when yielding
-    event.raw = raw;
 
     if (raw[0] != ':')
     {
@@ -129,19 +125,24 @@ public IRCEvent toIRCEvent(ref IRCParser parser, const string raw) pure
             // @solanum.chat/ip=211.51.131.179 :Guest6187!~Guest61@211-51-131-179.fiber7.init7.net NICK :carbo
 
             // Get rid of the prepended @
-            string newRaw = event.raw[1..$];  // mutable
+            string newRaw = raw[1..$];  // mutable
             immutable tags = newRaw.nom(' ');
-            event = .toIRCEvent(parser, newRaw);
+            auto event = .toIRCEvent(parser, newRaw);
             event.tags = tags;
             applyTags(event);
             return event;
         }
         else
         {
+            IRCEvent event;
+            event.raw = raw;
             parser.parseBasic(event);
             return event;
         }
     }
+
+    IRCEvent event;
+    event.raw = raw;
 
     string slice = event.raw[1..$]; // mutable. advance past first colon
 
@@ -156,7 +157,6 @@ public IRCEvent toIRCEvent(ref IRCParser parser, const string raw) pure
     parser.parseSpecialcases(event, slice);
 
     // Final cosmetic touches
-    import std.uni : toLower;
     event.channel = event.channel.toLower;
 
     return event;
