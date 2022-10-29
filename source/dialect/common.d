@@ -214,7 +214,7 @@ auto typenumsOf(const IRCServer.Daemon daemon) pure nothrow @nogc
     Returns:
         A decoded string without `\s` in it.
  +/
-string decodeIRCv3String(const string line) pure nothrow
+auto decodeIRCv3String(const string line) pure nothrow
 {
     import std.array : Appender;
     import std.string : representation;
@@ -362,7 +362,7 @@ unittest
     Returns:
         `true` if the `sender` is judged to be from nickname services, `false` if not.
  +/
-bool isAuthService(const IRCUser sender, const ref IRCParser parser) pure
+auto isAuthService(const IRCUser sender, const ref IRCParser parser) pure
 {
     version(TwitchSupport)
     {
@@ -500,7 +500,7 @@ unittest
     Returns:
         `true` if the string content is judged to be a channel, `false` if not.
  +/
-bool isValidChannel(const string channel, const IRCServer server) pure nothrow @nogc
+auto isValidChannel(const string channel, const IRCServer server) pure nothrow @nogc
 {
     import std.string : representation;
 
@@ -595,7 +595,7 @@ unittest
     Returns:
         `true` if the nickname string is judged to be a nickname, `false` if not.
  +/
-bool isValidNickname(const string nickname, const IRCServer server) pure nothrow @nogc
+auto isValidNickname(const string nickname, const IRCServer server) pure nothrow @nogc
 {
     import std.string : representation;
 
@@ -695,7 +695,7 @@ unittest
         `true` if the character is in the list of valid characters for
         nicknames, `false` if not.
  +/
-bool isValidNicknameCharacter(const ubyte c) pure nothrow @nogc
+auto isValidNicknameCharacter(const ubyte c) pure nothrow @nogc
 {
     switch (c)
     {
@@ -764,7 +764,9 @@ unittest
     Returns:
         The nickname without any prepended prefix signs.
  +/
-string stripModesign(const string nickname, const IRCServer server,
+auto stripModesign(
+    const string nickname,
+    const IRCServer server,
     out string modesigns) pure nothrow @nogc
 in (nickname.length, "Tried to strip modesigns off an empty nickname")
 do
@@ -841,7 +843,7 @@ unittest
     Returns:
         The raw nickname, unsigned.
  +/
-string stripModesign(const string nickname, const IRCServer server) pure nothrow @nogc
+auto stripModesign(const string nickname, const IRCServer server) pure nothrow @nogc
 {
     string nothing;
     return stripModesign(nickname, server, nothing);
@@ -1488,7 +1490,9 @@ enum IRCControlCharacter
     Returns:
         `true` if the [dialect.defs.IRCUser|IRCUser]s are deemed to match, `false` if not.
  +/
-bool matchesByMask(const IRCUser this_, const IRCUser that,
+auto matchesByMask(
+    const IRCUser this_,
+    const IRCUser that,
     const IRCServer.CaseMapping caseMapping = IRCServer.CaseMapping.rfc1459) pure nothrow
 {
     // unpatternedGlobMatch
@@ -1606,7 +1610,7 @@ unittest
     Returns:
         `true` if the passed `c` is in uppercase, `false` if not.
  +/
-bool isUpper(const char c, const IRCServer.CaseMapping caseMapping) pure nothrow @nogc
+auto isUpper(const char c, const IRCServer.CaseMapping caseMapping) pure nothrow @nogc
 {
     import std.ascii : isUpper;
 
@@ -1642,7 +1646,7 @@ bool isUpper(const char c, const IRCServer.CaseMapping caseMapping) pure nothrow
     Returns:
         The passed `c` in lowercase as per the case mappings.
  +/
-char toLower(const char c, const IRCServer.CaseMapping caseMapping) pure nothrow @nogc
+auto toLower(const char c, const IRCServer.CaseMapping caseMapping) pure nothrow @nogc
 {
     import std.ascii : toLower;
 
@@ -1701,7 +1705,7 @@ char toLower(const char c, const IRCServer.CaseMapping caseMapping) pure nothrow
         The passed `name` string with uppercase characters replaced as per
         the case mappings.
  +/
-string toLowerCase(const string name, const IRCServer.CaseMapping caseMapping) pure nothrow @trusted
+auto toLowerCase(const string name, const IRCServer.CaseMapping caseMapping) pure nothrow @trusted
 {
     import std.string : representation;
 
@@ -1794,7 +1798,9 @@ unittest
         `true` if `lhs` and `rhs` are deemed to be case-insensitively equal;
         `false` if not.
  +/
-bool opEqualsCaseInsensitive(const string lhs, const string rhs,
+auto opEqualsCaseInsensitive(
+    const string lhs,
+    const string rhs,
     const IRCServer.CaseMapping mapping) pure nothrow @nogc
 {
     if (lhs.length != rhs.length) return false;
@@ -1886,7 +1892,7 @@ unittest
     Returns:
         `true` if the hostmask seems to be valid, `false` if it obviously is not.
  +/
-bool isValidHostmask(const string hostmask, const IRCServer server) pure nothrow @nogc
+auto isValidHostmask(const string hostmask, const IRCServer server) pure nothrow @nogc
 {
     import std.string : indexOf, representation;
     import std.typecons : Flag, No, Yes;
