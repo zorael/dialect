@@ -1487,7 +1487,7 @@ void parseSpecialcases(ref IRCParser parser, ref IRCEvent event, ref string slic
             working on.
         slice = Reference to the slice of the raw IRC string.
  +/
-void parseGeneralCases(const ref IRCParser parser, ref IRCEvent event, ref string slice) pure @nogc
+void parseGeneralCases(const ref IRCParser parser, ref IRCEvent event, ref string slice) pure
 {
     import lu.string : beginsWith;
 
@@ -2541,7 +2541,7 @@ in (slice.length, "Tried to process `onMyInfo` on an empty slice")
         event = Reference to the [dialect.defs.IRCEvent|IRCEvent] whose tags to
             apply to itself.
  +/
-void applyTags(ref IRCEvent event) pure @safe @nogc
+void applyTags(ref IRCEvent event) pure @safe
 {
     import std.algorithm.iteration : splitter;
 
