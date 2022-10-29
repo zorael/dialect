@@ -41,7 +41,7 @@ auto parseTwitchTags(ref IRCParser parser, ref IRCEvent event)
 
     if (!event.tags.length) return;
 
-    auto tagRange = event.tags.splitter(";");
+    auto tagRange = event.tags.splitter(";");  // mutable
 
     version(TwitchWarnings)
     {
@@ -1165,7 +1165,9 @@ final class TwitchPostprocessor : Postprocessor
             if ((event.type == CLEARCHAT) && event.target.nickname.length)
             {
                 // Stay CLEARCHAT if no target nickname
-                event.type = (event.count > 0) ? TWITCH_TIMEOUT : TWITCH_BAN;
+                event.type = (event.count > 0) ?
+                    TWITCH_TIMEOUT :
+                    TWITCH_BAN;
             }
         }
 

@@ -364,6 +364,9 @@ unittest
  +/
 auto isAuthService(const IRCUser sender, const ref IRCParser parser) pure
 {
+    import lu.common : sharedDomains;
+    import lu.string : contains;
+
     version(TwitchSupport)
     {
         if (parser.server.daemon == IRCServer.Daemon.twitch) return false;
@@ -441,9 +444,6 @@ auto isAuthService(const IRCUser sender, const ref IRCParser parser) pure
 
     // We're here if nick nickserv/sasl/etc and unknown ident, or server mismatch
     // As such, no need to be as strict as isSpecial is
-
-    import lu.common : sharedDomains;
-    import lu.string : contains;
 
     return (sharedDomains(sender.address, parser.server.address) >= 2) ||
         (sharedDomains(sender.address, parser.server.resolvedAddress) >= 2);
@@ -845,8 +845,8 @@ unittest
  +/
 auto stripModesign(const string nickname, const IRCServer server) pure nothrow @nogc
 {
-    string nothing;
-    return stripModesign(nickname, server, nothing);
+    string _;
+    return stripModesign(nickname, server, _);
 }
 
 ///
@@ -902,8 +902,11 @@ unittest
             are being set.
         server = The current [dialect.defs.IRCServer|IRCServer] with all its settings.
  +/
-void setMode(ref IRCChannel channel, const string signedModestring,
-    const string data, const IRCServer server) pure
+void setMode(
+    ref IRCChannel channel,
+    const string signedModestring,
+    const string data,
+    const IRCServer server) pure
 {
     import lu.string : beginsWith;
     import std.array : array;
@@ -988,7 +991,7 @@ void setMode(ref IRCChannel channel, const string signedModestring,
             "$a:DikshitNijjer"
             "$a:NETGEAR_WNDR3300"
             "$~a:eir"+/
-            string slice = datastring[1..$];
+            string slice = datastring[1..$];  // mutable
 
             if (slice[0] == '~')
             {
@@ -1024,14 +1027,9 @@ void setMode(ref IRCChannel channel, const string signedModestring,
                     // "$~a"
                     // "$R"
                     // FIXME: Figure out how to express this.
-                    if (slice.length)
-                    {
-                        newMode.data = slice;
-                    }
-                    else
-                    {
-                        newMode.data = datastring;
-                    }
+                    newMode.data = slice.length ?
+                        slice :
+                        datastring;
                 }
                 break;
 
@@ -1541,20 +1539,26 @@ auto matchesByMask(
     // (unpatterned) globMatch in both directions
     // If no match and either is empty, that means they're *
 
-    immutable matchNick = ((ourLower == theirLower) ||
-        !this_.nickname.length || !that.nickname.length ||
+    immutable matchNick = (
+        (ourLower == theirLower) ||
+        !this_.nickname.length ||
+        !that.nickname.length ||
         unpatternedGlobMatch(ourLower, theirLower) ||
         unpatternedGlobMatch(theirLower, ourLower));
     if (!matchNick) return false;
 
-    immutable matchIdent = ((this_.ident == that.ident) ||
-        !this_.ident.length || !that.ident.length ||
+    immutable matchIdent = (
+        (this_.ident == that.ident) ||
+        !this_.ident.length ||
+        !that.ident.length ||
         unpatternedGlobMatch(this_.ident, that.ident) ||
         unpatternedGlobMatch(that.ident, this_.ident));
     if (!matchIdent) return false;
 
-    immutable matchAddress = ((this_.address == that.address) ||
-        !this_.address.length || !that.address.length ||
+    immutable matchAddress = (
+        (this_.address == that.address) ||
+        !this_.address.length ||
+        !that.address.length ||
         unpatternedGlobMatch(this_.address, that.address) ||
         unpatternedGlobMatch(that.address, this_.address));
     if (!matchAddress) return false;
@@ -1709,7 +1713,7 @@ auto toLowerCase(const string name, const IRCServer.CaseMapping caseMapping) pur
 {
     import std.string : representation;
 
-    char[] output;
+    char[] output;  // mutable
     bool dirty;
 
     foreach (immutable i, immutable c; name.representation)
