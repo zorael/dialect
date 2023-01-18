@@ -2320,7 +2320,7 @@ struct IRCChannel
          +/
         string data;
 
-        /// The user associated with the [Mode], when it is not just [data].
+        /// The user associated with the [Mode], when it is not just [Mode.data|data].
         IRCUser user;
 
         /// The channel this mode refers to, where applicable.
