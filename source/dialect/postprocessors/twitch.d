@@ -350,6 +350,12 @@ auto parseTwitchTags(ref IRCParser parser, ref IRCEvent event)
                 event.type = TWITCH_ANNOUNCEMENT;
                 break;
 
+            case "user-intro":
+                // PRIVMSG #ginomachino :yo this is much coller with actual music
+                // Unknown Twitch msg-id: user-intro
+                event.type = TWITCH_INTRO;
+                break;
+
             /*case "bad_ban_admin":
             case "bad_ban_anon":
             case "bad_ban_broadcaster":
