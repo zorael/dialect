@@ -1250,4 +1250,25 @@ unittest
             assert((id == "2ff6d2fb-7a9a-47f3-b64a-01b9abf08765"), id);
         }
     }
+    {
+        immutable event = parser.toIRCEvent("@badge-info=;badges=;color=#D2691E;display-name=Simon_Afflerbach;emotes=;first-msg=1;flags=;id=03c13cd4-225c-4f0c-b85c-6c3a74446f31;mod=0;msg-id=user-intro;returning-chatter=0;room-id=148651829;subscriber=0;tmi-sent-ts=1674068404074;turbo=0;user-id=46140936;user-type= :simon_afflerbach!simon_afflerbach@simon_afflerbach.tmi.twitch.tv PRIVMSG #ginomachino :yo this is much coller with actual music");
+        with (event)
+        {
+            assert((type == IRCEvent.Type.TWITCH_INTRO), Enum!(IRCEvent.Type).toString(type));
+            assert((sender.nickname == "simon_afflerbach"), sender.nickname);
+            assert((sender.ident == "simon_afflerbach"), sender.ident);
+            assert((sender.address == "simon_afflerbach.tmi.twitch.tv"), sender.address);
+            assert((sender.account == "simon_afflerbach"), sender.account);
+            assert((sender.displayName == "Simon_Afflerbach"), sender.displayName);
+            assert((sender.badges == "*"), sender.badges);
+            assert((sender.colour == "D2691E"), sender.colour);
+            assert((sender.id == 46140936), sender.id.to!string);
+            assert((channel == "#ginomachino"), channel);
+            assert((content == "yo this is much coller with actual music"), content);
+            assert((tags == "badge-info=;badges=;color=#D2691E;display-name=Simon_Afflerbach;emotes=;first-msg=1;flags=;id=03c13cd4-225c-4f0c-b85c-6c3a74446f31;mod=0;msg-id=user-intro;returning-chatter=0;room-id=148651829;subscriber=0;tmi-sent-ts=1674068404074;turbo=0;user-id=46140936;user-type="), tags);
+            assert((id == "03c13cd4-225c-4f0c-b85c-6c3a74446f31"), id);
+        }
+    }
+
+
 }
