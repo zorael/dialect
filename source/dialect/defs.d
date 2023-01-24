@@ -2310,7 +2310,7 @@ struct IRCChannel
         `i` twice. Others stack; a channel may have an arbitrary number of `b`
         bans. We try our best to support both.
      +/
-    struct Mode
+    static struct Mode
     {
         /// The character that implies this [Mode] (`i`, `z`, `l` ...).
         char modechar;
