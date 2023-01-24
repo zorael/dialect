@@ -2387,7 +2387,7 @@ struct IRCChannel
         Associative array of nicknames with a prefixing channel mode (operator,
         halfops, voiced, ...) keyed by modechar.
      +/
-    string[][char] mods;
+    bool[string][char] mods;
 
     /++
         Template to deduplicate code for mods shorthands.
@@ -2396,16 +2396,18 @@ struct IRCChannel
             prefix = Mode character.
 
         Returns:
-            A `string[]` array of all users with the given mode character.
+            A `bool[string]` hashmap of all users with the given mode character
+            as keys.
      +/
-    ref string[] modsShorthand(char prefix)()
+    ref bool[string] modsShorthand(char prefix)()
     {
         auto modsOp = prefix in mods;
 
         if (!modsOp)
         {
-            mods[prefix] = [];
-            modsOp = prefix in mods;
+            this.mods[prefix][string.init] = false;
+            modsOp = prefix in this.mods;
+            (*modsOp).remove(string.init);
         }
 
         return *modsOp;

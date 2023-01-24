@@ -1070,12 +1070,12 @@ void setMode(
 
                 // Register users with prefix modes (op, halfop, voice, ...)
                 auto prefixedUsers = newMode.modechar in channel.mods;
-                if (prefixedUsers && (*prefixedUsers).canFind(newMode.data))
+                if (prefixedUsers && (newMode.data in *prefixedUsers))
                 {
                     continue;
                 }
 
-                channel.mods[newMode.modechar] ~= newMode.data;
+                channel.mods[newMode.modechar][newMode.data] = true;
                 continue;
             }
             else if (server.aModes.contains(modechar))
@@ -1142,11 +1142,7 @@ void setMode(
                 auto prefixedUsers = newMode.modechar in channel.mods;
                 if (!prefixedUsers) continue;
 
-                immutable index = (*prefixedUsers).countUntil(newMode.data);
-                if (index != -1)
-                {
-                    *prefixedUsers = (*prefixedUsers).remove!(SwapStrategy.unstable)(index);
-                }
+                (*prefixedUsers).remove(newMode.data);
             }
             else if (server.aModes.contains(modechar))
             {
