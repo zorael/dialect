@@ -51,7 +51,7 @@ struct IRCChannel
     string modechars;
     Mode[] modes;
     bool[string] users;
-    string[][char] mods;
+    bool[string][char] mods;
     long created;
 }
 
