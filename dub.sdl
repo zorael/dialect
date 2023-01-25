@@ -1,7 +1,7 @@
 name "dialect"
 description "IRC parsing library"
 authors "JR"
-copyright "Copyright © 2016-2022, JR"
+copyright "Copyright © 2016+, JR"
 homepage "https://www.github.com/zorael/dialect"
 license "BSL-1.0"
 
