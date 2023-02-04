@@ -32,6 +32,16 @@ nothrow:
  +/
 struct IRCEvent
 {
+private:
+    import std.typecons : Nullable;
+
+    /// How many elements should be allocated for auxiliary strings.
+    enum numAuxStrings = 8;
+
+    /// How many elements should be allocated for counts.
+    enum numCounts = 16;
+
+public:
     /++
         [Type]s of [IRCEvent]s.
 
@@ -866,8 +876,21 @@ struct IRCEvent
     /// The main body of text of the event.
     string content;
 
-    /// The auxiliary storage, containing type-specific extra bits of information.
-    string aux;
+    /// Internal aux string array.
+    package string[numAuxStrings] _auxstrings;
+
+    /// Public aux string array slice.
+    pragma(inline, true)
+    auto auxstrings() inout return { return _auxstrings[]; }
+
+    deprecated("Use `IRCEvent.auxstrings[0]` instead")
+    {
+        /// The auxiliary storage, containing type-specific extra bits of information.
+        auto aux() inout { return _auxstrings[0]; }
+
+        /// FIXME
+        void aux(const string line) pure @safe nothrow @nogc { _auxstrings[0] = line; }
+    }
 
     /// IRCv3 message tags attached to this event.
     string tags;
@@ -875,11 +898,30 @@ struct IRCEvent
     /// With a numeric event, the number of the event type.
     uint num;
 
+    /// Internal count array.
+    package Nullable!long[numCounts] _counts;
+
+    /// Public count array slice.
+    pragma(inline, true)
+    auto counts() inout return { return _counts[]; }
+
     /// A count, an amount or "times" modifier, where such are applicable.
-    long count = long.min;
+    deprecated("Use `IRCEvent.counts[0]` instead")
+    auto count() const
+    {
+        return _counts[0].isNull ?
+            long.min :
+            _counts[0].get;
+    }
 
     /// A secondary count, for where [count] by itself is insufficient.
-    long altcount = long.min;
+    deprecated("Use `IRCEvent.counts[1]` instead")
+    auto altcount() const
+    {
+        return _counts[1].isNull ?
+            long.min :
+            _counts[1].get;
+    }
 
     /// A timestamp of when the event transpired.
     @Hidden long time;
