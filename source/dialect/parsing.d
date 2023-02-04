@@ -38,7 +38,7 @@
         assert(sender.address == "address.tld");
         assert(target.nickname == "nickname");
         assert(channel == "#channel");
-        assert(aux = "+v");
+        assert(auxstrings[0] = "+v");
     }
 
     string alsoFromServer = ":cherryh.freenode.net 435 oldnick newnick #d " ~
@@ -52,7 +52,7 @@
         assert(channel == "#d");
         assert(target.nickname == "oldnick");
         assert(content == "Cannot change nickname while banned on channel");
-        assert(aux == "newnick");
+        assert(auxstrings[0] == "newnick");
         assert(num == 435);
     }
 
@@ -290,7 +290,7 @@ void parseBasic(ref IRCParser parser, ref IRCEvent event) pure
         else
         {
             event.type = UNSET;
-            event.aux = event.raw;
+            event._auxstrings[0] = event.raw;
             event.errors = typestring;
             /*throw new IRCParseException("Unknown basic type: " ~
                 typestring ~ ": please report this", event);*/
@@ -744,7 +744,7 @@ void parseSpecialcases(ref IRCParser parser, ref IRCEvent event, ref string slic
             // H@
             // H+
             // H@+
-            event.aux = hg[1..$];
+            event._auxstrings[0] = hg[1..$];
         }
 
         slice.nom(' ');  // hopcount
@@ -779,8 +779,8 @@ void parseSpecialcases(ref IRCParser parser, ref IRCEvent event, ref string slic
             slice.nom(" q ") :
             slice.nom(' ');
         event.content = slice.nom(' ');
-        event.aux = slice.nom(' ');
-        event.count = slice.to!long;
+        event._auxstrings[0] = slice.nom(' ');
+        event._counts[0] = slice.to!long;
         break;
 
     case RPL_WHOISHOST: // 378
@@ -792,7 +792,7 @@ void parseSpecialcases(ref IRCParser parser, ref IRCEvent event, ref string slic
         event.target.ident = slice.nom('@');
         if (event.target.ident == "*") event.target.ident = string.init;
         event.content = slice.nom(' ');
-        event.aux = slice;
+        event._auxstrings[0] = slice;
         break;
 
     case ERR_UNKNOWNCOMMAND: // 421
@@ -806,7 +806,7 @@ void parseSpecialcases(ref IRCParser parser, ref IRCEvent event, ref string slic
             // :asimov.freenode.net 421 kameloso^ sudo :Unknown command
             // :tmi.twitch.tv 421 kamelosobot ZORAEL!ZORAEL@TMI.TWITCH.TV PRIVMSG #ZORAEL :HELLO :Unknown command
             immutable spaceColonPos = slice.lastIndexOf(" :");
-            event.aux = slice[0..spaceColonPos];
+            event._auxstrings[0] = slice[0..spaceColonPos];
             event.content = slice[spaceColonPos+2..$];
             slice = string.init;
         }
@@ -822,8 +822,8 @@ void parseSpecialcases(ref IRCParser parser, ref IRCEvent event, ref string slic
         // :rajaniemi.freenode.net 317 kameloso zorael 0 1510219961 :seconds idle, signon time
         slice.nom(' ');  // bot nickname
         event.target.nickname = slice.nom(' ');
-        event.count = slice.nom(' ').to!long;
-        event.altcount = slice.nom(" :").to!long;
+        event._counts[0] = slice.nom(' ').to!long;
+        event._counts[1] = slice.nom(" :").to!long;
         event.content = slice;
         break;
 
@@ -871,23 +871,23 @@ void parseSpecialcases(ref IRCParser parser, ref IRCEvent event, ref string slic
 
                     try
                     {
-                        event.count = first.to!long;
+                        event._counts[0] = first.to!long;
 
                         if (second.length && second[0].isNumber)
                         {
-                            event.altcount = second.to!long;
+                            event._counts[1] = second.to!long;
                         }
                     }
                     catch (ConvException e)
                     {
                         // :hitchcock.freenode.net 432 * 1234567890123456789012345 :Erroneous Nickname
                         // Treat as though not a number
-                        event.aux = first;
+                        event._auxstrings[0] = first;
                     }
                 }
                 else
                 {
-                    event.aux = first;
+                    event._auxstrings[0] = first;
                 }
             }
         }
@@ -916,7 +916,7 @@ void parseSpecialcases(ref IRCParser parser, ref IRCEvent event, ref string slic
         slice.nom(' ');  // bot nickname
         event.target.nickname = slice.nom(' ');
         event.content = slice.nom(" :");
-        event.aux = slice;
+        event._auxstrings[0] = slice;
         break;
 
     case RPL_WHOISACCOUNT: // 330
@@ -956,7 +956,7 @@ void parseSpecialcases(ref IRCParser parser, ref IRCEvent event, ref string slic
             // :irc.link-net.be 338 zorael zorael is actually ~kameloso@195.196.10.12 [195.196.10.12]
             // :irc.rizon.club 338 kameloso^ kameloso^ :is actually ~kameloso@194.117.188.126 [194.117.188.126]
             slice.nom("is actually ");
-            event.aux = slice.nom(' ');
+            event._auxstrings[0] = slice.nom(' ');
 
             if ((slice[0] == '[') && (slice[$-1] == ']'))
             {
@@ -976,12 +976,12 @@ void parseSpecialcases(ref IRCParser parser, ref IRCEvent event, ref string slic
                 if (addstring.contains(' '))
                 {
                     // :Prothid.NY.US.GameSurge.net 338 zorael zorael ~kameloso@195.196.10.12 195.196.10.12 :Actual user@host, Actual IP$
-                    event.aux = addstring.nom(' ');
+                    event._auxstrings[0] = addstring.nom(' ');
                     event.target.address = addstring;
                 }
                 else
                 {
-                    event.aux = addstring;
+                    event._auxstrings[0] = addstring;
                     if (addstring.contains('@')) addstring.nom('@');
                     event.target.address = addstring;
                 }
@@ -1011,7 +1011,7 @@ void parseSpecialcases(ref IRCParser parser, ref IRCEvent event, ref string slic
         else
         {
             // :irc.harblwefwoi.org 451 WHOIS :You have not registered
-            event.aux = slice.nom(" :");
+            event._auxstrings[0] = slice.nom(" :");
             event.content = slice;
         }
         break;
@@ -1086,7 +1086,7 @@ void parseSpecialcases(ref IRCParser parser, ref IRCEvent event, ref string slic
         }
         else
         {
-            event.aux = slice.nom(" :");
+            event._auxstrings[0] = slice.nom(" :");
         }
 
         event.content = slice;
@@ -1096,7 +1096,7 @@ void parseSpecialcases(ref IRCParser parser, ref IRCEvent event, ref string slic
         // <linkname> <sendq> <sent messages> <sent bytes> <received messages> <received bytes> <time open>
         // :verne.freenode.net 211 kameloso^ kameloso^[~NaN@194.117.188.126] 0 109 8 15 0 :40 0 -
         slice.nom(' '); // bot nickname
-        event.aux = slice.nom(' ');
+        event._auxstrings[0] = slice.nom(' ');
         event.content = slice;
         break;
 
@@ -1104,9 +1104,9 @@ void parseSpecialcases(ref IRCParser parser, ref IRCEvent event, ref string slic
         // User <class> <nick>
         // :wolfe.freenode.net 205 kameloso^ User v6users zorael[~NaN@2001:41d0:2:80b4::] (255.255.255.255) 16 :536
         slice.nom(" User "); // bot nickname
-        event.aux = slice.nom(' '); // "class"
+        event._auxstrings[0] = slice.nom(' '); // "class"
         event.content = slice.nom(" :");
-        event.count = slice.to!long; // unsure
+        event._counts[0] = slice.to!long; // unsure
         break;
 
     case RPL_LINKS: // 364
@@ -1114,8 +1114,8 @@ void parseSpecialcases(ref IRCParser parser, ref IRCEvent event, ref string slic
         // :rajaniemi.freenode.net 364 kameloso^ rajaniemi.freenode.net rajaniemi.freenode.net :0 Helsinki, FI, EU
         slice.nom(' '); // bot nickname
         slice.nom(' '); // "mask"
-        event.aux = slice.nom(" :"); // server address
-        event.count = slice.nom(' ').to!long; // hop count
+        event._auxstrings[0] = slice.nom(" :"); // server address
+        event._counts[0] = slice.nom(' ').to!long; // hop count
         event.content = slice; // "server info"
         break;
 
@@ -1123,7 +1123,7 @@ void parseSpecialcases(ref IRCParser parser, ref IRCEvent event, ref string slic
         // <nickname> <target nickname> <channel> :Cannot change nickname while banned on channel
         // :cherryh.freenode.net 435 kameloso^ kameloso^^ #d3d9 :Cannot change nickname while banned on channel
         event.target.nickname = slice.nom(' ');
-        event.aux = slice.nom(' ');
+        event._auxstrings[0] = slice.nom(' ');
         event.channel = slice.nom(" :");
         event.content = slice;
         break;
@@ -1141,7 +1141,7 @@ void parseSpecialcases(ref IRCParser parser, ref IRCEvent event, ref string slic
             slice.nom(' ');
         }
 
-        event.aux = slice.nom(" :");
+        event._auxstrings[0] = slice.nom(" :");
         event.content = slice.strippedRight;
         break;
 
@@ -1175,7 +1175,7 @@ void parseSpecialcases(ref IRCParser parser, ref IRCEvent event, ref string slic
             event.sender.nickname = event.channel[1..$];
             event.sender.address = string.init;
             event.target.nickname = slice.nom(' ');  // target channel
-            event.count = (slice == "-") ?
+            event._counts[0] = (slice == "-") ?
                 0 :
                 slice.to!long;
             break;
@@ -1185,7 +1185,7 @@ void parseSpecialcases(ref IRCParser parser, ref IRCEvent event, ref string slic
             event.channel = slice.nom(" :- ");
             event.sender.nickname = event.channel[1..$];
             event.sender.address = string.init;
-            event.count = (slice == "-") ?
+            event._counts[0] = (slice == "-") ?
                 0 :
                 slice.to!long;
             break;
@@ -1250,7 +1250,7 @@ void parseSpecialcases(ref IRCParser parser, ref IRCEvent event, ref string slic
         // <nickname> <host> :is now your hidden host
         // :TAL.DE.EU.GameSurge.net 396 kameloso ~NaN@1b24f4a7.243f02a4.5cd6f3e3.IP4 :is now your hidden host
         slice.nom(' '); // bot nickname
-        event.aux = slice.nom(" :");
+        event._auxstrings[0] = slice.nom(" :");
         event.content = slice;
         break;
 
@@ -1259,7 +1259,7 @@ void parseSpecialcases(ref IRCParser parser, ref IRCEvent event, ref string slic
         // :irc.rizon.no 351 kameloso^^ plexus-4(hybrid-8.1.20)(20170821_0-607). irc.rizon.no :TS6ow
         slice.nom(' '); // bot nickname
         event.content = slice.nom(" :");
-        event.aux = slice;
+        event._auxstrings[0] = slice;
         break;
 
     case RPL_YOURID: // 42
@@ -1278,7 +1278,7 @@ void parseSpecialcases(ref IRCParser parser, ref IRCEvent event, ref string slic
         string misc = slice.nom(" :");  // mutable
         event.content = slice;
         misc.nom!(Yes.inherit)(' ');
-        event.aux = misc;
+        event._auxstrings[0] = misc;
         break;
 
     case RPL_UMODEIS:
@@ -1294,7 +1294,7 @@ void parseSpecialcases(ref IRCParser parser, ref IRCEvent event, ref string slic
             slice = slice[1..$];
         }
 
-        event.aux = slice;
+        event._auxstrings[0] = slice;
         break;
 
     case RPL_CHANNELMODEIS: // 324
@@ -1306,13 +1306,13 @@ void parseSpecialcases(ref IRCParser parser, ref IRCEvent event, ref string slic
 
         if (slice.contains(' '))
         {
-            event.aux = slice.nom(' ');
+            event._auxstrings[0] = slice.nom(' ');
             //event.content = slice.nom(' ');
             event.content = slice.strippedRight;
         }
         else
         {
-            event.aux = slice.strippedRight;
+            event._auxstrings[0] = slice.strippedRight;
         }
         break;
 
@@ -1320,7 +1320,7 @@ void parseSpecialcases(ref IRCParser parser, ref IRCEvent event, ref string slic
         // :kornbluth.freenode.net 329 kameloso #flerrp 1512995737
         slice.nom(' ');
         event.channel = slice.nom(' ');
-        event.count = slice.to!long;
+        event._counts[0] = slice.to!long;
         break;
 
     case RPL_LIST: // 322
@@ -1336,7 +1336,7 @@ void parseSpecialcases(ref IRCParser parser, ref IRCEvent event, ref string slic
          */
         slice.nom(' '); // bot nickname
         event.channel = slice.nom(' ');
-        event.count = slice.nom(" :").to!long;
+        event._counts[0] = slice.nom(" :").to!long;
         event.content = slice;
         break;
 
@@ -1362,12 +1362,12 @@ void parseSpecialcases(ref IRCParser parser, ref IRCEvent event, ref string slic
 
         if (slice.contains(' '))
         {
-            event.aux = slice.nom(' ');
+            event._auxstrings[0] = slice.nom(' ');
             event.content = slice;
         }
         else
         {
-            event.aux = slice;
+            event._auxstrings[0] = slice;
         }
         break;
 
@@ -1379,8 +1379,8 @@ void parseSpecialcases(ref IRCParser parser, ref IRCEvent event, ref string slic
         slice.nom(' '); // bot nickname
         event.target.nickname = slice.nom(' ');
         event.target.ident = slice.nom(' ');
-        event.aux = slice.nom(" * :");
-        event.target.address = event.aux;
+        event._auxstrings[0] = slice.nom(" * :");
+        if (event._auxstrings[0].length) event.target.address = event._auxstrings[0];
         event.content = slice.stripped;
         event.target.realName = event.content;
         break;
@@ -1413,8 +1413,8 @@ void parseSpecialcases(ref IRCParser parser, ref IRCEvent event, ref string slic
         if (slice.contains(' '))
         {
             event.content = slice.nom(' ');
-            event.aux = slice.nom(' ');  // nickname that set the mode
-            event.count = slice.to!long;
+            event._auxstrings[0] = slice.nom(' ');  // nickname that set the mode
+            event._counts[0] = slice.to!long;
         }
         else
         {
@@ -1444,7 +1444,7 @@ void parseSpecialcases(ref IRCParser parser, ref IRCEvent event, ref string slic
         import std.conv : ConvException, to;
 
         slice.nom(' '); // bot nickname
-        event.aux = slice.nom(' ');
+        event._auxstrings[0] = slice.nom(' ');
         string portstring = slice.nom(" :");  // mutable
         event.content = slice;
 
@@ -1452,18 +1452,18 @@ void parseSpecialcases(ref IRCParser parser, ref IRCEvent event, ref string slic
 
         try
         {
-            event.count = portstring.to!int;
+            event._counts[0] = portstring.to!int;
         }
         catch (ConvException _)
         {
-            event.aux = event.aux ~ ':' ~ portstring;
+            event._auxstrings[0] = event._auxstrings[0] ~ ':' ~ portstring;
         }
         break;
 
     case ERR_BADCHANNAME: // 479
         // :helix.oftc.net 479 zorael|8 - :Illegal channel name
         slice.nom(' '); // bot nickname
-        event.aux = slice.nom(" :");
+        event._auxstrings[0] = slice.nom(" :");
         event.content = slice;
         break;
 
@@ -1566,7 +1566,7 @@ void parseGeneralCases(const ref IRCParser parser, ref IRCEvent event, ref strin
                     else if (numSpaces > 1)
                     {
                         // A lot of spaces; cannot say for sure what is what
-                        event.aux = targets;
+                        event._auxstrings[0] = targets;
                     }
                     else /*if (numSpaces == 0)*/
                     {
@@ -1580,7 +1580,7 @@ void parseGeneralCases(const ref IRCParser parser, ref IRCEvent event, ref strin
                         else if (targets == event.sender.address)
                         {
                             // Second is sender's address, probably server
-                            event.aux = targets;
+                            event._auxstrings[0] = targets;
                         }
                         else
                         {
@@ -1666,7 +1666,7 @@ void parseGeneralCases(const ref IRCParser parser, ref IRCEvent event, ref strin
                             // Remaining slice has at least two fields;
                             // separate into content and aux
                             event.content = slice.nom(' ');
-                            event.aux = slice;
+                            event._auxstrings[0] = slice;
                         }
                         else
                         {
@@ -1685,7 +1685,7 @@ void parseGeneralCases(const ref IRCParser parser, ref IRCEvent event, ref strin
                 {
                     // No second target
                     // :port80b.se.quakenet.org 221 kameloso +i
-                    event.aux = slice;
+                    event._auxstrings[0] = slice;
                 }
             }
         }
@@ -1999,7 +1999,7 @@ in (slice.length, "Tried to process `onPRIVMSG` on an empty slice")
 
                 case "CTCP_PING":
                     event.type = CTCP_PING;
-                    event.aux = "PING";
+                    event._auxstrings[0] = "PING";
                     break;
          +/
 
@@ -2027,8 +2027,8 @@ in (slice.length, "Tried to process `onPRIVMSG` on an empty slice")
             {
                 case typestring[5..$]:
                     event.type = type;
-                    event.aux = typestring[5..$];
-                    if (event.content == event.aux) event.content = string.init;
+                    event._auxstrings[0] = typestring[5..$];
+                    if (event.content == event._auxstrings[0]) event.content = string.init;
                     break top;
             }
         }
@@ -2064,7 +2064,7 @@ in (slice.length, "Tried to process `onMode` on an empty slice")
         if (slice.contains(' '))
         {
             // :zorael!~NaN@ns3363704.ip-94-23-253.eu MODE #flerrp +v kameloso^
-            event.aux = slice.nom(' ');
+            event._auxstrings[0] = slice.nom(' ');
             // save target in content; there may be more than one
             event.content = slice;
         }
@@ -2073,7 +2073,7 @@ in (slice.length, "Tried to process `onMode` on an empty slice")
             // :zorael!~NaN@ns3363704.ip-94-23-253.eu MODE #flerrp +i
             // :niven.freenode.net MODE #sklabjoier +ns
             //event.type = IRCEvent.Type.USERMODE;
-            event.aux = slice;
+            event._auxstrings[0] = slice;
         }
     }
     else
@@ -2108,7 +2108,7 @@ in (slice.length, "Tried to process `onMode` on an empty slice")
             modechange = '+' ~ slice;
         }
 
-        event.aux = modechange;
+        event._auxstrings[0] = modechange;
 
         if (subtractive)
         {
@@ -2466,7 +2466,7 @@ in (slice.length, "Tried to process `onMyInfo` on an empty slice")
     immutable daemonstring = slice.nom(' ');
     immutable daemonstringLower = daemonstring.toLower;
     event.content = slice;
-    event.aux = daemonstring;
+    event._auxstrings[0] = daemonstring;
 
     // https://upload.wikimedia.org/wikipedia/commons/d/d5/IRCd_software_implementations3.svg
 
@@ -2628,7 +2628,7 @@ public:
         assert(sender.address == "address.tld");
         assert(target.nickname == "nickname");
         assert(channel == "#channel");
-        assert(aux = "+v");
+        assert(auxstrings[0] = "+v");
     }
 
     string alsoFromServer = ":cherryh.freenode.net 435 oldnick newnick #d :Cannot change nickname while banned on channel";
@@ -2641,7 +2641,7 @@ public:
         assert(channel == "#d");
         assert(target.nickname == "oldnick");
         assert(content == "Cannot change nickname while banned on channel");
-        assert(aux == "newnick");
+        assert(auxstrings[0] == "newnick");
         assert(num == 435);
     }
 
@@ -2657,7 +2657,7 @@ public:
         assert(sender.badges == "subscriber/12");
         assert(channel == "#xqcow");
         assert(content == "SomeoneOnTwitch is gifting 1 Tier 1 Subs to xQcOW's community! They've gifted a total of 4 in the channel!");
-        assert(aux == "1000");
+        assert(auxstrings[0] == "1000");
         assert(count == 1);
         assert(altcount == 4);
     }
