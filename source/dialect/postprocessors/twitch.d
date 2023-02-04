@@ -71,6 +71,34 @@ auto parseTwitchTags(ref IRCParser parser, ref IRCEvent event)
                 writefln(`%-35s"%s"`, key, slice);
             }
         }
+
+        void warnAboutOverwrittenCount(const size_t i, const string key)
+        {
+            if (!event._counts[i].isNull)
+            {
+                import std.conv : text;
+                import std.stdio : writeln;
+
+                immutable msg = text(key, " overwrote `counts[", i, "]`: ", event._counts[i]);
+                appendToErrors(event, msg);
+                writeln(msg);
+                printTagsOnExit = true;
+            }
+        }
+
+        void warnAboutOverwrittenAuxString(const size_t i, const string key)
+        {
+            if (event._auxstrings[i].length)
+            {
+                import std.conv : text;
+                import std.stdio : writeln;
+
+                immutable msg = text(key, " overwrote `auxstrings[", i, "]`: ", event._auxstrings[i]);
+                appendToErrors(event, msg);
+                writeln(msg);
+                printTagsOnExit = true;
+            }
+        }
     }
 
     with (IRCEvent.Type)
@@ -192,9 +220,6 @@ auto parseTwitchTags(ref IRCParser parser, ref IRCEvent event)
 
                 event.type = TWITCH_CHARITY;
 
-                Appender!(char[]) sink;
-                sink.reserve(128);  // guesstimate
-
                 string[string] charityAA;
                 auto charityTags = tagRange
                     .filter!(tagline => tagline.beginsWith("msg-param-charity"));
@@ -206,46 +231,50 @@ auto parseTwitchTags(ref IRCParser parser, ref IRCEvent event)
                     charityAA[charityKey] = slice;
                 }
 
+                static immutable charityStringTags =
+                [
+                    "msg-param-charity-learn-more",
+                    "msg-param-charity-hashtag",
+                ];
+
+                static immutable charityCountTags =
+                [
+                    //"msg-param-total"
+                    "msg-param-charity-hours-remaining",
+                    "msg-param-charity-days-remaining",
+                ];
+
                 if (const charityName = "msg-param-charity-name" in charityAA)
                 {
                     import lu.string : removeControlCharacters, strippedRight;
 
                     //msg-param-charity-name = Direct\sRelief
 
-                    sink.put((*charityName)
+                    version(TwitchWarnings)
+                    {
+                        warnAboutOverwrittenAuxString(0, "msg-param-charity-name");
+                    }
+
+                    event._auxstrings[0] = (*charityName)
                         .decodeIRCv3String
                         .strippedRight
-                        .removeControlCharacters);
+                        .removeControlCharacters;
                 }
 
-                if (const charityLink = "msg-param-charity-learn-more" in charityAA)
+                foreach (immutable i, charityKey; charityStringTags)
                 {
-                    //msg-param-charity-learn-more = https://link.twitch.tv/blizzardofbits
+                    if (const charityString = charityKey in charityAA)
+                    {
+                        //msg-param-charity-learn-more = https://link.twitch.tv/blizzardofbits
+                        //msg-param-charity-hashtag = #charity
+                        // Pad count by 1 to allow for msg-param-charity-name
 
-                    if (sink.data.length)
-                    {
-                        sink.put(" (");
-                        sink.put(*charityLink);
-                        sink.put(')');
-                    }
-                    else
-                    {
-                        sink.put(*charityLink);
-                    }
-                }
+                        version(TwitchWarnings)
+                        {
+                            warnAboutOverwrittenAuxString(i+1, charityKey);
+                        }
 
-                if (const charityHashtag = "msg-param-charity-hashtag" in charityAA)
-                {
-                    //msg-param-charity-hashtag = #charity
-
-                    if (sink.data.length)
-                    {
-                        sink.put(' ');
-                        sink.put(*charityHashtag);
-                    }
-                    else
-                    {
-                        sink.put(*charityHashtag);
+                        event._auxstrings[i+1] = *charityString;
                     }
                 }
 
@@ -253,38 +282,25 @@ auto parseTwitchTags(ref IRCParser parser, ref IRCEvent event)
                 /*if (const charityTotal = "msg-param-total" in charityAA)
                 {
                     //msg-param-charity-hours-remaining = 286
-                    event.count = (*charityTotal).to!int;
+                    event._counts[0] = (*charityTotal).to!int;
                 }*/
 
-                if (const charityRemaining = "msg-param-charity-hours-remaining" in charityAA)
+                foreach (immutable i, charityKey; charityCountTags)
                 {
-                    event.altcount = (*charityRemaining).to!int;
-                }
-
-                /*if (const charityDaysRemaining = "msg-param-charity-days-remaining" in charityAA)
-                {
-                    //msg-param-charity-days-remaining = 11
-
-                    // No event.tricount...
-                    // Seems to be included in hours-remaining. Ignore?
-                }*/
-
-                version(TwitchWarnings)
-                {
-                    if (event.aux.length)
+                    if (const charityCount = charityKey in charityAA)
                     {
-                        import std.conv : text;
-                        import std.stdio : writeln;
+                        //msg-param-charity-hours-remaining
+                        //msg-param-charity-days-remaining = 11
+                        // Pad count by 1 to allow for msg-param-total
 
-                        immutable msg = text("msg-id charity tags overwrote an aux: ", event.aux);
-                        appendToErrors(event, msg);
-                        writeln(msg);
-                        printTagsOnExit = true;
+                        version(TwitchWarnings)
+                        {
+                            warnAboutOverwrittenCount(i+1, charityKey);
+                        }
+
+                        event._counts[i+1] = (*charityCount).to!long;
                     }
                 }
-
-                // Store combined text in aux
-                event.aux = sink.data.idup;
 
                 // Remove once we have a recorded parse
                 version(TwitchWarnings)
@@ -322,7 +338,7 @@ auto parseTwitchTags(ref IRCParser parser, ref IRCEvent event)
             case "highlighted-message":
             case "skip-subs-mode-message":
                 // These are PRIVMSGs
-                event.aux = msgID;
+                event._auxstrings[0] = msgID;
                 break;
 
             case "primecommunitygiftreceived":
@@ -439,7 +455,7 @@ auto parseTwitchTags(ref IRCParser parser, ref IRCEvent event)
             case "unavailable_command":
                 // Generic Twitch error.
                 event.type = TWITCH_ERROR;
-                event.aux = msgID;
+                event._auxstrings[0] = msgID;
                 break;
 
             case "emote_only_on":
@@ -512,13 +528,13 @@ auto parseTwitchTags(ref IRCParser parser, ref IRCEvent event)
             case "no_mods":
                 // Generic Twitch server reply.
                 event.type = TWITCH_NOTICE;
-                event.aux = msgID;
+                event._auxstrings[0] = msgID;
                 break;
 
             case "midnightsquid":
                 // New direct cheer with real currency
                 event.type = TWITCH_DIRECTCHEER;
-                //event.aux = msgID;  // reserve for msg-param-currency
+                //event._auxstrings[0] = msgID;  // reserve for msg-param-currency
                 break;
 
             default:
@@ -526,19 +542,19 @@ auto parseTwitchTags(ref IRCParser parser, ref IRCEvent event)
 
                 version(TwitchWarnings)
                 {
-                    if (event.aux.length)
+                    if (event._auxstrings[0].length)
                     {
                         import std.conv : text;
                         import std.stdio : writeln;
 
-                        immutable msg = text("msg-id ", msgID, " overwrote an aux: ", event.aux);
+                        immutable msg = text("msg-id ", msgID, " overwrote an aux: ", event._auxstrings[0]);
                         appendToErrors(event, msg);
                         writeln(msg);
                         printTagsOnExit = true;
                     }
                 }
 
-                event.aux = msgID;
+                event._auxstrings[0] = msgID;
 
                 if (msgID.beginsWith("bad_"))
                 {
@@ -630,16 +646,16 @@ auto parseTwitchTags(ref IRCParser parser, ref IRCEvent event)
 
             if (event.type == TWITCH_RITUAL)
             {
-                event.aux = message;
+                event._auxstrings[0] = message;
             }
             else if (!event.content.length)
             {
                 event.content = message;
             }
-            else if (!event.aux.length)
+            else if (!event._auxstrings[0].length)
             {
                 // If event.content.length but no aux.length, store in aux
-                event.aux = message;
+                event._auxstrings[0] = message;
             }
             break;
 
@@ -727,21 +743,24 @@ auto parseTwitchTags(ref IRCParser parser, ref IRCEvent event)
         case "pinned-chat-paid-currency":
             // elevated message currency
 
+            /+
+                Aux 0
+             +/
             version(TwitchWarnings)
             {
-                if (event.aux.length)
+                if (event._auxstrings[0].length)
                 {
                     import std.conv : text;
                     import std.stdio : writeln;
 
-                    immutable msg = text(key, " overwrote an aux: ", event.aux);
+                    immutable msg = text(key, " overwrote an aux: ", event._auxstrings[0]);
                     appendToErrors(event, msg);
                     writeln(msg);
                     printTagsOnExit = true;
                 }
             }
 
-            event.aux = value;
+            event._auxstrings[0] = value;
             break;
 
         case "emotes":
@@ -793,21 +812,15 @@ auto parseTwitchTags(ref IRCParser parser, ref IRCEvent event)
         case "pinned-chat-paid-amount":
             // elevated message amount
 
+            /+
+                Count 0
+             +/
             version(TwitchWarnings)
             {
-                if (event.count != long.min)
-                {
-                    import std.conv : text;
-                    import std.stdio : writeln;
-
-                    immutable msg = text(key, " overwrote a count: ", event.count);
-                    appendToErrors(event, msg);
-                    writeln(msg);
-                    printTagsOnExit = true;
-                }
+                warnAboutOverwrittenCount(0, key);
             }
 
-            event.count = (value == "0") ? 0 : value.to!long;
+            event._counts[0] = (value == "0") ? 0 : value.to!long;
             break;
 
         case "msg-param-selected-count":
@@ -817,28 +830,132 @@ auto parseTwitchTags(ref IRCParser parser, ref IRCEvent event)
             // Number of total gifts this promotion
         case "msg-param-sender-count":
             // Number of gift subs a user has given in the channel, on a SUBGIFT event
+        case "pinned-chat-paid-canonical-amount":
+            // elevated message, amount in real currency)
+            // we can infer it from pinned-chat-paid-amount in event._counts[0]
         case "msg-param-cumulative-months":
             // Total number of months subscribed, over time. Replaces msg-param-months
-        //case "msg-param-gift-month-being-redeemed":
-            // No room for this but it rightly belongs here
 
-            if (value == "0") break;
-
+            /+
+                Count 1
+             +/
             version(TwitchWarnings)
             {
-                if (event.altcount != long.min)
-                {
-                    import std.conv : text;
-                    import std.stdio : writeln;
-
-                    immutable msg = text(key, " overwrote an altcount: ", event.altcount);
-                    appendToErrors(event, msg);
-                    writeln(msg);
-                    printTagsOnExit = true;
-                }
+                warnAboutOverwrittenCount(1, key);
             }
 
-            event.altcount = value.to!long;
+            event._counts[1] = value.to!long;
+            break;
+
+        case "msg-param-gift-month-being-redeemed":
+            // Didn't save a description...
+        case "msg-param-goal-target-contributions":
+            // msg-param-goal-target-contributions = 600
+        case "msg-param-min-cheer-amount":
+            // REWARDGIFT; of interest?
+            // msg-param-min-cheer-amount = '150'
+        case "msg-param-charity-hours-remaining":
+            // Number of hours remaining in a charity
+        case "number-of-viewers":
+            // (Optional) Number of viewers watching the host.
+        case "msg-param-trigger-amount":
+            // reward gift, the "amount" of an event that triggered a gifting
+            // (eg "1000" for 1000 bits)
+        case "pinned-chat-paid-exponent":
+            // something with elevated messages
+
+            /+
+                Count 2
+             +/
+            version(TwitchWarnings)
+            {
+                warnAboutOverwrittenCount(2, key);
+            }
+
+            event._counts[2] = value.to!long;
+            break;
+
+        case "msg-param-goal-current-contributions":
+            // msg-param-goal-current-contributions = 90
+        case "msg-param-charity-days-remaining":
+            // Number of days remaining in a charity
+        case "msg-param-total-reward-count":
+            // reward gift, to how many users a reward was gifted
+            // alias of msg-param-selected-count?
+        case "msg-param-gift-months":
+
+            /+
+                Count 3
+             +/
+            version(TwitchWarnings)
+            {
+                warnAboutOverwrittenCount(3, key);
+            }
+
+            event._counts[3] = value.to!long;
+            break;
+
+        case "msg-param-goal-user-contributions":
+            // msg-param-goal-user-contributions = 1
+
+            /+
+                Count 4
+             +/
+            version(TwitchWarnings)
+            {
+                warnAboutOverwrittenCount(4, key);
+            }
+
+            event._counts[4] = value.to!long;
+            break;
+
+        case "msg-param-cumulative-tenure-months":
+            // Ongoing number of subscriptions (in a row)
+        case "msg-param-multimonth-duration":
+            // msg-param-multimonth-duration = 0
+            // Seen in a sub event
+
+            /+
+                Count 5
+             +/
+            version(TwitchWarnings)
+            {
+                warnAboutOverwrittenCount(5, key);
+            }
+
+            event._counts[5] = value.to!long;
+            break;
+
+        case "msg-param-multimonth-tenure":
+            // msg-param-multimonth-tenure = 0
+            // Ditto
+            // Number of months in a gifted sub?
+        case "msg-param-should-share-streak-tenure":
+            // Streak resubs
+
+            /+
+                Count 6
+             +/
+            version(TwitchWarnings)
+            {
+                warnAboutOverwrittenCount(6, key);
+            }
+
+            event._counts[6] = value.to!long;
+            break;
+
+        case "msg-param-should-share-streak":
+            // Streak resubs
+
+            /+
+                Count 7
+             +/
+            version(TwitchWarnings)
+            {
+                warnAboutOverwrittenCount(7, key);
+            }
+
+            event._counts[7] = value.to!long;
             break;
 
         case "badge-info":
@@ -883,7 +1000,7 @@ auto parseTwitchTags(ref IRCParser parser, ref IRCEvent event)
 
         case "room-id":
             // The channel ID.
-            if (event.type == ROOMSTATE) event.aux = value;
+            if (event.type == ROOMSTATE) event._auxstrings[0] = value;
             break;
 
         case "reply-parent-display-name":
@@ -896,7 +1013,7 @@ auto parseTwitchTags(ref IRCParser parser, ref IRCEvent event)
         case "reply-parent-msg-body":
             // The body of the message that is being replied to
             // reply-parent-msg-body = she's\sgonna\swin\s2truths\sand\sa\slie\severytime
-            event.aux = decodeIRCv3String(value);
+            event._auxstrings[0] = decodeIRCv3String(value);
             break;
 
         case "reply-parent-user-login":
@@ -917,8 +1034,6 @@ auto parseTwitchTags(ref IRCParser parser, ref IRCEvent event)
                 /*if (value == "0") break;
                 if (event.type == CHAN) event.type = EMOTE;
                 break;*/
-            case "msg-param-gift-months":
-                // Number of months in a gifted sub?
             case "msg-param-sub-plan-name":
                 // The display name of the subscription plan. This may be a default
                 // name or one created by the channel owner.
@@ -994,24 +1109,12 @@ auto parseTwitchTags(ref IRCParser parser, ref IRCEvent event)
             case "thread-id":
                 // thread-id = 22216721_404208264
                 // WHISPER, private message session?
-            case "msg-param-cumulative-tenure-months":
-                // Ongoing number of subscriptions (in a row)
-            case "msg-param-should-share-streak-tenure":
-            case "msg-param-should-share-streak":
-                // Streak resubs
-                // There's no extra field in which to place streak sub numbers
-                // without creating a new type, but even then information is lost
-                // unless we fall back to auxes of "1000 streak 3".
             case "msg-param-months":
                 // DEPRECATED in favour of msg-param-cumulative-months.
                 // The number of consecutive months the user has subscribed for,
                 // in a resub notice.
             case "msg-param-charity-hashtag":
                 //msg-param-charity-hashtag = #charity
-            case "msg-param-charity-hours-remaining":
-                // Number of hours remaining in a charity
-            case "msg-param-charity-days-remaining":
-                // Number of days remaining in a charity
             case "msg-param-charity-name":
                 //msg-param-charity-name = Direct\sRelief
             case "msg-param-charity-learn-more":
@@ -1019,11 +1122,6 @@ auto parseTwitchTags(ref IRCParser parser, ref IRCEvent event)
                 // Do nothing; everything is done at msg-id charity
             case "message":
                 // The message.
-            case "number-of-viewers":
-                // (Optional) Number of viewers watching the host.
-            case "msg-param-min-cheer-amount":
-                // REWARDGIFT; of interest?
-                // msg-param-min-cheer-amount = '150'
             case "msg-param-ritual-name":
                 // msg-param-ritual-name = 'new_chatter'
             case "msg-param-middle-man":
@@ -1033,12 +1131,6 @@ auto parseTwitchTags(ref IRCParser parser, ref IRCEvent event)
             case "custom-reward-id":
                 // custom-reward-id = f597fc7c-703e-42d8-98ed-f5ada6d19f4b
                 // Unsure, was just part of an emote-only PRIVMSG
-            case "msg-param-total-reward-count":
-                // reward gift, to how many users a reward was gifted
-                // alias of msg-param-selected-count?
-            case "msg-param-trigger-amount":
-                // reward gift, the "amount" of an event that triggered a gifting
-                // (eg "1000" for 1000 bits)
             case "msg-param-domain":
                 // msg-param-domain = owl2018
                 // [rewardgift] [#overwatchleague] Asdf [bits]: "A Cheer shared Rewards to 35 others in Chat!" {35}
@@ -1061,14 +1153,6 @@ auto parseTwitchTags(ref IRCParser parser, ref IRCEvent event)
                 // On subscription events, whether or not the sub was from a gift.
             case "msg-param-anon-gift":
                 // msg-param-anon-gift = false
-            case "msg-param-gift-month-being-redeemed":
-                // msg-param-gift-month-being-redeemed = 3
-            case "msg-param-multimonth-duration":
-                // msg-param-multimonth-duration = 0
-                // Seen in a sub event
-            case "msg-param-multimonth-tenure":
-                // msg-param-multimonth-tenure = 0
-                // Ditto
             case "first-msg":
                 // first-msg = 0
                 // Whether or not it's the user's first message after joining the channel?
@@ -1084,13 +1168,6 @@ auto parseTwitchTags(ref IRCParser parser, ref IRCEvent event)
             case "msg-param-goal-description":
                 // msg-param-goal-description = Lali-this\sis\sa\sgoal-ho
                 // Nowhere to put this without a triaux.
-            case "msg-param-goal-target-contributions":
-                // msg-param-goal-target-contributions = 600
-                // Nowhere to put this without a tricount.
-            case "msg-param-goal-current-contributions":
-                // msg-param-goal-current-contributions = 90
-            case "msg-param-goal-user-contributions":
-                // msg-param-goal-user-contributions = 1
             case "returning-chatter":
                 // returning-chatter = 0
                 // Unsure.
@@ -1105,11 +1182,6 @@ auto parseTwitchTags(ref IRCParser parser, ref IRCEvent event)
                 // ditto
             case "msg-param-pill-type":
                 // ditto
-            case "pinned-chat-paid-canonical-amount":
-                // elevated message, amount in real currency)
-                // we can infer it from pinned-chat-paid-amount in event.count
-            case "pinned-chat-paid-exponent":
-                // something with elevated messages
 
                 // Ignore these events.
                 break;
@@ -1171,7 +1243,7 @@ final class TwitchPostprocessor : Postprocessor
             if ((event.type == CLEARCHAT) && event.target.nickname.length)
             {
                 // Stay CLEARCHAT if no target nickname
-                event.type = (event.count > 0) ?
+                event.type = (!event._counts[0].isNull && (event._counts[0].get > 0)) ?
                     TWITCH_TIMEOUT :
                     TWITCH_BAN;
             }
