@@ -86,7 +86,7 @@ import lu.deltastrings : formatDeltaInto;
 import std.range.primitives : isOutputRange;
 import std.typecons : Flag, No, Yes;
 
-@safe:
+//@safe:
 
 
 // formatClientAssignment
