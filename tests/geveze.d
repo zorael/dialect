@@ -66,7 +66,7 @@ unittest
             assert((type == IRCEvent.Type.RPL_MYINFO), Enum!(IRCEvent.Type).toString(type));
             assert((sender.address == "irc.geveze.org"), sender.address);
             assert((content == "iowghraAsORTVSxUXNClWqBzdHtGpQD lvhopsmntikrRcaqOALQbSeIKVfMCuzNTGjZ"), content);
-            assert((aux == "Unreal3.2.8.1"), aux);
+            assert((auxstrings[0] == "Unreal3.2.8.1"), auxstrings[0]);
             assert((num == 4), num.to!string);
         }
     }

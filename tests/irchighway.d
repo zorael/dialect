@@ -14,7 +14,7 @@ unittest
             assert((type == IRCEvent.Type.RPL_MYINFO), Enum!(IRCEvent.Type).toString(type));
             assert((sender.address == "eggbert.ca.na.irchighway.net"), sender.address);
             assert((content == "BIRSWghiorswx ACDIMNORSTabcdehiklmnopqrstvz Iabdehkloqv"), content);
-            assert((aux == "InspIRCd-2.0"), aux);
+            assert((auxstrings[0] == "InspIRCd-2.0"), auxstrings[0]);
             assert((num == 4), num.to!string);
         }
     }
@@ -109,7 +109,7 @@ unittest
             assert((type == RPL_YOURID), Enum!(IRCEvent.Type).toString(type));
             assert((sender.address == "caliburn.pa.us.irchighway.net"), sender.address);
             assert((content == "your unique ID"), content);
-            assert((aux == "132AAMJT5"), aux);
+            assert((auxstrings[0] == "132AAMJT5"), auxstrings[0]);
             assert((num == 42), num.to!string);
         }
     }
@@ -121,7 +121,7 @@ unittest
             assert((type == CAP), Enum!(IRCEvent.Type).toString(type));
             assert((sender.address == "genesis.ks.us.irchighway.net"), sender.address);
             assert((content == "away-notify extended-join account-notify multi-prefix sasl tls userhost-in-names"), content);
-            assert((aux == "LS"), aux);
+            assert((auxstrings[0] == "LS"), auxstrings[0]);
         }
     }
 }

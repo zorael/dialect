@@ -23,7 +23,7 @@ unittest
             assert((type == IRCEvent.Type.RPL_MYINFO), Enum!(IRCEvent.Type).toString(type));
             assert((sender.address == "irc.ircii.net"), sender.address);
             assert((content == "CDGNRSUWagilopqrswxyz BCIMNORSabcehiklmnopqstvz Iabehkloqv"), content);
-            assert((aux == "plexus-4(hybrid-8.1.20)"), aux);
+            assert((auxstrings[0] == "plexus-4(hybrid-8.1.20)"), auxstrings[0]);
             assert((num == 4), num.to!string);
         }
     }
@@ -175,7 +175,7 @@ unittest
             assert((type == ERR_HELPNOTFOUND), Enum!(IRCEvent.Type).toString(type));
             assert((sender.address == "irc.rizon.no"), sender.address);
             assert((content == "Help not found"), content);
-            assert((aux == "502"), aux);
+            assert((auxstrings[0] == "502"), auxstrings[0]);
             assert((num == 524), num.to!string);
         }
     }
@@ -187,7 +187,7 @@ unittest
             assert((type == ERR_UNKNOWNMODE), Enum!(IRCEvent.Type).toString(type));
             assert((sender.address == "irc.rizon.no"), sender.address);
             assert((content == "is unknown mode char to me"), content);
-            assert((aux == "X"), aux);
+            assert((auxstrings[0] == "X"), auxstrings[0]);
             assert((num == 472), num.to!string);
         }
     }
@@ -202,7 +202,7 @@ unittest
             assert((target.ident == "~NaN"), target.ident);
             assert((target.address == "C2802314.E23AD7D8.E9841504.IP"), target.address);
             assert((content == "kameloso!"), content);
-            assert((aux == "C2802314.E23AD7D8.E9841504.IP"), aux);
+            assert((auxstrings[0] == "C2802314.E23AD7D8.E9841504.IP"), auxstrings[0]);
             assert((num == 314), num.to!string);
         }
     }
@@ -214,7 +214,7 @@ unittest
             assert((type == RPL_VERSION), Enum!(IRCEvent.Type).toString(type));
             assert((sender.address == "irc.rizon.no"), sender.address);
             assert((content == "plexus-4(hybrid-8.1.20)(20170821_0-607). irc.rizon.no"), content);
-            assert((aux == "TS6ow"), aux);
+            assert((auxstrings[0] == "TS6ow"), auxstrings[0]);
             assert((num == 351), num.to!string);
         }
     }
@@ -285,7 +285,7 @@ unittest
             assert((sender.address == "irc.rizon.club"), sender.address);
             assert((target.nickname == "kameloso^"), target.nickname);
             assert((target.address == "194.117.188.126"), target.address);
-            assert((aux == "~kameloso@194.117.188.126"), aux);
+            assert((auxstrings[0] == "~kameloso@194.117.188.126"), auxstrings[0]);
             assert((num == 338), num.to!string);
         }
     }

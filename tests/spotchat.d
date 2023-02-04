@@ -14,7 +14,7 @@ unittest
             assert((type == IRCEvent.Type.RPL_MYINFO), Enum!(IRCEvent.Type).toString(type));
             assert((sender.address == "medusa.us.SpotChat.org"), sender.address);
             assert((content == "BHIRSWcdghikorswx ACIJKMNOPQRSTYabceghiklmnopqrstvz IJYabeghkloqv"), content);
-            assert((aux == "InspIRCd-2.0"), aux);
+            assert((auxstrings[0] == "InspIRCd-2.0"), auxstrings[0]);
             assert((num == 4), num.to!string);
         }
     }
@@ -132,7 +132,7 @@ unittest
         {
             assert((type == RPL_UMODEIS), Enum!(IRCEvent.Type).toString(type));
             assert((sender.address == "lamia.ca.SpotChat.org"), sender.address);
-            assert((aux == "+ix"), aux);
+            assert((auxstrings[0] == "+ix"), auxstrings[0]);
             assert((num == 221), num.to!string);
         }
     }

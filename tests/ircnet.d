@@ -14,7 +14,7 @@ unittest
             assert((type == IRCEvent.Type.RPL_MYINFO), Enum!(IRCEvent.Type).toString(type));
             assert((sender.address == "irc.nlnog.net"), sender.address);
             assert((content == "aoOirw abeiIklmnoOpqrRstv"), content);
-            assert((aux == "2.11.2p3"), aux);
+            assert((auxstrings[0] == "2.11.2p3"), auxstrings[0]);
             assert((num == 4), num.to!string);
         }
     }
