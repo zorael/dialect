@@ -19,6 +19,13 @@ import dialect.common : Postprocessor;
 
 @safe:
 
+version(Postprocessors) {}
+else
+{
+    enum message = "Version `Postprocessors` must be enabled in `dub.sdl` for Twitch support.";
+    static assert(0, message);
+}
+
 
 // parseTwitchTags
 /++

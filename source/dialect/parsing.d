@@ -2719,6 +2719,7 @@ public:
         Array of active [dialect.common.Postprocessor|Postprocessor]s, to be
         iterated through and processed after parsing is complete.
      +/
+    version(Postprocessors)
     Postprocessor[] postprocessors;
 
     // toIRCEvent
@@ -2744,7 +2745,7 @@ public:
         // meaningful error messages if something doesn't look right.
         postparseSanityCheck(this, event);
 
-        static if (Postprocessors.length)
+        version(Postprocessors)
         {
             // Epilogue: let postprocessors alter the event
             foreach (postprocessor; this.postprocessors)
@@ -2765,7 +2766,7 @@ public:
         this.client = client;
         this.server = server;
 
-        static if (Postprocessors.length)
+        version(Postprocessors)
         {
             initPostprocessors();
         }
@@ -2777,9 +2778,8 @@ public:
     /++
         Initialises defined postprocessors.
      +/
+    version(Postprocessors)
     void initPostprocessors() pure nothrow
-    in (!this.postprocessors.length, "Tried to double-init postprocessors")
-    do
     {
         this.postprocessors.reserve(Postprocessors.length);
 
