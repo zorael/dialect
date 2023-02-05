@@ -43,7 +43,9 @@ private:
      +/
     enum numAuxStrings = 16;
 
-    /// How many elements should be allocated for counts.
+    /++
+        How many elements should be allocated for counts.
+     +/
     enum numCounts = 16;
 
 public:
@@ -863,48 +865,76 @@ public:
         }
     */
 
-    /// The event type, signifying what *kind* of event this is.
+    /++
+        The event type, signifying what *kind* of event this is.
+     +/
     Type type;
 
-    /// The raw IRC string, untouched.
+    /++
+        The raw IRC string, untouched.
+     +/
     @Hidden string raw;
 
-    /// The name of whoever (or whatever) sent this event.
+    /++
+        The name of whoever (or whatever) sent this event.
+     +/
     IRCUser sender;
 
-    /// The channel the event transpired in, or is otherwise related to.
+    /++
+        The channel the event transpired in, or is otherwise related to.
+     +/
     string channel;
 
-    /// The target user of the event.
+    /++
+        The target user of the event.
+     +/
     IRCUser target;
 
-    /// The main body of text of the event.
+    /++
+        The main body of text of the event.
+     +/
     string content;
 
-    /// Auxiliary string array.
+    /++
+        Auxiliary string array.
+     +/
     string[numAuxStrings] aux;
 
-    /// IRCv3 message tags attached to this event.
+    /++
+        IRCv3 message tags attached to this event
+     +/
     string tags;
 
-    /// With a numeric event, the number of the event type.
+    /++
+        With a numeric event, the number of the event type.
+     +/
     uint num;
 
-    /// Count array.
+    /++
+        Count array.
+     +/
     Nullable!long[numCounts] count;
 
-    /// A timestamp of when the event transpired.
+    /++
+        A timestamp of when the event transpired.
+     +/
     @Hidden long time;
 
-    /// What errors occurred during parsing, if any.
+    /++
+        What errors occurred during parsing, if any.
+     +/
     string errors;
 
     version(TwitchSupport)
     {
-        /// The Twitch emotes in the message, if any.
+        /++
+            The Twitch emotes in the message, if any.
+         +/
         string emotes;
 
-        /// The Twitch ID of this message.
+        /++
+            The Twitch ID of this message.
+         +/
         string id;
     }
 }
@@ -980,30 +1010,46 @@ struct IRCServer
         strict_rfc1459,
     }
 
-    /// Server address (or IP).
+    /++
+        Server address (or IP).
+     +/
     string address;
 
-    /// The port to connect to, usually `6667`-`6669`.
+    /++
+        The port to connect to, usually `6667`-`6669`.
+     +/
     ushort port;
 
     @Unserialisable
     {
-        /// The server daemon family the server is running.
+        /++
+            The server daemon family the server is running.
+         +/
         Daemon daemon;
 
-        /// Server network string, like Freenode, QuakeNet, Rizon.
+        /++
+            Server network string, like Freenode, QuakeNet, Rizon.
+         +/
         string network;
 
-        /// The reported daemon, with version.
+        /++
+            The reported daemon, with version.
+         +/
         string daemonstring;
 
-        /// The IRC server address handed to us by the round robin pool.
+        /++
+            The IRC server address handed to us by the round robin pool.
+         +/
         string resolvedAddress;
 
-        /// Max nickname length as per IRC specs, but not the de facto standard.
+        /++
+            Max nickname length as per IRC specs, but not the de facto standard.
+         +/
         uint maxNickLength = 9;
 
-        /// Max channel name length as per IRC specs, or as reported.
+        /++
+            Max channel name length as per IRC specs, or as reported.
+         +/
         uint maxChannelLength = 200;
 
         /++
@@ -1012,19 +1058,29 @@ struct IRCServer
          +/
         string aModes; // = "eIbq";
 
-        /// B = Mode that changes a setting and always has a parameter.
+        /++
+            B = Mode that changes a setting and always has a parameter.
+         +/
         string bModes; // = "k";
 
-        /// C = Mode that changes a setting and only has a parameter when set.
+        /++
+            C = Mode that changes a setting and only has a parameter when set.
+         +/
         string cModes; // = "flj";
 
-        /// D = Mode that changes a setting and never has a parameter.
+        /++
+            D = Mode that changes a setting and never has a parameter.
+         +/
         string dModes; // = "CFLMPQScgimnprstz";
 
-        /// Prefix characters by mode character; `o` by `@`, `v` by `+`, etc.
+        /++
+            Prefix characters by mode character; `o` by `@`, `v` by `+`, etc.
+         +/
         char[char] prefixchars;
 
-        /// Character channel mode prefixes (`o`, `v`, `h`, ...)
+        /++
+            Character channel mode prefixes (`o`, `v`, `h`, ...)
+         +/
         string prefixes;
 
         /++
@@ -1034,22 +1090,34 @@ struct IRCServer
          +/
         string chantypes = "#";
 
-        /// The current case mapping, dictating how case-insensitivity works.
+        /++
+            The current case mapping, dictating how case-insensitivity works.
+         +/
         CaseMapping caseMapping;
 
-        /// `EXTBAN` prefix character.
+        /++
+            `EXTBAN` prefix character.
+         +/
         char extbanPrefix = '$';
 
-        /// `EXTBAN` types.
+        /++
+            `EXTBAN` types.
+         +/
         string extbanTypes;
 
-        /// The modechar for mode exceptions.
+        /++
+            The modechar for mode exceptions.
+         +/
         char exceptsChar = 'e';
 
-        /// The modechar for invite exceptions.
+        /++
+            The modechar for invite exceptions.
+         +/
         char invexChar = 'I';
 
-        /// Contents of the [IRCEvent.Type.RPL_ISUPPORT|RPL_ISUPPORT] response(s).
+        /++
+            Contents of the [IRCEvent.Type.RPL_ISUPPORT|RPL_ISUPPORT] response(s).
+         +/
         string supports;
     }
 
@@ -1073,12 +1141,16 @@ struct IRCServer
  +/
 struct IRCUser
 {
-    /// The user's nickname.
+    /++
+        The user's nickname.
+     +/
     string nickname;
 
     version(BotElements)
     {
-        /// Classifiers; roles which a user is one of.
+        /++
+            Classifiers; roles which a user is one of.
+         +/
         enum Class
         {
             unset,      /// Unknown, yet to be determined.
@@ -1092,43 +1164,65 @@ struct IRCUser
             admin,      /// An administrator, in a bot-like context.
         }
 
-        /// User classifier.
+        /++
+            User classifier.
+         +/
         Class class_;
     }
 
-    /// The user's GECOS/"real name".
+    /++
+        The user's GECOS/"real name".
+     +/
     string realName;
 
-    /// The user's IDENT identification.
+    /++
+        The user's IDENT identification.
+     +/
     string ident;
 
-    /// The reported user address, which may be a cloak.
+    /++
+        The reported user address, which may be a cloak.
+     +/
     string address;
 
-    /// Services account name (to `NickServ`, `AuthServ`, `Q`, etc).
+    /++
+        Services account name (to `NickServ`, `AuthServ`, `Q`, etc).
+     +/
     string account;
 
-    /// Timestamp when the user was last modified.
+    /++
+        Timestamp when the user was last modified.
+     +/
     @Hidden long updated;
 
     version(TwitchSupport)
     {
         // Twitch has some extra features.
 
-        /// The alternate "display name" of the user.
+        /++
+            The alternate "display name" of the user.
+         +/
         string displayName;
 
-        /// The Twitch badges this user has.
+        /++
+            The Twitch badges this user has.
+         +/
         string badges;
 
-        /// The Twitch colour (RRGGBB) to tint the user's nickname with.
+        /++
+            The Twitch colour (RRGGBB) to tint the user's nickname with.
+         +/
         string colour;
 
-        /// The Twitch ID of this user's account.
+        /++
+            The Twitch ID of this user's account.
+         +/
         uint id;
     }
 
-    /// Create a new [IRCUser] based on a `*!*@*` mask string.
+    /++
+        Create a new [IRCUser] based on a `*!*@*` mask string.
+     +/
     this(string userstring) pure
     {
         import std.format : formattedRead;
@@ -1310,9 +1404,13 @@ struct IRCUser
  +/
 struct Typenums
 {
+private:
     alias Type = IRCEvent.Type;
 
-    /// Default mappings.
+public:
+    /++
+        Default mappings.
+     +/
     static immutable Type[1024] base =
     [
         1   : Type.RPL_WELCOME,
@@ -2324,7 +2422,9 @@ struct IRCChannel
      +/
     static struct Mode
     {
-        /// The character that implies this [Mode] (`i`, `z`, `l` ...).
+        /++
+            The character that implies this [Mode] (`i`, `z`, `l` ...).
+         +/
         char modechar;
 
         /++
@@ -2333,16 +2433,24 @@ struct IRCChannel
          +/
         string data;
 
-        /// The user associated with the [Mode], when it is not just [Mode.data|data].
+        /++
+            The user associated with the [Mode], when it is not just [Mode.data|data].
+         +/
         IRCUser user;
 
-        /// The channel this mode refers to, where applicable.
+        /++
+            The channel this mode refers to, where applicable.
+         +/
         string channel;
 
-        /// Users that are explicitly exempt from the [Mode].
+        /++
+            Users that are explicitly exempt from the [Mode].
+         +/
         IRCUser[] exceptions;
 
-        /// Whether or not this [Mode] should be considered to be its own antithesis.
+        /++
+            Whether or not this [Mode] should be considered to be its own antithesis.
+         +/
         bool negated;
 
         /++
@@ -2380,19 +2488,29 @@ struct IRCChannel
         }
     }
 
-    /// The channel name.
+    /++
+        The channel name.
+     +/
     string name;
 
-    /// The current topic of the channel, as set by operators.
+    /++
+        The current topic of the channel, as set by operators.
+     +/
     string topic;
 
-    /// The current non-[data]-sporting [Mode]s of the channel.
+    /++
+        The current non-[data]-sporting [Mode]s of the channel.
+     +/
     string modechars;
 
-    /// Array of all [Mode]s that are not simply represented in [modechars].
+    /++
+        Array of all [Mode]s that are not simply represented in [modechars].
+     +/
     Mode[] modes;
 
-    /// Associative array of all the nicknames inhabiting the channel.
+    /++
+        Associative array of all the nicknames inhabiting the channel.
+     +/
     bool[string] users;
 
     /++
@@ -2425,16 +2543,24 @@ struct IRCChannel
         return *modsOp;
     }
 
-    /// Array of channel operators.
+    /++
+        Array of channel operators.
+     +/
     alias ops = modsShorthand!'o';
 
-    /// Array of channel halfops.
+    /++
+        Array of channel halfops.
+     +/
     alias halfops = modsShorthand!'h';
 
-    /// Array of voiced channel users.
+    /++
+        Array of voiced channel users.
+     +/
     alias voiced = modsShorthand!'v';
 
-    /// When the channel was created, expressed in UNIX time.
+    /++
+        When the channel was created, expressed in UNIX time.
+     +/
     long created;
 }
 
@@ -2448,18 +2574,26 @@ struct IRCChannel
  +/
 struct IRCClient
 {
-    /// Client nickname.
+    /++
+        Client nickname.
+     +/
     string nickname; // = "kameloso";
 
-    /// Client "user".
+    /++
+        Client "user".
+     +/
     string user; // = "kameloso";
 
-    /// Client GECOS/"real name".
+    /++
+        Client GECOS/"real name".
+     +/
     string realName; // = "kameloso IRC bot";
 
     @Unserialisable
     {
-        /// The original client nickname before connecting, in case it changed.
+        /++
+            The original client nickname before connecting, in case it changed.
+         +/
         string origNickname;
 
         /++
@@ -2470,11 +2604,15 @@ struct IRCClient
 
         version(TwitchSupport)
         {
-            /// Our Twitch display name or alias.
+            /++
+                Our Twitch display name or alias.
+             +/
             string displayName;
         }
 
-        /// The current modechars active on the client (e.g. "ix");
+        /++
+            The current modechars active on the client (e.g. "ix");
+         +/
         string modes;
     }
 }
