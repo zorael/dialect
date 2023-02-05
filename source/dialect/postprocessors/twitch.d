@@ -217,9 +217,6 @@ auto parseTwitchTags(ref IRCParser parser, ref IRCEvent event)
                 break;
 
             case "charity":
-                //msg-param-total = 135770
-                // Charity has too many fields to fit an IRCEvent as they are currently
-                // Cram as much into aux as possible
                 import lu.string : beginsWith;
                 import std.algorithm.iteration : filter;
                 import std.array : Appender;
