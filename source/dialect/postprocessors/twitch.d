@@ -74,12 +74,12 @@ auto parseTwitchTags(ref IRCParser parser, ref IRCEvent event)
 
         void warnAboutOverwrittenCount(const size_t i, const string key)
         {
-            if (!event._counts[i].isNull)
+            if (!event.count[i].isNull)
             {
                 import std.conv : text;
                 import std.stdio : writeln;
 
-                immutable msg = text(key, " overwrote `counts[", i, "]`: ", event._counts[i]);
+                immutable msg = text(key, " overwrote `count[", i, "]`: ", event.count[i]);
                 appendToErrors(event, msg);
                 writeln(msg);
                 printTagsOnExit = true;
@@ -88,12 +88,12 @@ auto parseTwitchTags(ref IRCParser parser, ref IRCEvent event)
 
         void warnAboutOverwrittenAuxString(const size_t i, const string key)
         {
-            if (event._auxstrings[i].length)
+            if (event.aux[i].length)
             {
                 import std.conv : text;
                 import std.stdio : writeln;
 
-                immutable msg = text(key, " overwrote `auxstrings[", i, "]`: ", event._auxstrings[i]);
+                immutable msg = text(key, " overwrote `aux[", i, "]`: ", event.aux[i]);
                 appendToErrors(event, msg);
                 writeln(msg);
                 printTagsOnExit = true;
@@ -255,7 +255,7 @@ auto parseTwitchTags(ref IRCParser parser, ref IRCEvent event)
                         warnAboutOverwrittenAuxString(0, "msg-param-charity-name");
                     }
 
-                    event._auxstrings[0] = (*charityName)
+                    event.aux[0] = (*charityName)
                         .decodeIRCv3String
                         .strippedRight
                         .removeControlCharacters;
@@ -274,7 +274,7 @@ auto parseTwitchTags(ref IRCParser parser, ref IRCEvent event)
                             warnAboutOverwrittenAuxString(i+1, charityKey);
                         }
 
-                        event._auxstrings[i+1] = *charityString;
+                        event.aux[i+1] = *charityString;
                     }
                 }
 
@@ -282,7 +282,7 @@ auto parseTwitchTags(ref IRCParser parser, ref IRCEvent event)
                 /*if (const charityTotal = "msg-param-total" in charityAA)
                 {
                     //msg-param-charity-hours-remaining = 286
-                    event._counts[0] = (*charityTotal).to!int;
+                    event.count[0] = (*charityTotal).to!int;
                 }*/
 
                 foreach (immutable i, charityKey; charityCountTags)
@@ -298,7 +298,7 @@ auto parseTwitchTags(ref IRCParser parser, ref IRCEvent event)
                             warnAboutOverwrittenCount(i+1, charityKey);
                         }
 
-                        event._counts[i+1] = (*charityCount).to!long;
+                        event.count[i+1] = (*charityCount).to!long;
                     }
                 }
 
@@ -338,7 +338,7 @@ auto parseTwitchTags(ref IRCParser parser, ref IRCEvent event)
             case "highlighted-message":
             case "skip-subs-mode-message":
                 // These are PRIVMSGs
-                event._auxstrings[0] = msgID;
+                event.aux[0] = msgID;
                 break;
 
             case "primecommunitygiftreceived":
@@ -455,7 +455,7 @@ auto parseTwitchTags(ref IRCParser parser, ref IRCEvent event)
             case "unavailable_command":
                 // Generic Twitch error.
                 event.type = TWITCH_ERROR;
-                event._auxstrings[0] = msgID;
+                event.aux[0] = msgID;
                 break;
 
             case "emote_only_on":
@@ -528,13 +528,13 @@ auto parseTwitchTags(ref IRCParser parser, ref IRCEvent event)
             case "no_mods":
                 // Generic Twitch server reply.
                 event.type = TWITCH_NOTICE;
-                event._auxstrings[0] = msgID;
+                event.aux[0] = msgID;
                 break;
 
             case "midnightsquid":
                 // New direct cheer with real currency
                 event.type = TWITCH_DIRECTCHEER;
-                //event._auxstrings[0] = msgID;  // reserve for msg-param-currency
+                //event.aux[0] = msgID;  // reserve for msg-param-currency
                 break;
 
             default:
@@ -542,19 +542,19 @@ auto parseTwitchTags(ref IRCParser parser, ref IRCEvent event)
 
                 version(TwitchWarnings)
                 {
-                    if (event._auxstrings[0].length)
+                    if (event.aux[0].length)
                     {
                         import std.conv : text;
                         import std.stdio : writeln;
 
-                        immutable msg = text("msg-id ", msgID, " overwrote an aux: ", event._auxstrings[0]);
+                        immutable msg = text("msg-id ", msgID, " overwrote an aux: ", event.aux[0]);
                         appendToErrors(event, msg);
                         writeln(msg);
                         printTagsOnExit = true;
                     }
                 }
 
-                event._auxstrings[0] = msgID;
+                event.aux[0] = msgID;
 
                 if (msgID.beginsWith("bad_"))
                 {
@@ -646,16 +646,16 @@ auto parseTwitchTags(ref IRCParser parser, ref IRCEvent event)
 
             if (event.type == TWITCH_RITUAL)
             {
-                event._auxstrings[0] = message;
+                event.aux[0] = message;
             }
             else if (!event.content.length)
             {
                 event.content = message;
             }
-            else if (!event._auxstrings[0].length)
+            else if (!event.aux[0].length)
             {
                 // If event.content.length but no aux.length, store in aux
-                event._auxstrings[0] = message;
+                event.aux[0] = message;
             }
             break;
 
@@ -748,19 +748,19 @@ auto parseTwitchTags(ref IRCParser parser, ref IRCEvent event)
              +/
             version(TwitchWarnings)
             {
-                if (event._auxstrings[0].length)
+                if (event.aux[0].length)
                 {
                     import std.conv : text;
                     import std.stdio : writeln;
 
-                    immutable msg = text(key, " overwrote an aux: ", event._auxstrings[0]);
+                    immutable msg = text(key, " overwrote an aux: ", event.aux[0]);
                     appendToErrors(event, msg);
                     writeln(msg);
                     printTagsOnExit = true;
                 }
             }
 
-            event._auxstrings[0] = value;
+            event.aux[0] = value;
             break;
 
         case "emotes":
@@ -820,7 +820,7 @@ auto parseTwitchTags(ref IRCParser parser, ref IRCEvent event)
                 warnAboutOverwrittenCount(0, key);
             }
 
-            event._counts[0] = (value == "0") ? 0 : value.to!long;
+            event.count[0] = (value == "0") ? 0 : value.to!long;
             break;
 
         case "msg-param-selected-count":
@@ -832,7 +832,7 @@ auto parseTwitchTags(ref IRCParser parser, ref IRCEvent event)
             // Number of gift subs a user has given in the channel, on a SUBGIFT event
         case "pinned-chat-paid-canonical-amount":
             // elevated message, amount in real currency)
-            // we can infer it from pinned-chat-paid-amount in event._counts[0]
+            // we can infer it from pinned-chat-paid-amount in event.count[0]
         case "msg-param-cumulative-months":
             // Total number of months subscribed, over time. Replaces msg-param-months
 
@@ -844,7 +844,7 @@ auto parseTwitchTags(ref IRCParser parser, ref IRCEvent event)
                 warnAboutOverwrittenCount(1, key);
             }
 
-            event._counts[1] = value.to!long;
+            event.count[1] = value.to!long;
             break;
 
         case "msg-param-gift-month-being-redeemed":
@@ -872,7 +872,7 @@ auto parseTwitchTags(ref IRCParser parser, ref IRCEvent event)
                 warnAboutOverwrittenCount(2, key);
             }
 
-            event._counts[2] = value.to!long;
+            event.count[2] = value.to!long;
             break;
 
         case "msg-param-goal-current-contributions":
@@ -892,7 +892,7 @@ auto parseTwitchTags(ref IRCParser parser, ref IRCEvent event)
                 warnAboutOverwrittenCount(3, key);
             }
 
-            event._counts[3] = value.to!long;
+            event.count[3] = value.to!long;
             break;
 
         case "msg-param-goal-user-contributions":
@@ -906,7 +906,7 @@ auto parseTwitchTags(ref IRCParser parser, ref IRCEvent event)
                 warnAboutOverwrittenCount(4, key);
             }
 
-            event._counts[4] = value.to!long;
+            event.count[4] = value.to!long;
             break;
 
         case "msg-param-cumulative-tenure-months":
@@ -923,7 +923,7 @@ auto parseTwitchTags(ref IRCParser parser, ref IRCEvent event)
                 warnAboutOverwrittenCount(5, key);
             }
 
-            event._counts[5] = value.to!long;
+            event.count[5] = value.to!long;
             break;
 
         case "msg-param-multimonth-tenure":
@@ -941,7 +941,7 @@ auto parseTwitchTags(ref IRCParser parser, ref IRCEvent event)
                 warnAboutOverwrittenCount(6, key);
             }
 
-            event._counts[6] = value.to!long;
+            event.count[6] = value.to!long;
             break;
 
         case "msg-param-should-share-streak":
@@ -955,7 +955,7 @@ auto parseTwitchTags(ref IRCParser parser, ref IRCEvent event)
                 warnAboutOverwrittenCount(7, key);
             }
 
-            event._counts[7] = value.to!long;
+            event.count[7] = value.to!long;
             break;
 
         case "badge-info":
@@ -1000,7 +1000,7 @@ auto parseTwitchTags(ref IRCParser parser, ref IRCEvent event)
 
         case "room-id":
             // The channel ID.
-            if (event.type == ROOMSTATE) event._auxstrings[0] = value;
+            if (event.type == ROOMSTATE) event.aux[0] = value;
             break;
 
         case "reply-parent-display-name":
@@ -1013,7 +1013,7 @@ auto parseTwitchTags(ref IRCParser parser, ref IRCEvent event)
         case "reply-parent-msg-body":
             // The body of the message that is being replied to
             // reply-parent-msg-body = she's\sgonna\swin\s2truths\sand\sa\slie\severytime
-            event._auxstrings[0] = decodeIRCv3String(value);
+            event.aux[0] = decodeIRCv3String(value);
             break;
 
         case "reply-parent-user-login":
@@ -1243,7 +1243,7 @@ final class TwitchPostprocessor : Postprocessor
             if ((event.type == CLEARCHAT) && event.target.nickname.length)
             {
                 // Stay CLEARCHAT if no target nickname
-                event.type = (!event._counts[0].isNull && (event._counts[0].get > 0)) ?
+                event.type = (!event.count[0].isNull && (event.count[0].get > 0)) ?
                     TWITCH_TIMEOUT :
                     TWITCH_BAN;
             }
@@ -1251,7 +1251,7 @@ final class TwitchPostprocessor : Postprocessor
 
         if (event.sender.nickname.length)
         {
-            // Twitch nicknames are always the same as the user accounts; the
+            // Twitch nicknames are always the same as the user account; the
             // displayed name/alias is sent separately as a "display-name" IRCv3 tag
             event.sender.account = event.sender.nickname;
         }
