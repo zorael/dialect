@@ -35,8 +35,13 @@ struct IRCEvent
 private:
     import std.typecons : Nullable;
 
-    /// How many elements should be allocated for auxiliary strings.
-    enum numAuxStrings = 8;
+    /++
+        How many elements should be allocated for auxiliary strings.
+
+        `ISUPPORT` can contain a lot of strings and should be considered the
+        worst case.
+     +/
+    enum numAuxStrings = 16;
 
     /// How many elements should be allocated for counts.
     enum numCounts = 16;
