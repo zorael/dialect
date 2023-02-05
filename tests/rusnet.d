@@ -14,7 +14,7 @@ unittest
             assert((type == IRCEvent.Type.RPL_MYINFO), Enum!(IRCEvent.Type).toString(type));
             assert((sender.address == "irc.run.net"), sender.address);
             assert((content == "aboOirswx abcehiIklmnoOpqrstvz"), content);
-            assert((auxstrings[0] == "1.5.24/uk_UA.KOI8-U"), auxstrings[0]);
+            assert((aux[0] == "1.5.24/uk_UA.KOI8-U"), aux[0]);
             assert((num == 4), num.to!string);
         }
     }
@@ -69,7 +69,7 @@ unittest
             assert((type == IRCEvent.Type.RPL_CODEPAGE), Enum!(IRCEvent.Type).toString(type));
             assert((sender.address == "irc.run.net"), sender.address);
             assert((content == "is your charset now"), content);
-            assert((auxstrings[0] == "KOI8-U"), auxstrings[0]);
+            assert((aux[0] == "KOI8-U"), aux[0]);
             assert((num == 222), num.to!string);
         }
     }

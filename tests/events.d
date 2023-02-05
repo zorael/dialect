@@ -34,7 +34,7 @@ unittest
             assert((type == ERR_YOUREBANNEDCREEP), Enum!(IRCEvent.Type).toString(type));
             assert((sender.address == "miranda.chathispano.com"), sender.address);
             assert((content == "[1511000504768] G-Lined by ChatHispano Network. Para mas informacion visite http://chathispano.com/gline/?id=<id> (expires at Dom, 19/11/2017 11:21:48 +0100)."), content);
-            assert((auxstrings[0] == "1511086908"), auxstrings[0]);
+            assert((aux[0] == "1511086908"), aux[0]);
             assert((num == 465), num.to!string);
         }
     }
@@ -47,7 +47,7 @@ unittest
             assert((sender.address == "irc.RomaniaChat.eu"), sender.address);
             assert((channel == "#gameofthrones"), channel);
             assert((content == "[+ntTGfB]"), content);
-            assert((counts[0] == 1), counts[0].to!string);
+            assert((count[0] == 1), count[0].to!string);
             assert((num == 322), num.to!string);
         }
     }
@@ -60,7 +60,7 @@ unittest
             assert((sender.address == "irc.RomaniaChat.eu"), sender.address);
             assert((channel == "#radioclick"), channel);
             assert((content == "[+ntr]  Bun venit pe #Radioclick! Site oficial www.radioclick.ro sau servere irc.romaniachat.eu, irc.radioclick.ro"), content);
-            assert((counts[0] == 63), counts[0].to!string);
+            assert((count[0] == 63), count[0].to!string);
             assert((num == 322), num.to!string);
         }
     }
@@ -71,7 +71,7 @@ unittest
         {
             assert((type == RPL_WHOISMODES), Enum!(IRCEvent.Type).toString(type));
             assert((sender.address == "cadance.canternet.org"), sender.address);
-            assert((auxstrings[0] == "+ix"), auxstrings[0]);
+            assert((aux[0] == "+ix"), aux[0]);
             assert((num == 379), num.to!string);
         }
     }
@@ -189,7 +189,7 @@ unittest
             assert((type == IRCEvent.Type.RPL_MYINFO), Enum!(IRCEvent.Type).toString(type));
             assert((sender.address == "efnet.port80.se"), sender.address);
             assert((content == "oiwszcrkfydnxbauglZCD biklmnopstveIrS bkloveI"), content);
-            assert((auxstrings[0] == "ircd-ratbox-3.0.9"), auxstrings[0]);
+            assert((aux[0] == "ircd-ratbox-3.0.9"), aux[0]);
             assert((num == 4), num.to!string);
         }
     }
@@ -257,7 +257,7 @@ unittest
             assert((type == IRCEvent.Type.RPL_MYINFO), Enum!(IRCEvent.Type).toString(type));
             assert((sender.address == "bitcoin.uk.eu.dal.net"), sender.address);
             assert((content == "aAbcCdefFghHiIjkKmnoOPrRsSwxXy AbceiIjklLmMnoOpPrRsStv"), content);
-            assert((auxstrings[0] == "bahamut-2.1.4"), auxstrings[0]);
+            assert((aux[0] == "bahamut-2.1.4"), aux[0]);
             assert((num == 4), num.to!string);
         }
     }
@@ -325,7 +325,7 @@ unittest
         {
             assert((type == IRCEvent.Type.SELFMODE), Enum!(IRCEvent.Type).toString(type));
             assert((sender.nickname == "kameloso"), sender.nickname);
-            assert((auxstrings[0] == "+i"), auxstrings[0]);
+            assert((aux[0] == "+i"), aux[0]);
         }
     }
 
@@ -340,7 +340,7 @@ unittest
         {
             assert((type == IRCEvent.Type.SELFMODE), Enum!(IRCEvent.Type).toString(type));
             assert((sender.nickname == "kameloso"), sender.nickname);
-            assert((auxstrings[0] == "+r"), auxstrings[0]);
+            assert((aux[0] == "+r"), aux[0]);
         }
     }
 
@@ -393,7 +393,7 @@ unittest
             assert((type == IRCEvent.Type.RPL_MYINFO), Enum!(IRCEvent.Type).toString(type));
             assert((sender.address == "fe-00107.GeekShed.net"), sender.address);
             assert((content == "iowghraAsORTVSxNCWqBzvdHtGpIDc lvhopsmntikrRcaqOALQbSeIKVfMCuzNTGjUZ"), content);
-            assert((auxstrings[0] == "Unreal3.2.10.3-gs"), auxstrings[0]);
+            assert((aux[0] == "Unreal3.2.10.3-gs"), aux[0]);
             assert((num == 4), num.to!string);
         }
     }
@@ -451,7 +451,7 @@ unittest
         {
             assert((type == IRCEvent.Type.SELFMODE), Enum!(IRCEvent.Type).toString(type));
             assert((sender.nickname == "kameloso"), sender.nickname);
-            assert((auxstrings[0] == "+iRx"), auxstrings[0]);
+            assert((aux[0] == "+iRx"), aux[0]);
         }
     }
 
@@ -467,9 +467,9 @@ unittest
             assert((type == IRCEvent.Type.THISSERVERINSTEAD), Enum!(IRCEvent.Type).toString(type));
             assert((sender.address == "irc.link-net.be"), sender.address);
             assert((content == "Please use this Server/Port instead"), content);
-            assert((auxstrings[0] == "irc.link-net.be"), auxstrings[0]);
+            assert((aux[0] == "irc.link-net.be"), aux[0]);
             assert((num == 10), num.to!string);
-            assert((counts[0] == 6697), counts[0].to!string);
+            assert((count[0] == 6697), count[0].to!string);
         }
     }
 }

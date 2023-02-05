@@ -14,7 +14,7 @@ unittest
             assert((type == IRCEvent.Type.RPL_MYINFO), Enum!(IRCEvent.Type).toString(type));
             assert((sender.address == "helix.oftc.net"), sender.address);
             assert((content == "CDGPRSabcdfgijklnorsuwxyz bciklmnopstvzeIMRS bkloveI"), content);
-            assert((auxstrings[0] == "hybrid-7.2.2+oftc1.7.3"), auxstrings[0]);
+            assert((aux[0] == "hybrid-7.2.2+oftc1.7.3"), aux[0]);
             assert((num == 4), num.to!string);
         }
     }
@@ -91,7 +91,7 @@ unittest
             assert((type == IRCEvent.Type.RPL_YOURID), Enum!(IRCEvent.Type).toString(type));
             assert((sender.address == "helix.oftc.net"), sender.address);
             assert((content == "your unique ID"), content);
-            assert((auxstrings[0] == "4G4AAA7BH"), auxstrings[0]);
+            assert((aux[0] == "4G4AAA7BH"), aux[0]);
             assert((num == 42), num.to!string);
         }
     }
@@ -130,8 +130,8 @@ unittest
             assert((sender.address == "irc.oftc.net"), sender.address);
             assert((channel == "#garderoben"), channel);
             assert((content == "harbl!snarbl@*"), content);
-            assert((auxstrings[0] == "kameloso!~NaN@194.117.188.126"), auxstrings[0]);
-            assert((counts[0] == 1515418362), counts[0].to!string);
+            assert((aux[0] == "kameloso!~NaN@194.117.188.126"), aux[0]);
+            assert((count[0] == 1515418362), count[0].to!string);
             assert((num == 344), num.to!string);
         }
     }
@@ -202,7 +202,7 @@ unittest
             assert((type == IRCEvent.Type.ERR_BADCHANNAME), Enum!(IRCEvent.Type).toString(type));
             assert((sender.address == "helix.oftc.net"), sender.address);
             assert((content == "Illegal channel name"), content);
-            assert((auxstrings[0] == "-"), auxstrings[0]);
+            assert((aux[0] == "-"), aux[0]);
             assert((num == 479), num.to!string);
         }
     }

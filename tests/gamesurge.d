@@ -14,7 +14,7 @@ unittest
             assert((type == IRCEvent.Type.RPL_MYINFO), Enum!(IRCEvent.Type).toString(type));
             assert((sender.address == "Portlane.SE.EU.GameSurge.net"), sender.address);
             assert((content == "diOoswkgxnI biklmnopstvrDdRcCz bklov"), content);
-            assert((auxstrings[0] == "u2.10.12.18(gs2)"), auxstrings[0]);
+            assert((aux[0] == "u2.10.12.18(gs2)"), aux[0]);
             assert((num == 4), num.to!string);
         }
     }
@@ -87,8 +87,8 @@ unittest
         {
             assert((type == RPL_HOSTHIDDEN), Enum!(IRCEvent.Type).toString(type));
             assert((sender.address == "TAL.DE.EU.GameSurge.net"), sender.address);
-            assert((content == "is now your hidden host"), auxstrings[0]);
-            assert((auxstrings[0] == "~NaN@1b24f4a7.243f02a4.5cd6f3e3.IP4"), content);
+            assert((content == "is now your hidden host"), aux[0]);
+            assert((aux[0] == "~NaN@1b24f4a7.243f02a4.5cd6f3e3.IP4"), content);
             assert((num == 396), num.to!string);
         }
     }
@@ -150,7 +150,7 @@ unittest
             assert((target.nickname == "zorael"), target.nickname);
             assert((target.address == "195.196.10.12"), target.address);
             assert((content == "Actual user@host, Actual IP"), content);
-            assert((auxstrings[0] == "~kameloso@195.196.10.12"), auxstrings[0]);
+            assert((aux[0] == "~kameloso@195.196.10.12"), aux[0]);
             assert((num == 338), num.to!string);
         }
     }

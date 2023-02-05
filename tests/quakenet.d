@@ -14,7 +14,7 @@ unittest
             assert((type == IRCEvent.Type.RPL_MYINFO), Enum!(IRCEvent.Type).toString(type));
             assert((sender.address == "underworld1.no.quakenet.org"), sender.address);
             assert((content == "dioswkgxRXInP biklmnopstvrDcCNuMT bklov"), content);
-            assert((auxstrings[0] == "u2.10.12.10+snircd(1.3.4a)"), auxstrings[0]);
+            assert((aux[0] == "u2.10.12.10+snircd(1.3.4a)"), aux[0]);
             assert((num == 4), num.to!string);
         }
     }
@@ -87,7 +87,7 @@ unittest
         {
             assert((type == RPL_UMODEIS), Enum!(IRCEvent.Type).toString(type));
             assert((sender.address == "port80b.se.quakenet.org"), sender.address);
-            assert((auxstrings[0] == "+i"), auxstrings[0]);
+            assert((aux[0] == "+i"), aux[0]);
             assert((num == 221), num.to!string);
         }
     }

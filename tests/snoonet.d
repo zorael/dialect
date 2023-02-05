@@ -33,7 +33,7 @@ unittest
             assert((type == IRCEvent.Type.RPL_MYINFO), Enum!(IRCEvent.Type).toString(type));
             assert((sender.address == "van-halen.snoonet.org"), sender.address);
             assert((content == "BHILRSTWcdghikorswx ABCDFHIJKLMNOPQRSTWXYZbcdefghijklmnoprstuvwxz FHIJLWXYZbdefghjklovwx"), content);
-            assert((auxstrings[0] == "InspIRCd-2.0"), auxstrings[0]);
+            assert((aux[0] == "InspIRCd-2.0"), aux[0]);
             assert((num == 4), num.to!string);
         }
     }
@@ -106,7 +106,7 @@ unittest
             assert((type == IRCEvent.Type.RPL_YOURID), Enum!(IRCEvent.Type).toString(type));
             assert((sender.address == "van-halen.snoonet.org"), sender.address);
             assert((content == "your unique ID"), content);
-            assert((auxstrings[0] == "1VHANCEH8"), auxstrings[0]);
+            assert((aux[0] == "1VHANCEH8"), aux[0]);
             assert((num == 42), num.to!string);
         }
     }
@@ -118,7 +118,7 @@ unittest
             assert((sender.address == "van-halen.snoonet.org"), sender.address);
             assert((channel == "#garderoben123"), channel);
             assert((content == "5:60 30:5 5:1 10:5"), content);
-            assert((auxstrings[0] == "+CFTfjntx"), auxstrings[0]);
+            assert((aux[0] == "+CFTfjntx"), aux[0]);
             assert((num == 324), num.to!string);
         }
     }
@@ -131,7 +131,7 @@ unittest
             assert((channel == "#garderoben123"), channel);
             assert((target.nickname == "kameloso"), target.nickname);
             assert((content == "+noctcp"), content);
-            assert((auxstrings[0] == "+nickflood 5:60 +nonotice +flood 30:5 +joinflood 5:1 +noextmsg +topiclock +globalflood 10:5"), auxstrings[0]);
+            assert((aux[0] == "+nickflood 5:60 +nonotice +flood 30:5 +joinflood 5:1 +noextmsg +topiclock +globalflood 10:5"), aux[0]);
             assert((num == 961), num.to!string);
         }
     }

@@ -13,7 +13,7 @@ unittest
             assert((type == IRCEvent.Type.RPL_MYINFO), Enum!(IRCEvent.Type).toString(type));
             assert((sender.address == "sinisalo.freenode.net"), sender.address);
             assert((content == "DOQRSZaghilopswz CFILMPQSbcefgijklmnopqrstvz bkloveqjfI"), content);
-            assert((auxstrings[0] == "ircd-seven-1.1.7"), auxstrings[0]);
+            assert((aux[0] == "ircd-seven-1.1.7"), aux[0]);
             assert((num == 4), num.to!string);
         }
     }
@@ -212,7 +212,7 @@ unittest
         assert((sender.nickname == "wob^2"), sender.nickname);
         assert((type == IRCEvent.Type.CTCP_PING), Enum!(IRCEvent.Type).toString(type));
         assert((content == "1495974267 590878"), content);
-        assert((auxstrings[0] == "PING"), auxstrings[0]);
+        assert((aux[0] == "PING"), aux[0]);
     }
 
     /+
@@ -283,7 +283,7 @@ unittest
             assert((type == RPL_STATSDEBUG), Enum!(IRCEvent.Type).toString(type));
             assert((sender.address == "livingstone.freenode.net"), sender.address);
             assert((content == "dax (dax@freenode/staff/dax)"), content);
-            assert((auxstrings[0] == "p"), auxstrings[0]);
+            assert((aux[0] == "p"), aux[0]);
             assert((num == 249), num.to!string);
         }
     }
@@ -295,7 +295,7 @@ unittest
             assert((type == RPL_ENDOFSTATS), Enum!(IRCEvent.Type).toString(type));
             assert((sender.address == "livingstone.freenode.net"), sender.address);
             assert((content == "End of /STATS report"), content);
-            assert((auxstrings[0] == "p"), auxstrings[0]);
+            assert((aux[0] == "p"), aux[0]);
             assert((num == 219), num.to!string);
         }
     }
@@ -471,7 +471,7 @@ unittest
             assert((sender.address == "wilhelm.freenode.net"), sender.address);
             assert((target.nickname == "kameloso^"), target.nickname);
             assert((content == "81-233-105-62-no80.tbcn.telia.com"), content);
-            assert((auxstrings[0] == "81.233.105.62"), auxstrings[0]);
+            assert((aux[0] == "81.233.105.62"), aux[0]);
             assert((num == 378), num.to!string);
         }
     }
@@ -482,7 +482,7 @@ unittest
             assert((type == IRCEvent.Type.ERR_UNKNOWNCOMMAND), Enum!(IRCEvent.Type).toString(type));
             assert((sender.address == "asimov.freenode.net"), sender.address);
             assert((content == "Unknown command"), content);version(TwitchSupport)
-            assert((auxstrings[0] == "sudo"), auxstrings[0]);
+            assert((aux[0] == "sudo"), aux[0]);
             assert((num == 421), num.to!string);
         }
     }
@@ -493,7 +493,7 @@ unittest
             assert((type == IRCEvent.Type.RPL_LUSEROP), Enum!(IRCEvent.Type).toString(type));
             assert((sender.address == "asimov.freenode.net"), sender.address);
             assert((content == "IRC Operators online"), content);
-            assert((counts[0] == 31), counts[0].to!string);
+            assert((count[0] == 31), count[0].to!string);
             assert((num == 252), num.to!string);
         }
     }
@@ -504,7 +504,7 @@ unittest
             assert((type == IRCEvent.Type.RPL_LUSERUNKNOWN), Enum!(IRCEvent.Type).toString(type));
             assert((sender.address == "asimov.freenode.net"), sender.address);
             assert((content == "unknown connection(s)"), content);
-            assert((counts[0] == 13), counts[0].to!string);
+            assert((count[0] == 13), count[0].to!string);
             assert((num == 253), num.to!string);
         }
     }
@@ -515,7 +515,7 @@ unittest
             assert((type == IRCEvent.Type.RPL_LUSERCHANNELS), Enum!(IRCEvent.Type).toString(type));
             assert((sender.address == "asimov.freenode.net"), sender.address);
             assert((content == "channels formed"), content);
-            assert((counts[0] == 54541), counts[0].to!string);
+            assert((count[0] == 54541), count[0].to!string);
             assert((num == 254), num.to!string);
         }
     }
@@ -526,7 +526,7 @@ unittest
             assert((type == IRCEvent.Type.ERR_ERRONEOUSNICKNAME), Enum!(IRCEvent.Type).toString(type));
             assert((sender.address == "asimov.freenode.net"), sender.address);
             assert((content == "Erroneous Nickname"), content);
-            assert((auxstrings[0] == "@nickname"), auxstrings[0]);
+            assert((aux[0] == "@nickname"), aux[0]);
             assert((num == 432), num.to!string);
         }
     }
@@ -537,7 +537,7 @@ unittest
             assert((type == IRCEvent.Type.ERR_NEEDMOREPARAMS), Enum!(IRCEvent.Type).toString(type));
             assert((sender.address == "asimov.freenode.net"), sender.address);
             assert((content == "Not enough parameters"), content);
-            assert((auxstrings[0] == "JOIN"), auxstrings[0]);
+            assert((aux[0] == "JOIN"), aux[0]);
             assert((num == 461), num.to!string);
         }
     }
@@ -548,8 +548,8 @@ unittest
             assert((type == IRCEvent.Type.RPL_LOCALUSERS), Enum!(IRCEvent.Type).toString(type));
             assert((sender.address == "asimov.freenode.net"), sender.address);
             assert((content == "Current local users 6500, max 11061"), content);
-            assert((counts[0] == 6500), counts[0].to!string);
-            assert((counts[1] == 11_061), counts[1].to!string);
+            assert((count[0] == 6500), count[0].to!string);
+            assert((count[1] == 11_061), count[1].to!string);
             assert((num == 265), num.to!string);
         }
     }
@@ -574,7 +574,7 @@ unittest
             assert((sender.address == "asimov.freenode.net"), sender.address);
             assert((target.nickname == "zorael"), target.nickname);
             assert((content == "sinisalo.freenode.net"), content);
-            assert((auxstrings[0] == "SE"), auxstrings[0]);
+            assert((aux[0] == "SE"), aux[0]);
             assert((num == 312), num.to!string);
         }
     }
@@ -607,7 +607,7 @@ unittest
             assert((type == IRCEvent.Type.ERR_NOTREGISTERED), Enum!(IRCEvent.Type).toString(type));
             assert((sender.address == "irc.harblwefwoi.org"), sender.address);
             assert((content == "You have not registered"), content);
-            assert((auxstrings[0] == "WHOIS"), auxstrings[0]);
+            assert((aux[0] == "WHOIS"), aux[0]);
             assert((num == 451), num.to!string);
         }
     }
@@ -618,7 +618,7 @@ unittest
             assert((type == IRCEvent.Type.RPL_HELPSTART), Enum!(IRCEvent.Type).toString(type));
             assert((sender.address == "leguin.freenode.net"), sender.address);
             assert((content == "Help topics available to users:"), content);
-            assert((auxstrings[0] == "index"), auxstrings[0]);
+            assert((aux[0] == "index"), aux[0]);
             assert((num == 704), num.to!string);
         }
     }
@@ -629,7 +629,7 @@ unittest
             assert((type == IRCEvent.Type.RPL_LINKS), Enum!(IRCEvent.Type).toString(type));
             assert((sender.address == "rajaniemi.freenode.net"), sender.address);
             assert((content == "Helsinki, FI, EU"), content);
-            assert((auxstrings[0] == "rajaniemi.freenode.net"), auxstrings[0]);
+            assert((aux[0] == "rajaniemi.freenode.net"), aux[0]);
             assert((num == 364), num.to!string);
         }
     }
@@ -640,9 +640,9 @@ unittest
             assert((type == IRCEvent.Type.RPL_TRACEUSER), Enum!(IRCEvent.Type).toString(type));
             assert((sender.address == "wolfe.freenode.net"), sender.address);
             assert((content == "zorael[~NaN@2001:41d0:2:80b4::] (255.255.255.255) 16"), content);
-            assert((auxstrings[0] == "v6users"), auxstrings[0]);
+            assert((aux[0] == "v6users"), aux[0]);
             assert((num == 205), num.to!string);
-            assert((counts[0] == 536), counts[0].to!string);
+            assert((count[0] == 536), count[0].to!string);
         }
     }
     {
@@ -652,7 +652,7 @@ unittest
             assert((type == IRCEvent.Type.RPL_ENDOFHELP), Enum!(IRCEvent.Type).toString(type));
             assert((sender.address == "leguin.freenode.net"), sender.address);
             assert((content == "End of /HELP."), content);
-            assert((auxstrings[0] == "index"), auxstrings[0]);
+            assert((aux[0] == "index"), aux[0]);
             assert((num == 706), num.to!string);
         }
     }
@@ -663,7 +663,7 @@ unittest
             assert((type == IRCEvent.Type.RPL_STATSDEBUG), Enum!(IRCEvent.Type).toString(type));
             assert((sender.address == "livingstone.freenode.net"), sender.address);
             assert((content == "1 staff members"), content);
-            assert((auxstrings[0] == "p"), auxstrings[0]);
+            assert((aux[0] == "p"), aux[0]);
             assert((num == 249), num.to!string);
         }
     }
@@ -674,7 +674,7 @@ unittest
             assert((type == IRCEvent.Type.RPL_TRYAGAIN), Enum!(IRCEvent.Type).toString(type));
             assert((sender.address == "verne.freenode.net"), sender.address);
             assert((content == "This command could not be completed because it has been used recently, and is rate-limited"), content);
-            assert((auxstrings[0] == "STATS"), auxstrings[0]);
+            assert((aux[0] == "STATS"), aux[0]);
             assert((num == 263), num.to!string);
         }
     }
@@ -685,7 +685,7 @@ unittest
             assert((type == IRCEvent.Type.RPL_TRACEEND), Enum!(IRCEvent.Type).toString(type));
             assert((sender.address == "verne.freenode.net"), sender.address);
             assert((content == "End of TRACE"), content);
-            assert((auxstrings[0] == "verne.freenode.net"), auxstrings[0]);
+            assert((aux[0] == "verne.freenode.net"), aux[0]);
             assert((num == 262), num.to!string);
         }
     }
@@ -822,7 +822,7 @@ unittest
             assert((type == RPL_MYINFO), Enum!(IRCEvent.Type).toString(type));
             assert((sender.address == "asimov.freenode.net"), sender.address);
             assert((content == "DOQRSZaghilopswz CFILMPQSbcefgijklmnopqrstvz bkloveqjfI"), content);
-            assert((auxstrings[0] == "ircd-seven-1.1.4"), auxstrings[0]);
+            assert((aux[0] == "ircd-seven-1.1.4"), aux[0]);
             assert((num == 4), num.to!string);
         }
         assert(parser.server.daemon == IRCServer.daemon.ircdseven);
@@ -837,7 +837,7 @@ unittest
             assert((sender.address == "asimov.freenode.net"), sender.address);
             assert((channel == "#garderoben"), channel);
             assert((content == "klarrt!~bsdrouter@h150n13-aahm-a11.ias.bredband.telia.com"), content);
-            assert((auxstrings[0] == "1476294377"), auxstrings[0]);
+            assert((aux[0] == "1476294377"), aux[0]);
             assert((num == 333), num.to!string);
         }
     }
@@ -860,8 +860,8 @@ unittest
             assert((type == RPL_WHOISIDLE), Enum!(IRCEvent.Type).toString(type));
             assert((sender.address == "rajaniemi.freenode.net"), sender.address);
             assert((target.nickname == "zorael"), target.nickname);
-            assert((counts[0] == 0), counts[0].to!string);
-            assert((counts[1] == 1510219961), counts[1].to!string);
+            assert((count[0] == 0), count[0].to!string);
+            assert((count[1] == 1510219961), count[1].to!string);
             assert((num == 317), num.to!string);
         }
     }
@@ -873,8 +873,8 @@ unittest
             assert((type == RPL_GLOBALUSERS), Enum!(IRCEvent.Type).toString(type));
             assert((sender.address == "asimov.freenode.net"), sender.address);
             assert((content == "Current global users 85267, max 92341"), content);
-            assert((counts[0] == 85267), counts[0].to!string);
-            assert((counts[1] == 92341), counts[1].to!string);
+            assert((count[0] == 85267), count[0].to!string);
+            assert((count[1] == 92341), count[1].to!string);
             assert((num == 266), num.to!string);
         }
     }
@@ -886,8 +886,8 @@ unittest
             assert((type == RPL_LOCALUSERS), Enum!(IRCEvent.Type).toString(type));
             assert((sender.address == "weber.freenode.net"), sender.address);
             assert((content == "Current local users 3385, max 6820"), content);
-            assert((counts[0] == 3385), counts[0].to!string);
-            assert((counts[1] == 6820), counts[1].to!string);
+            assert((count[0] == 3385), count[0].to!string);
+            assert((count[1] == 6820), count[1].to!string);
             assert((num == 265), num.to!string);
         }
     }
@@ -899,8 +899,8 @@ unittest
             assert((type == RPL_GLOBALUSERS), Enum!(IRCEvent.Type).toString(type));
             assert((sender.address == "weber.freenode.net"), sender.address);
             assert((content == "Current global users 87056, max 93012"), content);
-            assert((counts[0] == 87056), counts[0].to!string);
-            assert((counts[1] == 93012), counts[1].to!string);
+            assert((count[0] == 87056), count[0].to!string);
+            assert((count[1] == 93012), count[1].to!string);
             assert((num == 266), num.to!string);
         }
     }
@@ -947,7 +947,7 @@ unittest
         {
             assert((type == ERR_NOSUCHNICK), Enum!(IRCEvent.Type).toString(type));
             assert((sender.address == "cherryh.freenode.net"), sender.address);
-            assert((auxstrings[0] == "cherryh.freenode.net"), auxstrings[0]);
+            assert((aux[0] == "cherryh.freenode.net"), aux[0]);
             assert((content == "No such nick/channel"), content);
             assert((num == 401), num.to!string);
         }
@@ -984,7 +984,7 @@ unittest
             assert((type == RPL_HELPTXT), Enum!(IRCEvent.Type).toString(type));
             assert((sender.address == "leguin.freenode.net"), sender.address);
             assert((content == "ACCEPT\tADMIN\tAWAY\tCHALLENGE"), content);
-            assert((auxstrings[0] == "index"), auxstrings[0]);
+            assert((aux[0] == "index"), aux[0]);
             assert((num == 705), num.to!string);
         }
     }
@@ -996,7 +996,7 @@ unittest
             assert((type == RPL_ENDOFHELP), Enum!(IRCEvent.Type).toString(type));
             assert((sender.address == "leguin.freenode.net"), sender.address);
             assert((content == "End of /HELP.// :leguin.freenode.net 706 kameloso^ index :End of /HELP."), content);
-            assert((auxstrings[0] == "index"), auxstrings[0]);
+            assert((aux[0] == "index"), aux[0]);
             assert((num == 706), num.to!string);
         }
     }
@@ -1009,7 +1009,7 @@ unittest
             assert((sender.address == "cherryh.freenode.net"), sender.address);
             assert((channel == "#d3d9"), channel);
             assert((content == "Cannot change nickname while banned on channel"), content);
-            assert((auxstrings[0] == "kameloso^^"), auxstrings[0]);
+            assert((aux[0] == "kameloso^^"), aux[0]);
             assert((num == 435), num.to!string);
         }
     }
@@ -1050,7 +1050,7 @@ unittest
             assert((sender.ident == "~quassel"), sender.ident);
             assert((sender.address == "ip5b435007.dynamic.kabel-deutschland.de"), sender.address);
             assert((sender.account == "skix77"), sender.account);
-            assert((content == "skix77"), auxstrings[0]);
+            assert((content == "skix77"), aux[0]);
         }
     }
     {
@@ -1160,7 +1160,7 @@ unittest
             assert((sender.address == "ns3363704.ip-94-23-253.eu"), sender.address);
             assert((channel == "#flerrp"), channel);
             assert((content == "kameloso^"), content);
-            assert((auxstrings[0] == "+v"), auxstrings[0]);
+            assert((aux[0] == "+v"), aux[0]);
         }
     }
     {
@@ -1173,7 +1173,7 @@ unittest
             assert((sender.ident == "~NaN"), sender.ident);
             assert((sender.address == "ns3363704.ip-94-23-253.eu"), sender.address);
             assert((channel == "#flerrp"), channel);
-            assert((auxstrings[0] == "+i"), auxstrings[0]);
+            assert((aux[0] == "+i"), aux[0]);
         }
     }
 
@@ -1185,7 +1185,7 @@ unittest
             assert((type == MODE), Enum!(IRCEvent.Type).toString(type));
             assert((sender.address == "niven.freenode.net"), sender.address);
             assert((channel == "#sklabjoier"), channel);
-            assert((auxstrings[0] == "+ns"), auxstrings[0]);
+            assert((aux[0] == "+ns"), aux[0]);
         }
     }
 
@@ -1198,7 +1198,7 @@ unittest
         {
             assert((type == SELFMODE), Enum!(IRCEvent.Type).toString(type));
             assert((sender.nickname == "kameloso^"), sender.nickname);
-            assert((auxstrings[0] == "+i"), auxstrings[0]);
+            assert((aux[0] == "+i"), aux[0]);
         }
     }
     {
@@ -1244,7 +1244,7 @@ unittest
             assert((type == RPL_CHANNELMODEIS), Enum!(IRCEvent.Type).toString(type));
             assert((sender.address == "kornbluth.freenode.net"), sender.address);
             assert((channel == "#flerrp"), channel);
-            assert((auxstrings[0] == "+ns"), auxstrings[0]);
+            assert((aux[0] == "+ns"), aux[0]);
             assert((num == 324), num.to!string);
         }
     }
@@ -1256,7 +1256,7 @@ unittest
             assert((type == RPL_CREATIONTIME), Enum!(IRCEvent.Type).toString(type));
             assert((sender.address == "kornbluth.freenode.net"), sender.address);
             assert((channel == "#flerrp"), channel);
-            assert((counts[0] == 1512995737), counts[0].to!string);
+            assert((count[0] == 1512995737), count[0].to!string);
             assert((num == 329), num.to!string);
         }
     }
@@ -1270,8 +1270,8 @@ unittest
             assert((sender.address == "kornbluth.freenode.net"), sender.address);
             assert((channel == "#flerrp"), "channel is " ~ channel);
             assert((content == "harbl!harbl@snarbl.com"), content);
-            assert((auxstrings[0] == "zorael!~NaN@2001:41d0:2:80b4::"), auxstrings[0]);
-            assert((counts[0] == 1513899521), counts[0].to!string);
+            assert((aux[0] == "zorael!~NaN@2001:41d0:2:80b4::"), aux[0]);
+            assert((count[0] == 1513899521), count[0].to!string);
             assert((num == 367), num.to!string);
         }
     }
@@ -1284,7 +1284,7 @@ unittest
             assert((sender.address == "niven.freenode.net"), sender.address);
             assert((channel == "##linux"), channel);
             assert((content == "##linux-overflow"), content);
-            assert((auxstrings[0] == "+CLPcnprtf"), auxstrings[0]);
+            assert((aux[0] == "+CLPcnprtf"), aux[0]);
             assert((num == 324), num.to!string);
         }
     }
@@ -1298,7 +1298,7 @@ unittest
             assert((sender.address == "niven.freenode.net"), sender.address);
             assert((channel == "#flerrp"), channel);
             assert((content == "asdf!fdas@asdf.net"), content);
-            assert((auxstrings[0] == "zorael!~NaN@2001:41d0:2:80b4:: 1514405089"), auxstrings[0]);
+            assert((aux[0] == "zorael!~NaN@2001:41d0:2:80b4:: 1514405089"), aux[0]);
             assert((num == 346), num.to!string);
         }
     }
@@ -1311,8 +1311,8 @@ unittest
             assert((sender.address == "niven.freenode.net"), sender.address);
             assert((channel == "#flerrp"), channel);
             assert((content == "qqqq!*@asdf.net"), content);
-            assert((auxstrings[0] == "zorael!~NaN@2001:41d0:2:80b4::"), auxstrings[0]);
-            assert((counts[0] == 1514405101), counts[0].to!string);
+            assert((aux[0] == "zorael!~NaN@2001:41d0:2:80b4::"), aux[0]);
+            assert((count[0] == 1514405101), count[0].to!string);
             assert((num == 728), num.to!string);
         }
     }

@@ -57,7 +57,7 @@ unittest
             assert((sender.nickname == "lirik"), sender.nickname);
             assert((sender.account == "lirik"), sender.account);
             assert((channel == "#lirik"), channel);
-            assert((counts[0] == 178), counts[0].to!string);
+            assert((count[0] == 178), count[0].to!string);
         }
     }
     {
@@ -70,7 +70,7 @@ unittest
             assert((channel == "#lirik"), channel);
             assert((target.nickname == "chu8"), target.nickname);
             assert((target.account == "chu8"), target.account);
-            assert((counts[0] == 270), counts[0].to!string);
+            assert((count[0] == 270), count[0].to!string);
         }
     }
     {
@@ -99,7 +99,7 @@ unittest
             assert((type == IRCEvent.Type.ROOMSTATE), Enum!(IRCEvent.Type).toString(type));
             assert((sender.address == "tmi.twitch.tv"), sender.address);
             assert((channel == "#zorael"), channel);
-            assert((auxstrings[0] == "22216721"), auxstrings[0]);
+            assert((aux[0] == "22216721"), aux[0]);
             assert((tags == "broadcaster-lang=;emote-only=0;followers-only=-1;mercury=0;r9k=0;room-id=22216721;slow=0;subs-only=0"), tags);
         }
     }
@@ -110,7 +110,7 @@ unittest
             assert((type == IRCEvent.Type.CAP), Enum!(IRCEvent.Type).toString(type));
             assert((sender.address == "tmi.twitch.tv"), sender.address);
             assert((content == "twitch.tv/tags twitch.tv/commands twitch.tv/membership"), content);
-            assert((auxstrings[0] == "LS"), auxstrings[0]);
+            assert((aux[0] == "LS"), aux[0]);
         }
     }
     {
@@ -262,7 +262,7 @@ unittest
             assert((sender.address == "tmi.twitch.tv"), sender.address);
             assert((channel == "#zorael"), channel);
             assert((content == "Your color has been changed."), content);
-            assert((auxstrings[0] == "color_changed"), auxstrings[0]);
+            assert((aux[0] == "color_changed"), aux[0]);
             assert((tags == "msg-id=color_changed"), tags);
         }
     }
@@ -359,7 +359,7 @@ unittest
             assert((sender.colour == "7403B4"), sender.colour);
             assert((channel == "#beardageddon"), channel);
             assert((content == "Theres no HWAY"), content);
-            assert((auxstrings[0] == "highlighted-message"), auxstrings[0]);
+            assert((aux[0] == "highlighted-message"), aux[0]);
             assert((tags == "badge-info=subscriber/1;badges=subscriber/0,premium/1;color=#7403B4;display-name=GunnrySGT_Buck;emotes=;flags=;id=09eddc75-d3ce-4c4f-9f08-37ce43c7d325;mod=0;msg-id=highlighted-message;room-id=74488574;subscriber=1;tmi-sent-ts=1569005180759;turbo=0;user-id=70624578;user-type="), tags);
             assert((id == "09eddc75-d3ce-4c4f-9f08-37ce43c7d325"), id);
         }
@@ -376,9 +376,9 @@ unittest
             assert((sender.colour == "19B336"), sender.colour);
             assert((channel == "#chocotaco"), channel);
             assert((content == "IamSlower subscribed with Twitch Prime."), content);
-            assert((auxstrings[0] == "Prime"), auxstrings[0]);
+            assert((aux[0] == "Prime"), aux[0]);
             assert((tags == `badge-info=subscriber/0;badges=subscriber/0,premium/1;color=#19B336;display-name=IamSlower;emotes=;flags=;id=0a66cc58-57db-4ae6-940d-d46aa315e2d1;login=iamslower;mod=0;msg-id=sub;msg-param-cumulative-months=1;msg-param-months=0;msg-param-should-share-streak=0;msg-param-sub-plan-name=Channel\sSubscription\s(chocotaco);msg-param-sub-plan=Prime;room-id=69906737;subscriber=1;system-msg=IamSlower\ssubscribed\swith\sTwitch\sPrime.;tmi-sent-ts=1569005836621;user-id=147721858;user-type=`), tags);
-            assert((counts[1] == 1), counts[1].to!string);
+            assert((count[1] == 1), count[1].to!string);
             assert((id == "0a66cc58-57db-4ae6-940d-d46aa315e2d1"), id);
         }
     }
@@ -396,7 +396,7 @@ unittest
             assert((target.nickname == "buffalo_bison"), target.nickname);
             assert((target.displayName == "buffalo_bison"), target.displayName);
             assert((content == "nappy5074 gifted a Tier 1 sub to buffalo_bison!"), content);
-            assert((auxstrings[0] == "1000"), auxstrings[0]);
+            assert((aux[0] == "1000"), aux[0]);
             assert((tags == `badge-info=subscriber/15;badges=subscriber/12,sub-gifter/500;color=#0000FF;display-name=nappy5074;emotes=;flags=;id=f5446beb-bc54-472c-9539-e495a1250a30;login=nappy5074;mod=0;msg-id=subgift;msg-param-months=6;msg-param-origin-id=da\s39\sa3\see\s5e\s6b\s4b\s0d\s32\s55\sbf\sef\s95\s60\s18\s90\saf\sd8\s07\s09;msg-param-recipient-display-name=buffalo_bison;msg-param-recipient-id=141870891;msg-param-recipient-user-name=buffalo_bison;msg-param-sender-count=0;msg-param-sub-plan-name=Channel\sSubscription\s(chocotaco);msg-param-sub-plan=1000;room-id=69906737;subscriber=1;system-msg=nappy5074\sgifted\sa\sTier\s1\ssub\sto\sbuffalo_bison!;tmi-sent-ts=1569005845776;user-id=230054092;user-type=`), tags);
             assert((id == "f5446beb-bc54-472c-9539-e495a1250a30"), id);
         }
@@ -413,10 +413,10 @@ unittest
             assert((sender.colour == "0000FF"), sender.colour);
             assert((channel == "#chocotaco"), channel);
             assert((content == "nappy5074 is gifting 20 Tier 1 Subs to chocoTaco's community! They've gifted a total of 650 in the channel!"), content);
-            assert((auxstrings[0] == "1000"), auxstrings[0]);
+            assert((aux[0] == "1000"), aux[0]);
             assert((tags == `badge-info=subscriber/15;badges=subscriber/12,sub-gifter/500;color=#0000FF;display-name=nappy5074;emotes=;flags=;id=d7a1da3b-9ba7-495d-bfd5-9ad4f9f434d2;login=nappy5074;mod=0;msg-id=submysterygift;msg-param-mass-gift-count=20;msg-param-origin-id=ce\s08\s4e\sf5\se9\sf5\s31\s6c\s7a\sb6\sbc\sf9\s71\s8a\sf2\s7f\s90\s4c\s87\s47;msg-param-sender-count=650;msg-param-sub-plan=1000;room-id=69906737;subscriber=1;system-msg=nappy5074\sis\sgifting\s20\sTier\s1\sSubs\sto\schocoTaco's\scommunity!\sThey've\sgifted\sa\stotal\sof\s650\sin\sthe\schannel!;tmi-sent-ts=1569005843145;user-id=230054092;user-type=`), tags);
-            assert((counts[0] == 20), counts[0].to!string);
-            assert((counts[1] == 650), counts[1].to!string);
+            assert((count[0] == 20), count[0].to!string);
+            assert((count[1] == 650), count[1].to!string);
             assert((id == "d7a1da3b-9ba7-495d-bfd5-9ad4f9f434d2"), id);
         }
     }
@@ -431,9 +431,9 @@ unittest
             assert((sender.badges == "subscriber/9,premium/1"), sender.badges);
             assert((channel == "#chocotaco"), channel);
             assert((content == "Noahxcite subscribed at Tier 1. They've subscribed for 11 months!"), content);
-            assert((auxstrings[0] == "1000"), auxstrings[0]);
+            assert((aux[0] == "1000"), aux[0]);
             assert((tags == `badge-info=subscriber/11;badges=subscriber/9,premium/1;color=;display-name=Noahxcite;emotes=;flags=;id=2e7b0dbc-d6be-4331-903b-17255ae57d5b;login=noahxcite;mod=0;msg-id=resub;msg-param-cumulative-months=11;msg-param-months=0;msg-param-should-share-streak=0;msg-param-sub-plan-name=Channel\sSubscription\s(chocotaco);msg-param-sub-plan=1000;room-id=69906737;subscriber=1;system-msg=Noahxcite\ssubscribed\sat\sTier\s1.\sThey've\ssubscribed\sfor\s11\smonths!;tmi-sent-ts=1569006106614;user-id=67751309;user-type=`), tags);
-            assert((counts[1] == 11), counts[1].to!string);
+            assert((count[1] == 11), count[1].to!string);
             assert((id == "2e7b0dbc-d6be-4331-903b-17255ae57d5b"), id);
         }
     }
@@ -448,10 +448,10 @@ unittest
             assert((sender.badges == "subscriber/6,premium/1"), sender.badges);
             assert((channel == "#chocotaco"), channel);
             assert((content == "acul1992 is gifting 1 Tier 1 Subs to chocoTaco's community! They've gifted a total of 1 in the channel!"), content);
-            assert((auxstrings[0] == "1000"), auxstrings[0]);
+            assert((aux[0] == "1000"), aux[0]);
             assert((tags == `badge-info=subscriber/6;badges=subscriber/6,premium/1;color=;display-name=acul1992;emotes=;flags=;id=287de5eb-b93c-4040-86b7-16cddb6cefc8;login=acul1992;mod=0;msg-id=submysterygift;msg-param-mass-gift-count=1;msg-param-origin-id=eb\s39\sea\sd2\sbc\sb4\sd9\sd8\sc9\s51\sd5\s3a\sbb\seb\sd7\s6b\sa8\s2c\sc1\s71;msg-param-sender-count=1;msg-param-sub-plan=1000;room-id=69906737;subscriber=1;system-msg=acul1992\sis\sgifting\s1\sTier\s1\sSubs\sto\schocoTaco's\scommunity!\sThey've\sgifted\sa\stotal\sof\s1\sin\sthe\schannel!;tmi-sent-ts=1569006134003;user-id=32127247;user-type=`), tags);
-            assert((counts[0] == 1), counts[0].to!string);
-            assert((counts[1] == 1), counts[1].to!string);
+            assert((count[0] == 1), count[0].to!string);
+            assert((count[1] == 1), count[1].to!string);
             assert((id == "287de5eb-b93c-4040-86b7-16cddb6cefc8"), id);
         }
     }
@@ -467,10 +467,10 @@ unittest
             assert((sender.colour == "2B22B2"), sender.colour);
             assert((channel == "#chocotaco"), channel);
             assert((content == "WAHEEEEY DA CHOCOOOOOOOOOOOO"), content);
-            assert((auxstrings[0] == "1000"), auxstrings[0]);
+            assert((aux[0] == "1000"), aux[0]);
             assert((tags == `badge-info=subscriber/9;badges=subscriber/9,bits/100;color=#2B22B2;display-name=PoggyFifty;emotes=;flags=;id=21bb6867-1e5b-475c-90a4-c21bc5cf42d3;login=poggyfifty;mod=0;msg-id=resub;msg-param-cumulative-months=9;msg-param-months=0;msg-param-should-share-streak=1;msg-param-streak-months=9;msg-param-sub-plan-name=Channel\sSubscription\s(chocotaco);msg-param-sub-plan=1000;room-id=69906737;subscriber=1;system-msg=PoggyFifty\ssubscribed\sat\sTier\s1.\sThey've\ssubscribed\sfor\s9\smonths,\scurrently\son\sa\s9\smonth\sstreak!;tmi-sent-ts=1569006294587;user-id=204550522;user-type=`), tags);
-            assert((counts[0] == 9), counts[0].to!string);
-            assert((counts[1] == 9), counts[1].to!string);
+            assert((count[0] == 9), count[0].to!string);
+            assert((count[1] == 9), count[1].to!string);
             assert((id == "21bb6867-1e5b-475c-90a4-c21bc5cf42d3"), id);
         }
     }
@@ -489,7 +489,7 @@ unittest
             assert((channel == "#chocotaco"), channel);
             assert((content == "chocotHello Subway100 bonus10 Did you see the chocomerch promo video I made last night??"), content);
             assert((tags == "badge-info=subscriber/13;badges=subscriber/12,twitchconNA2019/1;bits=100;color=#0000FF;display-name=eXpressRR;emotes=757370:0-10;flags=;id=d437ff32-2c98-4c86-b404-85c577e7a63d;mod=0;room-id=69906737;subscriber=1;tmi-sent-ts=1569007507586;turbo=0;user-id=172492216;user-type="), tags);
-            assert((counts[0] == 100), counts[0].to!string);
+            assert((count[0] == 100), count[0].to!string);
             assert((emotes == "757370:0-10"), emotes);
             assert((id == "d437ff32-2c98-4c86-b404-85c577e7a63d"), id);
         }
@@ -503,7 +503,7 @@ unittest
             assert((channel == "#mithrain"), channel);
             assert((target.nickname == "14ahmetkerim"), target.nickname);
             assert((tags == "ban-duration=600;room-id=79442833;target-user-id=447000332;tmi-sent-ts=1569007534501"), tags);
-            assert((counts[0] == 600), counts[0].to!string);
+            assert((count[0] == 600), count[0].to!string);
         }
     }
     {
@@ -518,7 +518,7 @@ unittest
             assert((sender.colour == "9ACD32"), sender.colour);
             assert((channel == "#mithrain"), channel);
             assert((content == "burakk1912 converted from a Twitch Prime sub to a Tier 1 sub!"), content);
-            assert((auxstrings[0] == "1000"), auxstrings[0]);
+            assert((aux[0] == "1000"), aux[0]);
             assert((tags == "badge-info=subscriber/1;badges=subscriber/0,premium/1;color=#9ACD32;display-name=burakk1912;emotes=;flags=;id=a805a41d-99e5-4a5d-be80-a95ccefc9e73;login=burakk1912;mod=0;msg-id=primepaidupgrade;msg-param-sub-plan=1000;room-id=79442833;subscriber=1;system-msg=burakk1912\\sconverted\\sfrom\\sa\\sTwitch\\sPrime\\ssub\\sto\\sa\\sTier\\s1\\ssub!;tmi-sent-ts=1569008642164;user-id=242099224;user-type="), tags);
             assert((id == "a805a41d-99e5-4a5d-be80-a95ccefc9e73"), id);
         }
@@ -583,7 +583,7 @@ unittest
             assert((sender.nickname == "kungentv"), sender.nickname);
             assert((channel == "#kungentv"), channel);
             assert((target.nickname == "esfandtv"), target.nickname);
-            assert((counts[0] == 5167), counts[0].to!string);
+            assert((count[0] == 5167), count[0].to!string);
         }
     }
     {
@@ -594,7 +594,7 @@ unittest
             assert((sender.address == "tmi.twitch.tv"), sender.address);
             assert((channel == "#kungentv"), channel);
             assert((content == "Now hosting EsfandTV."), content);
-            assert((auxstrings[0] == "host_on"), auxstrings[0]);
+            assert((aux[0] == "host_on"), aux[0]);
             assert((tags == "msg-id=host_on"), tags);
         }
     }
@@ -610,7 +610,7 @@ unittest
             assert((sender.colour == "67B222"), sender.colour);
             assert((channel == "#couragejd"), channel);
             assert((content == "HeyGuys"), content);
-            assert((auxstrings[0] == "@travslaps is new here. Say hello!"), auxstrings[0]);
+            assert((aux[0] == "@travslaps is new here. Say hello!"), aux[0]);
             assert((tags == "badge-info=;badges=premium/1;color=#67B222;display-name=travslaps;emotes=30259:0-6;flags=;id=a875d520-ba60-4383-925c-4fa09b3fd772;login=travslaps;mod=0;msg-id=ritual;msg-param-ritual-name=new_chatter;room-id=106125347;subscriber=0;system-msg=@travslaps\\sis\\snew\\shere.\\sSay\\shello!;tmi-sent-ts=1569012207274;user-id=183436052;user-type="), tags);
             assert((emotes == "30259:0-6"), emotes);
             assert((id == "a875d520-ba60-4383-925c-4fa09b3fd772"), id);
@@ -637,10 +637,10 @@ unittest
             assert((sender.badges == "subscriber/12"), sender.badges);
             assert((channel == "#xqcow"), channel);
             assert((content == "tayk47_mom is gifting 1 Tier 1 Subs to xQcOW's community! They've gifted a total of 4 in the channel!"), content);
-            assert((auxstrings[0] == "1000"), auxstrings[0]);
+            assert((aux[0] == "1000"), aux[0]);
             assert((tags == "badge-info=subscriber/15;badges=subscriber/12;color=;display-name=tayk47_mom;emotes=;flags=;id=d6729804-2bf3-495d-80ce-a2fe8ed00a26;login=tayk47_mom;mod=0;msg-id=submysterygift;msg-param-mass-gift-count=1;msg-param-origin-id=49\\s9d\\s3e\\s68\\sca\\s26\\se9\\s2a\\s6e\\s44\\sd4\\s60\\s9b\\s3d\\saa\\sb9\\s4c\\sad\\s43\\s5c;msg-param-sender-count=4;msg-param-sub-plan=1000;room-id=71092938;subscriber=1;system-msg=tayk47_mom\\sis\\sgifting\\s1\\sTier\\s1\\sSubs\\sto\\sxQcOW's\\scommunity!\\sThey've\\sgifted\\sa\\stotal\\sof\\s4\\sin\\sthe\\schannel!;tmi-sent-ts=1569013433362;user-id=224578549;user-type="), tags);
-            assert((counts[0] == 1), counts[0].to!string);
-            assert((counts[1] == 4), counts[1].to!string);
+            assert((count[0] == 1), count[0].to!string);
+            assert((count[1] == 4), count[1].to!string);
             assert((id == "d6729804-2bf3-495d-80ce-a2fe8ed00a26"), id);
         }
     }
@@ -658,7 +658,7 @@ unittest
             assert((channel == "#gabepeixe"), channel);
             assert((target.nickname == "m4ggusbruno"), target.nickname);
             assert((content == "A viewer was gifted a World of Tanks: Care Package, courtesy of a Prime member!"), content);
-            assert((auxstrings[0] == "World\\sof\\sTanks:\\sCare\\sPackage"), auxstrings[0]);
+            assert((aux[0] == "World\\sof\\sTanks:\\sCare\\sPackage"), aux[0]);
             assert((tags == "badge-info=;badges=partner/1;color=#004DFF;display-name=NorddeutscherJunge;emotes=;flags=;id=3ced021d-adab-4278-845d-4c8f2c5d6306;login=norddeutscherjunge;mod=0;msg-id=primecommunitygiftreceived;msg-param-gift-name=World\\sof\\sTanks:\\sCare\\sPackage;msg-param-middle-man=gabepeixe;msg-param-recipient=m4ggusbruno;msg-param-sender=NorddeutscherJunge;room-id=59799994;subscriber=0;system-msg=A\\sviewer\\swas\\sgifted\\sa\\sWorld\\sof\\sTanks:\\sCare\\sPackage,\\scourtesy\\sof\\sa\\sPrime\\smember!;tmi-sent-ts=1570346408346;user-id=39548541;user-type="), tags);
             assert((id == "3ced021d-adab-4278-845d-4c8f2c5d6306"), id);
         }
@@ -678,7 +678,7 @@ unittest
             assert((target.nickname == "just_illustrationz"), target.nickname);
             assert((target.displayName == "Just_Illustrationz"), target.displayName);
             assert((content == "lil_bytch is paying forward the Gift they got from CoopaManTV to Just_Illustrationz!"), content);
-            assert((auxstrings[0] == "coopamantv"), auxstrings[0]);
+            assert((aux[0] == "coopamantv"), aux[0]);
             assert((tags == "badge-info=subscriber/1;badges=subscriber/0,premium/1;color=#1E90FF;display-name=lil_bytch;emotes=;flags=;id=f9f5c093-ebd3-447b-96f2-64fe94e19c9b;login=lil_bytch;mod=0;msg-id=standardpayforward;msg-param-prior-gifter-anonymous=false;msg-param-prior-gifter-display-name=CoopaManTV;msg-param-prior-gifter-id=444343916;msg-param-prior-gifter-user-name=coopamantv;msg-param-recipient-display-name=Just_Illustrationz;msg-param-recipient-id=236981420;msg-param-recipient-user-name=just_illustrationz;room-id=32787655;subscriber=1;system-msg=lil_bytch\\sis\\spaying\\sforward\\sthe\\sGift\\sthey\\sgot\\sfrom\\sCoopaManTV\\sto\\sJust_Illustrationz!;tmi-sent-ts=1582159747742;user-id=229842635;user-type="), tags);
             assert((id == "f9f5c093-ebd3-447b-96f2-64fe94e19c9b"), id);
         }
@@ -695,7 +695,7 @@ unittest
             assert((sender.badges == "subscriber/0,premium/1"), sender.badges);
             assert((channel == "#trainwreckstv"), channel);
             assert((content == "havoc_sinz is paying forward the Gift they got from pytori1 to the community!"), content);
-            assert((auxstrings[0] == "pytori1"), auxstrings[0]);
+            assert((aux[0] == "pytori1"), aux[0]);
             assert((tags == "badge-info=subscriber/1;badges=subscriber/0,premium/1;color=;display-name=havoc_sinz;emotes=;flags=;id=f28a7d4c-5d2a-4182-b9a3-2fbf82eb3883;login=havoc_sinz;mod=0;msg-id=communitypayforward;msg-param-prior-gifter-anonymous=false;msg-param-prior-gifter-display-name=pytori1;msg-param-prior-gifter-id=35087710;msg-param-prior-gifter-user-name=pytori1;room-id=71190292;subscriber=1;system-msg=havoc_sinz\\sis\\spaying\\sforward\\sthe\\sGift\\sthey\\sgot\\sfrom\\spytori1\\sto\\sthe\\scommunity!;tmi-sent-ts=1582267055759;user-id=223347745;user-type="), tags);
             assert((id == "f28a7d4c-5d2a-4182-b9a3-2fbf82eb3883"), id);
         }
@@ -714,7 +714,7 @@ unittest
             assert((channel == "#lestream"), channel);
             assert((content == "3322 raiders from Xari have joined!"), content);
             assert((tags == "badge-info=subscriber/19;badges=vip/1,subscriber/12,partner/1;color=#CC0000;display-name=Xari;emotes=;flags=;id=85c3a060-07df-474a-abdc-bae457018dc5;login=xari;mod=0;msg-id=raid;msg-param-displayName=Xari;msg-param-login=xari;msg-param-profileImageURL=https://static-cdn.jtvnw.net/jtv_user_pictures/86214da3-1461-44d1-a2e9-43501af29538-profile_image-70x70.jpeg;msg-param-viewerCount=3322;room-id=147337432;subscriber=1;system-msg=3322\\sraiders\\sfrom\\sXari\\shave\\sjoined!;tmi-sent-ts=1585054359220;user-id=88301612;user-type="), tags);
-            assert((counts[0] == 3322), counts[0].to!string);
+            assert((count[0] == 3322), count[0].to!string);
         }
     }
     {
@@ -729,10 +729,10 @@ unittest
             assert((sender.badges == "subscriber/6"), sender.badges);
             assert((channel == "#nokduro"), channel);
             assert((content == "mymii87 extended their Tier 1 subscription through April!"), content);
-            assert((auxstrings[0] == "1000"), auxstrings[0]);
+            assert((aux[0] == "1000"), aux[0]);
             assert((tags == "badge-info=subscriber/8;badges=subscriber/6;color=;display-name=mymii87;emotes=;flags=;id=0ce7f53f-928a-4b71-abe5-e06ff53eb8fe;login=mymii87;mod=0;msg-id=extendsub;msg-param-cumulative-months=8;msg-param-sub-benefit-end-month=4;msg-param-sub-plan=1000;room-id=137687203;subscriber=1;system-msg=mymii87\\sextended\\stheir\\sTier\\s1\\ssubscription\\sthrough\\sApril!;tmi-sent-ts=1585061506357;user-id=167733757;user-type="), tags);
-            assert((counts[0] == 4), counts[0].to!string);
-            assert((counts[1] == 8), counts[1].to!string);
+            assert((count[0] == 4), count[0].to!string);
+            assert((count[1] == 8), count[1].to!string);
         }
     }
     {
@@ -764,7 +764,7 @@ unittest
             assert((channel == "#timthetatman"), channel);
             assert((content == "GG"), content);
             assert((tags == "badge-info=subscriber/1;badges=subscriber/0,bits/1000;color=;display-name=High_Depth;emotes=;flags=;id=4ef6d438-dcfc-4435-b63e-730d5c400c10;login=high_depth;mod=0;msg-id=bitsbadgetier;msg-param-threshold=1000;room-id=36769016;subscriber=1;system-msg=bits\\sbadge\\stier\\snotification;tmi-sent-ts=1585240021586;user-id=457965105;user-type="), tags);
-            assert((counts[0] == 1000), counts[0].to!string);
+            assert((count[0] == 1000), count[0].to!string);
         }
     }
     {
@@ -780,7 +780,7 @@ unittest
             assert((channel == "#gaules"), channel);
             assert((content == "SAFE"), content);
             assert((tags == "badge-info=subscriber/10;badges=subscriber/9,bits/1000;color=;display-name=reykjaviik_;emotes=;flags=;id=efd7886f-45f3-4781-a9aa-dd601fd340eb;login=reykjaviik_;mod=0;msg-id=bitsbadgetier;msg-param-threshold=1000;room-id=181077473;subscriber=1;system-msg=bits\\sbadge\\stier\\snotification;tmi-sent-ts=1585336240505;user-id=248795812;user-type="), tags);
-            assert((counts[0] == 1000), counts[0].to!string);
+            assert((count[0] == 1000), count[0].to!string);
         }
     }
     {
@@ -792,7 +792,7 @@ unittest
             assert((sender.address == "tmi.twitch.tv"), sender.address);
             assert((channel == "#zorael"), channel);
             assert((content == "Sorry, \"/user\" is not available through this client."), content);
-            assert((auxstrings[0] == "unavailable_command"), auxstrings[0]);
+            assert((aux[0] == "unavailable_command"), aux[0]);
             assert((tags == "msg-id=unavailable_command"), tags);
         }
     }
@@ -804,7 +804,7 @@ unittest
             assert((sender.address == "tmi.twitch.tv"), sender.address);
             assert((channel == "#zorael"), channel);
             assert((content == "This channel does not have any VIPs."), content);
-            assert((auxstrings[0] == "no_vips"), auxstrings[0]);
+            assert((aux[0] == "no_vips"), aux[0]);
             assert((tags == "msg-id=no_vips"), tags);
         }
     }
@@ -823,7 +823,7 @@ unittest
             assert((sender.id == 237489408), sender.id.to!string);
             assert((channel == "#nickeh30"), channel);
             assert((content == "gladd7 gladd7 gladd7 gladd7 gladd7 gladd7 gladd7 gladd7 gladd7 gladd7 gladd7 gladd7 gladd7 gladd7 gladd7 gladd7 gladd7 gladd7 gladd7 gladd7 gladd7 gladd7 gladd7 gladd7 gladd7 gladd7 gladd7 gladd7 gladd7 gladd7 gladd7 gladd7 gladd7 gladd7 gladd7 gladd7 gladd7 gladd7"), content);
-            assert((auxstrings[0] == "skip-subs-mode-message"), auxstrings[0]);
+            assert((aux[0] == "skip-subs-mode-message"), aux[0]);
             assert((tags == "badge-info=;badges=premium/1;color=#00FFAD;display-name=sleepingbeds;emote-only=1;emotes=300787466:0-5,7-12,14-19,21-26,28-33,35-40,42-47,49-54,56-61,63-68,70-75,77-82,84-89,91-96,98-103,105-110,112-117,119-124,126-131,133-138,140-145,147-152,154-159,161-166,168-173,175-180,182-187,189-194,196-201,203-208,210-215,217-222,224-229,231-236,238-243,245-250,252-257,259-264;flags=;id=f9ec222e-1d73-4db4-b67e-3f1857ba204f;mod=0;msg-id=skip-subs-mode-message;room-id=44424631;subscriber=0;tmi-sent-ts=1589991183756;turbo=0;user-id=237489408;user-type="), tags);
             assert((emotes == "300787466:0-5,7-12,14-19,21-26,28-33,35-40,42-47,49-54,56-61,63-68,70-75,77-82,84-89,91-96,98-103,105-110,112-117,119-124,126-131,133-138,140-145,147-152,154-159,161-166,168-173,175-180,182-187,189-194,196-201,203-208,210-215,217-222,224-229,231-236,238-243,245-250,252-257,259-264"), emotes);
         }
@@ -847,7 +847,7 @@ unittest
             assert((target.displayName == "zenArc"), target.displayName);
             assert((target.id == 50081302), target.id.to!string);
             assert((content == "@zenArc KEKW"), content);
-            assert((auxstrings[0] == "she's gonna win 2truths and a lie everytime"), auxstrings[0]);
+            assert((aux[0] == "she's gonna win 2truths and a lie everytime"), aux[0]);
             assert((tags == "badge-info=subscriber/4;badges=subscriber/3;client-nonce=354569ede0b9750bdc895a861ddbf341;color=#5F9EA0;display-name=thatgirllalison;emotes=;flags=;id=6ff2d906-536f-4019-9611-cff930d449cb;mod=0;reply-parent-display-name=zenArc;reply-parent-msg-body=she's\\sgonna\\swin\\s2truths\\sand\\sa\\slie\\severytime;reply-parent-msg-id=81b6262b-7ce3-4686-be4f-1f5c548c9d16;reply-parent-user-id=50081302;reply-parent-user-login=zenarc;room-id=32393428;subscriber=1;tmi-sent-ts=1597446673211;turbo=0;user-id=525941821;user-type="), tags);
             assert((id == "6ff2d906-536f-4019-9611-cff930d449cb"), id);
         }
@@ -872,7 +872,7 @@ unittest
             assert((target.displayName == "zenArc"), target.displayName);
             assert((target.id == 50081302), target.id.to!string);
             assert((content == "@zenArc lynD"), content);
-            assert((auxstrings[0] == "Ohno did they change reply? i see it again"), auxstrings[0]);
+            assert((aux[0] == "Ohno did they change reply? i see it again"), aux[0]);
             assert((tags == "badge-info=subscriber/8;badges=subscriber/6,bits/100;client-nonce=94d8f991f0ec1dfa346247fcb78c6306;color=#3ED8B3;display-name=zenArc;emotes=301235090:8-11;flags=;id=bb0c7669-7fe9-409d-92e2-29f96cf6b3de;mod=0;reply-parent-display-name=zenArc;reply-parent-msg-body=Ohno\\sdid\\sthey\\schange\\sreply?\\si\\ssee\\sit\\sagain;reply-parent-msg-id=bc2a2412-356f-4633-aa5b-c85a6ce2906e;reply-parent-user-id=50081302;reply-parent-user-login=zenarc;room-id=32393428;subscriber=1;tmi-sent-ts=1597443237324;turbo=0;user-id=50081302;user-type="), tags);
             assert((emotes == "301235090:8-11"), emotes);
             assert((id == "bb0c7669-7fe9-409d-92e2-29f96cf6b3de"), id);
@@ -894,7 +894,7 @@ unittest
             assert((channel == "#hidingkun"), channel);
             assert((content == "Anon100"), content);
             assert((tags == "badge-info=;badges=anonymous-cheerer/1;bits=100;color=#8A2BE2;display-name=AnAnonymousCheerer;emotes=;flags=;id=1685dc57-a390-446c-b885-4bdf39c307b9;mod=0;room-id=231070929;subscriber=0;tmi-sent-ts=1597533872078;turbo=0;user-id=407665396;user-type="), tags);
-            assert((counts[0] == 100), counts[0].to!string);
+            assert((count[0] == 100), count[0].to!string);
             assert((id == "1685dc57-a390-446c-b885-4bdf39c307b9"), id);
         }
     }
@@ -935,7 +935,7 @@ unittest
             assert((sender.id == 467476367), sender.id.to!string);
             assert((channel == "#p4wnyhof"), channel);
             assert((content == "oYALIYAo is paying forward the Gift they got from HoadOne to the community!"), content);
-            assert((auxstrings[0] == "hoadone"), auxstrings[0]);
+            assert((aux[0] == "hoadone"), aux[0]);
             assert((tags == "badge-info=subscriber/1;badges=subscriber/0;color=#0000FF;display-name=oYALIYAo;emotes=;flags=;id=f7339efa-06a5-4708-a1bb-97592158781a;login=oyaliyao;mod=0;msg-id=communitypayforward;msg-param-prior-gifter-anonymous=false;msg-param-prior-gifter-display-name=HoadOne;msg-param-prior-gifter-id=472732828;msg-param-prior-gifter-user-name=hoadone;room-id=71672341;subscriber=1;system-msg=oYALIYAo\\sis\\spaying\\sforward\\sthe\\sGift\\sthey\\sgot\\sfrom\\sHoadOne\\sto\\sthe\\scommunity!;tmi-sent-ts=1597570304114;user-id=467476367;user-type="), tags);
             assert((id == "f7339efa-06a5-4708-a1bb-97592158781a"), id);
         }
@@ -955,9 +955,9 @@ unittest
             assert((sender.id == 30175011), sender.id.to!string);
             assert((channel == "#gamesdonequick"), channel);
             assert((content == "Shaezonai's Gift shared rewards to 5 others in Chat!"), content);
-            assert((auxstrings[0] == "SUBGIFT"), auxstrings[0]);
+            assert((aux[0] == "SUBGIFT"), aux[0]);
             assert((tags == "badge-info=;badges=;color=#1E90FF;display-name=Shaezonai;emotes=;flags=;id=094ae469-6827-4d80-a689-dd1b4a33ba69;login=shaezonai;mod=0;msg-id=rewardgift;msg-param-domain=hyperscape_megacommerce;msg-param-selected-count=5;msg-param-total-reward-count=5;msg-param-trigger-amount=1;msg-param-trigger-type=SUBGIFT;room-id=22510310;subscriber=0;system-msg=Shaezonai's\\sGift\\sshared\\srewards\\sto\\s5\\sothers\\sin\\sChat!;tmi-sent-ts=1597689523398;user-id=30175011;user-type="), tags);
-            assert((counts[1] == 5), counts[1].to!string);
+            assert((count[1] == 5), count[1].to!string);
             assert((id == "094ae469-6827-4d80-a689-dd1b4a33ba69"), id);
         }
     }
@@ -975,9 +975,9 @@ unittest
             assert((sender.id == 492403027), sender.id.to!string);
             assert((channel == "#gamesdonequick"), channel);
             assert((content == "multibatteri's Cheer shared rewards to 25 others in Chat!"), content);
-            assert((auxstrings[0] == "CHEER"), auxstrings[0]);
+            assert((aux[0] == "CHEER"), aux[0]);
             assert((tags == "badge-info=subscriber/1;badges=subscriber/0,bits/1000;color=;display-name=multibatteri;emotes=;flags=;id=e2901dc8-b247-4aaa-8ff2-78e4e472c3a8;login=multibatteri;mod=0;msg-id=rewardgift;msg-param-domain=hyperscape_megacommerce;msg-param-selected-count=25;msg-param-total-reward-count=25;msg-param-trigger-amount=1000;msg-param-trigger-type=CHEER;room-id=22510310;subscriber=1;system-msg=multibatteri's\\sCheer\\sshared\\srewards\\sto\\s25\\sothers\\sin\\sChat!;tmi-sent-ts=1597689117752;user-id=492403027;user-type="), tags);
-            assert((counts[1] == 25), counts[1].to!string);
+            assert((count[1] == 25), count[1].to!string);
             assert((id == "e2901dc8-b247-4aaa-8ff2-78e4e472c3a8"), id);
         }
     }
@@ -999,10 +999,10 @@ unittest
             assert((target.displayName == "alaynars"), target.displayName);
             assert((target.id == 125181523), target.id.to!string);
             assert((content == "WELCOME TO THE JUNGLE Pog"), content);
-            assert((auxstrings[0] == "1000"), auxstrings[0]);
+            assert((aux[0] == "1000"), aux[0]);
             assert((tags == "badge-info=subscriber/3;badges=subscriber/3;color=;display-name=poome;emotes=;flags=;id=8670eeb3-9cf3-4d80-934a-34a0cdc52a76;login=poome;mod=0;msg-id=resub;msg-param-anon-gift=false;msg-param-cumulative-months=3;msg-param-gift-month-being-redeemed=3;msg-param-gift-months=3;msg-param-gifter-id=125181523;msg-param-gifter-login=alaynars;msg-param-gifter-name=alaynars;msg-param-months=0;msg-param-should-share-streak=1;msg-param-streak-months=3;msg-param-sub-plan-name=Channel\\sSubscription\\s(xqcow);msg-param-sub-plan=1000;msg-param-was-gifted=true;room-id=71092938;subscriber=1;system-msg=poome\\ssubscribed\\sat\\sTier\\s1.\\sThey've\\ssubscribed\\sfor\\s3\\smonths,\\scurrently\\son\\sa\\s3\\smonth\\sstreak!;tmi-sent-ts=1599278081397;user-id=141120106;user-type="), tags);
-            assert((counts[0] == 3), counts[0].to!string);
-            assert((counts[1] == 3), counts[1].to!string);
+            assert((count[0] == 3), count[0].to!string);
+            assert((count[1] == 3), count[1].to!string);
             assert((id == "8670eeb3-9cf3-4d80-934a-34a0cdc52a76"), id);
         }
     }
@@ -1020,9 +1020,9 @@ unittest
             assert((sender.id == 513875830), sender.id.to!string);
             assert((channel == "#brunenge"), channel);
             assert((content == "rockoleitor_ subscribed with Twitch Prime."), content);
-            assert((auxstrings[0] == "Prime"), auxstrings[0]);
+            assert((aux[0] == "Prime"), aux[0]);
             assert((tags == "badge-info=subscriber/0;badges=subscriber/0,premium/1;color=;display-name=rockoleitor_;emotes=;flags=;id=00433938-cf6b-4435-b427-bc160ccc6a2c;login=rockoleitor_;mod=0;msg-id=sub;msg-param-cumulative-months=1;msg-param-months=0;msg-param-multimonth-duration=0;msg-param-multimonth-tenure=0;msg-param-should-share-streak=0;msg-param-sub-plan-name=Entrar\\sal\\scentro\\sPOWER\\sRANGER\\s(bruno_pro21);msg-param-sub-plan=Prime;msg-param-was-gifted=false;room-id=94757023;subscriber=1;system-msg=rockoleitor_\\ssubscribed\\swith\\sTwitch\\sPrime.;tmi-sent-ts=1601499733907;user-id=513875830;user-type="), tags);
-            assert((counts[1] == 1), counts[1].to!string);
+            assert((count[1] == 1), count[1].to!string);
             assert((id == "00433938-cf6b-4435-b427-bc160ccc6a2c"), id);
         }
     }
@@ -1077,10 +1077,10 @@ unittest
             assert((sender.id == 471292233), sender.id.to!string);
             assert((channel == "#jerma985"), channel);
             assert((content == "ithinkican is gifting 5 Tier 1 Subs to Jerma985's community! They've gifted a total of 5 in the channel!"), content);
-            assert((auxstrings[0] == "1000"), auxstrings[0]);
+            assert((aux[0] == "1000"), aux[0]);
             assert((tags == "badge-info=subscriber/22;badges=subscriber/12,bits/1000;color=#008000;display-name=ithinkican;emotes=;flags=;id=9ece0157-f458-4e5a-b314-e0bb1674bc2f;login=ithinkican;mod=0;msg-id=submysterygift;msg-param-gift-theme=party;msg-param-mass-gift-count=5;msg-param-origin-id=74\\s74\\s42\\s57\\scd\\sc4\\sf7\\s8c\\se8\\s67\\s36\\sf3\\s43\\s29\\s8c\\s8c\\sd1\\s61\\sbe\\s0b;msg-param-sender-count=5;msg-param-sub-plan=1000;room-id=23936415;subscriber=1;system-msg=ithinkican\\sis\\sgifting\\s5\\sTier\\s1\\sSubs\\sto\\sJerma985's\\scommunity!\\sThey've\\sgifted\\sa\\stotal\\sof\\s5\\sin\\sthe\\schannel!;tmi-sent-ts=1629502318806;user-id=471292233;user-type="), tags);
-            assert((counts[0] == 5), counts[0].to!string);
-            assert((counts[1] == 5), counts[1].to!string);
+            assert((count[0] == 5), count[0].to!string);
+            assert((count[1] == 5), count[1].to!string);
             assert((id == "9ece0157-f458-4e5a-b314-e0bb1674bc2f"), id);
         }
     }
@@ -1135,9 +1135,9 @@ unittest
             assert((sender.id == 48760906), sender.id.to!string);
             assert((channel == "#mousie"), channel);
             assert((content == "starblazers subscribed with Prime."), content);
-            assert((auxstrings[0] == "Prime"), auxstrings[0]);
+            assert((aux[0] == "Prime"), aux[0]);
             assert((tags == "badge-info=;badges=premium/1;color=;display-name=starblazers;emotes=;flags=;id=550d0b45-dee7-4fa4-9910-7ad1003f0d79;login=starblazers;mod=0;msg-id=sub;msg-param-cumulative-months=1;msg-param-goal-contribution-type=SUB_POINTS;msg-param-goal-current-contributions=902;msg-param-goal-description=Lali-this\\sis\\sa\\sgoal-ho;msg-param-goal-target-contributions=600;msg-param-goal-user-contributions=1;msg-param-months=0;msg-param-multimonth-duration=0;msg-param-multimonth-tenure=0;msg-param-should-share-streak=0;msg-param-sub-plan-name=Channel\\sSubscription\\s(mousierl);msg-param-sub-plan=Prime;msg-param-was-gifted=false;room-id=46969360;subscriber=1;system-msg=starblazers\\ssubscribed\\swith\\sPrime.;tmi-sent-ts=1644090143655;user-id=48760906;user-type="), tags);
-            assert((counts[1] == 1), counts[1].to!string);
+            assert((count[1] == 1), count[1].to!string);
             assert((id == "550d0b45-dee7-4fa4-9910-7ad1003f0d79"), id);
         }
     }
@@ -1155,7 +1155,7 @@ unittest
             assert((sender.id == 22216721), sender.id.to!string);
             assert((channel == "#zorael"), channel);
             assert((content == "this is a test announcement"), content);
-            assert((auxstrings[0] == "PURPLE"), auxstrings[0]);
+            assert((aux[0] == "PURPLE"), aux[0]);
             assert((tags == "badge-info=;badges=broadcaster/1;color=#5F9EA0;display-name=zorael;emotes=;flags=;id=d312a414-a1d3-45b1-abd1-2b3b11b65eb7;login=zorael;mod=0;msg-id=announcement;msg-param-color=PURPLE;room-id=22216721;subscriber=0;system-msg=;tmi-sent-ts=1648851705977;user-id=22216721;user-type="), tags);
             assert((id == "d312a414-a1d3-45b1-abd1-2b3b11b65eb7"), id);
         }
@@ -1167,7 +1167,7 @@ unittest
             assert((type == IRCEvent.Type.ERR_UNKNOWNCOMMAND), Enum!(IRCEvent.Type).toString(type));
             assert((sender.address == "tmi.twitch.tv"), sender.address);
             assert((content == "Unknown command"), content);
-            assert((auxstrings[0] == "ZORAEL!ZORAEL@TMI.TWITCH.TV PRIVMSG #ZORAEL :HELLO"), auxstrings[0]);
+            assert((aux[0] == "ZORAEL!ZORAEL@TMI.TWITCH.TV PRIVMSG #ZORAEL :HELLO"), aux[0]);
             assert((num == 421), num.to!string);
         }
     }
@@ -1223,9 +1223,9 @@ unittest
             assert((sender.id == 238696431), sender.id.to!string);
             assert((channel == "#gaules"), channel);
             assert((content == "SilvergunRP Cheered with R$6.00"), content);
-            assert((auxstrings[0] == "BRL"), auxstrings[0]);
+            assert((aux[0] == "BRL"), aux[0]);
             assert((tags == "badge-info=subscriber/30;badges=subscriber/30,premium/1;color=#00FF7F;display-name=SilvergunRP;emotes=;flags=;id=8071df4a-29c7-4fe2-867e-7558a9e4efb0;login=silvergunrp;mod=0;msg-id=midnightsquid;msg-param-amount=600;msg-param-currency=BRL;msg-param-emote-id=emotesv2_4c4b1157b8d34edba9bcb0aa8198197f;msg-param-exponent=2;msg-param-is-highlighted=false;msg-param-pill-type=Success;room-id=181077473;subscriber=1;system-msg=SilvergunRP\\sCheered\\swith\\sR$6.00;tmi-sent-ts=1665339696298;user-id=238696431;user-type="), tags);
-            assert((counts[0] == 600), counts[0].to!string);
+            assert((count[0] == 600), count[0].to!string);
             assert((id == "8071df4a-29c7-4fe2-867e-7558a9e4efb0"), id);
         }
     }
@@ -1244,9 +1244,9 @@ unittest
             assert((sender.id == 478167598), sender.id.to!string);
             assert((channel == "#amouranth"), channel);
             assert((content == "Can we get a L for the camera guy pls?"), content);
-            assert((auxstrings[0] == "USD"), auxstrings[0]);
+            assert((aux[0] == "USD"), aux[0]);
             assert((tags == "badge-info=;badges=glhf-pledge/1;color=#FF69B4;display-name=bethiehem;emotes=;first-msg=0;flags=;id=2ff6d2fb-7a9a-47f3-b64a-01b9abf08765;mod=0;pinned-chat-paid-amount=500;pinned-chat-paid-canonical-amount=5;pinned-chat-paid-currency=USD;pinned-chat-paid-exponent=2;returning-chatter=0;room-id=125387632;subscriber=0;tmi-sent-ts=1665358650971;turbo=0;user-id=478167598;user-type="), tags);
-            assert((counts[0] == 500), counts[0].to!string);
+            assert((count[0] == 500), count[0].to!string);
             assert((id == "2ff6d2fb-7a9a-47f3-b64a-01b9abf08765"), id);
         }
     }
