@@ -2373,6 +2373,7 @@ in (slice.length, "Tried to process `onISUPPORT` on an empty slice")
             }
         }
 
+        event.content = string.init;
         version(FlagAsUpdated) parser.updates |= IRCParser.Update.server;
     }
     /*catch (ConvException e)
