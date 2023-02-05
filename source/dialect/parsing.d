@@ -1466,13 +1466,15 @@ void parseSpecialcases(ref IRCParser parser, ref IRCEvent event, ref string slic
 
         if (portstring.beginsWith('+')) portstring = portstring[1..$];
 
+        event.aux[1] = portstring;
+
         try
         {
             event.count[0] = portstring.to!int;
         }
         catch (ConvException _)
         {
-            event.aux[0] = event.aux[0] ~ ':' ~ portstring;
+            // Ignore
         }
         break;
 
