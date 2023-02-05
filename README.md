@@ -17,11 +17,10 @@ struct IRCEvent
     IRCUser target;
     string channel;
     string content;
-    string aux;
+    string[16] aux;
     string tags;
     uint num;
-    long count;
-    long altcount;
+    Nullable!long[16] count;
     long time;
     string errors;
 }
@@ -85,10 +84,10 @@ struct IRCParser
 
 ## Available build configurations
 
-* `library` is the default and includes some code specifically useful for bot applications
+* `library` is the default
 * `twitch` is `library` but with extra support added for Twitch servers
-* `agnostic` is `library` but with bot code omitted
-* `twitchagnostic` is `agnostic` but with Twitch support included
+* `bot` additionally includes some code specifically useful for bot applications
+* `twitchbot` is `twitch` and `bot` combined
 
 ## How to use
 
