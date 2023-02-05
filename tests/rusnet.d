@@ -36,30 +36,20 @@ unittest
         {
             assert((type == IRCEvent.Type.RPL_ISUPPORT), Enum!(IRCEvent.Type).toString(type));
             assert((sender.address == "irc.run.net"), sender.address);
-            assert((content == "PREFIX=(ohv)@%+ CODEPAGES MODES=3 CHANTYPES=#&!+ MAXCHANNELS=20 NICKLEN=31 TOPICLEN=255 KICKLEN=255 NETWORK=RusNet CHANMODES=beI,k,l,acimnpqrstz"), content);
+            assert((aux == ["PREFIX=(ohv)@%+", "CODEPAGES", "MODES=3", "CHANTYPES=#&!+", "MAXCHANNELS=20", "NICKLEN=31", "TOPICLEN=255", "KICKLEN=255", "NETWORK=RusNet", "CHANMODES=beI,k,l,acimnpqrstz", "", "", "", "", "", ""]), aux.to!string);
             assert((num == 5), num.to!string);
         }
     }
 
-    /*
-    server.daemon = IRCServer.Daemon.rusnet;
-    server.maxNickLength = 31;
-    server.aModes = "beI";
-    server.cModes = "l";
-    server.dModes = "acimnpqrstz";
-    server.prefixes = "ohv";
-    server.chantypes = "#&!+";
-    */
-
     with (parser)
     {
-        assert((server.daemon == IRCServer.Daemon.rusnet), Enum!(IRCServer.Daemon).toString(server.daemon));
         assert((server.maxNickLength == 31), server.maxNickLength.to!string);
         assert((server.aModes == "beI"), server.aModes);
         assert((server.cModes == "l"), server.cModes);
         assert((server.dModes == "acimnpqrstz"), server.dModes);
         assert((server.prefixes == "ohv"), server.prefixes);
         assert((server.chantypes == "#&!+"), server.chantypes);
+        assert((server.supports == "PREFIX=(ohv)@%+ CODEPAGES MODES=3 CHANTYPES=#&!+ MAXCHANNELS=20 NICKLEN=31 TOPICLEN=255 KICKLEN=255 NETWORK=RusNet CHANMODES=beI,k,l,acimnpqrstz"), server.supports);
     }
 
     {

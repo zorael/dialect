@@ -36,9 +36,15 @@ unittest
         {
             assert((type == IRCEvent.Type.RPL_ISUPPORT), Enum!(IRCEvent.Type).toString(type));
             assert((sender.address == "underworld1.no.quakenet.org"), sender.address);
-            assert((content == "WHOX WALLCHOPS WALLVOICES USERIP CPRIVMSG CNOTICE SILENCE=15 MODES=6 MAXCHANNELS=20 MAXBANS=45 NICKLEN=15"), content);
+            assert((aux == ["WHOX", "WALLCHOPS", "WALLVOICES", "USERIP", "CPRIVMSG", "CNOTICE", "SILENCE=15", "MODES=6", "MAXCHANNELS=20", "MAXBANS=45", "NICKLEN=15", "", "", "", "", ""]), aux.to!string);
             assert((num == 5), num.to!string);
         }
+    }
+
+    with (parser)
+    {
+        assert((server.maxNickLength == 15), server.maxNickLength.to!string);
+        assert((server.supports == "WHOX WALLCHOPS WALLVOICES USERIP CPRIVMSG CNOTICE SILENCE=15 MODES=6 MAXCHANNELS=20 MAXBANS=45 NICKLEN=15"), server.supports);
     }
 
     /*
@@ -51,24 +57,15 @@ unittest
     }
 
     {
-        immutable event = parser.toIRCEvent(":underworld1.no.quakenet.org 005 kameloso MAXNICKLEN=15 TOPICLEN=250 AWAYLEN=160 KICKLEN=250 CHANNELLEN=200 MAXCHANNELLEN=200 CHANTYPES=#& PREFIX=(ov)@+ STATUSMSG=@+ CHANMODES=b,k,l,imnpstrDducCNMT CASEMAPPING=rfc1459 NETWORK=QuakeNet :are supported by this server$");
+        immutable event = parser.toIRCEvent(":underworld1.no.quakenet.org 005 kameloso MAXNICKLEN=15 TOPICLEN=250 AWAYLEN=160 KICKLEN=250 CHANNELLEN=200 MAXCHANNELLEN=200 CHANTYPES=#& PREFIX=(ov)@+ STATUSMSG=@+ CHANMODES=b,k,l,imnpstrDducCNMT CASEMAPPING=rfc1459 NETWORK=QuakeNet :are supported by this server");
         with (event)
         {
             assert((type == IRCEvent.Type.RPL_ISUPPORT), Enum!(IRCEvent.Type).toString(type));
             assert((sender.address == "underworld1.no.quakenet.org"), sender.address);
-            assert((content == "MAXNICKLEN=15 TOPICLEN=250 AWAYLEN=160 KICKLEN=250 CHANNELLEN=200 MAXCHANNELLEN=200 CHANTYPES=#& PREFIX=(ov)@+ STATUSMSG=@+ CHANMODES=b,k,l,imnpstrDducCNMT CASEMAPPING=rfc1459 NETWORK=QuakeNet"), content);
+            assert((aux == ["MAXNICKLEN=15", "TOPICLEN=250", "AWAYLEN=160", "KICKLEN=250", "CHANNELLEN=200", "MAXCHANNELLEN=200", "CHANTYPES=#&", "PREFIX=(ov)@+", "STATUSMSG=@+", "CHANMODES=b,k,l,imnpstrDducCNMT", "CASEMAPPING=rfc1459", "NETWORK=QuakeNet", "", "", "", ""]), aux.to!string);
             assert((num == 5), num.to!string);
         }
     }
-
-    /*
-    server.network = "QuakeNet";
-    server.aModes = "b";
-    server.cModes = "l";
-    server.dModes = "imnpstrDducCNMT";
-    server.chantypes = "#&";
-    server.caseMapping = IRCServer.CaseMapping.rfc1459;
-    */
 
     with (parser)
     {
@@ -78,6 +75,7 @@ unittest
         assert((server.dModes == "imnpstrDducCNMT"), server.dModes);
         assert((server.chantypes == "#&"), server.chantypes);
         assert((server.caseMapping == IRCServer.CaseMapping.rfc1459), Enum!(IRCServer.CaseMapping).toString(server.caseMapping));
+        assert((server.supports == "WHOX WALLCHOPS WALLVOICES USERIP CPRIVMSG CNOTICE SILENCE=15 MODES=6 MAXCHANNELS=20 MAXBANS=45 NICKLEN=15 MAXNICKLEN=15 TOPICLEN=250 AWAYLEN=160 KICKLEN=250 CHANNELLEN=200 MAXCHANNELLEN=200 CHANTYPES=#& PREFIX=(ov)@+ STATUSMSG=@+ CHANMODES=b,k,l,imnpstrDducCNMT CASEMAPPING=rfc1459 NETWORK=QuakeNet"), server.supports);
     }
 
     {

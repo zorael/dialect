@@ -40,25 +40,23 @@ unittest
     }
 
     {
-    immutable event = parser.toIRCEvent(":irc.ircii.net 005 kameloso^^ CALLERID CASEMAPPING=rfc1459 DEAF=D KICKLEN=180 MODES=4 PREFIX=(qaohv)~&@%+ STATUSMSG=~&@%+ EXCEPTS=e INVEX=I NICKLEN=30 NETWORK=Rizon MAXLIST=beI:250 MAXTARGETS=4 :are supported by this server");
+        immutable event = parser.toIRCEvent(":irc.ircii.net 005 kameloso^^ CALLERID CASEMAPPING=rfc1459 DEAF=D KICKLEN=180 MODES=4 PREFIX=(qaohv)~&@%+ STATUSMSG=~&@%+ EXCEPTS=e INVEX=I NICKLEN=30 NETWORK=Rizon MAXLIST=beI:250 MAXTARGETS=4 :are supported by this server");
         with (event)
         {
             assert((type == IRCEvent.Type.RPL_ISUPPORT), Enum!(IRCEvent.Type).toString(type));
             assert((sender.address == "irc.ircii.net"), sender.address);
-            assert((content == "CALLERID CASEMAPPING=rfc1459 DEAF=D KICKLEN=180 MODES=4 PREFIX=(qaohv)~&@%+ STATUSMSG=~&@%+ EXCEPTS=e INVEX=I NICKLEN=30 NETWORK=Rizon MAXLIST=beI:250 MAXTARGETS=4"), content);
+            assert((aux == ["CALLERID", "CASEMAPPING=rfc1459", "DEAF=D", "KICKLEN=180", "MODES=4", "PREFIX=(qaohv)~&@%+", "STATUSMSG=~&@%+", "EXCEPTS=e", "INVEX=I", "NICKLEN=30", "NETWORK=Rizon", "MAXLIST=beI:250", "MAXTARGETS=4", "", "", ""]), aux.to!string);
             assert((num == 5), num.to!string);
         }
     }
 
-    /*
-    server.daemon = IRCServer.Daemon.rizon;
-    server.network = "Rizon";
-    server.maxNickLength = 30;
-    server.prefixes = "qaohv";
-    server.caseMapping = IRCServer.CaseMapping.rfc1459;
-    server.exceptsChar = 'e';
-    server.invexChar = 'I';
-    */
+    with (parser)
+    {
+        assert((server.network == "Rizon"), server.network);
+        assert((server.maxNickLength == 30), server.maxNickLength.to!string);
+        assert((server.prefixes == "qaohv"), server.prefixes);
+        assert((server.caseMapping == IRCServer.CaseMapping.rfc1459), Enum!(IRCServer.CaseMapping).toString(server.caseMapping));
+    }
 
     with (parser)
     {
@@ -77,17 +75,10 @@ unittest
         {
             assert((type == IRCEvent.Type.RPL_ISUPPORT), Enum!(IRCEvent.Type).toString(type));
             assert((sender.address == "irc.ircii.net"), sender.address);
-            assert((content == "CHANTYPES=# CHANLIMIT=#:250 CHANNELLEN=50 TOPICLEN=390 CHANMODES=beI,k,l,BCMNORScimnpstz NAMESX UHNAMES AWAYLEN=180 ELIST=CMNTU SAFELIST KNOCK WATCH=60"), content);
+            assert((aux == ["CHANTYPES=#", "CHANLIMIT=#:250", "CHANNELLEN=50", "TOPICLEN=390", "CHANMODES=beI,k,l,BCMNORScimnpstz", "NAMESX", "UHNAMES", "AWAYLEN=180", "ELIST=CMNTU", "SAFELIST", "KNOCK", "WATCH=60", "", "", "", ""]), aux.to!string);
             assert((num == 5), num.to!string);
         }
     }
-
-    /*
-    server.maxChannelLength = 50;
-    server.aModes = "beI";
-    server.cModes = "l";
-    server.dModes = "BCMNORScimnpstz";
-    */
 
     with (parser)
     {
@@ -95,6 +86,7 @@ unittest
         assert((server.aModes == "beI"), server.aModes);
         assert((server.cModes == "l"), server.cModes);
         assert((server.dModes == "BCMNORScimnpstz"), server.dModes);
+        assert((server.supports == "CALLERID CASEMAPPING=rfc1459 DEAF=D KICKLEN=180 MODES=4 PREFIX=(qaohv)~&@%+ STATUSMSG=~&@%+ EXCEPTS=e INVEX=I NICKLEN=30 NETWORK=Rizon MAXLIST=beI:250 MAXTARGETS=4 CHANTYPES=# CHANLIMIT=#:250 CHANNELLEN=50 TOPICLEN=390 CHANMODES=beI,k,l,BCMNORScimnpstz NAMESX UHNAMES AWAYLEN=180 ELIST=CMNTU SAFELIST KNOCK WATCH=60"), server.supports);
     }
 
     {

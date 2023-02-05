@@ -30,7 +30,7 @@ unittest
         assert((server.daemonstring == "2.11.2p3"), server.daemonstring);
     }
 
-    {
+    /+{
         immutable event = parser.toIRCEvent(":irc.nlnog.net 005 kameloso RFC2812 PREFIX=(ov)@+ CHANTYPES=#&!+ MODES=3 CHANLIMIT=#&!+:42 NICKLEN=15 TOPICLEN=255 KICKLEN=255 MAXLIST=beIR:64 CHANNELLEN=50 IDCHAN=!:5 CHANMODES=beIR,k,l,imnpstaqr :are supported by this server");
         with (event)
         {
@@ -58,6 +58,28 @@ unittest
         assert((server.cModes == "l"), server.cModes);
         assert((server.dModes == "imnpstaqr"), server.dModes);
         assert((server.chantypes == "#&!+"), server.chantypes);
+    }+/
+
+    {
+        immutable event = parser.toIRCEvent(":irc.nlnog.net 005 kameloso RFC2812 PREFIX=(ov)@+ CHANTYPES=#&!+ MODES=3 CHANLIMIT=#&!+:42 NICKLEN=15 TOPICLEN=255 KICKLEN=255 MAXLIST=beIR:64 CHANNELLEN=50 IDCHAN=!:5 CHANMODES=beIR,k,l,imnpstaqr :are supported by this server");
+        with (event)
+        {
+            assert((type == IRCEvent.Type.RPL_ISUPPORT), Enum!(IRCEvent.Type).toString(type));
+            assert((sender.address == "irc.nlnog.net"), sender.address);
+            assert((aux == ["RFC2812", "PREFIX=(ov)@+", "CHANTYPES=#&!+", "MODES=3", "CHANLIMIT=#&!+:42", "NICKLEN=15", "TOPICLEN=255", "KICKLEN=255", "MAXLIST=beIR:64", "CHANNELLEN=50", "IDCHAN=!:5", "CHANMODES=beIR,k,l,imnpstaqr", "", "", "", ""]), aux.to!string);
+            assert((num == 5), num.to!string);
+        }
+    }
+
+    with (parser)
+    {
+        assert((server.maxNickLength == 15), server.maxNickLength.to!string);
+        assert((server.maxChannelLength == 50), server.maxChannelLength.to!string);
+        assert((server.aModes == "beIR"), server.aModes);
+        assert((server.cModes == "l"), server.cModes);
+        assert((server.dModes == "imnpstaqr"), server.dModes);
+        assert((server.chantypes == "#&!+"), server.chantypes);
+        assert((server.supports == "RFC2812 PREFIX=(ov)@+ CHANTYPES=#&!+ MODES=3 CHANLIMIT=#&!+:42 NICKLEN=15 TOPICLEN=255 KICKLEN=255 MAXLIST=beIR:64 CHANNELLEN=50 IDCHAN=!:5 CHANMODES=beIR,k,l,imnpstaqr"), server.supports);
     }
 
     {
@@ -66,22 +88,16 @@ unittest
         {
             assert((type == IRCEvent.Type.RPL_ISUPPORT), Enum!(IRCEvent.Type).toString(type));
             assert((sender.address == "irc.nlnog.net"), sender.address);
-            assert((content == "PENALTY FNC EXCEPTS=e INVEX=I CASEMAPPING=ascii NETWORK=IRCnet"), content);
+            assert((aux == ["PENALTY", "FNC", "EXCEPTS=e", "INVEX=I", "CASEMAPPING=ascii", "NETWORK=IRCnet", "", "", "", "", "", "", "", "", "", ""]), aux.to!string);
             assert((num == 5), num.to!string);
         }
     }
-
-    /*
-    server.daemon = IRCServer.Daemon.ircnet;
-    server.network = "IRCnet";
-    server.exceptsChar = 'e';
-    server.invexChar = 'I';
-    */
 
     with (parser)
     {
         assert((server.daemon == IRCServer.Daemon.ircnet), Enum!(IRCServer.Daemon).toString(server.daemon));
         assert((server.network == "IRCnet"), server.network);
+        assert((server.supports == "RFC2812 PREFIX=(ov)@+ CHANTYPES=#&!+ MODES=3 CHANLIMIT=#&!+:42 NICKLEN=15 TOPICLEN=255 KICKLEN=255 MAXLIST=beIR:64 CHANNELLEN=50 IDCHAN=!:5 CHANMODES=beIR,k,l,imnpstaqr PENALTY FNC EXCEPTS=e INVEX=I CASEMAPPING=ascii NETWORK=IRCnet"), server.supports);
         assert((server.exceptsChar == 'e'), server.exceptsChar.to!string);
         assert((server.invexChar == 'I'), server.invexChar.to!string);
     }

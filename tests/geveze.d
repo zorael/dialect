@@ -82,7 +82,7 @@ unittest
         {
             assert((type == IRCEvent.Type.RPL_ISUPPORT), Enum!(IRCEvent.Type).toString(type));
             assert((sender.address == "irc.geveze.org"), sender.address);
-            assert((content == "CMDS=KNOCK,MAP,DCCALLOW,xUSERIPx UHNAMES NAMESX SAFELIST HCN MAXCHANNELS=24 CHANLIMIT=#:24 MAXLIST=b:1000,e:1000,I:1000 NICKLEN=30 CHANNELLEN=32 TOPICLEN=307 KICKLEN=307 AWAYLEN=307"), content);
+            assert((aux == ["CMDS=KNOCK,MAP,DCCALLOW,xUSERIPx", "UHNAMES", "NAMESX", "SAFELIST", "HCN", "MAXCHANNELS=24", "CHANLIMIT=#:24", "MAXLIST=b:1000,e:1000,I:1000", "NICKLEN=30", "CHANNELLEN=32", "TOPICLEN=307", "KICKLEN=307", "AWAYLEN=307", "", "", ""]), aux.to!string);
             assert((num == 5), num.to!string);
         }
     }
@@ -94,7 +94,7 @@ unittest
         assert((server.supports == "CMDS=KNOCK,MAP,DCCALLOW,xUSERIPx UHNAMES NAMESX SAFELIST HCN MAXCHANNELS=24 CHANLIMIT=#:24 MAXLIST=b:1000,e:1000,I:1000 NICKLEN=30 CHANNELLEN=32 TOPICLEN=307 KICKLEN=307 AWAYLEN=307"), server.supports);
     }
 
-    {
+    /*{
         immutable event = parser.toIRCEvent(":irc.geveze.org 005 kameloso MAXTARGETS=20 WALLCHOPS WATCH=128 WATCHOPTS=A SILENCE=15 MODES=12 CHANTYPES=# PREFIX=(qaohv)~&@%+ CHANMODES=beI,kfL,lj,psmntirRcOAQKVCuzNSMTGZ NETWORK=Geveze CASEMAPPING=ascii EXTBAN=~,cqnrT ELIST=MNUCT :are supported by this server");
         with (event)
         {
@@ -115,6 +115,30 @@ unittest
         assert((server.extbanPrefix == '~'), server.extbanPrefix.to!string);
         assert((server.extbanTypes == "cqnrT"), server.extbanTypes);
         assert((server.supports == "CMDS=KNOCK,MAP,DCCALLOW,xUSERIPx UHNAMES NAMESX SAFELIST HCN MAXCHANNELS=24 CHANLIMIT=#:24 MAXLIST=b:1000,e:1000,I:1000 NICKLEN=30 CHANNELLEN=32 TOPICLEN=307 KICKLEN=307 AWAYLEN=307 MAXTARGETS=20 WALLCHOPS WATCH=128 WATCHOPTS=A SILENCE=15 MODES=12 CHANTYPES=# PREFIX=(qaohv)~&@%+ CHANMODES=beI,kfL,lj,psmntirRcOAQKVCuzNSMTGZ NETWORK=Geveze CASEMAPPING=ascii EXTBAN=~,cqnrT ELIST=MNUCT"), server.supports);
+    }*/
+
+    {
+        immutable event = parser.toIRCEvent(":irc.geveze.org 005 kameloso MAXTARGETS=20 WALLCHOPS WATCH=128 WATCHOPTS=A SILENCE=15 MODES=12 CHANTYPES=# PREFIX=(qaohv)~&@%+ CHANMODES=beI,kfL,lj,psmntirRcOAQKVCuzNSMTGZ NETWORK=Geveze CASEMAPPING=ascii EXTBAN=~,cqnrT ELIST=MNUCT :are supported by this server");
+        with (event)
+        {
+            assert((type == IRCEvent.Type.RPL_ISUPPORT), Enum!(IRCEvent.Type).toString(type));
+            assert((sender.address == "irc.geveze.org"), sender.address);
+            assert((aux == ["MAXTARGETS=20", "WALLCHOPS", "WATCH=128", "WATCHOPTS=A", "SILENCE=15", "MODES=12", "CHANTYPES=#", "PREFIX=(qaohv)~&@%+", "CHANMODES=beI,kfL,lj,psmntirRcOAQKVCuzNSMTGZ", "NETWORK=Geveze", "CASEMAPPING=ascii", "EXTBAN=~,cqnrT", "ELIST=MNUCT", "", "", ""]), aux.to!string);
+            assert((num == 5), num.to!string);
+        }
+    }
+
+    with (parser)
+    {
+        assert((server.network == "Geveze"), server.network);
+        assert((server.aModes == "beI"), server.aModes);
+        assert((server.bModes == "kfL"), server.bModes);
+        assert((server.cModes == "lj"), server.cModes);
+        assert((server.dModes == "psmntirRcOAQKVCuzNSMTGZ"), server.dModes);
+        assert((server.prefixes == "qaohv"), server.prefixes);
+        assert((server.extbanPrefix == '~'), server.extbanPrefix.to!string);
+        assert((server.extbanTypes == "cqnrT"), server.extbanTypes);
+        assert((server.supports == "CMDS=KNOCK,MAP,DCCALLOW,xUSERIPx UHNAMES NAMESX SAFELIST HCN MAXCHANNELS=24 CHANLIMIT=#:24 MAXLIST=b:1000,e:1000,I:1000 NICKLEN=30 CHANNELLEN=32 TOPICLEN=307 KICKLEN=307 AWAYLEN=307 MAXTARGETS=20 WALLCHOPS WATCH=128 WATCHOPTS=A SILENCE=15 MODES=12 CHANTYPES=# PREFIX=(qaohv)~&@%+ CHANMODES=beI,kfL,lj,psmntirRcOAQKVCuzNSMTGZ NETWORK=Geveze CASEMAPPING=ascii EXTBAN=~,cqnrT ELIST=MNUCT"), server.supports);
     }
 
     {
@@ -123,7 +147,7 @@ unittest
         {
             assert((type == IRCEvent.Type.RPL_ISUPPORT), Enum!(IRCEvent.Type).toString(type));
             assert((sender.address == "irc.geveze.org"), sender.address);
-            assert((content == "STATUSMSG=~&@%+ EXCEPTS INVEX"), content);
+            assert((aux == ["STATUSMSG=~&@%+", "EXCEPTS", "INVEX", "", "", "", "", "", "", "", "", "", "", "", "", ""]), aux.to!string);
             assert((num == 5), num.to!string);
         }
     }

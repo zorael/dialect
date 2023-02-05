@@ -36,22 +36,10 @@ unittest
         {
             assert((type == IRCEvent.Type.RPL_ISUPPORT), Enum!(IRCEvent.Type).toString(type));
             assert((sender.address == "medusa.us.SpotChat.org"), sender.address);
-            assert((content == "AWAYLEN=200 CALLERID=g CASEMAPPING=rfc1459 CHANMODES=Ibeg,k,Jl,ACKMNOPQRSTcimnprstz CHANNELLEN=64 CHANTYPES=# CHARSET=ascii ELIST=MU EXCEPTS=e EXTBAN=,ACNOQRSTUcmz FNC INVEX=I KICKLEN=255"), content);
+            assert((aux == ["AWAYLEN=200", "CALLERID=g", "CASEMAPPING=rfc1459", "CHANMODES=Ibeg,k,Jl,ACKMNOPQRSTcimnprstz", "CHANNELLEN=64", "CHANTYPES=#", "CHARSET=ascii", "ELIST=MU", "EXCEPTS=e", "EXTBAN=,ACNOQRSTUcmz", "FNC", "INVEX=I", "KICKLEN=255", "", "", ""]), aux.to!string);
             assert((num == 5), num.to!string);
         }
     }
-
-    /*
-    server.maxChannelLength = 64;
-    server.aModes = "Ibeg";
-    server.cModes = "Jl";
-    server.dModes = "ACKMNOPQRSTcimnprstz";
-    server.caseMapping = IRCServer.CaseMapping.rfc1459;
-    server.extbanPrefix = '$'';
-    server.extbanTypes = "ACNOQRSTUcmz";
-    server.exceptsChar = 'e';
-    server.invexChar = 'I';
-    */
 
     with (parser)
     {
@@ -72,22 +60,17 @@ unittest
         {
             assert((type == IRCEvent.Type.RPL_ISUPPORT), Enum!(IRCEvent.Type).toString(type));
             assert((sender.address == "medusa.us.SpotChat.org"), sender.address);
-            assert((content == "MAP MAXBANS=60 MAXCHANNELS=20 MAXPARA=32 MAXTARGETS=20 MODES=20 NAMESX NETWORK=SpotChat NICKLEN=31 OVERRIDE PREFIX=(Yqaohv)!~&@%+ REMOVE SECURELIST"), content);
+            assert((aux == ["MAP", "MAXBANS=60", "MAXCHANNELS=20", "MAXPARA=32", "MAXTARGETS=20", "MODES=20", "NAMESX", "NETWORK=SpotChat", "NICKLEN=31", "OVERRIDE", "PREFIX=(Yqaohv)!~&@%+", "REMOVE", "SECURELIST", "", "", ""]), aux.to!string);
             assert((num == 5), num.to!string);
         }
     }
-
-    /*
-    server.network = "SpotChat";
-    server.maxNickLength = 31;
-    server.prefixes = "Yqaohv";
-    */
 
     with (parser)
     {
         assert((server.network == "SpotChat"), server.network);
         assert((server.maxNickLength == 31), server.maxNickLength.to!string);
         assert((server.prefixes == "Yqaohv"), server.prefixes);
+        assert((server.supports == "AWAYLEN=200 CALLERID=g CASEMAPPING=rfc1459 CHANMODES=Ibeg,k,Jl,ACKMNOPQRSTcimnprstz CHANNELLEN=64 CHANTYPES=# CHARSET=ascii ELIST=MU EXCEPTS=e EXTBAN=,ACNOQRSTUcmz FNC INVEX=I KICKLEN=255 MAP MAXBANS=60 MAXCHANNELS=20 MAXPARA=32 MAXTARGETS=20 MODES=20 NAMESX NETWORK=SpotChat NICKLEN=31 OVERRIDE PREFIX=(Yqaohv)!~&@%+ REMOVE SECURELIST"), server.supports);
     }
 
     {
@@ -96,7 +79,7 @@ unittest
         {
             assert((type == IRCEvent.Type.RPL_ISUPPORT), Enum!(IRCEvent.Type).toString(type));
             assert((sender.address == "medusa.us.SpotChat.org"), sender.address);
-            assert((content == "SSL=64.57.93.14:6697 STARTTLS STATUSMSG=!~&@%+ TOPICLEN=307 UHNAMES VBANLIST WALLCHOPS WALLVOICES WATCH=32"), content);
+            assert((aux == ["SSL=64.57.93.14:6697", "STARTTLS", "STATUSMSG=!~&@%+", "TOPICLEN=307", "UHNAMES", "VBANLIST", "WALLCHOPS", "WALLVOICES", "WATCH=32", "", "", "", "", "", "", ""]), aux.to!string);
             assert((num == 5), num.to!string);
         }
     }
@@ -176,27 +159,14 @@ unittest
 
     {
         immutable event = parser.toIRCEvent(":medusa.us.SpotChat.org 005 kameloso AWAYLEN=200 CALLERID=g CASEMAPPING=rfc1459 CHANMODES=Ibeg,k,Jl,ACKMNOPQRSTcimnprstz CHANNELLEN=64 CHANTYPES=# CHARSET=ascii ELIST=MU EXCEPTS=e EXTBAN=,ACNOQRSTUcmz FNC INVEX=I KICKLEN=255 :are supported by this server");
-        with (IRCEvent.Type)
         with (event)
         {
-            assert((type == RPL_ISUPPORT), Enum!(IRCEvent.Type).toString(type));
+            assert((type == IRCEvent.Type.RPL_ISUPPORT), Enum!(IRCEvent.Type).toString(type));
             assert((sender.address == "medusa.us.SpotChat.org"), sender.address);
-            assert((content == "AWAYLEN=200 CALLERID=g CASEMAPPING=rfc1459 CHANMODES=Ibeg,k,Jl,ACKMNOPQRSTcimnprstz CHANNELLEN=64 CHANTYPES=# CHARSET=ascii ELIST=MU EXCEPTS=e EXTBAN=,ACNOQRSTUcmz FNC INVEX=I KICKLEN=255"), content);
+            assert((aux == ["AWAYLEN=200", "CALLERID=g", "CASEMAPPING=rfc1459", "CHANMODES=Ibeg,k,Jl,ACKMNOPQRSTcimnprstz", "CHANNELLEN=64", "CHANTYPES=#", "CHARSET=ascii", "ELIST=MU", "EXCEPTS=e", "EXTBAN=,ACNOQRSTUcmz", "FNC", "INVEX=I", "KICKLEN=255", "", "", ""]), aux.to!string);
             assert((num == 5), num.to!string);
         }
     }
-
-    /*
-    with (parser)
-    {
-        server.maxChannelLength = 64;
-        server.aModes = "Ibeg";
-        server.cModes = "Jl";
-        server.dModes = "ACKMNOPQRSTcimnprstz";
-        server.caseMapping = IRCServer.CaseMapping.rfc1459;
-        server.extbanTypes = "ACNOQRSTUcmz";
-    }
-    */
 
     with (parser)
     {
@@ -204,7 +174,8 @@ unittest
         assert((server.aModes == "Ibeg"), server.aModes);
         assert((server.cModes == "Jl"), server.cModes);
         assert((server.dModes == "ACKMNOPQRSTcimnprstz"), server.dModes);
-        assert((server.caseMapping == IRCServer.CaseMapping.rfc1459), server.caseMapping.to!string);
+        assert((server.caseMapping == IRCServer.CaseMapping.rfc1459), Enum!(IRCServer.CaseMapping).toString(server.caseMapping));
         assert((server.extbanTypes == "ACNOQRSTUcmz"), server.extbanTypes);
+        assert((server.supports == "AWAYLEN=200 CALLERID=g CASEMAPPING=rfc1459 CHANMODES=Ibeg,k,Jl,ACKMNOPQRSTcimnprstz CHANNELLEN=64 CHANTYPES=# CHARSET=ascii ELIST=MU EXCEPTS=e EXTBAN=,ACNOQRSTUcmz FNC INVEX=I KICKLEN=255"), server.supports);
     }
 }

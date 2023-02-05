@@ -206,7 +206,7 @@ unittest
         {
             assert((type == IRCEvent.Type.RPL_ISUPPORT), Enum!(IRCEvent.Type).toString(type));
             assert((sender.address == "efnet.port80.se"), sender.address);
-            assert((content == "CHANTYPES=&# EXCEPTS INVEX CHANMODES=eIb,k,l,imnpstS CHANLIMIT=&#:50 PREFIX=(ov)@+ MAXLIST=beI:100 MODES=4 NETWORK=EFnet KNOCK STATUSMSG=@+ CALLERID=g"), content);
+            assert((aux == ["CHANTYPES=&#", "EXCEPTS", "INVEX", "CHANMODES=eIb,k,l,imnpstS", "CHANLIMIT=&#:50", "PREFIX=(ov)@+", "MAXLIST=beI:100", "MODES=4", "NETWORK=EFnet", "KNOCK", "STATUSMSG=@+", "CALLERID=g", "", "", "", ""]), aux.to!string);
             assert((num == 5), num.to!string);
         }
     }
@@ -221,6 +221,7 @@ unittest
         assert((server.prefixchars == ['+':'v', '@':'o']), server.prefixchars.to!string);
         assert((server.prefixes == "ov"), server.prefixes);
         assert((server.chantypes == "&#"), server.chantypes);
+        assert((server.supports == "CHANTYPES=&# EXCEPTS INVEX CHANMODES=eIb,k,l,imnpstS CHANLIMIT=&#:50 PREFIX=(ov)@+ MAXLIST=beI:100 MODES=4 NETWORK=EFnet KNOCK STATUSMSG=@+ CALLERID=g"), server.supports);
     }
 }
 
@@ -274,7 +275,7 @@ unittest
         {
             assert((type == IRCEvent.Type.RPL_ISUPPORT), Enum!(IRCEvent.Type).toString(type));
             assert((sender.address == "bitcoin.uk.eu.dal.net"), sender.address);
-            assert((content == "NETWORK=DALnet SAFELIST MAXBANS=200 MAXCHANNELS=50 CHANNELLEN=32 KICKLEN=307 NICKLEN=30 TOPICLEN=307 MODES=6 CHANTYPES=# CHANLIMIT=#:50 PREFIX=(ov)@+ STATUSMSG=@+"), content);
+            assert((aux == ["NETWORK=DALnet", "SAFELIST", "MAXBANS=200", "MAXCHANNELS=50", "CHANNELLEN=32", "KICKLEN=307", "NICKLEN=30", "TOPICLEN=307", "MODES=6", "CHANTYPES=#", "CHANLIMIT=#:50", "PREFIX=(ov)@+", "STATUSMSG=@+", "", "", ""]), aux.to!string);
             assert((num == 5), num.to!string);
         }
     }
@@ -286,6 +287,7 @@ unittest
         assert((server.maxChannelLength == 32), server.maxChannelLength.to!string);
         assert((server.prefixchars == ['+':'v', '@':'o']), server.prefixchars.to!string);
         assert((server.prefixes == "ov"), server.prefixes);
+        assert((server.supports == "NETWORK=DALnet SAFELIST MAXBANS=200 MAXCHANNELS=50 CHANNELLEN=32 KICKLEN=307 NICKLEN=30 TOPICLEN=307 MODES=6 CHANTYPES=# CHANLIMIT=#:50 PREFIX=(ov)@+ STATUSMSG=@+"), server.supports);
     }
 
     {
@@ -294,7 +296,7 @@ unittest
         {
             assert((type == IRCEvent.Type.RPL_ISUPPORT), Enum!(IRCEvent.Type).toString(type));
             assert((sender.address == "bitcoin.uk.eu.dal.net"), sender.address);
-            assert((content == "CASEMAPPING=ascii WATCH=128 SILENCE=10 ELIST=cmntu EXCEPTS INVEX CHANMODES=beI,k,jl,cimMnOprRsSt MAXLIST=b:200,e:100,I:100 TARGMAX=DCCALLOW:,JOIN:,KICK:4,KILL:20,NOTICE:20,PART:,PRIVMSG:20,WHOIS:,WHOWAS:"), content);
+            assert((aux == ["CASEMAPPING=ascii", "WATCH=128", "SILENCE=10", "ELIST=cmntu", "EXCEPTS", "INVEX", "CHANMODES=beI,k,jl,cimMnOprRsSt", "MAXLIST=b:200,e:100,I:100", "TARGMAX=DCCALLOW:,JOIN:,KICK:4,KILL:20,NOTICE:20,PART:,PRIVMSG:20,WHOIS:,WHOWAS:", "", "", "", "", "", "", ""]), aux.to!string);
             assert((num == 5), num.to!string);
         }
     }
@@ -302,9 +304,11 @@ unittest
     with (parser)
     {
         assert((server.aModes == "beI"), server.aModes);
-        assert((server.bModes == "k"), server.bModes);
         assert((server.cModes == "jl"), server.cModes);
+        assert((server.bModes == "k"), server.bModes);
         assert((server.dModes == "cimMnOprRsSt"), server.dModes);
+        assert((server.supports == "NETWORK=DALnet SAFELIST MAXBANS=200 MAXCHANNELS=50 CHANNELLEN=32 KICKLEN=307 NICKLEN=30 TOPICLEN=307 MODES=6 CHANTYPES=# CHANLIMIT=#:50 PREFIX=(ov)@+ STATUSMSG=@+ CASEMAPPING=ascii WATCH=128 SILENCE=10 ELIST=cmntu EXCEPTS INVEX CHANMODES=beI,k,jl,cimMnOprRsSt MAXLIST=b:200,e:100,I:100 TARGMAX=DCCALLOW:,JOIN:,KICK:4,KILL:20,NOTICE:20,PART:,PRIVMSG:20,WHOIS:,WHOWAS:"), server.supports);
+
     }
 
     {
@@ -410,7 +414,7 @@ unittest
         {
             assert((type == IRCEvent.Type.RPL_ISUPPORT), Enum!(IRCEvent.Type).toString(type));
             assert((sender.address == "fe-00107.GeekShed.net"), sender.address);
-            assert((content == "CMDS=KNOCK,MAP,DCCALLOW,USERIP,STARTTLS UHNAMES NAMESX SAFELIST HCN MAXCHANNELS=100 CHANLIMIT=#:100 MAXLIST=b:60,e:60,I:60 NICKLEN=30 CHANNELLEN=32 TOPICLEN=307 KICKLEN=307 AWAYLEN=307"), content);
+            assert((aux == ["CMDS=KNOCK,MAP,DCCALLOW,USERIP,STARTTLS", "UHNAMES", "NAMESX", "SAFELIST", "HCN", "MAXCHANNELS=100", "CHANLIMIT=#:100", "MAXLIST=b:60,e:60,I:60", "NICKLEN=30", "CHANNELLEN=32", "TOPICLEN=307", "KICKLEN=307", "AWAYLEN=307", "", "", ""]), aux.to!string);
             assert((num == 5), num.to!string);
         }
     }
@@ -419,6 +423,7 @@ unittest
     {
         assert((server.maxNickLength == 30), server.maxNickLength.to!string);
         assert((server.maxChannelLength == 32), server.maxChannelLength.to!string);
+        assert((server.supports == "CMDS=KNOCK,MAP,DCCALLOW,USERIP,STARTTLS UHNAMES NAMESX SAFELIST HCN MAXCHANNELS=100 CHANLIMIT=#:100 MAXLIST=b:60,e:60,I:60 NICKLEN=30 CHANNELLEN=32 TOPICLEN=307 KICKLEN=307 AWAYLEN=307"), server.supports);
     }
 
     {
@@ -427,7 +432,7 @@ unittest
         {
             assert((type == IRCEvent.Type.RPL_ISUPPORT), Enum!(IRCEvent.Type).toString(type));
             assert((sender.address == "fe-00107.GeekShed.net"), sender.address);
-            assert((content == "MAXTARGETS=20 WALLCHOPS WATCH=128 WATCHOPTS=A SILENCE=15 MODES=12 CHANTYPES=# PREFIX=(qaohv)~&@%+ CHANMODES=beI,kfL,lj,psmntirRcOAQKVCuzNSMTGUZ NETWORK=GeekShed CASEMAPPING=ascii EXTBAN=~,qjncrRaT ELIST=MNUCT"), content);
+            assert((aux == ["MAXTARGETS=20", "WALLCHOPS", "WATCH=128", "WATCHOPTS=A", "SILENCE=15", "MODES=12", "CHANTYPES=#", "PREFIX=(qaohv)~&@%+", "CHANMODES=beI,kfL,lj,psmntirRcOAQKVCuzNSMTGUZ", "NETWORK=GeekShed", "CASEMAPPING=ascii", "EXTBAN=~,qjncrRaT", "ELIST=MNUCT", "", "", ""]), aux.to!string);
             assert((num == 5), num.to!string);
         }
     }
@@ -439,10 +444,11 @@ unittest
         assert((server.bModes == "kfL"), server.bModes);
         assert((server.cModes == "lj"), server.cModes);
         assert((server.dModes == "psmntirRcOAQKVCuzNSMTGUZ"), server.dModes);
-        assert((server.prefixchars == ['&':'a', '+':'v', '@':'o', '%':'h', '~':'q']), server.prefixchars.to!string);
         assert((server.prefixes == "qaohv"), server.prefixes);
+        assert((server.prefixchars == ['&':'a', '+':'v', '@':'o', '%':'h', '~':'q']), server.prefixchars.to!string);
         assert((server.extbanPrefix == '~'), server.extbanPrefix.to!string);
         assert((server.extbanTypes == "qjncrRaT"), server.extbanTypes);
+        assert((server.supports == "CMDS=KNOCK,MAP,DCCALLOW,USERIP,STARTTLS UHNAMES NAMESX SAFELIST HCN MAXCHANNELS=100 CHANLIMIT=#:100 MAXLIST=b:60,e:60,I:60 NICKLEN=30 CHANNELLEN=32 TOPICLEN=307 KICKLEN=307 AWAYLEN=307 MAXTARGETS=20 WALLCHOPS WATCH=128 WATCHOPTS=A SILENCE=15 MODES=12 CHANTYPES=# PREFIX=(qaohv)~&@%+ CHANMODES=beI,kfL,lj,psmntirRcOAQKVCuzNSMTGUZ NETWORK=GeekShed CASEMAPPING=ascii EXTBAN=~,qjncrRaT ELIST=MNUCT"), server.supports);
     }
 
     {

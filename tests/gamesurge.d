@@ -30,7 +30,7 @@ unittest
         assert((server.daemonstring == "u2.10.12.18(gs2)"), server.daemonstring);
     }
 
-    {
+    /*{
         immutable event = parser.toIRCEvent(":Portlane.SE.EU.GameSurge.net 005 kameloso WHOX WALLCHOPS WALLVOICES USERIP CPRIVMSG CNOTICE SILENCE=25 MODES=6 MAXCHANNELS=75 MAXBANS=100 NICKLEN=30 :are supported by this server");
         with (event)
         {
@@ -39,6 +39,22 @@ unittest
             assert((content == "WHOX WALLCHOPS WALLVOICES USERIP CPRIVMSG CNOTICE SILENCE=25 MODES=6 MAXCHANNELS=75 MAXBANS=100 NICKLEN=30"), content);
             assert((num == 5), num.to!string);
         }
+    }*/
+    {
+        immutable event = parser.toIRCEvent(":Portlane.SE.EU.GameSurge.net 005 kameloso WHOX WALLCHOPS WALLVOICES USERIP CPRIVMSG CNOTICE SILENCE=25 MODES=6 MAXCHANNELS=75 MAXBANS=100 NICKLEN=30 :are supported by this server");
+        with (event)
+        {
+            assert((type == IRCEvent.Type.RPL_ISUPPORT), Enum!(IRCEvent.Type).toString(type));
+            assert((sender.address == "Portlane.SE.EU.GameSurge.net"), sender.address);
+            assert((aux == ["WHOX", "WALLCHOPS", "WALLVOICES", "USERIP", "CPRIVMSG", "CNOTICE", "SILENCE=25", "MODES=6", "MAXCHANNELS=75", "MAXBANS=100", "NICKLEN=30", "", "", "", "", ""]), aux.to!string);
+            assert((num == 5), num.to!string);
+        }
+    }
+
+    with (parser)
+    {
+        assert((server.maxNickLength == 30), server.maxNickLength.to!string);
+        assert((server.supports == "WHOX WALLCHOPS WALLVOICES USERIP CPRIVMSG CNOTICE SILENCE=25 MODES=6 MAXCHANNELS=75 MAXBANS=100 NICKLEN=30"), server.supports);
     }
 
     /*
@@ -56,19 +72,10 @@ unittest
         {
             assert((type == IRCEvent.Type.RPL_ISUPPORT), Enum!(IRCEvent.Type).toString(type));
             assert((sender.address == "Portlane.SE.EU.GameSurge.net"), sender.address);
-            assert((content == "MAXNICKLEN=30 TOPICLEN=300 AWAYLEN=200 KICKLEN=300 CHANNELLEN=200 MAXCHANNELLEN=200 CHANTYPES=#& PREFIX=(ov)@+ STATUSMSG=@+ CHANMODES=b,k,l,imnpstrDdRcC CASEMAPPING=rfc1459 NETWORK=GameSurge"), content);
+            assert((aux == ["MAXNICKLEN=30", "TOPICLEN=300", "AWAYLEN=200", "KICKLEN=300", "CHANNELLEN=200", "MAXCHANNELLEN=200", "CHANTYPES=#&", "PREFIX=(ov)@+", "STATUSMSG=@+", "CHANMODES=b,k,l,imnpstrDdRcC", "CASEMAPPING=rfc1459", "NETWORK=GameSurge", "", "", "", ""]), aux.to!string);
             assert((num == 5), num.to!string);
         }
     }
-
-    /*
-    server.network = "GameSurge";
-    server.aModes = "b";
-    server.cModes = "l";
-    server.dModes = "imnpstrDdRcC";
-    server.chantypes = "#&";
-    server.caseMapping = IRCServer.CaseMapping.rfc1459;
-    */
 
     with (parser)
     {
@@ -78,6 +85,7 @@ unittest
         assert((server.dModes == "imnpstrDdRcC"), server.dModes);
         assert((server.chantypes == "#&"), server.chantypes);
         assert((server.caseMapping == IRCServer.CaseMapping.rfc1459), Enum!(IRCServer.CaseMapping).toString(server.caseMapping));
+        assert((server.supports == "WHOX WALLCHOPS WALLVOICES USERIP CPRIVMSG CNOTICE SILENCE=25 MODES=6 MAXCHANNELS=75 MAXBANS=100 NICKLEN=30 MAXNICKLEN=30 TOPICLEN=300 AWAYLEN=200 KICKLEN=300 CHANNELLEN=200 MAXCHANNELLEN=200 CHANTYPES=#& PREFIX=(ov)@+ STATUSMSG=@+ CHANMODES=b,k,l,imnpstrDdRcC CASEMAPPING=rfc1459 NETWORK=GameSurge"), server.supports);
     }
 
     {

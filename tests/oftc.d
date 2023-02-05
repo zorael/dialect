@@ -36,16 +36,10 @@ unittest
         {
             assert((type == IRCEvent.Type.RPL_ISUPPORT), Enum!(IRCEvent.Type).toString(type));
             assert((sender.address == "helix.oftc.net"), sender.address);
-            assert((content == "CALLERID CASEMAPPING=rfc1459 DEAF=D KICKLEN=160 MODES=4 NICKLEN=30 PREFIX=(ov)@+ STATUSMSG=@+ TOPICLEN=391 NETWORK=OFTC MAXLIST=beI:100 MAXTARGETS=1 CHANTYPES=#"), content);
+            assert((aux == ["CALLERID", "CASEMAPPING=rfc1459", "DEAF=D", "KICKLEN=160", "MODES=4", "NICKLEN=30", "PREFIX=(ov)@+", "STATUSMSG=@+", "TOPICLEN=391", "NETWORK=OFTC", "MAXLIST=beI:100", "MAXTARGETS=1", "CHANTYPES=#", "", "", ""]), aux.to!string);
             assert((num == 5), num.to!string);
         }
     }
-
-    /*
-    server.network = "OFTC";
-    server.maxNickLength = 30;
-    server.caseMapping = IRCServer.CaseMapping.rfc1459;
-    */
 
     with (parser)
     {
@@ -60,19 +54,10 @@ unittest
         {
             assert((type == IRCEvent.Type.RPL_ISUPPORT), Enum!(IRCEvent.Type).toString(type));
             assert((sender.address == "helix.oftc.net"), sender.address);
-            assert((content == "CHANLIMIT=#:90 CHANNELLEN=50 CHANMODES=eIqb,k,l,cimnpstzMRS AWAYLEN=160 KNOCK ELIST=CMNTU SAFELIST EXCEPTS=e INVEX=I"), content);
+            assert((aux == ["CHANLIMIT=#:90", "CHANNELLEN=50", "CHANMODES=eIqb,k,l,cimnpstzMRS", "AWAYLEN=160", "KNOCK", "ELIST=CMNTU", "SAFELIST", "EXCEPTS=e", "INVEX=I", "", "", "", "", "", "", ""]), aux.to!string);
             assert((num == 5), num.to!string);
         }
     }
-
-    /*
-    server.maxChannelLength = 50;
-    server.aModes = "eIqb";
-    server.cModes = "l";
-    server.dModes = "cimnpstzMRS";
-    server.exceptsChar = 'e';
-    server.invexChar = 'I';
-    */
 
     with (parser)
     {
@@ -80,6 +65,7 @@ unittest
         assert((server.aModes == "eIqb"), server.aModes);
         assert((server.cModes == "l"), server.cModes);
         assert((server.dModes == "cimnpstzMRS"), server.dModes);
+        assert((server.supports == "CALLERID CASEMAPPING=rfc1459 DEAF=D KICKLEN=160 MODES=4 NICKLEN=30 PREFIX=(ov)@+ STATUSMSG=@+ TOPICLEN=391 NETWORK=OFTC MAXLIST=beI:100 MAXTARGETS=1 CHANTYPES=# CHANLIMIT=#:90 CHANNELLEN=50 CHANMODES=eIqb,k,l,cimnpstzMRS AWAYLEN=160 KNOCK ELIST=CMNTU SAFELIST EXCEPTS=e INVEX=I"), server.supports);
         assert((server.exceptsChar == 'e'), server.exceptsChar.to!string);
         assert((server.invexChar == 'I'), server.invexChar.to!string);
     }

@@ -36,22 +36,10 @@ unittest
         {
             assert((type == IRCEvent.Type.RPL_ISUPPORT), Enum!(IRCEvent.Type).toString(type));
             assert((sender.address == "eggbert.ca.na.irchighway.net"), sender.address);
-            assert((content == "AWAYLEN=200 CALLERID=g CASEMAPPING=rfc1459 CHANMODES=Ibe,k,dl,ACDMNORSTcimnprstz CHANNELLEN=64 CHANTYPES=# CHARSET=ascii ELIST=MU ESILENCE EXCEPTS=e EXTBAN=,ACNORSTUcjmz FNC INVEX=I"), content);
+            assert((aux == ["AWAYLEN=200", "CALLERID=g", "CASEMAPPING=rfc1459", "CHANMODES=Ibe,k,dl,ACDMNORSTcimnprstz", "CHANNELLEN=64", "CHANTYPES=#", "CHARSET=ascii", "ELIST=MU", "ESILENCE", "EXCEPTS=e", "EXTBAN=,ACNORSTUcjmz", "FNC", "INVEX=I", "", "", ""]), aux.to!string);
             assert((num == 5), num.to!string);
         }
     }
-
-    /*
-    server.maxChannelLength = 64;
-    server.aModes = "Ibe";
-    server.cModes = "dl";
-    server.dModes = "ACDMNORSTcimnprstz";
-    server.caseMapping = IRCServer.CaseMapping.rfc1459;
-    server.extbanPrefix = '$';
-    server.extbanTypes = "ACNORSTUcjmz";
-    server.exceptsChar = 'e';
-    server.invexChar = 'I';
-    */
 
     with (parser)
     {
@@ -62,6 +50,7 @@ unittest
         assert((server.caseMapping == IRCServer.CaseMapping.rfc1459), Enum!(IRCServer.CaseMapping).toString(server.caseMapping));
         assert((server.extbanPrefix == '$'), server.extbanPrefix.to!string);
         assert((server.extbanTypes == "ACNORSTUcjmz"), server.extbanTypes);
+        assert((server.supports == "AWAYLEN=200 CALLERID=g CASEMAPPING=rfc1459 CHANMODES=Ibe,k,dl,ACDMNORSTcimnprstz CHANNELLEN=64 CHANTYPES=# CHARSET=ascii ELIST=MU ESILENCE EXCEPTS=e EXTBAN=,ACNORSTUcjmz FNC INVEX=I"), server.supports);
         assert((server.exceptsChar == 'e'), server.exceptsChar.to!string);
         assert((server.invexChar == 'I'), server.invexChar.to!string);
     }
@@ -72,22 +61,17 @@ unittest
         {
             assert((type == IRCEvent.Type.RPL_ISUPPORT), Enum!(IRCEvent.Type).toString(type));
             assert((sender.address == "eggbert.ca.na.irchighway.net"), sender.address);
-            assert((content == "KICKLEN=255 MAP MAXBANS=60 MAXCHANNELS=30 MAXPARA=32 MAXTARGETS=20 MODES=20 NAMESX NETWORK=irchighway NICKLEN=31 PREFIX=(qaohv)~&@%+ SILENCE=32 SSL=10.0.30.4:6697"), content);
+            assert((aux == ["KICKLEN=255", "MAP", "MAXBANS=60", "MAXCHANNELS=30", "MAXPARA=32", "MAXTARGETS=20", "MODES=20", "NAMESX", "NETWORK=irchighway", "NICKLEN=31", "PREFIX=(qaohv)~&@%+", "SILENCE=32", "SSL=10.0.30.4:6697", "", "", ""]), aux.to!string);
             assert((num == 5), num.to!string);
         }
     }
-
-    /*
-    server.network = "irchighway";
-    server.maxNickLength = 31;
-    server.prefixes = "qaohv";
-    */
 
     with (parser)
     {
         assert((server.network == "irchighway"), server.network);
         assert((server.maxNickLength == 31), server.maxNickLength.to!string);
         assert((server.prefixes == "qaohv"), server.prefixes);
+        assert((server.supports == "AWAYLEN=200 CALLERID=g CASEMAPPING=rfc1459 CHANMODES=Ibe,k,dl,ACDMNORSTcimnprstz CHANNELLEN=64 CHANTYPES=# CHARSET=ascii ELIST=MU ESILENCE EXCEPTS=e EXTBAN=,ACNORSTUcjmz FNC INVEX=I KICKLEN=255 MAP MAXBANS=60 MAXCHANNELS=30 MAXPARA=32 MAXTARGETS=20 MODES=20 NAMESX NETWORK=irchighway NICKLEN=31 PREFIX=(qaohv)~&@%+ SILENCE=32 SSL=10.0.30.4:6697"), server.supports);
     }
 
     {
@@ -96,7 +80,7 @@ unittest
         {
             assert((type == IRCEvent.Type.RPL_ISUPPORT), Enum!(IRCEvent.Type).toString(type));
             assert((sender.address == "eggbert.ca.na.irchighway.net"), sender.address);
-            assert((content == "STARTTLS STATUSMSG=~&@%+ TOPICLEN=307 UHNAMES USERIP VBANLIST WALLCHOPS WALLVOICES"), content);
+            assert((aux == ["STARTTLS", "STATUSMSG=~&@%+", "TOPICLEN=307", "UHNAMES", "USERIP", "VBANLIST", "WALLCHOPS", "WALLVOICES", "", "", "", "", "", "", "", ""]), aux.to!string);
             assert((num == 5), num.to!string);
         }
     }
@@ -115,13 +99,12 @@ unittest
     }
     {
         immutable event = parser.toIRCEvent(":genesis.ks.us.irchighway.net CAP 867AAF66L LS :away-notify extended-join account-notify multi-prefix sasl tls userhost-in-names");
-        with (IRCEvent.Type)
         with (event)
         {
-            assert((type == CAP), Enum!(IRCEvent.Type).toString(type));
+            assert((type == IRCEvent.Type.CAP), Enum!(IRCEvent.Type).toString(type));
             assert((sender.address == "genesis.ks.us.irchighway.net"), sender.address);
-            assert((content == "away-notify extended-join account-notify multi-prefix sasl tls userhost-in-names"), content);
-            assert((aux[0] == "LS"), aux[0]);
+            assert((content == "LS"), content);
+            assert((aux == ["away-notify", "extended-join", "account-notify", "multi-prefix", "sasl", "tls", "userhost-in-names", "", "", "", "", "", "", "", "", ""]), aux.to!string);
         }
     }
 }

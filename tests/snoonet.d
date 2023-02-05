@@ -49,7 +49,7 @@ unittest
         {
             assert((type == IRCEvent.Type.RPL_ISUPPORT), Enum!(IRCEvent.Type).toString(type));
             assert((sender.address == "van-halen.snoonet.org"), sender.address);
-            assert((content == "AWAYLEN=200 CALLERID=g CASEMAPPING=rfc1459 CHANMODES=IXZbegw,k,FHJLWdfjlx,ABCDKMNOPQRSTcimnprstuz CHANNELLEN=64 CHANTYPES=# CHARSET=ascii ELIST=MU ESILENCE EXCEPTS=e EXTBAN=,ABCNOQRSTUcjmprsz FNC INVEX=I"), content);
+            assert((aux == ["AWAYLEN=200", "CALLERID=g", "CASEMAPPING=rfc1459", "CHANMODES=IXZbegw,k,FHJLWdfjlx,ABCDKMNOPQRSTcimnprstuz", "CHANNELLEN=64", "CHANTYPES=#", "CHARSET=ascii", "ELIST=MU", "ESILENCE", "EXCEPTS=e", "EXTBAN=,ABCNOQRSTUcjmprsz", "FNC", "INVEX=I", "", "", ""]), aux.to!string);
             assert((num == 5), num.to!string);
         }
     }
@@ -62,7 +62,6 @@ unittest
         assert((server.dModes == "ABCDKMNOPQRSTcimnprstuz"), server.dModes);
         assert((server.caseMapping == IRCServer.CaseMapping.rfc1459), Enum!(IRCServer.CaseMapping).toString(server.caseMapping));
         assert((server.extbanTypes == "ABCNOQRSTUcjmprsz"), server.extbanTypes);
-        assert((server.supports == "AWAYLEN=200 CALLERID=g CASEMAPPING=rfc1459 CHANMODES=IXZbegw,k,FHJLWdfjlx,ABCDKMNOPQRSTcimnprstuz CHANNELLEN=64 CHANTYPES=# CHARSET=ascii ELIST=MU ESILENCE EXCEPTS=e EXTBAN=,ABCNOQRSTUcjmprsz FNC INVEX=I"), server.supports);
     }
 
     {
@@ -71,13 +70,14 @@ unittest
         {
             assert((type == IRCEvent.Type.RPL_ISUPPORT), Enum!(IRCEvent.Type).toString(type));
             assert((sender.address == "van-halen.snoonet.org"), sender.address);
-            assert((content == "KICKLEN=255 MAP MAXBANS=60 MAXCHANNELS=200 MAXPARA=32 MAXTARGETS=20 MODES=50 NAMESX NETWORK=Snoonet NICKLEN=27 OPERLOG PREFIX=(Yohv)!@%+ REMOVE"), content);
+            assert((aux == ["KICKLEN=255", "MAP", "MAXBANS=60", "MAXCHANNELS=200", "MAXPARA=32", "MAXTARGETS=20", "MODES=50", "NAMESX", "NETWORK=Snoonet", "NICKLEN=27", "OPERLOG", "PREFIX=(Yohv)!@%+", "REMOVE", "", "", ""]), aux.to!string);
             assert((num == 5), num.to!string);
         }
     }
 
     with (parser)
     {
+        assert((server.network == "Snoonet"), server.network);
         assert((server.maxNickLength == 27), server.maxNickLength.to!string);
         assert((server.prefixes == "Yohv"), server.prefixes);
         assert((server.supports == "AWAYLEN=200 CALLERID=g CASEMAPPING=rfc1459 CHANMODES=IXZbegw,k,FHJLWdfjlx,ABCDKMNOPQRSTcimnprstuz CHANNELLEN=64 CHANTYPES=# CHARSET=ascii ELIST=MU ESILENCE EXCEPTS=e EXTBAN=,ABCNOQRSTUcjmprsz FNC INVEX=I KICKLEN=255 MAP MAXBANS=60 MAXCHANNELS=200 MAXPARA=32 MAXTARGETS=20 MODES=50 NAMESX NETWORK=Snoonet NICKLEN=27 OPERLOG PREFIX=(Yohv)!@%+ REMOVE"), server.supports);
@@ -89,7 +89,7 @@ unittest
         {
             assert((type == IRCEvent.Type.RPL_ISUPPORT), Enum!(IRCEvent.Type).toString(type));
             assert((sender.address == "van-halen.snoonet.org"), sender.address);
-            assert((content == "SECURELIST SILENCE=32 SSL=[::]:6697 STATUSMSG=!@%+ TOPICLEN=1000 UHNAMES USERIP VBANLIST WALLCHOPS WALLVOICES WATCH=64"), content);
+            assert((aux == ["SECURELIST", "SILENCE=32", "SSL=[::]:6697", "STATUSMSG=!@%+", "TOPICLEN=1000", "UHNAMES", "USERIP", "VBANLIST", "WALLCHOPS", "WALLVOICES", "WATCH=64", "", "", "", "", ""]), aux.to!string);
             assert((num == 5), num.to!string);
         }
     }

@@ -35,13 +35,15 @@ unittest
         {
             assert((type == IRCEvent.Type.RPL_ISUPPORT), Enum!(IRCEvent.Type).toString(type));
             assert((sender.address == "sinisalo.freenode.net"), sender.address);
-            assert((content == "CHANTYPES=# EXCEPTS INVEX CHANMODES=eIbq,k,flj,CFLMPQScgimnprstz CHANLIMIT=#:120 PREFIX=(ov)@+ MAXLIST=bqeI:100 MODES=4 NETWORK=freenode STATUSMSG=@+ CALLERID=g CASEMAPPING=rfc1459"), content);
+            assert((aux == ["CHANTYPES=#", "EXCEPTS", "INVEX", "CHANMODES=eIbq,k,flj,CFLMPQScgimnprstz", "CHANLIMIT=#:120", "PREFIX=(ov)@+", "MAXLIST=bqeI:100", "MODES=4", "NETWORK=freenode", "STATUSMSG=@+", "CALLERID=g", "CASEMAPPING=rfc1459", "", "", "", ""]), aux.to!string);
             assert((num == 5), num.to!string);
         }
     }
 
     with (parser)
     {
+        assert((server.network == "freenode"), server.network);
+        assert((server.dModes == "CFLMPQScgimnprstz"), server.dModes);
         assert((server.caseMapping == IRCServer.CaseMapping.rfc1459), Enum!(IRCServer.CaseMapping).toString(server.caseMapping));
         assert((server.supports == "CHANTYPES=# EXCEPTS INVEX CHANMODES=eIbq,k,flj,CFLMPQScgimnprstz CHANLIMIT=#:120 PREFIX=(ov)@+ MAXLIST=bqeI:100 MODES=4 NETWORK=freenode STATUSMSG=@+ CALLERID=g CASEMAPPING=rfc1459"), server.supports);
     }
@@ -52,7 +54,7 @@ unittest
         {
             assert((type == IRCEvent.Type.RPL_ISUPPORT), Enum!(IRCEvent.Type).toString(type));
             assert((sender.address == "sinisalo.freenode.net"), sender.address);
-            assert((content == "CHARSET=ascii NICKLEN=16 CHANNELLEN=50 TOPICLEN=390 DEAF=D FNC TARGMAX=NAMES:1,LIST:1,KICK:1,WHOIS:1,PRIVMSG:4,NOTICE:4,ACCEPT:,MONITOR: EXTBAN=$,jrxz CLIENTVER=3.0 WHOX KNOCK ETRACE"), content);
+            assert((aux == ["CHARSET=ascii", "NICKLEN=16", "CHANNELLEN=50", "TOPICLEN=390", "DEAF=D", "FNC", "TARGMAX=NAMES:1,LIST:1,KICK:1,WHOIS:1,PRIVMSG:4,NOTICE:4,ACCEPT:,MONITOR:", "EXTBAN=$,jrxz", "CLIENTVER=3.0", "WHOX", "KNOCK", "ETRACE", "", "", "", ""]), aux.to!string);
             assert((num == 5), num.to!string);
         }
     }
@@ -804,15 +806,20 @@ unittest
     }
     {
         immutable event = parser.toIRCEvent(":cherryh.freenode.net 005 CHANTYPES=# EXCEPTS INVEX MODES=eIbq,k,flj,CFLMPQScgimnprstz CHANLIMIT=#:120 PREFIX=(ov)@+ MAXLIST=bqeI:100 MODES=4 NETWORK=freenode STATUSMSG=@+ CALLERID=g CASEMAPPING=rfc1459 :are supported by this server");
-        with (IRCEvent.Type)
         with (event)
         {
-            assert((type == RPL_ISUPPORT), Enum!(IRCEvent.Type).toString(type));
+            assert((type == IRCEvent.Type.RPL_ISUPPORT), Enum!(IRCEvent.Type).toString(type));
             assert((sender.address == "cherryh.freenode.net"), sender.address);
-            assert((content == "EXCEPTS INVEX MODES=eIbq,k,flj,CFLMPQScgimnprstz CHANLIMIT=#:120 PREFIX=(ov)@+ MAXLIST=bqeI:100 MODES=4 NETWORK=freenode STATUSMSG=@+ CALLERID=g CASEMAPPING=rfc1459"), content);
+            assert((aux == ["EXCEPTS", "INVEX", "MODES=eIbq,k,flj,CFLMPQScgimnprstz", "CHANLIMIT=#:120", "PREFIX=(ov)@+", "MAXLIST=bqeI:100", "MODES=4", "NETWORK=freenode", "STATUSMSG=@+", "CALLERID=g", "CASEMAPPING=rfc1459", "", "", "", "", ""]), aux.to!string);
             assert((num == 5), num.to!string);
         }
-        assert((parser.server.network == "freenode"), parser.server.network);
+    }
+
+    with (parser)
+    {
+        assert((server.network == "freenode"), server.network);
+        assert((server.caseMapping == IRCServer.CaseMapping.rfc1459), Enum!(IRCServer.CaseMapping).toString(server.caseMapping));
+        assert((server.supports == "EXCEPTS INVEX MODES=eIbq,k,flj,CFLMPQScgimnprstz CHANLIMIT=#:120 PREFIX=(ov)@+ MAXLIST=bqeI:100 MODES=4 NETWORK=freenode STATUSMSG=@+ CALLERID=g CASEMAPPING=rfc1459"), server.supports);
     }
     {
         immutable event = parser.toIRCEvent(":asimov.freenode.net 004 kameloso^ asimov.freenode.net ircd-seven-1.1.4 DOQRSZaghilopswz CFILMPQSbcefgijklmnopqrstvz bkloveqjfI");
@@ -1203,14 +1210,21 @@ unittest
     }
     {
         immutable event = parser.toIRCEvent(":cherryh.freenode.net 005 CHARSET=ascii NICKLEN=16 CHANNELLEN=50 TOPICLEN=390 DEAF=D FNC TARGMAX=NAMES:1,LIST:1,KICK:1,WHOIS:1,PRIVMSG:4,NOTICE:4,ACCEPT:,MONITOR: EXTBAN=$,ajrxz CLIENTVER=3.0 CPRIVMSG CNOTICE SAFELIST :are supported by this server");
-        with (IRCEvent.Type)
         with (event)
         {
-            assert((type == RPL_ISUPPORT), Enum!(IRCEvent.Type).toString(type));
+            assert((type == IRCEvent.Type.RPL_ISUPPORT), Enum!(IRCEvent.Type).toString(type));
             assert((sender.address == "cherryh.freenode.net"), sender.address);
-            assert((content == "NICKLEN=16 CHANNELLEN=50 TOPICLEN=390 DEAF=D FNC TARGMAX=NAMES:1,LIST:1,KICK:1,WHOIS:1,PRIVMSG:4,NOTICE:4,ACCEPT:,MONITOR: EXTBAN=$,ajrxz CLIENTVER=3.0 CPRIVMSG CNOTICE SAFELIST"), content);
+            assert((aux == ["NICKLEN=16", "CHANNELLEN=50", "TOPICLEN=390", "DEAF=D", "FNC", "TARGMAX=NAMES:1,LIST:1,KICK:1,WHOIS:1,PRIVMSG:4,NOTICE:4,ACCEPT:,MONITOR:", "EXTBAN=$,ajrxz", "CLIENTVER=3.0", "CPRIVMSG", "CNOTICE", "SAFELIST", "", "", "", "", ""]), aux.to!string);
             assert((num == 5), num.to!string);
         }
+    }
+
+    with (parser)
+    {
+        assert((server.maxNickLength == 16), server.maxNickLength.to!string);
+        assert((server.maxChannelLength == 50), server.maxChannelLength.to!string);
+        assert((server.extbanTypes == "ajrxz"), server.extbanTypes);
+        assert((server.supports == "EXCEPTS INVEX MODES=eIbq,k,flj,CFLMPQScgimnprstz CHANLIMIT=#:120 PREFIX=(ov)@+ MAXLIST=bqeI:100 MODES=4 NETWORK=freenode STATUSMSG=@+ CALLERID=g CASEMAPPING=rfc1459 NICKLEN=16 CHANNELLEN=50 TOPICLEN=390 DEAF=D FNC TARGMAX=NAMES:1,LIST:1,KICK:1,WHOIS:1,PRIVMSG:4,NOTICE:4,ACCEPT:,MONITOR: EXTBAN=$,ajrxz CLIENTVER=3.0 CPRIVMSG CNOTICE SAFELIST"), server.supports);
     }
     {
         immutable event = parser.toIRCEvent(":server.net 465 kameloso :You are banned from this server- Your irc client seems broken and is flooding lots of channels. Banned for 240 min, if in error, please contact kline@freenode.net. (2017/12/1 21.08)");
