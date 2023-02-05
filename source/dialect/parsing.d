@@ -2220,8 +2220,16 @@ in (slice.length, "Tried to process `onISUPPORT` on an empty slice")
 
     try
     {
+        uint n;
+
         foreach (value; event.content.splitter(' '))
         {
+            if (n < event.aux.length)
+            {
+                // Include the value-key pairs in aux, now that there's room
+                event.aux[n++] = value;
+            }
+
             if (!value.contains('='))
             {
                 // insert switch on value for things like EXCEPTS, INVEX, CPRIVMSG, etc
