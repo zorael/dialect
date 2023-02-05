@@ -851,6 +851,7 @@ auto parseTwitchTags(ref IRCParser parser, ref IRCEvent event)
                 warnAboutOverwrittenCount(1, key);
             }
 
+            if (value == "0") break;
             event.count[1] = value.to!long;
             break;
 
@@ -879,6 +880,7 @@ auto parseTwitchTags(ref IRCParser parser, ref IRCEvent event)
                 warnAboutOverwrittenCount(2, key);
             }
 
+            if (value == "0") break;
             event.count[2] = value.to!long;
             break;
 
@@ -899,6 +901,7 @@ auto parseTwitchTags(ref IRCParser parser, ref IRCEvent event)
                 warnAboutOverwrittenCount(3, key);
             }
 
+            if (value == "0") break;
             event.count[3] = value.to!long;
             break;
 
@@ -913,6 +916,7 @@ auto parseTwitchTags(ref IRCParser parser, ref IRCEvent event)
                 warnAboutOverwrittenCount(4, key);
             }
 
+            if (value == "0") break;
             event.count[4] = value.to!long;
             break;
 
@@ -930,6 +934,7 @@ auto parseTwitchTags(ref IRCParser parser, ref IRCEvent event)
                 warnAboutOverwrittenCount(5, key);
             }
 
+            if (value == "0") break;
             event.count[5] = value.to!long;
             break;
 
@@ -948,6 +953,7 @@ auto parseTwitchTags(ref IRCParser parser, ref IRCEvent event)
                 warnAboutOverwrittenCount(6, key);
             }
 
+            if (value == "0") break;
             event.count[6] = value.to!long;
             break;
 
@@ -962,6 +968,7 @@ auto parseTwitchTags(ref IRCParser parser, ref IRCEvent event)
                 warnAboutOverwrittenCount(7, key);
             }
 
+            if (value == "0") break;
             event.count[7] = value.to!long;
             break;
 
