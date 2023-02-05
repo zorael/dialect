@@ -7,7 +7,7 @@ license "BSL-1.0"
 
 targetType "library"
 dflags "-dip25" "-dip1008"
-#dflags "-linkonce-templates" platform="ldc"
+dflags "-linkonce-templates" "-disable-verify" platform="ldc"
 x:ddoxTool "scod"
 
 subPackage {
@@ -25,6 +25,7 @@ subPackage {
 
     versions \
         "BotElements" \
+        "Postprocessors" \
         "FlagAsUpdated" \
         "TwitchSupport" \
         "TwitchWarnings" \
@@ -40,37 +41,40 @@ importPaths "source"
 versions "FlagAsUpdated"
 
 /**
-    library: Meant to be used in a bot
+    library: Base configuration without bot elements
  */
 configuration "library" {
+    excludedSourceFiles "source/dialect/assertgen.d"
+
+}
+
+/**
+    bot: With bot elements
+ */
+configuration "bot" {
     excludedSourceFiles "source/dialect/assertgen.d"
     versions \
         "BotElements"
 }
 
 /**
-    agnostic: With no bot elements
- */
-configuration "agnostic" {
-    excludedSourceFiles "source/dialect/assertgen.d"
-}
-
-/**
-    twitch: Meant to be used in a bot with Twitch support
+    twitch: With Twitch support but no bot elements
  */
 configuration "twitch" {
     excludedSourceFiles "source/dialect/assertgen.d"
     versions \
-        "BotElements" \
+        "Postprocessors" \
         "TwitchSupport"
 }
 
 /**
-    twitchagnostic: With no bot elements nor Twitch support
+    twitch: With bot elements and Twitch support
  */
-configuration "twitchagnostic" {
+configuration "twitchbot" {
     excludedSourceFiles "source/dialect/assertgen.d"
     versions \
+        "BotElements" \
+        "Postprocessors" \
         "TwitchSupport"
 }
 
@@ -81,6 +85,7 @@ configuration "dev" {
     excludedSourceFiles "source/dialect/assertgen.d"
     versions \
         "BotElements" \
+        "Postprocessors" \
         "TwitchSupport" \
         "TwitchWarnings"
 }
@@ -93,6 +98,7 @@ configuration "unittest" {
     importPaths "source" "tests"
     versions \
         "BotElements" \
+        "Postprocessors" \
         "TwitchSupport" \
         "TwitchWarnings" \
         "PrintStacktraces" \
