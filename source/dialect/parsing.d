@@ -1129,20 +1129,36 @@ void parseSpecialcases(ref IRCParser parser, ref IRCEvent event, ref string slic
         break;
 
     case CAP:
+        import std.algorithm.iteration : splitter;
+
         if (slice.contains('*'))
         {
             // :tmi.twitch.tv CAP * LS :twitch.tv/tags twitch.tv/commands twitch.tv/membership
+            // More CAPs follow
             slice.nom("* ");
         }
         else
         {
             // :genesis.ks.us.irchighway.net CAP 867AAF66L LS :away-notify extended-join account-notify multi-prefix sasl tls userhost-in-names
-            //immutable id = slice.nom(' ');
-            slice.nom(' ');
+            // Final CAP listing
+            /*immutable id =*/ slice.nom(' ');
         }
 
-        event.aux[0] = slice.nom(" :");
-        event.content = slice.strippedRight;
+        // Store verb in content and caps in aux
+        event.content = slice.nom(" :");
+
+        uint i;
+        foreach (immutable cap; slice.splitter(' '))
+        {
+            if (i < event.aux.length)
+            {
+                event.aux[i++] = cap;
+            }
+            else
+            {
+                // Overflow! aux is too small.
+            }
+        }
         break;
 
     case RPL_UMODEGMSG:
