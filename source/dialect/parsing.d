@@ -2819,7 +2819,7 @@ public:
         /++
             Initialises defined postprocessors.
          +/
-        auto initPostprocessors() pure nothrow
+        auto initPostprocessors() pure @system nothrow
         {
             this.postprocessors.reserve(Postprocessors.length);
 
