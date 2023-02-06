@@ -263,11 +263,7 @@ auto parseTwitchTags(ref IRCParser parser, ref IRCEvent event) @safe
 
                     //msg-param-charity-name = Direct\sRelief
 
-                    version(TwitchWarnings)
-                    {
-                        warnAboutOverwrittenAuxString(0, "msg-param-charity-name");
-                    }
-
+                    version(TwitchWarnings) warnAboutOverwrittenAuxString(0, "msg-param-charity-name");
                     event.aux[0] = (*charityName)
                         .decodeIRCv3String
                         .strippedRight
@@ -282,11 +278,7 @@ auto parseTwitchTags(ref IRCParser parser, ref IRCEvent event) @safe
                         //msg-param-charity-hashtag = #charity
                         // Pad count by 1 to allow for msg-param-charity-name
 
-                        version(TwitchWarnings)
-                        {
-                            warnAboutOverwrittenAuxString(i+1, charityKey);
-                        }
-
+                        version(TwitchWarnings) warnAboutOverwrittenAuxString(i+1, charityKey);
                         event.aux[i+1] = *charityString;
                     }
                 }
@@ -306,11 +298,7 @@ auto parseTwitchTags(ref IRCParser parser, ref IRCEvent event) @safe
                         //msg-param-charity-days-remaining = 11
                         // Pad count by 1 to allow for msg-param-total
 
-                        version(TwitchWarnings)
-                        {
-                            warnAboutOverwrittenCount(i+1, charityKey);
-                        }
-
+                        version(TwitchWarnings) warnAboutOverwrittenCount(i+1, charityKey);
                         event.count[i+1] = (*charityCount).to!long;
                     }
                 }
@@ -834,11 +822,7 @@ auto parseTwitchTags(ref IRCParser parser, ref IRCEvent event) @safe
             /+
                 Count 0
              +/
-            version(TwitchWarnings)
-            {
-                warnAboutOverwrittenCount(0, key);
-            }
-
+            version(TwitchWarnings) warnAboutOverwrittenCount(0, key);
             event.count[0] = (value == "0") ? 0 : value.to!long;
             break;
 
@@ -858,10 +842,7 @@ auto parseTwitchTags(ref IRCParser parser, ref IRCEvent event) @safe
             /+
                 Count 1
              +/
-            version(TwitchWarnings)
-            {
-                warnAboutOverwrittenCount(1, key);
-            }
+            version(TwitchWarnings) warnAboutOverwrittenCount(1, key);
 
             if (value == "0") break;
             event.count[1] = value.to!long;
@@ -887,10 +868,7 @@ auto parseTwitchTags(ref IRCParser parser, ref IRCEvent event) @safe
             /+
                 Count 2
              +/
-            version(TwitchWarnings)
-            {
-                warnAboutOverwrittenCount(2, key);
-            }
+            version(TwitchWarnings) warnAboutOverwrittenCount(2, key);
 
             if (value == "0") break;
             event.count[2] = value.to!long;
@@ -908,10 +886,7 @@ auto parseTwitchTags(ref IRCParser parser, ref IRCEvent event) @safe
             /+
                 Count 3
              +/
-            version(TwitchWarnings)
-            {
-                warnAboutOverwrittenCount(3, key);
-            }
+            version(TwitchWarnings) warnAboutOverwrittenCount(3, key);
 
             if (value == "0") break;
             event.count[3] = value.to!long;
@@ -923,10 +898,7 @@ auto parseTwitchTags(ref IRCParser parser, ref IRCEvent event) @safe
             /+
                 Count 4
              +/
-            version(TwitchWarnings)
-            {
-                warnAboutOverwrittenCount(4, key);
-            }
+            version(TwitchWarnings) warnAboutOverwrittenCount(4, key);
 
             if (value == "0") break;
             event.count[4] = value.to!long;
@@ -941,10 +913,7 @@ auto parseTwitchTags(ref IRCParser parser, ref IRCEvent event) @safe
             /+
                 Count 5
              +/
-            version(TwitchWarnings)
-            {
-                warnAboutOverwrittenCount(5, key);
-            }
+            version(TwitchWarnings) warnAboutOverwrittenCount(5, key);
 
             if (value == "0") break;
             event.count[5] = value.to!long;
@@ -960,10 +929,7 @@ auto parseTwitchTags(ref IRCParser parser, ref IRCEvent event) @safe
             /+
                 Count 6
              +/
-            version(TwitchWarnings)
-            {
-                warnAboutOverwrittenCount(6, key);
-            }
+            version(TwitchWarnings) warnAboutOverwrittenCount(6, key);
 
             if (value == "0") break;
             event.count[6] = value.to!long;
@@ -975,10 +941,7 @@ auto parseTwitchTags(ref IRCParser parser, ref IRCEvent event) @safe
             /+
                 Count 7
              +/
-            version(TwitchWarnings)
-            {
-                warnAboutOverwrittenCount(7, key);
-            }
+            version(TwitchWarnings) warnAboutOverwrittenCount(7, key);
 
             if (value == "0") break;
             event.count[7] = value.to!long;
