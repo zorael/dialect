@@ -14,9 +14,8 @@ version(TwitchSupport):
 private:
 
 import dialect.defs;
-import dialect.parsing;
-import dialect.postprocessors : Postprocessor;
-
+import dialect.parsing : IRCParser;
+import dialect.postprocessors;
 
 version(Postprocessors) {}
 else
@@ -24,6 +23,13 @@ else
     enum message = "Version `Postprocessors` must be enabled in `dub.sdl` for Twitch support.";
     static assert(0, message);
 }
+
+
+/+
+    Mix in [dialect.postprocessors.PostprocessorRegistration] to enable this
+    postprocessor and have it be automatically instantiated on library initialisation.
+ +/
+mixin PostprocessorRegistration!TwitchPostprocessor;
 
 
 // parseTwitchTags

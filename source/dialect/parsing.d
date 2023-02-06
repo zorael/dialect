@@ -2819,42 +2819,10 @@ public:
         /++
             Initialises defined postprocessors.
          +/
-        auto initPostprocessors() pure @system nothrow
+        void initPostprocessors() @system
         {
-            this.postprocessors.reserve(Postprocessors.length);
-
-            foreach (immutable moduleName; Postprocessors)
-            {
-                static if (!__traits(compiles, { mixin("import ", moduleName, ";"); }))
-                {
-                    enum message = "Postprocessor module `" ~ moduleName ~ "` is missing or fails to compile";
-                    static assert(0, message);
-                }
-
-                mixin("import postprocessorModule = ", moduleName, ";");
-
-                foreach (member; __traits(allMembers, postprocessorModule))
-                {
-                    static if (is(__traits(getMember, postprocessorModule, member) == class))
-                    {
-                        alias Class = __traits(getMember, postprocessorModule, member);
-
-                        static if (is(Class : Postprocessor))
-                        {
-                            static if (__traits(compiles, new Class))
-                            {
-                                this.postprocessors ~= new Class;
-                            }
-                            else
-                            {
-                                import std.format : format;
-                                static assert(0, "`%s.%s` constructor does not compile"
-                                    .format(moduleName, Class.stringof));
-                            }
-                        }
-                    }
-                }
-            }
+            import dialect.postprocessors : instantiatePostprocessors;
+            postprocessors = instantiatePostprocessors();
         }
     }
 
