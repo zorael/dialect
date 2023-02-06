@@ -146,13 +146,10 @@ auto parseTwitchTags(ref IRCParser parser, ref IRCEvent event) @safe
                 already_r9k_on          This room is already in r9k mode.
                 already_subs_off        This room is not in subscribers-only mode.
                 already_subs_on         This room is already in subscribers-only mode.
-                bad_host_hosting        This channel is hosting <channel>.
                 bad_unban_no_ban        <user> is not banned from this room.
                 ban_success             <user> is banned from this room.
                 emote_only_off          This room is no longer in emote-only mode.
                 emote_only_on           This room is now in emote-only mode.
-                host_off                Exited host mode.
-                host_on                 Now hosting <channel>.
                 hosts_remaining         There are <number> host commands remaining this half hour.
                 msg_channel_suspended   This channel is suspended.
                 r9k_off                 This room is no longer in r9k mode.
@@ -386,11 +383,6 @@ auto parseTwitchTags(ref IRCParser parser, ref IRCEvent event) @safe
             case "bad_delete_message_broadcaster":
             case "bad_delete_message_mod":
             case "bad_delete_message_error":
-            case "bad_host_error":
-            case "bad_host_hosting":
-            case "bad_host_rate_exceeded":
-            case "bad_host_rejected":
-            case "bad_host_self":
             case "bad_marker_client":
             case "bad_mod_banned":
             case "bad_mod_mod":
@@ -403,7 +395,6 @@ auto parseTwitchTags(ref IRCParser parser, ref IRCEvent event) @safe
             case "bad_timeout_self":
             case "bad_timeout_staff":
             case "bad_unban_no_ban":
-            case "bad_unhost_error":
             case "bad_unmod_mod":*/
 
             case "already_banned":
@@ -413,7 +404,6 @@ auto parseTwitchTags(ref IRCParser parser, ref IRCEvent event) @safe
             case "already_r9k_off":
             case "already_subs_on":
             case "already_subs_off":
-            case "host_tagline_length_error":
             case "invalid_user":
             case "msg_bad_characters":
             case "msg_channel_blocked":
@@ -424,7 +414,6 @@ auto parseTwitchTags(ref IRCParser parser, ref IRCEvent event) @safe
             case "msg_suspended":
             case "msg_timedout":
             case "no_help":
-            case "not_hosting":
             case "no_permission":
             case "raid_already_raiding":
             case "raid_error_forbidden":
@@ -472,8 +461,6 @@ auto parseTwitchTags(ref IRCParser parser, ref IRCEvent event) @safe
             case "followers_on":
             case "followers_off":
             case "followers_on_zero":
-            case "host_on":
-            case "host_off":
 
             /*case "usage_ban":
             case "usage_clear":
@@ -485,7 +472,6 @@ auto parseTwitchTags(ref IRCParser parser, ref IRCEvent event) @safe
             case "usage_followers_off":
             case "usage_followers_on":
             case "usage_help":
-            case "usage_host":
             case "usage_marker":
             case "usage_me":
             case "usage_mod":
@@ -499,13 +485,10 @@ auto parseTwitchTags(ref IRCParser parser, ref IRCEvent event) @safe
             case "usage_subs_on":
             case "usage_timeout":
             case "usage_unban":
-            case "usage_unhost":
             case "usage_unmod":
             case "usage_unraid":
             case "usage_untimeout":*/
 
-            case "host_success_viewers":
-            case "hosts_remaining":
             case "mod_success":
             case "msg_emotesonly":
             case "msg_followersonly":
@@ -525,8 +508,6 @@ auto parseTwitchTags(ref IRCParser parser, ref IRCEvent event) @safe
             case "commercial_success":
             case "delete_message_success":
             case "ban_success":
-            case "host_target_went_offline":
-            case "host_success":
             case "no_vips":
             case "no_mods":
                 // Generic Twitch server reply.

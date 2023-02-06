@@ -133,7 +133,6 @@ public:
         CLEARCHAT,        /// Twitch `CLEARCHAT` event, clearing the chat or banning a user.
         CLEARMSG,         /// Twitch `CLEARMSG` event, deletes a sent message.
         USERNOTICE,       /// Twitch subscription or resubscription event.
-        HOSTTARGET,       /// Twitch channel hosting target.
         RECONNECT,        /// Twitch `RECONNECT` event; Twitch IRC processes restarting.
         WHISPER,          /// Twitch private query message.
         TWITCH_NOTICE,    /// Twitch generic server notice, see `event.aux`.
@@ -143,8 +142,6 @@ public:
         TWITCH_SUB,       /// Twitch subscription event, including resubs.
         TWITCH_CHEER,     /// Twitch "bits" donation.
         TWITCH_SUBGIFT,   /// Twitch subscription gift event.
-        TWITCH_HOSTSTART, /// Twitch channel hosting start.
-        TWITCH_HOSTEND,   /// Twitch channel hosting end.
         TWITCH_BITSBADGETIER, /// Twitch event, unsure of its meaning.
         TWITCH_RAID,      /// Twitch raid.
         TWITCH_UNRAID,    /// End of a Twitch raid.

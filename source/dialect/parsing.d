@@ -1184,40 +1184,6 @@ void parseSpecialcases(
 
     version(TwitchSupport)
     {
-        case HOSTTARGET:
-            if (slice.contains(" :-"))
-            {
-                event.type = TWITCH_HOSTEND;
-                goto case TWITCH_HOSTEND;
-            }
-            else
-            {
-                event.type = TWITCH_HOSTSTART;
-                goto case TWITCH_HOSTSTART;
-            }
-
-        case TWITCH_HOSTSTART:
-            // :tmi.twitch.tv HOSTTARGET #hosting_channel <channel> [<number-of-viewers>]
-            // :tmi.twitch.tv HOSTTARGET #andymilonakis :zombie_barricades -
-            event.channel = slice.nom(" :");
-            event.sender.nickname = event.channel[1..$];
-            event.sender.address = string.init;
-            event.target.nickname = slice.nom(' ');  // target channel
-            event.count[0] = (slice == "-") ?
-                0 :
-                slice.to!long;
-            break;
-
-        case TWITCH_HOSTEND:
-            // :tmi.twitch.tv HOSTTARGET #hosting_channel :- [<number-of-viewers>]
-            event.channel = slice.nom(" :- ");
-            event.sender.nickname = event.channel[1..$];
-            event.sender.address = string.init;
-            event.count[0] = (slice == "-") ?
-                0 :
-                slice.to!long;
-            break;
-
         case CLEARCHAT:
             // :tmi.twitch.tv CLEARCHAT #zorael
             // :tmi.twitch.tv CLEARCHAT #<channel> :<user>
