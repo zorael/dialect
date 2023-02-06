@@ -2734,17 +2734,20 @@ public:
      +/
     IRCClient client;
 
+
     /++
         The current [dialect.defs.IRCServer|IRCServer] with all the context
         needed for parsing.
      +/
     IRCServer server;
 
+
     /++
         An `dialect.defs.IRCEvent.Type[1024]` reverse lookup table for fast
         numeric lookups.
      +/
     IRCEvent.Type[1024] typenums = Typenums.base;
+
 
     // toIRCEvent
     /++
@@ -2781,6 +2784,7 @@ public:
         return event;
     }
 
+
     // ctor
     /++
         Create a new [IRCParser] with the passed [dialect.defs.IRCClient|IRCClient]
@@ -2802,10 +2806,12 @@ public:
         }
     }
 
+
     /++
         Disallow copying of this struct.
      +/
     @disable this(this);
+
 
     version(Postprocessors)
     {
@@ -2814,6 +2820,7 @@ public:
             iterated through and processed after parsing is complete.
          +/
         Postprocessor[] postprocessors;
+
 
         // initPostprocessors
         /++
@@ -2825,6 +2832,7 @@ public:
             postprocessors = instantiatePostprocessors();
         }
     }
+
 
     version(FlagAsUpdated)
     {
@@ -2850,6 +2858,7 @@ public:
             server = 1 << 1,
         }
 
+
         // updates
         /++
             Bitfield of in what way the parser's internal state was altered
@@ -2867,6 +2876,7 @@ public:
          +/
         Update updates;
 
+
         // clientUpdated
         /++
             Wrapper for backwards compatibility with pre-bitfield update-signaling.
@@ -2879,6 +2889,7 @@ public:
         {
             return cast(bool)(updates & Update.client);
         }
+
 
         // serverUpdated
         /++
@@ -2893,6 +2904,7 @@ public:
             return cast(bool)(updates & Update.server);
         }
 
+
         // clientUpdated
         /++
             Wrapper for backwards compatibility with pre-bitfield update-signaling.
@@ -2906,6 +2918,7 @@ public:
             if (updated) updates |= Update.client;
             else updates ^= Update.client;
         }
+
 
         // serverUpdated
         /++
