@@ -60,6 +60,8 @@ auto parseTwitchTags(ref IRCParser parser, ref IRCEvent event) @safe
         /// Whether or not an error occured and debug information should be printed
         /// upon leaving the function.
         bool printTagsOnExit;
+        bool printAuxOnExit;
+        bool printCountOnExit;
 
         static void appendToErrors(ref IRCEvent event, const string msg)
         {
@@ -95,6 +97,7 @@ auto parseTwitchTags(ref IRCParser parser, ref IRCEvent event) @safe
                 appendToErrors(event, msg);
                 writeln(msg);
                 printTagsOnExit = true;
+                printCountOnExit = true;
             }
         }
 
@@ -109,6 +112,7 @@ auto parseTwitchTags(ref IRCParser parser, ref IRCEvent event) @safe
                 appendToErrors(event, msg);
                 writeln(msg);
                 printTagsOnExit = true;
+                printAuxOnExit = true;
             }
         }
     }
@@ -316,6 +320,8 @@ auto parseTwitchTags(ref IRCParser parser, ref IRCEvent event) @safe
                 {
                     appendToErrors(event, "RECORD TWITCH CHARITY");
                     printTagsOnExit = true;
+                    printAuxOnExit = true;
+                    printCountOnExit = true;
                 }
                 break;
 
@@ -560,6 +566,7 @@ auto parseTwitchTags(ref IRCParser parser, ref IRCEvent event) @safe
                         appendToErrors(event, msg);
                         writeln(msg);
                         printTagsOnExit = true;
+                        printAuxOnExit = true;
                     }
                 }
 
@@ -766,6 +773,7 @@ auto parseTwitchTags(ref IRCParser parser, ref IRCEvent event) @safe
                     appendToErrors(event, msg);
                     writeln(msg);
                     printTagsOnExit = true;
+                    printAuxOnExit = true;
                 }
             }
 
@@ -1220,7 +1228,16 @@ auto parseTwitchTags(ref IRCParser parser, ref IRCEvent event) @safe
 
     version(TwitchWarnings)
     {
-        if (printTagsOnExit) printTags(tagRange, event);
+        if (printTagsOnExit)
+        {
+            import std.stdio : writefln, writeln;
+
+            printTags(tagRange, event);
+            if (printAuxOnExit || printCountOnExit) writeln();
+            if (printAuxOnExit) writefln(`%-35s%s`, "event.aux", event.aux);
+            if (printCountOnExit) writefln(`%-35s%s`, "event.count", event.count);
+            writeln();
+        }
     }
 }
 
