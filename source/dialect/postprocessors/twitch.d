@@ -549,7 +549,9 @@ auto parseTwitchTags(ref IRCParser parser, ref IRCEvent event) @safe
             case "midnightsquid":
                 // New direct cheer with real currency
                 event.type = TWITCH_DIRECTCHEER;
-                //event.aux[0] = msgID;  // reserve for msg-param-currency
+
+                version(TwitchWarnings) warnAboutOverwrittenAuxString(1, key);
+                event.aux[1] = msgID;
                 break;
 
             default:
