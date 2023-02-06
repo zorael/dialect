@@ -2829,7 +2829,14 @@ public:
         void initPostprocessors() @system
         {
             import dialect.postprocessors : instantiatePostprocessors;
+
             postprocessors = instantiatePostprocessors();
+
+            version(TwitchSupport)
+            {
+                enum message = "No postprocessors were instantiated despite version `TwitchSupport`";
+                assert(postprocessors.length, message);
+            }
         }
     }
 
