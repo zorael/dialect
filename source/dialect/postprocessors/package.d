@@ -11,6 +11,16 @@ module dialect.postprocessors;
 
 private:
 
+version(TwitchSupport)
+{
+    /+
+        This is needed for the module constructor mixed in with
+        [PostprocessorRegistration] to actually run. Without it, the Twitch
+        postprocessor is never instantiated.
+     +/
+    import dialect.postprocessors.twitch;
+}
+
 
 // PostprocessorRegistrationEntry
 /++
