@@ -538,11 +538,8 @@ int main(string[] args) @system
 
             buffer.formatEventAssertBlock(event);
 
-            if (parser.clientUpdated || parser.serverUpdated)
+            if (parser.updates != IRCParser.Update.nothing)
             {
-                parser.clientUpdated = false;
-                parser.serverUpdated = false;
-
                 buffer.put("\n\nwith (parser)\n{\n");
                 buffer.formatDeltaInto!(Yes.asserts)(oldClient, parser.client, 1, "client");
                 buffer.formatDeltaInto!(Yes.asserts)(oldServer, parser.server, 1, "server");
@@ -550,6 +547,7 @@ int main(string[] args) @system
 
                 oldClient = parser.client;
                 oldServer = parser.server;
+                parser.updates = IRCParser.Update.nothing;
             }
         }
         catch (IRCParseException e)
