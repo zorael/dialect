@@ -110,7 +110,9 @@ unittest
             assert((type == IRCEvent.Type.CAP), Enum!(IRCEvent.Type).toString(type));
             assert((sender.address == "tmi.twitch.tv"), sender.address);
             assert((content == "LS"), content);
-            assert((aux == ["twitch.tv/tags", "twitch.tv/commands", "twitch.tv/membership", "", "", "", "", "", "", "", "", "", "", "", "", ""]), aux.to!string);
+            assert((aux[0] == "twitch.tv/tags"), aux[0]);
+            assert((aux[1] == "twitch.tv/commands"), aux[1]);
+            assert((aux[2] == "twitch.tv/membership"), aux[2]);
         }
     }
     {

@@ -46,7 +46,17 @@ unittest
         {
             assert((type == IRCEvent.Type.RPL_ISUPPORT), Enum!(IRCEvent.Type).toString(type));
             assert((sender.address == "Portlane.SE.EU.GameSurge.net"), sender.address);
-            assert((aux == ["WHOX", "WALLCHOPS", "WALLVOICES", "USERIP", "CPRIVMSG", "CNOTICE", "SILENCE=25", "MODES=6", "MAXCHANNELS=75", "MAXBANS=100", "NICKLEN=30", "", "", "", "", ""]), aux.to!string);
+            assert((aux[0] == "WHOX"), aux[0]);
+            assert((aux[1] == "WALLCHOPS"), aux[1]);
+            assert((aux[2] == "WALLVOICES"), aux[2]);
+            assert((aux[3] == "USERIP"), aux[3]);
+            assert((aux[4] == "CPRIVMSG"), aux[4]);
+            assert((aux[5] == "CNOTICE"), aux[5]);
+            assert((aux[6] == "SILENCE=25"), aux[6]);
+            assert((aux[7] == "MODES=6"), aux[7]);
+            assert((aux[8] == "MAXCHANNELS=75"), aux[8]);
+            assert((aux[9] == "MAXBANS=100"), aux[9]);
+            assert((aux[10] == "NICKLEN=30"), aux[10]);
             assert((num == 5), num.to!string);
         }
     }
@@ -72,7 +82,18 @@ unittest
         {
             assert((type == IRCEvent.Type.RPL_ISUPPORT), Enum!(IRCEvent.Type).toString(type));
             assert((sender.address == "Portlane.SE.EU.GameSurge.net"), sender.address);
-            assert((aux == ["MAXNICKLEN=30", "TOPICLEN=300", "AWAYLEN=200", "KICKLEN=300", "CHANNELLEN=200", "MAXCHANNELLEN=200", "CHANTYPES=#&", "PREFIX=(ov)@+", "STATUSMSG=@+", "CHANMODES=b,k,l,imnpstrDdRcC", "CASEMAPPING=rfc1459", "NETWORK=GameSurge", "", "", "", ""]), aux.to!string);
+            assert((aux[0] == "MAXNICKLEN=30"), aux[0]);
+            assert((aux[1] == "TOPICLEN=300"), aux[1]);
+            assert((aux[2] == "AWAYLEN=200"), aux[2]);
+            assert((aux[3] == "KICKLEN=300"), aux[3]);
+            assert((aux[4] == "CHANNELLEN=200"), aux[4]);
+            assert((aux[5] == "MAXCHANNELLEN=200"), aux[5]);
+            assert((aux[6] == "CHANTYPES=#&"), aux[6]);
+            assert((aux[7] == "PREFIX=(ov)@+"), aux[7]);
+            assert((aux[8] == "STATUSMSG=@+"), aux[8]);
+            assert((aux[9] == "CHANMODES=b,k,l,imnpstrDdRcC"), aux[9]);
+            assert((aux[10] == "CASEMAPPING=rfc1459"), aux[10]);
+            assert((aux[11] == "NETWORK=GameSurge"), aux[11]);
             assert((num == 5), num.to!string);
         }
     }

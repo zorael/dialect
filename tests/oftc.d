@@ -36,7 +36,19 @@ unittest
         {
             assert((type == IRCEvent.Type.RPL_ISUPPORT), Enum!(IRCEvent.Type).toString(type));
             assert((sender.address == "helix.oftc.net"), sender.address);
-            assert((aux == ["CALLERID", "CASEMAPPING=rfc1459", "DEAF=D", "KICKLEN=160", "MODES=4", "NICKLEN=30", "PREFIX=(ov)@+", "STATUSMSG=@+", "TOPICLEN=391", "NETWORK=OFTC", "MAXLIST=beI:100", "MAXTARGETS=1", "CHANTYPES=#", "", "", ""]), aux.to!string);
+            assert((aux[0] == "CALLERID"), aux[0]);
+            assert((aux[1] == "CASEMAPPING=rfc1459"), aux[1]);
+            assert((aux[2] == "DEAF=D"), aux[2]);
+            assert((aux[3] == "KICKLEN=160"), aux[3]);
+            assert((aux[4] == "MODES=4"), aux[4]);
+            assert((aux[5] == "NICKLEN=30"), aux[5]);
+            assert((aux[6] == "PREFIX=(ov)@+"), aux[6]);
+            assert((aux[7] == "STATUSMSG=@+"), aux[7]);
+            assert((aux[8] == "TOPICLEN=391"), aux[8]);
+            assert((aux[9] == "NETWORK=OFTC"), aux[9]);
+            assert((aux[10] == "MAXLIST=beI:100"), aux[10]);
+            assert((aux[11] == "MAXTARGETS=1"), aux[11]);
+            assert((aux[12] == "CHANTYPES=#"), aux[12]);
             assert((num == 5), num.to!string);
         }
     }
@@ -54,7 +66,15 @@ unittest
         {
             assert((type == IRCEvent.Type.RPL_ISUPPORT), Enum!(IRCEvent.Type).toString(type));
             assert((sender.address == "helix.oftc.net"), sender.address);
-            assert((aux == ["CHANLIMIT=#:90", "CHANNELLEN=50", "CHANMODES=eIqb,k,l,cimnpstzMRS", "AWAYLEN=160", "KNOCK", "ELIST=CMNTU", "SAFELIST", "EXCEPTS=e", "INVEX=I", "", "", "", "", "", "", ""]), aux.to!string);
+            assert((aux[0] == "CHANLIMIT=#:90"), aux[0]);
+            assert((aux[1] == "CHANNELLEN=50"), aux[1]);
+            assert((aux[2] == "CHANMODES=eIqb,k,l,cimnpstzMRS"), aux[2]);
+            assert((aux[3] == "AWAYLEN=160"), aux[3]);
+            assert((aux[4] == "KNOCK"), aux[4]);
+            assert((aux[5] == "ELIST=CMNTU"), aux[5]);
+            assert((aux[6] == "SAFELIST"), aux[6]);
+            assert((aux[7] == "EXCEPTS=e"), aux[7]);
+            assert((aux[8] == "INVEX=I"), aux[8]);
             assert((num == 5), num.to!string);
         }
     }

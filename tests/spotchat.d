@@ -36,7 +36,19 @@ unittest
         {
             assert((type == IRCEvent.Type.RPL_ISUPPORT), Enum!(IRCEvent.Type).toString(type));
             assert((sender.address == "medusa.us.SpotChat.org"), sender.address);
-            assert((aux == ["AWAYLEN=200", "CALLERID=g", "CASEMAPPING=rfc1459", "CHANMODES=Ibeg,k,Jl,ACKMNOPQRSTcimnprstz", "CHANNELLEN=64", "CHANTYPES=#", "CHARSET=ascii", "ELIST=MU", "EXCEPTS=e", "EXTBAN=,ACNOQRSTUcmz", "FNC", "INVEX=I", "KICKLEN=255", "", "", ""]), aux.to!string);
+            assert((aux[0] == "AWAYLEN=200"), aux[0]);
+            assert((aux[1] == "CALLERID=g"), aux[1]);
+            assert((aux[2] == "CASEMAPPING=rfc1459"), aux[2]);
+            assert((aux[3] == "CHANMODES=Ibeg,k,Jl,ACKMNOPQRSTcimnprstz"), aux[3]);
+            assert((aux[4] == "CHANNELLEN=64"), aux[4]);
+            assert((aux[5] == "CHANTYPES=#"), aux[5]);
+            assert((aux[6] == "CHARSET=ascii"), aux[6]);
+            assert((aux[7] == "ELIST=MU"), aux[7]);
+            assert((aux[8] == "EXCEPTS=e"), aux[8]);
+            assert((aux[9] == "EXTBAN=,ACNOQRSTUcmz"), aux[9]);
+            assert((aux[10] == "FNC"), aux[10]);
+            assert((aux[11] == "INVEX=I"), aux[11]);
+            assert((aux[12] == "KICKLEN=255"), aux[12]);
             assert((num == 5), num.to!string);
         }
     }
@@ -60,7 +72,19 @@ unittest
         {
             assert((type == IRCEvent.Type.RPL_ISUPPORT), Enum!(IRCEvent.Type).toString(type));
             assert((sender.address == "medusa.us.SpotChat.org"), sender.address);
-            assert((aux == ["MAP", "MAXBANS=60", "MAXCHANNELS=20", "MAXPARA=32", "MAXTARGETS=20", "MODES=20", "NAMESX", "NETWORK=SpotChat", "NICKLEN=31", "OVERRIDE", "PREFIX=(Yqaohv)!~&@%+", "REMOVE", "SECURELIST", "", "", ""]), aux.to!string);
+            assert((aux[0] == "MAP"), aux[0]);
+            assert((aux[1] == "MAXBANS=60"), aux[1]);
+            assert((aux[2] == "MAXCHANNELS=20"), aux[2]);
+            assert((aux[3] == "MAXPARA=32"), aux[3]);
+            assert((aux[4] == "MAXTARGETS=20"), aux[4]);
+            assert((aux[5] == "MODES=20"), aux[5]);
+            assert((aux[6] == "NAMESX"), aux[6]);
+            assert((aux[7] == "NETWORK=SpotChat"), aux[7]);
+            assert((aux[8] == "NICKLEN=31"), aux[8]);
+            assert((aux[9] == "OVERRIDE"), aux[9]);
+            assert((aux[10] == "PREFIX=(Yqaohv)!~&@%+"), aux[10]);
+            assert((aux[11] == "REMOVE"), aux[11]);
+            assert((aux[12] == "SECURELIST"), aux[12]);
             assert((num == 5), num.to!string);
         }
     }
@@ -79,7 +103,15 @@ unittest
         {
             assert((type == IRCEvent.Type.RPL_ISUPPORT), Enum!(IRCEvent.Type).toString(type));
             assert((sender.address == "medusa.us.SpotChat.org"), sender.address);
-            assert((aux == ["SSL=64.57.93.14:6697", "STARTTLS", "STATUSMSG=!~&@%+", "TOPICLEN=307", "UHNAMES", "VBANLIST", "WALLCHOPS", "WALLVOICES", "WATCH=32", "", "", "", "", "", "", ""]), aux.to!string);
+            assert((aux[0] == "SSL=64.57.93.14:6697"), aux[0]);
+            assert((aux[1] == "STARTTLS"), aux[1]);
+            assert((aux[2] == "STATUSMSG=!~&@%+"), aux[2]);
+            assert((aux[3] == "TOPICLEN=307"), aux[3]);
+            assert((aux[4] == "UHNAMES"), aux[4]);
+            assert((aux[5] == "VBANLIST"), aux[5]);
+            assert((aux[6] == "WALLCHOPS"), aux[6]);
+            assert((aux[7] == "WALLVOICES"), aux[7]);
+            assert((aux[8] == "WATCH=32"), aux[8]);
             assert((num == 5), num.to!string);
         }
     }
@@ -163,7 +195,19 @@ unittest
         {
             assert((type == IRCEvent.Type.RPL_ISUPPORT), Enum!(IRCEvent.Type).toString(type));
             assert((sender.address == "medusa.us.SpotChat.org"), sender.address);
-            assert((aux == ["AWAYLEN=200", "CALLERID=g", "CASEMAPPING=rfc1459", "CHANMODES=Ibeg,k,Jl,ACKMNOPQRSTcimnprstz", "CHANNELLEN=64", "CHANTYPES=#", "CHARSET=ascii", "ELIST=MU", "EXCEPTS=e", "EXTBAN=,ACNOQRSTUcmz", "FNC", "INVEX=I", "KICKLEN=255", "", "", ""]), aux.to!string);
+            assert((aux[0] == "AWAYLEN=200"), aux[0]);
+            assert((aux[1] == "CALLERID=g"), aux[1]);
+            assert((aux[2] == "CASEMAPPING=rfc1459"), aux[2]);
+            assert((aux[3] == "CHANMODES=Ibeg,k,Jl,ACKMNOPQRSTcimnprstz"), aux[3]);
+            assert((aux[4] == "CHANNELLEN=64"), aux[4]);
+            assert((aux[5] == "CHANTYPES=#"), aux[5]);
+            assert((aux[6] == "CHARSET=ascii"), aux[6]);
+            assert((aux[7] == "ELIST=MU"), aux[7]);
+            assert((aux[8] == "EXCEPTS=e"), aux[8]);
+            assert((aux[9] == "EXTBAN=,ACNOQRSTUcmz"), aux[9]);
+            assert((aux[10] == "FNC"), aux[10]);
+            assert((aux[11] == "INVEX=I"), aux[11]);
+            assert((aux[12] == "KICKLEN=255"), aux[12]);
             assert((num == 5), num.to!string);
         }
     }

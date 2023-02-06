@@ -35,7 +35,18 @@ unittest
         {
             assert((type == IRCEvent.Type.RPL_ISUPPORT), Enum!(IRCEvent.Type).toString(type));
             assert((sender.address == "sinisalo.freenode.net"), sender.address);
-            assert((aux == ["CHANTYPES=#", "EXCEPTS", "INVEX", "CHANMODES=eIbq,k,flj,CFLMPQScgimnprstz", "CHANLIMIT=#:120", "PREFIX=(ov)@+", "MAXLIST=bqeI:100", "MODES=4", "NETWORK=freenode", "STATUSMSG=@+", "CALLERID=g", "CASEMAPPING=rfc1459", "", "", "", ""]), aux.to!string);
+            assert((aux[0] == "CHANTYPES=#"), aux[0]);
+            assert((aux[1] == "EXCEPTS"), aux[1]);
+            assert((aux[2] == "INVEX"), aux[2]);
+            assert((aux[3] == "CHANMODES=eIbq,k,flj,CFLMPQScgimnprstz"), aux[3]);
+            assert((aux[4] == "CHANLIMIT=#:120"), aux[4]);
+            assert((aux[5] == "PREFIX=(ov)@+"), aux[5]);
+            assert((aux[6] == "MAXLIST=bqeI:100"), aux[6]);
+            assert((aux[7] == "MODES=4"), aux[7]);
+            assert((aux[8] == "NETWORK=freenode"), aux[8]);
+            assert((aux[9] == "STATUSMSG=@+"), aux[9]);
+            assert((aux[10] == "CALLERID=g"), aux[10]);
+            assert((aux[11] == "CASEMAPPING=rfc1459"), aux[11]);
             assert((num == 5), num.to!string);
         }
     }
@@ -54,7 +65,18 @@ unittest
         {
             assert((type == IRCEvent.Type.RPL_ISUPPORT), Enum!(IRCEvent.Type).toString(type));
             assert((sender.address == "sinisalo.freenode.net"), sender.address);
-            assert((aux == ["CHARSET=ascii", "NICKLEN=16", "CHANNELLEN=50", "TOPICLEN=390", "DEAF=D", "FNC", "TARGMAX=NAMES:1,LIST:1,KICK:1,WHOIS:1,PRIVMSG:4,NOTICE:4,ACCEPT:,MONITOR:", "EXTBAN=$,jrxz", "CLIENTVER=3.0", "WHOX", "KNOCK", "ETRACE", "", "", "", ""]), aux.to!string);
+            assert((aux[0] == "CHARSET=ascii"), aux[0]);
+            assert((aux[1] == "NICKLEN=16"), aux[1]);
+            assert((aux[2] == "CHANNELLEN=50"), aux[2]);
+            assert((aux[3] == "TOPICLEN=390"), aux[3]);
+            assert((aux[4] == "DEAF=D"), aux[4]);
+            assert((aux[5] == "FNC"), aux[5]);
+            assert((aux[6] == "TARGMAX=NAMES:1,LIST:1,KICK:1,WHOIS:1,PRIVMSG:4,NOTICE:4,ACCEPT:,MONITOR:"), aux[6]);
+            assert((aux[7] == "EXTBAN=$,jrxz"), aux[7]);
+            assert((aux[8] == "CLIENTVER=3.0"), aux[8]);
+            assert((aux[9] == "WHOX"), aux[9]);
+            assert((aux[10] == "KNOCK"), aux[10]);
+            assert((aux[11] == "ETRACE"), aux[11]);
             assert((num == 5), num.to!string);
         }
     }
@@ -810,7 +832,17 @@ unittest
         {
             assert((type == IRCEvent.Type.RPL_ISUPPORT), Enum!(IRCEvent.Type).toString(type));
             assert((sender.address == "cherryh.freenode.net"), sender.address);
-            assert((aux == ["EXCEPTS", "INVEX", "MODES=eIbq,k,flj,CFLMPQScgimnprstz", "CHANLIMIT=#:120", "PREFIX=(ov)@+", "MAXLIST=bqeI:100", "MODES=4", "NETWORK=freenode", "STATUSMSG=@+", "CALLERID=g", "CASEMAPPING=rfc1459", "", "", "", "", ""]), aux.to!string);
+            assert((aux[0] == "EXCEPTS"), aux[0]);
+            assert((aux[1] == "INVEX"), aux[1]);
+            assert((aux[2] == "MODES=eIbq,k,flj,CFLMPQScgimnprstz"), aux[2]);
+            assert((aux[3] == "CHANLIMIT=#:120"), aux[3]);
+            assert((aux[4] == "PREFIX=(ov)@+"), aux[4]);
+            assert((aux[5] == "MAXLIST=bqeI:100"), aux[5]);
+            assert((aux[6] == "MODES=4"), aux[6]);
+            assert((aux[7] == "NETWORK=freenode"), aux[7]);
+            assert((aux[8] == "STATUSMSG=@+"), aux[8]);
+            assert((aux[9] == "CALLERID=g"), aux[9]);
+            assert((aux[10] == "CASEMAPPING=rfc1459"), aux[10]);
             assert((num == 5), num.to!string);
         }
     }
@@ -1214,7 +1246,17 @@ unittest
         {
             assert((type == IRCEvent.Type.RPL_ISUPPORT), Enum!(IRCEvent.Type).toString(type));
             assert((sender.address == "cherryh.freenode.net"), sender.address);
-            assert((aux == ["NICKLEN=16", "CHANNELLEN=50", "TOPICLEN=390", "DEAF=D", "FNC", "TARGMAX=NAMES:1,LIST:1,KICK:1,WHOIS:1,PRIVMSG:4,NOTICE:4,ACCEPT:,MONITOR:", "EXTBAN=$,ajrxz", "CLIENTVER=3.0", "CPRIVMSG", "CNOTICE", "SAFELIST", "", "", "", "", ""]), aux.to!string);
+            assert((aux[0] == "NICKLEN=16"), aux[0]);
+            assert((aux[1] == "CHANNELLEN=50"), aux[1]);
+            assert((aux[2] == "TOPICLEN=390"), aux[2]);
+            assert((aux[3] == "DEAF=D"), aux[3]);
+            assert((aux[4] == "FNC"), aux[4]);
+            assert((aux[5] == "TARGMAX=NAMES:1,LIST:1,KICK:1,WHOIS:1,PRIVMSG:4,NOTICE:4,ACCEPT:,MONITOR:"), aux[5]);
+            assert((aux[6] == "EXTBAN=$,ajrxz"), aux[6]);
+            assert((aux[7] == "CLIENTVER=3.0"), aux[7]);
+            assert((aux[8] == "CPRIVMSG"), aux[8]);
+            assert((aux[9] == "CNOTICE"), aux[9]);
+            assert((aux[10] == "SAFELIST"), aux[10]);
             assert((num == 5), num.to!string);
         }
     }

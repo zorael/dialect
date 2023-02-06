@@ -36,7 +36,19 @@ unittest
         {
             assert((type == IRCEvent.Type.RPL_ISUPPORT), Enum!(IRCEvent.Type).toString(type));
             assert((sender.address == "eggbert.ca.na.irchighway.net"), sender.address);
-            assert((aux == ["AWAYLEN=200", "CALLERID=g", "CASEMAPPING=rfc1459", "CHANMODES=Ibe,k,dl,ACDMNORSTcimnprstz", "CHANNELLEN=64", "CHANTYPES=#", "CHARSET=ascii", "ELIST=MU", "ESILENCE", "EXCEPTS=e", "EXTBAN=,ACNORSTUcjmz", "FNC", "INVEX=I", "", "", ""]), aux.to!string);
+            assert((aux[0] == "AWAYLEN=200"), aux[0]);
+            assert((aux[1] == "CALLERID=g"), aux[1]);
+            assert((aux[2] == "CASEMAPPING=rfc1459"), aux[2]);
+            assert((aux[3] == "CHANMODES=Ibe,k,dl,ACDMNORSTcimnprstz"), aux[3]);
+            assert((aux[4] == "CHANNELLEN=64"), aux[4]);
+            assert((aux[5] == "CHANTYPES=#"), aux[5]);
+            assert((aux[6] == "CHARSET=ascii"), aux[6]);
+            assert((aux[7] == "ELIST=MU"), aux[7]);
+            assert((aux[8] == "ESILENCE"), aux[8]);
+            assert((aux[9] == "EXCEPTS=e"), aux[9]);
+            assert((aux[10] == "EXTBAN=,ACNORSTUcjmz"), aux[10]);
+            assert((aux[11] == "FNC"), aux[11]);
+            assert((aux[12] == "INVEX=I"), aux[12]);
             assert((num == 5), num.to!string);
         }
     }
@@ -61,7 +73,19 @@ unittest
         {
             assert((type == IRCEvent.Type.RPL_ISUPPORT), Enum!(IRCEvent.Type).toString(type));
             assert((sender.address == "eggbert.ca.na.irchighway.net"), sender.address);
-            assert((aux == ["KICKLEN=255", "MAP", "MAXBANS=60", "MAXCHANNELS=30", "MAXPARA=32", "MAXTARGETS=20", "MODES=20", "NAMESX", "NETWORK=irchighway", "NICKLEN=31", "PREFIX=(qaohv)~&@%+", "SILENCE=32", "SSL=10.0.30.4:6697", "", "", ""]), aux.to!string);
+            assert((aux[0] == "KICKLEN=255"), aux[0]);
+            assert((aux[1] == "MAP"), aux[1]);
+            assert((aux[2] == "MAXBANS=60"), aux[2]);
+            assert((aux[3] == "MAXCHANNELS=30"), aux[3]);
+            assert((aux[4] == "MAXPARA=32"), aux[4]);
+            assert((aux[5] == "MAXTARGETS=20"), aux[5]);
+            assert((aux[6] == "MODES=20"), aux[6]);
+            assert((aux[7] == "NAMESX"), aux[7]);
+            assert((aux[8] == "NETWORK=irchighway"), aux[8]);
+            assert((aux[9] == "NICKLEN=31"), aux[9]);
+            assert((aux[10] == "PREFIX=(qaohv)~&@%+"), aux[10]);
+            assert((aux[11] == "SILENCE=32"), aux[11]);
+            assert((aux[12] == "SSL=10.0.30.4:6697"), aux[12]);
             assert((num == 5), num.to!string);
         }
     }
@@ -80,10 +104,18 @@ unittest
         {
             assert((type == IRCEvent.Type.RPL_ISUPPORT), Enum!(IRCEvent.Type).toString(type));
             assert((sender.address == "eggbert.ca.na.irchighway.net"), sender.address);
-            assert((aux == ["STARTTLS", "STATUSMSG=~&@%+", "TOPICLEN=307", "UHNAMES", "USERIP", "VBANLIST", "WALLCHOPS", "WALLVOICES", "", "", "", "", "", "", "", ""]), aux.to!string);
+            assert((aux[0] == "STARTTLS"), aux[0]);
+            assert((aux[1] == "STATUSMSG=~&@%+"), aux[1]);
+            assert((aux[2] == "TOPICLEN=307"), aux[2]);
+            assert((aux[3] == "UHNAMES"), aux[3]);
+            assert((aux[4] == "USERIP"), aux[4]);
+            assert((aux[5] == "VBANLIST"), aux[5]);
+            assert((aux[6] == "WALLCHOPS"), aux[6]);
+            assert((aux[7] == "WALLVOICES"), aux[7]);
             assert((num == 5), num.to!string);
         }
     }
+
 
     {
         immutable event = parser.toIRCEvent(":caliburn.pa.us.irchighway.net 042 kameloso 132AAMJT5 :your unique ID");
@@ -104,7 +136,13 @@ unittest
             assert((type == IRCEvent.Type.CAP), Enum!(IRCEvent.Type).toString(type));
             assert((sender.address == "genesis.ks.us.irchighway.net"), sender.address);
             assert((content == "LS"), content);
-            assert((aux == ["away-notify", "extended-join", "account-notify", "multi-prefix", "sasl", "tls", "userhost-in-names", "", "", "", "", "", "", "", "", ""]), aux.to!string);
+            assert((aux[0] == "away-notify"), aux[0]);
+            assert((aux[1] == "extended-join"), aux[1]);
+            assert((aux[2] == "account-notify"), aux[2]);
+            assert((aux[3] == "multi-prefix"), aux[3]);
+            assert((aux[4] == "sasl"), aux[4]);
+            assert((aux[5] == "tls"), aux[5]);
+            assert((aux[6] == "userhost-in-names"), aux[6]);
         }
     }
 }

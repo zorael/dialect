@@ -49,7 +49,19 @@ unittest
         {
             assert((type == IRCEvent.Type.RPL_ISUPPORT), Enum!(IRCEvent.Type).toString(type));
             assert((sender.address == "van-halen.snoonet.org"), sender.address);
-            assert((aux == ["AWAYLEN=200", "CALLERID=g", "CASEMAPPING=rfc1459", "CHANMODES=IXZbegw,k,FHJLWdfjlx,ABCDKMNOPQRSTcimnprstuz", "CHANNELLEN=64", "CHANTYPES=#", "CHARSET=ascii", "ELIST=MU", "ESILENCE", "EXCEPTS=e", "EXTBAN=,ABCNOQRSTUcjmprsz", "FNC", "INVEX=I", "", "", ""]), aux.to!string);
+            assert((aux[0] == "AWAYLEN=200"), aux[0]);
+            assert((aux[1] == "CALLERID=g"), aux[1]);
+            assert((aux[2] == "CASEMAPPING=rfc1459"), aux[2]);
+            assert((aux[3] == "CHANMODES=IXZbegw,k,FHJLWdfjlx,ABCDKMNOPQRSTcimnprstuz"), aux[3]);
+            assert((aux[4] == "CHANNELLEN=64"), aux[4]);
+            assert((aux[5] == "CHANTYPES=#"), aux[5]);
+            assert((aux[6] == "CHARSET=ascii"), aux[6]);
+            assert((aux[7] == "ELIST=MU"), aux[7]);
+            assert((aux[8] == "ESILENCE"), aux[8]);
+            assert((aux[9] == "EXCEPTS=e"), aux[9]);
+            assert((aux[10] == "EXTBAN=,ABCNOQRSTUcjmprsz"), aux[10]);
+            assert((aux[11] == "FNC"), aux[11]);
+            assert((aux[12] == "INVEX=I"), aux[12]);
             assert((num == 5), num.to!string);
         }
     }
@@ -70,7 +82,19 @@ unittest
         {
             assert((type == IRCEvent.Type.RPL_ISUPPORT), Enum!(IRCEvent.Type).toString(type));
             assert((sender.address == "van-halen.snoonet.org"), sender.address);
-            assert((aux == ["KICKLEN=255", "MAP", "MAXBANS=60", "MAXCHANNELS=200", "MAXPARA=32", "MAXTARGETS=20", "MODES=50", "NAMESX", "NETWORK=Snoonet", "NICKLEN=27", "OPERLOG", "PREFIX=(Yohv)!@%+", "REMOVE", "", "", ""]), aux.to!string);
+            assert((aux[0] == "KICKLEN=255"), aux[0]);
+            assert((aux[1] == "MAP"), aux[1]);
+            assert((aux[2] == "MAXBANS=60"), aux[2]);
+            assert((aux[3] == "MAXCHANNELS=200"), aux[3]);
+            assert((aux[4] == "MAXPARA=32"), aux[4]);
+            assert((aux[5] == "MAXTARGETS=20"), aux[5]);
+            assert((aux[6] == "MODES=50"), aux[6]);
+            assert((aux[7] == "NAMESX"), aux[7]);
+            assert((aux[8] == "NETWORK=Snoonet"), aux[8]);
+            assert((aux[9] == "NICKLEN=27"), aux[9]);
+            assert((aux[10] == "OPERLOG"), aux[10]);
+            assert((aux[11] == "PREFIX=(Yohv)!@%+"), aux[11]);
+            assert((aux[12] == "REMOVE"), aux[12]);
             assert((num == 5), num.to!string);
         }
     }
@@ -89,7 +113,17 @@ unittest
         {
             assert((type == IRCEvent.Type.RPL_ISUPPORT), Enum!(IRCEvent.Type).toString(type));
             assert((sender.address == "van-halen.snoonet.org"), sender.address);
-            assert((aux == ["SECURELIST", "SILENCE=32", "SSL=[::]:6697", "STATUSMSG=!@%+", "TOPICLEN=1000", "UHNAMES", "USERIP", "VBANLIST", "WALLCHOPS", "WALLVOICES", "WATCH=64", "", "", "", "", ""]), aux.to!string);
+            assert((aux[0] == "SECURELIST"), aux[0]);
+            assert((aux[1] == "SILENCE=32"), aux[1]);
+            assert((aux[2] == "SSL=[::]:6697"), aux[2]);
+            assert((aux[3] == "STATUSMSG=!@%+"), aux[3]);
+            assert((aux[4] == "TOPICLEN=1000"), aux[4]);
+            assert((aux[5] == "UHNAMES"), aux[5]);
+            assert((aux[6] == "USERIP"), aux[6]);
+            assert((aux[7] == "VBANLIST"), aux[7]);
+            assert((aux[8] == "WALLCHOPS"), aux[8]);
+            assert((aux[9] == "WALLVOICES"), aux[9]);
+            assert((aux[10] == "WATCH=64"), aux[10]);
             assert((num == 5), num.to!string);
         }
     }

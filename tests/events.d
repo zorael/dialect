@@ -206,7 +206,18 @@ unittest
         {
             assert((type == IRCEvent.Type.RPL_ISUPPORT), Enum!(IRCEvent.Type).toString(type));
             assert((sender.address == "efnet.port80.se"), sender.address);
-            assert((aux == ["CHANTYPES=&#", "EXCEPTS", "INVEX", "CHANMODES=eIb,k,l,imnpstS", "CHANLIMIT=&#:50", "PREFIX=(ov)@+", "MAXLIST=beI:100", "MODES=4", "NETWORK=EFnet", "KNOCK", "STATUSMSG=@+", "CALLERID=g", "", "", "", ""]), aux.to!string);
+            assert((aux[0] == "CHANTYPES=&#"), aux[0]);
+            assert((aux[1] == "EXCEPTS"), aux[1]);
+            assert((aux[2] == "INVEX"), aux[2]);
+            assert((aux[3] == "CHANMODES=eIb,k,l,imnpstS"), aux[3]);
+            assert((aux[4] == "CHANLIMIT=&#:50"), aux[4]);
+            assert((aux[5] == "PREFIX=(ov)@+"), aux[5]);
+            assert((aux[6] == "MAXLIST=beI:100"), aux[6]);
+            assert((aux[7] == "MODES=4"), aux[7]);
+            assert((aux[8] == "NETWORK=EFnet"), aux[8]);
+            assert((aux[9] == "KNOCK"), aux[9]);
+            assert((aux[10] == "STATUSMSG=@+"), aux[10]);
+            assert((aux[11] == "CALLERID=g"), aux[11]);
             assert((num == 5), num.to!string);
         }
     }
@@ -275,7 +286,19 @@ unittest
         {
             assert((type == IRCEvent.Type.RPL_ISUPPORT), Enum!(IRCEvent.Type).toString(type));
             assert((sender.address == "bitcoin.uk.eu.dal.net"), sender.address);
-            assert((aux == ["NETWORK=DALnet", "SAFELIST", "MAXBANS=200", "MAXCHANNELS=50", "CHANNELLEN=32", "KICKLEN=307", "NICKLEN=30", "TOPICLEN=307", "MODES=6", "CHANTYPES=#", "CHANLIMIT=#:50", "PREFIX=(ov)@+", "STATUSMSG=@+", "", "", ""]), aux.to!string);
+            assert((aux[0] == "NETWORK=DALnet"), aux[0]);
+            assert((aux[1] == "SAFELIST"), aux[1]);
+            assert((aux[2] == "MAXBANS=200"), aux[2]);
+            assert((aux[3] == "MAXCHANNELS=50"), aux[3]);
+            assert((aux[4] == "CHANNELLEN=32"), aux[4]);
+            assert((aux[5] == "KICKLEN=307"), aux[5]);
+            assert((aux[6] == "NICKLEN=30"), aux[6]);
+            assert((aux[7] == "TOPICLEN=307"), aux[7]);
+            assert((aux[8] == "MODES=6"), aux[8]);
+            assert((aux[9] == "CHANTYPES=#"), aux[9]);
+            assert((aux[10] == "CHANLIMIT=#:50"), aux[10]);
+            assert((aux[11] == "PREFIX=(ov)@+"), aux[11]);
+            assert((aux[12] == "STATUSMSG=@+"), aux[12]);
             assert((num == 5), num.to!string);
         }
     }
@@ -296,7 +319,15 @@ unittest
         {
             assert((type == IRCEvent.Type.RPL_ISUPPORT), Enum!(IRCEvent.Type).toString(type));
             assert((sender.address == "bitcoin.uk.eu.dal.net"), sender.address);
-            assert((aux == ["CASEMAPPING=ascii", "WATCH=128", "SILENCE=10", "ELIST=cmntu", "EXCEPTS", "INVEX", "CHANMODES=beI,k,jl,cimMnOprRsSt", "MAXLIST=b:200,e:100,I:100", "TARGMAX=DCCALLOW:,JOIN:,KICK:4,KILL:20,NOTICE:20,PART:,PRIVMSG:20,WHOIS:,WHOWAS:", "", "", "", "", "", "", ""]), aux.to!string);
+            assert((aux[0] == "CASEMAPPING=ascii"), aux[0]);
+            assert((aux[1] == "WATCH=128"), aux[1]);
+            assert((aux[2] == "SILENCE=10"), aux[2]);
+            assert((aux[3] == "ELIST=cmntu"), aux[3]);
+            assert((aux[4] == "EXCEPTS"), aux[4]);
+            assert((aux[5] == "INVEX"), aux[5]);
+            assert((aux[6] == "CHANMODES=beI,k,jl,cimMnOprRsSt"), aux[6]);
+            assert((aux[7] == "MAXLIST=b:200,e:100,I:100"), aux[7]);
+            assert((aux[8] == "TARGMAX=DCCALLOW:,JOIN:,KICK:4,KILL:20,NOTICE:20,PART:,PRIVMSG:20,WHOIS:,WHOWAS:"), aux[8]);
             assert((num == 5), num.to!string);
         }
     }
@@ -414,7 +445,19 @@ unittest
         {
             assert((type == IRCEvent.Type.RPL_ISUPPORT), Enum!(IRCEvent.Type).toString(type));
             assert((sender.address == "fe-00107.GeekShed.net"), sender.address);
-            assert((aux == ["CMDS=KNOCK,MAP,DCCALLOW,USERIP,STARTTLS", "UHNAMES", "NAMESX", "SAFELIST", "HCN", "MAXCHANNELS=100", "CHANLIMIT=#:100", "MAXLIST=b:60,e:60,I:60", "NICKLEN=30", "CHANNELLEN=32", "TOPICLEN=307", "KICKLEN=307", "AWAYLEN=307", "", "", ""]), aux.to!string);
+            assert((aux[0] == "CMDS=KNOCK,MAP,DCCALLOW,USERIP,STARTTLS"), aux[0]);
+            assert((aux[1] == "UHNAMES"), aux[1]);
+            assert((aux[2] == "NAMESX"), aux[2]);
+            assert((aux[3] == "SAFELIST"), aux[3]);
+            assert((aux[4] == "HCN"), aux[4]);
+            assert((aux[5] == "MAXCHANNELS=100"), aux[5]);
+            assert((aux[6] == "CHANLIMIT=#:100"), aux[6]);
+            assert((aux[7] == "MAXLIST=b:60,e:60,I:60"), aux[7]);
+            assert((aux[8] == "NICKLEN=30"), aux[8]);
+            assert((aux[9] == "CHANNELLEN=32"), aux[9]);
+            assert((aux[10] == "TOPICLEN=307"), aux[10]);
+            assert((aux[11] == "KICKLEN=307"), aux[11]);
+            assert((aux[12] == "AWAYLEN=307"), aux[12]);
             assert((num == 5), num.to!string);
         }
     }
@@ -432,7 +475,19 @@ unittest
         {
             assert((type == IRCEvent.Type.RPL_ISUPPORT), Enum!(IRCEvent.Type).toString(type));
             assert((sender.address == "fe-00107.GeekShed.net"), sender.address);
-            assert((aux == ["MAXTARGETS=20", "WALLCHOPS", "WATCH=128", "WATCHOPTS=A", "SILENCE=15", "MODES=12", "CHANTYPES=#", "PREFIX=(qaohv)~&@%+", "CHANMODES=beI,kfL,lj,psmntirRcOAQKVCuzNSMTGUZ", "NETWORK=GeekShed", "CASEMAPPING=ascii", "EXTBAN=~,qjncrRaT", "ELIST=MNUCT", "", "", ""]), aux.to!string);
+            assert((aux[0] == "MAXTARGETS=20"), aux[0]);
+            assert((aux[1] == "WALLCHOPS"), aux[1]);
+            assert((aux[2] == "WATCH=128"), aux[2]);
+            assert((aux[3] == "WATCHOPTS=A"), aux[3]);
+            assert((aux[4] == "SILENCE=15"), aux[4]);
+            assert((aux[5] == "MODES=12"), aux[5]);
+            assert((aux[6] == "CHANTYPES=#"), aux[6]);
+            assert((aux[7] == "PREFIX=(qaohv)~&@%+"), aux[7]);
+            assert((aux[8] == "CHANMODES=beI,kfL,lj,psmntirRcOAQKVCuzNSMTGUZ"), aux[8]);
+            assert((aux[9] == "NETWORK=GeekShed"), aux[9]);
+            assert((aux[10] == "CASEMAPPING=ascii"), aux[10]);
+            assert((aux[11] == "EXTBAN=~,qjncrRaT"), aux[11]);
+            assert((aux[12] == "ELIST=MNUCT"), aux[12]);
             assert((num == 5), num.to!string);
         }
     }

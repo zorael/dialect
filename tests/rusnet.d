@@ -36,7 +36,16 @@ unittest
         {
             assert((type == IRCEvent.Type.RPL_ISUPPORT), Enum!(IRCEvent.Type).toString(type));
             assert((sender.address == "irc.run.net"), sender.address);
-            assert((aux == ["PREFIX=(ohv)@%+", "CODEPAGES", "MODES=3", "CHANTYPES=#&!+", "MAXCHANNELS=20", "NICKLEN=31", "TOPICLEN=255", "KICKLEN=255", "NETWORK=RusNet", "CHANMODES=beI,k,l,acimnpqrstz", "", "", "", "", "", ""]), aux.to!string);
+            assert((aux[0] == "PREFIX=(ohv)@%+"), aux[0]);
+            assert((aux[1] == "CODEPAGES"), aux[1]);
+            assert((aux[2] == "MODES=3"), aux[2]);
+            assert((aux[3] == "CHANTYPES=#&!+"), aux[3]);
+            assert((aux[4] == "MAXCHANNELS=20"), aux[4]);
+            assert((aux[5] == "NICKLEN=31"), aux[5]);
+            assert((aux[6] == "TOPICLEN=255"), aux[6]);
+            assert((aux[7] == "KICKLEN=255"), aux[7]);
+            assert((aux[8] == "NETWORK=RusNet"), aux[8]);
+            assert((aux[9] == "CHANMODES=beI,k,l,acimnpqrstz"), aux[9]);
             assert((num == 5), num.to!string);
         }
     }

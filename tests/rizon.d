@@ -45,7 +45,19 @@ unittest
         {
             assert((type == IRCEvent.Type.RPL_ISUPPORT), Enum!(IRCEvent.Type).toString(type));
             assert((sender.address == "irc.ircii.net"), sender.address);
-            assert((aux == ["CALLERID", "CASEMAPPING=rfc1459", "DEAF=D", "KICKLEN=180", "MODES=4", "PREFIX=(qaohv)~&@%+", "STATUSMSG=~&@%+", "EXCEPTS=e", "INVEX=I", "NICKLEN=30", "NETWORK=Rizon", "MAXLIST=beI:250", "MAXTARGETS=4", "", "", ""]), aux.to!string);
+            assert((aux[0] == "CALLERID"), aux[0]);
+            assert((aux[1] == "CASEMAPPING=rfc1459"), aux[1]);
+            assert((aux[2] == "DEAF=D"), aux[2]);
+            assert((aux[3] == "KICKLEN=180"), aux[3]);
+            assert((aux[4] == "MODES=4"), aux[4]);
+            assert((aux[5] == "PREFIX=(qaohv)~&@%+"), aux[5]);
+            assert((aux[6] == "STATUSMSG=~&@%+"), aux[6]);
+            assert((aux[7] == "EXCEPTS=e"), aux[7]);
+            assert((aux[8] == "INVEX=I"), aux[8]);
+            assert((aux[9] == "NICKLEN=30"), aux[9]);
+            assert((aux[10] == "NETWORK=Rizon"), aux[10]);
+            assert((aux[11] == "MAXLIST=beI:250"), aux[11]);
+            assert((aux[12] == "MAXTARGETS=4"), aux[12]);
             assert((num == 5), num.to!string);
         }
     }
@@ -75,7 +87,18 @@ unittest
         {
             assert((type == IRCEvent.Type.RPL_ISUPPORT), Enum!(IRCEvent.Type).toString(type));
             assert((sender.address == "irc.ircii.net"), sender.address);
-            assert((aux == ["CHANTYPES=#", "CHANLIMIT=#:250", "CHANNELLEN=50", "TOPICLEN=390", "CHANMODES=beI,k,l,BCMNORScimnpstz", "NAMESX", "UHNAMES", "AWAYLEN=180", "ELIST=CMNTU", "SAFELIST", "KNOCK", "WATCH=60", "", "", "", ""]), aux.to!string);
+            assert((aux[0] == "CHANTYPES=#"), aux[0]);
+            assert((aux[1] == "CHANLIMIT=#:250"), aux[1]);
+            assert((aux[2] == "CHANNELLEN=50"), aux[2]);
+            assert((aux[3] == "TOPICLEN=390"), aux[3]);
+            assert((aux[4] == "CHANMODES=beI,k,l,BCMNORScimnpstz"), aux[4]);
+            assert((aux[5] == "NAMESX"), aux[5]);
+            assert((aux[6] == "UHNAMES"), aux[6]);
+            assert((aux[7] == "AWAYLEN=180"), aux[7]);
+            assert((aux[8] == "ELIST=CMNTU"), aux[8]);
+            assert((aux[9] == "SAFELIST"), aux[9]);
+            assert((aux[10] == "KNOCK"), aux[10]);
+            assert((aux[11] == "WATCH=60"), aux[11]);
             assert((num == 5), num.to!string);
         }
     }

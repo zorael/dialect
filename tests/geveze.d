@@ -82,7 +82,19 @@ unittest
         {
             assert((type == IRCEvent.Type.RPL_ISUPPORT), Enum!(IRCEvent.Type).toString(type));
             assert((sender.address == "irc.geveze.org"), sender.address);
-            assert((aux == ["CMDS=KNOCK,MAP,DCCALLOW,xUSERIPx", "UHNAMES", "NAMESX", "SAFELIST", "HCN", "MAXCHANNELS=24", "CHANLIMIT=#:24", "MAXLIST=b:1000,e:1000,I:1000", "NICKLEN=30", "CHANNELLEN=32", "TOPICLEN=307", "KICKLEN=307", "AWAYLEN=307", "", "", ""]), aux.to!string);
+            assert((aux[0] == "CMDS=KNOCK,MAP,DCCALLOW,xUSERIPx"), aux[0]);
+            assert((aux[1] == "UHNAMES"), aux[1]);
+            assert((aux[2] == "NAMESX"), aux[2]);
+            assert((aux[3] == "SAFELIST"), aux[3]);
+            assert((aux[4] == "HCN"), aux[4]);
+            assert((aux[5] == "MAXCHANNELS=24"), aux[5]);
+            assert((aux[6] == "CHANLIMIT=#:24"), aux[6]);
+            assert((aux[7] == "MAXLIST=b:1000,e:1000,I:1000"), aux[7]);
+            assert((aux[8] == "NICKLEN=30"), aux[8]);
+            assert((aux[9] == "CHANNELLEN=32"), aux[9]);
+            assert((aux[10] == "TOPICLEN=307"), aux[10]);
+            assert((aux[11] == "KICKLEN=307"), aux[11]);
+            assert((aux[12] == "AWAYLEN=307"), aux[12]);
             assert((num == 5), num.to!string);
         }
     }
@@ -123,7 +135,19 @@ unittest
         {
             assert((type == IRCEvent.Type.RPL_ISUPPORT), Enum!(IRCEvent.Type).toString(type));
             assert((sender.address == "irc.geveze.org"), sender.address);
-            assert((aux == ["MAXTARGETS=20", "WALLCHOPS", "WATCH=128", "WATCHOPTS=A", "SILENCE=15", "MODES=12", "CHANTYPES=#", "PREFIX=(qaohv)~&@%+", "CHANMODES=beI,kfL,lj,psmntirRcOAQKVCuzNSMTGZ", "NETWORK=Geveze", "CASEMAPPING=ascii", "EXTBAN=~,cqnrT", "ELIST=MNUCT", "", "", ""]), aux.to!string);
+            assert((aux[0] == "MAXTARGETS=20"), aux[0]);
+            assert((aux[1] == "WALLCHOPS"), aux[1]);
+            assert((aux[2] == "WATCH=128"), aux[2]);
+            assert((aux[3] == "WATCHOPTS=A"), aux[3]);
+            assert((aux[4] == "SILENCE=15"), aux[4]);
+            assert((aux[5] == "MODES=12"), aux[5]);
+            assert((aux[6] == "CHANTYPES=#"), aux[6]);
+            assert((aux[7] == "PREFIX=(qaohv)~&@%+"), aux[7]);
+            assert((aux[8] == "CHANMODES=beI,kfL,lj,psmntirRcOAQKVCuzNSMTGZ"), aux[8]);
+            assert((aux[9] == "NETWORK=Geveze"), aux[9]);
+            assert((aux[10] == "CASEMAPPING=ascii"), aux[10]);
+            assert((aux[11] == "EXTBAN=~,cqnrT"), aux[11]);
+            assert((aux[12] == "ELIST=MNUCT"), aux[12]);
             assert((num == 5), num.to!string);
         }
     }
@@ -142,15 +166,17 @@ unittest
     }
 
     {
-        immutable event = parser.toIRCEvent(":irc.geveze.org 005 kameloso STATUSMSG=~&@%+ EXCEPTS INVEX :are supported by this server");
-        with (event)
-        {
-            assert((type == IRCEvent.Type.RPL_ISUPPORT), Enum!(IRCEvent.Type).toString(type));
-            assert((sender.address == "irc.geveze.org"), sender.address);
-            assert((aux == ["STATUSMSG=~&@%+", "EXCEPTS", "INVEX", "", "", "", "", "", "", "", "", "", "", "", "", ""]), aux.to!string);
-            assert((num == 5), num.to!string);
-        }
+    immutable event = parser.toIRCEvent(":irc.geveze.org 005 kameloso STATUSMSG=~&@%+ EXCEPTS INVEX :are supported by this server");
+    with (event)
+    {
+        assert((type == IRCEvent.Type.RPL_ISUPPORT), Enum!(IRCEvent.Type).toString(type));
+        assert((sender.address == "irc.geveze.org"), sender.address);
+        assert((aux[0] == "STATUSMSG=~&@%+"), aux[0]);
+        assert((aux[1] == "EXCEPTS"), aux[1]);
+        assert((aux[2] == "INVEX"), aux[2]);
+        assert((num == 5), num.to!string);
     }
+}
 
     with (parser)
     {

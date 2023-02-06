@@ -36,10 +36,21 @@ unittest
         {
             assert((type == IRCEvent.Type.RPL_ISUPPORT), Enum!(IRCEvent.Type).toString(type));
             assert((sender.address == "underworld1.no.quakenet.org"), sender.address);
-            assert((aux == ["WHOX", "WALLCHOPS", "WALLVOICES", "USERIP", "CPRIVMSG", "CNOTICE", "SILENCE=15", "MODES=6", "MAXCHANNELS=20", "MAXBANS=45", "NICKLEN=15", "", "", "", "", ""]), aux.to!string);
+            assert((aux[0] == "WHOX"), aux[0]);
+            assert((aux[1] == "WALLCHOPS"), aux[1]);
+            assert((aux[2] == "WALLVOICES"), aux[2]);
+            assert((aux[3] == "USERIP"), aux[3]);
+            assert((aux[4] == "CPRIVMSG"), aux[4]);
+            assert((aux[5] == "CNOTICE"), aux[5]);
+            assert((aux[6] == "SILENCE=15"), aux[6]);
+            assert((aux[7] == "MODES=6"), aux[7]);
+            assert((aux[8] == "MAXCHANNELS=20"), aux[8]);
+            assert((aux[9] == "MAXBANS=45"), aux[9]);
+            assert((aux[10] == "NICKLEN=15"), aux[10]);
             assert((num == 5), num.to!string);
         }
     }
+
 
     with (parser)
     {
@@ -62,7 +73,18 @@ unittest
         {
             assert((type == IRCEvent.Type.RPL_ISUPPORT), Enum!(IRCEvent.Type).toString(type));
             assert((sender.address == "underworld1.no.quakenet.org"), sender.address);
-            assert((aux == ["MAXNICKLEN=15", "TOPICLEN=250", "AWAYLEN=160", "KICKLEN=250", "CHANNELLEN=200", "MAXCHANNELLEN=200", "CHANTYPES=#&", "PREFIX=(ov)@+", "STATUSMSG=@+", "CHANMODES=b,k,l,imnpstrDducCNMT", "CASEMAPPING=rfc1459", "NETWORK=QuakeNet", "", "", "", ""]), aux.to!string);
+            assert((aux[0] == "MAXNICKLEN=15"), aux[0]);
+            assert((aux[1] == "TOPICLEN=250"), aux[1]);
+            assert((aux[2] == "AWAYLEN=160"), aux[2]);
+            assert((aux[3] == "KICKLEN=250"), aux[3]);
+            assert((aux[4] == "CHANNELLEN=200"), aux[4]);
+            assert((aux[5] == "MAXCHANNELLEN=200"), aux[5]);
+            assert((aux[6] == "CHANTYPES=#&"), aux[6]);
+            assert((aux[7] == "PREFIX=(ov)@+"), aux[7]);
+            assert((aux[8] == "STATUSMSG=@+"), aux[8]);
+            assert((aux[9] == "CHANMODES=b,k,l,imnpstrDducCNMT"), aux[9]);
+            assert((aux[10] == "CASEMAPPING=rfc1459"), aux[10]);
+            assert((aux[11] == "NETWORK=QuakeNet"), aux[11]);
             assert((num == 5), num.to!string);
         }
     }

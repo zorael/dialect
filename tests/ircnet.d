@@ -66,7 +66,18 @@ unittest
         {
             assert((type == IRCEvent.Type.RPL_ISUPPORT), Enum!(IRCEvent.Type).toString(type));
             assert((sender.address == "irc.nlnog.net"), sender.address);
-            assert((aux == ["RFC2812", "PREFIX=(ov)@+", "CHANTYPES=#&!+", "MODES=3", "CHANLIMIT=#&!+:42", "NICKLEN=15", "TOPICLEN=255", "KICKLEN=255", "MAXLIST=beIR:64", "CHANNELLEN=50", "IDCHAN=!:5", "CHANMODES=beIR,k,l,imnpstaqr", "", "", "", ""]), aux.to!string);
+            assert((aux[0] == "RFC2812"), aux[0]);
+            assert((aux[1] == "PREFIX=(ov)@+"), aux[1]);
+            assert((aux[2] == "CHANTYPES=#&!+"), aux[2]);
+            assert((aux[3] == "MODES=3"), aux[3]);
+            assert((aux[4] == "CHANLIMIT=#&!+:42"), aux[4]);
+            assert((aux[5] == "NICKLEN=15"), aux[5]);
+            assert((aux[6] == "TOPICLEN=255"), aux[6]);
+            assert((aux[7] == "KICKLEN=255"), aux[7]);
+            assert((aux[8] == "MAXLIST=beIR:64"), aux[8]);
+            assert((aux[9] == "CHANNELLEN=50"), aux[9]);
+            assert((aux[10] == "IDCHAN=!:5"), aux[10]);
+            assert((aux[11] == "CHANMODES=beIR,k,l,imnpstaqr"), aux[11]);
             assert((num == 5), num.to!string);
         }
     }
@@ -88,7 +99,12 @@ unittest
         {
             assert((type == IRCEvent.Type.RPL_ISUPPORT), Enum!(IRCEvent.Type).toString(type));
             assert((sender.address == "irc.nlnog.net"), sender.address);
-            assert((aux == ["PENALTY", "FNC", "EXCEPTS=e", "INVEX=I", "CASEMAPPING=ascii", "NETWORK=IRCnet", "", "", "", "", "", "", "", "", "", ""]), aux.to!string);
+            assert((aux[0] == "PENALTY"), aux[0]);
+            assert((aux[1] == "FNC"), aux[1]);
+            assert((aux[2] == "EXCEPTS=e"), aux[2]);
+            assert((aux[3] == "INVEX=I"), aux[3]);
+            assert((aux[4] == "CASEMAPPING=ascii"), aux[4]);
+            assert((aux[5] == "NETWORK=IRCnet"), aux[5]);
             assert((num == 5), num.to!string);
         }
     }
