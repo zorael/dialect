@@ -36,43 +36,6 @@ unittest
         assert((server.prefixchars == ['@':'o']), server.prefixchars.to!string);
         assert((server.prefixes == "o"), server.prefixes);
     }
-
-    {
-        immutable event = parser.toIRCEvent(":tmi.twitch.tv HOSTTARGET #lirik :h1z1 -");
-        with (event)
-        {
-            assert((type == IRCEvent.Type.TWITCH_HOSTSTART), Enum!(IRCEvent.Type).toString(type));
-            assert((sender.nickname == "lirik"), sender.nickname);
-            assert((sender.account == "lirik"), sender.account);
-            assert((channel == "#lirik"), channel);
-            assert((target.nickname == "h1z1"), target.nickname);
-            assert((target.account == "h1z1"), target.account);
-        }
-    }
-    {
-        immutable event = parser.toIRCEvent(":tmi.twitch.tv HOSTTARGET #lirik :- 178");
-        with (event)
-        {
-            assert((type == IRCEvent.Type.TWITCH_HOSTEND), Enum!(IRCEvent.Type).toString(type));
-            assert((sender.nickname == "lirik"), sender.nickname);
-            assert((sender.account == "lirik"), sender.account);
-            assert((channel == "#lirik"), channel);
-            assert((count[0] == 178), count[0].to!string);
-        }
-    }
-    {
-        immutable event = parser.toIRCEvent(":tmi.twitch.tv HOSTTARGET #lirik :chu8 270");
-        with (event)
-        {
-            assert((type == IRCEvent.Type.TWITCH_HOSTSTART), Enum!(IRCEvent.Type).toString(type));
-            assert((sender.nickname == "lirik"), sender.nickname);
-            assert((sender.account == "lirik"), sender.account);
-            assert((channel == "#lirik"), channel);
-            assert((target.nickname == "chu8"), target.nickname);
-            assert((target.account == "chu8"), target.account);
-            assert((count[0] == 270), count[0].to!string);
-        }
-    }
     {
         immutable event = parser.toIRCEvent("@badges=subscriber/3;color=;display-name=asdcassr;emotes=560489:0-6,8-14,16-22,24-30/560510:39-46;id=4d6bbafb-427d-412a-ae24-4426020a1042;mod=0;room-id=23161357;sent-ts=1510059590512;subscriber=1;tmi-sent-ts=1510059591528;turbo=0;user-id=38772474;user-type= :asdcsa!asdcss@asdcsd.tmi.twitch.tv PRIVMSG #lirik :lirikFR lirikFR lirikFR lirikFR :sled: lirikLUL");
         with (event)
@@ -131,18 +94,6 @@ unittest
             assert((type == IRCEvent.Type.ROOMSTATE), Enum!(IRCEvent.Type).toString(type));
             assert((sender.address == "tmi.twitch.tv"), sender.address);
             assert((channel == "#zorael"), channel);
-        }
-    }
-    {
-        immutable event = parser.toIRCEvent(":tmi.twitch.tv HOSTTARGET #andymilonakis :zombie_barricades -");
-        with (event)
-        {
-            assert((type == IRCEvent.Type.TWITCH_HOSTSTART), Enum!(IRCEvent.Type).toString(type));
-            assert((sender.nickname == "andymilonakis"), sender.nickname);
-            assert((sender.account == "andymilonakis"), sender.account);
-            assert((channel == "#andymilonakis"), channel);
-            assert((target.nickname == "zombie_barricades"), target.nickname);
-            assert((target.account == "zombie_barricades"), target.account);
         }
     }
     {
@@ -578,29 +529,6 @@ unittest
         }
     }
     {
-        immutable event = parser.toIRCEvent(":tmi.twitch.tv HOSTTARGET #kungentv :esfandtv 5167");
-        with (event)
-        {
-            assert((type == IRCEvent.Type.TWITCH_HOSTSTART), Enum!(IRCEvent.Type).toString(type));
-            assert((sender.nickname == "kungentv"), sender.nickname);
-            assert((channel == "#kungentv"), channel);
-            assert((target.nickname == "esfandtv"), target.nickname);
-            assert((count[0] == 5167), count[0].to!string);
-        }
-    }
-    {
-        immutable event = parser.toIRCEvent("@msg-id=host_on :tmi.twitch.tv NOTICE #kungentv :Now hosting EsfandTV.");
-        with (event)
-        {
-            assert((type == IRCEvent.Type.TWITCH_NOTICE), Enum!(IRCEvent.Type).toString(type));
-            assert((sender.address == "tmi.twitch.tv"), sender.address);
-            assert((channel == "#kungentv"), channel);
-            assert((content == "Now hosting EsfandTV."), content);
-            assert((aux[0] == "host_on"), aux[0]);
-            assert((tags == "msg-id=host_on"), tags);
-        }
-    }
-    {
         immutable event = parser.toIRCEvent("@badge-info=;badges=premium/1;color=#67B222;display-name=travslaps;emotes=30259:0-6;flags=;id=a875d520-ba60-4383-925c-4fa09b3fd772;login=travslaps;mod=0;msg-id=ritual;msg-param-ritual-name=new_chatter;room-id=106125347;subscriber=0;system-msg=@travslaps\\sis\\snew\\shere.\\sSay\\shello!;tmi-sent-ts=1569012207274;user-id=183436052;user-type= :tmi.twitch.tv USERNOTICE #couragejd :HeyGuys");
         with (event)
         {
@@ -616,15 +544,6 @@ unittest
             assert((tags == "badge-info=;badges=premium/1;color=#67B222;display-name=travslaps;emotes=30259:0-6;flags=;id=a875d520-ba60-4383-925c-4fa09b3fd772;login=travslaps;mod=0;msg-id=ritual;msg-param-ritual-name=new_chatter;room-id=106125347;subscriber=0;system-msg=@travslaps\\sis\\snew\\shere.\\sSay\\shello!;tmi-sent-ts=1569012207274;user-id=183436052;user-type="), tags);
             assert((emotes == "30259:0-6"), emotes);
             assert((id == "a875d520-ba60-4383-925c-4fa09b3fd772"), id);
-        }
-    }
-    {
-        immutable event = parser.toIRCEvent(":tmi.twitch.tv HOSTTARGET #asmongold :- 0");
-        with (event)
-        {
-            assert((type == IRCEvent.Type.TWITCH_HOSTEND), Enum!(IRCEvent.Type).toString(type));
-            assert((sender.nickname == "asmongold"), sender.nickname);
-            assert((channel == "#asmongold"), channel);
         }
     }
     {
