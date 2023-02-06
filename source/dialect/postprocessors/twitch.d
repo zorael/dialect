@@ -15,7 +15,7 @@ private:
 
 import dialect.defs;
 import dialect.parsing;
-import dialect.common : Postprocessor;
+import dialect.postprocessors : Postprocessor;
 
 @safe:
 

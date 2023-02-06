@@ -76,7 +76,8 @@ module dialect.parsing;
 private:
 
 import dialect.defs;
-import dialect.common : IRCParseException, Postprocessor;
+import dialect.common : IRCParseException;
+import dialect.postprocessors : Postprocessor;
 import lu.string : contains, nom;
 
 
