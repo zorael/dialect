@@ -8,7 +8,8 @@ license "BSL-1.0"
 targetType "library"
 dflags "-dip25" "-dip1008"
 dflags "-linkonce-templates" "-disable-verify" platform="ldc"
-x:ddoxTool "scod"
+#dflags "-ftime-trace" "-ftime-trace-file=trace.json" platform="ldc"
+#postBuildCommands "tracy-import-chrome ./trace.json ./trace.tracy" platform="ldc"
 
 subPackage {
     name "assertgen"
