@@ -2800,7 +2800,9 @@ public:
 
             version(TwitchSupport)
             {
-                enum message = "No postprocessors were instantiated despite version `TwitchSupport`";
+                enum message = "No postprocessors were instantiated despite version " ~
+                    "`TwitchSupport` declared. Make sure to `import dialect.postprocessors.twitch` " ~
+                    "somewhere in the importing project.";
                 assert(postprocessors.length, message);
             }
         }
