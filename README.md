@@ -84,9 +84,9 @@ struct IRCParser
 
 ## Available build configurations
 
-* `library` is the default
-* `twitch` is `library` but with extra support added for Twitch servers
-* `bot` additionally includes some code specifically useful for bot applications
+* `library` is the base configuration
+* `twitch` includes extra parsing needed to interface with Twitch servers
+* `bot` includes some code specifically useful for bot applications
 * `twitchbot` is `twitch` and `bot` combined
 
 ## How to use
@@ -96,7 +96,7 @@ struct IRCParser
 * Create an [`IRCClient`](http://dialect.dpldocs.info/dialect.defs.IRCClient.html) and configure its members. (required for context when parsing)
 * Create an [`IRCServer`](http://dialect.dpldocs.info/dialect.defs.IRCServer.html) and configure its members. (it may work without but just give it at minimum a host address)
 * Create an [`IRCParser`](http://dialect.dpldocs.info/dialect.parsing.IRCParser.html) with your client and server via constructor. Pass it by `ref` if passed around between functions.
-* Read a string from the server and parse it into an [`IRCEvent`](http://dialect.dpldocs.info/dialect.defs.IRCEvent.html) with [`yourParser.toIRCEvent(string)`](http://dialect.dpldocs.info/dialect.parsing.toIRCEvent.html).
+* Read a string from the server and parse it into an [`IRCEvent`](http://dialect.dpldocs.info/dialect.defs.IRCEvent.html) with [`yourParser.toIRCEvent(stringFromServer)`](http://dialect.dpldocs.info/dialect.parsing.toIRCEvent.html).
 
 ```d
 IRCClient client;
