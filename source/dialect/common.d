@@ -360,7 +360,9 @@ auto decodeIRCv3String(const string line) pure @safe nothrow
     Returns:
         `true` if the `sender` is judged to be from nickname services, `false` if not.
  +/
-auto isAuthService(const IRCUser sender, const ref IRCParser parser) pure @safe
+auto isAuthService(
+    const IRCUser sender,
+    const ref IRCParser parser) pure @safe
 {
     import lu.common : sharedDomains;
     import lu.string : contains;
@@ -498,7 +500,9 @@ auto isAuthService(const IRCUser sender, const ref IRCParser parser) pure @safe
     Returns:
         `true` if the string content is judged to be a channel, `false` if not.
  +/
-auto isValidChannel(const string channel, const IRCServer server) pure @safe nothrow @nogc
+auto isValidChannel(
+    const string channel,
+    const IRCServer server) pure @safe nothrow @nogc
 {
     import std.string : representation;
 
@@ -593,7 +597,9 @@ auto isValidChannel(const string channel, const IRCServer server) pure @safe not
     Returns:
         `true` if the nickname string is judged to be a nickname, `false` if not.
  +/
-auto isValidNickname(const string nickname, const IRCServer server) pure @safe nothrow @nogc
+auto isValidNickname(
+    const string nickname,
+    const IRCServer server) pure @safe nothrow @nogc
 {
     import std.string : representation;
 
@@ -841,7 +847,9 @@ unittest
     Returns:
         The raw nickname, unsigned.
  +/
-auto stripModesign(const string nickname, const IRCServer server) pure @safe nothrow @nogc
+auto stripModesign(
+    const string nickname,
+    const IRCServer server) pure @safe nothrow @nogc
 {
     string _;
     return stripModesign(nickname, server, _);
@@ -1498,7 +1506,9 @@ auto matchesByMask(
         Returns:
             True if `first` matches the `second` glob mask, false if not.
      +/
-    static bool unpatternedGlobMatch(const string first, const string second)
+    static bool unpatternedGlobMatch(
+        const string first,
+        const string second)
     {
         import std.array : replace;
         import std.path : CaseSensitive, globMatch;
@@ -1607,7 +1617,9 @@ auto matchesByMask(
     Returns:
         `true` if the passed `c` is in uppercase, `false` if not.
  +/
-auto isUpper(const char c, const IRCServer.CaseMapping caseMapping) pure @safe nothrow @nogc
+auto isUpper(
+    const char c,
+    const IRCServer.CaseMapping caseMapping) pure @safe nothrow @nogc
 {
     import std.ascii : isUpper;
 
@@ -1643,7 +1655,9 @@ auto isUpper(const char c, const IRCServer.CaseMapping caseMapping) pure @safe n
     Returns:
         The passed `c` in lowercase as per the case mappings.
  +/
-auto toLower(const char c, const IRCServer.CaseMapping caseMapping) pure @safe nothrow @nogc
+auto toLower(
+    const char c,
+    const IRCServer.CaseMapping caseMapping) pure @safe nothrow @nogc
 {
     import std.ascii : toLower;
 
@@ -1702,7 +1716,9 @@ auto toLower(const char c, const IRCServer.CaseMapping caseMapping) pure @safe n
         The passed `name` string with uppercase characters replaced as per
         the case mappings.
  +/
-auto toLowerCase(const string name, const IRCServer.CaseMapping caseMapping) pure nothrow @trusted
+auto toLowerCase(
+    const string name,
+    const IRCServer.CaseMapping caseMapping) pure nothrow @trusted
 {
     import std.string : representation;
 
@@ -1889,7 +1905,9 @@ auto opEqualsCaseInsensitive(
     Returns:
         `true` if the hostmask seems to be valid, `false` if it obviously is not.
  +/
-auto isValidHostmask(const string hostmask, const IRCServer server) pure @safe nothrow @nogc
+auto isValidHostmask(
+    const string hostmask,
+    const IRCServer server) pure @safe nothrow @nogc
 {
     import std.string : indexOf, representation;
     import std.typecons : Flag, No, Yes;
