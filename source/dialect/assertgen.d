@@ -506,6 +506,7 @@ int main(string[] args) @system
     while ((input = readln()) !is null)
     {
         import dialect.common : IRCParseException;
+        import lu.string : unquoted;
         import std.format : formattedWrite;
 
         scope(exit)
@@ -518,7 +519,8 @@ int main(string[] args) @system
 
         input = input
             .strippedLeft(" /")  // Remove indents and commentating slashes
-            .chomp; //strippedRight;
+            .chomp //strippedRight;
+            .unquoted;
 
         if (input.length && (input[$-1] == '$')) input = input[0..$-1];
         if (!input.length) continue;
