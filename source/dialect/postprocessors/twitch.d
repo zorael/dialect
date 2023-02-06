@@ -17,7 +17,6 @@ import dialect.defs;
 import dialect.parsing;
 import dialect.postprocessors : Postprocessor;
 
-@safe:
 
 version(Postprocessors) {}
 else
@@ -38,7 +37,7 @@ else
         event = Reference to the [dialect.defs.IRCEvent|IRCEvent] whose tags
             should be parsed.
  +/
-auto parseTwitchTags(ref IRCParser parser, ref IRCEvent event)
+auto parseTwitchTags(ref IRCParser parser, ref IRCEvent event) @safe
 {
     import dialect.common : decodeIRCv3String;
     import std.algorithm.iteration : splitter;
@@ -1243,7 +1242,9 @@ final class TwitchPostprocessor : Postprocessor
             parser = Current [dialect.parsing.IRCParser|IRCParser].
             event = [dialect.defs.IRCEvent|IRCEvent] in flight.
      +/
-    void postprocess(ref IRCParser parser, ref IRCEvent event)
+    void postprocess(
+        ref IRCParser parser,
+        ref IRCEvent event) @system
     {
         if (parser.server.daemon != IRCServer.Daemon.twitch) return;
 

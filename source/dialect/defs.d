@@ -16,7 +16,6 @@ import lu.uda;
 public:
 
 final:
-@safe:
 pure:
 nothrow:
 @nogc:
@@ -1124,7 +1123,9 @@ struct IRCServer
     /++
         Constructor.
      +/
-    this(const string address, const ushort port)
+    auto this(
+        const string address,
+        const ushort port) pure @safe nothrow @nogc
     {
         this.address = address;
         this.port = port;
@@ -1223,7 +1224,7 @@ struct IRCUser
     /++
         Create a new [IRCUser] based on a `*!*@*` mask string.
      +/
-    this(string userstring) pure
+    this(string userstring) pure @safe
     {
         import std.format : formattedRead;
 
@@ -1260,7 +1261,10 @@ struct IRCUser
         Create a new [IRCUser] inheriting passed `nickname`, `ident`, and
         `address` strings.
      +/
-    this(const string nickname, const string ident, const string address) pure nothrow @nogc
+    auto this(
+        const string nickname,
+        const string ident,
+        const string address) pure @safe nothrow @nogc
     {
         this.nickname = nickname;
         this.ident = ident;
@@ -1274,14 +1278,14 @@ struct IRCUser
             `true` if the sender nickname and/or address looks to be a server's,
             `false` if not.
      +/
-    bool isServer() const @property pure nothrow @nogc
+    auto isServer() const @property pure @safe nothrow @nogc
     {
         import std.string : indexOf;
         return !nickname.length && (address.indexOf('.') != -1);
     }
 
     ///
-    unittest
+    @safe unittest
     {
         IRCUser user;
 
@@ -1311,7 +1315,7 @@ struct IRCUser
         Returns:
             `true` if the users match, `false` if not.
      +/
-    bool opEquals(const IRCUser that) const pure nothrow @nogc
+    auto opEquals(const IRCUser that) const pure @safe nothrow @nogc
     {
         return (this.nickname == that.nickname) &&
             (this.ident == that.ident) && (this.address == that.address);
@@ -1323,7 +1327,7 @@ struct IRCUser
         Returns:
             A hash.
      +/
-    size_t toHash() const pure @nogc nothrow
+    auto toHash() const pure @safe @nogc nothrow
     {
         return nickname.hashOf + ident.hashOf + address.hashOf;
     }
@@ -1336,7 +1340,7 @@ struct IRCUser
         Params:
             sink = Output range sink to save the hostmask string to.
      +/
-    void toString(Sink)(auto ref Sink sink) const
+    void toString(Sink)(auto ref Sink sink) const @safe
     {
         import std.format : formattedWrite;
 
@@ -1355,7 +1359,7 @@ struct IRCUser
         Returns:
             A hostmask "*!*@*" string.
      +/
-    string hostmask() pure const
+    string hostmask() pure @safe const
     {
         import std.array : Appender;
 
@@ -1367,7 +1371,7 @@ struct IRCUser
     }
 
     ///
-    unittest
+    @safe unittest
     {
         {
             const user = IRCUser("nickname", "ident", "address.tld");
@@ -2463,7 +2467,7 @@ struct IRCChannel
             Returns:
                 `true` if the [Mode]s match, `false` if not.
          +/
-        bool opEquals(const Mode that) const pure nothrow @nogc
+        auto opEquals(const Mode that) const pure @safe nothrow @nogc
         {
             // Ignore exemptions when comparing Modes
             immutable charMatch = (this.modechar == that.modechar);
@@ -2481,7 +2485,7 @@ struct IRCChannel
             Returns:
                 A hash.
          +/
-        size_t toHash() const pure nothrow
+        auto toHash() const pure @safe nothrow
         {
             import std.conv : text;
             return (modechar ~ data ~ user.hashOf.text ~ channel ~ negated ? "negated" : "not").hashOf;

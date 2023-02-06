@@ -86,8 +86,6 @@ import lu.deltastrings : formatDeltaInto;
 import std.range.primitives : isOutputRange;
 import std.typecons : Flag, No, Yes;
 
-//@safe:
-
 
 // formatClientAssignment
 /++
@@ -108,7 +106,10 @@ import std.typecons : Flag, No, Yes;
         client = [dialect.defs.IRCClient|IRCClient] to simulate the assignment of.
         server = [dialect.defs.IRCServer|IRCServer] to simulate the assignment of.
  +/
-void formatClientAssignment(Sink)(auto ref Sink sink, const IRCClient client, const IRCServer server)
+void formatClientAssignment(Sink)
+    (auto ref Sink sink,
+    const IRCClient client,
+    const IRCServer server) pure @safe
 if (isOutputRange!(Sink, char[]))
 {
     sink.put("IRCParser parser;\n\n");
@@ -125,7 +126,7 @@ if (isOutputRange!(Sink, char[]))
 }
 
 ///
-unittest
+pure @safe unittest
 {
     import std.array : Appender;
 
@@ -178,7 +179,9 @@ with (parser)
         sink = Output buffer to write to.
         event = [dialect.defs.IRCEvent|IRCEvent] to construct assert statements for.
  +/
-void formatEventAssertBlock(Sink)(auto ref Sink sink, const IRCEvent event)
+void formatEventAssertBlock(Sink)
+    (auto ref Sink sink,
+    const IRCEvent event) pure @safe
 if (isOutputRange!(Sink, char[]))
 {
     import lu.string : tabs;
