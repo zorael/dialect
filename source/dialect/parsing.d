@@ -2916,7 +2916,7 @@ public:
         void clientUpdated(const bool updated) pure @safe @nogc nothrow
         {
             if (updated) updates |= Update.client;
-            else updates ^= Update.client;
+            else updates &= ~Update.client;
         }
 
 
@@ -2931,7 +2931,7 @@ public:
         void serverUpdated(const bool updated) pure @safe @nogc nothrow
         {
             if (updated) updates |= Update.server;
-            else updates ^= Update.server;
+            else updates &= ~Update.server;
         }
     }
 }
