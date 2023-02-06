@@ -2791,7 +2791,7 @@ public:
      +/
     auto this(
         IRCClient client,
-        IRCServer server) pure nothrow
+        IRCServer server)  // infer attributes
     {
         this.client = client;
         this.server = server;
