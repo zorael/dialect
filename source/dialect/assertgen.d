@@ -82,7 +82,6 @@ private:
 
 import dialect.defs;
 import dialect.parsing : IRCParser;
-import lu.deltastrings : formatDeltaInto;
 import std.range.primitives : isOutputRange;
 import std.typecons : Flag, No, Yes;
 
@@ -112,6 +111,8 @@ void formatClientAssignment(Sink)
     const IRCServer server) pure @safe
 if (isOutputRange!(Sink, char[]))
 {
+    import lu.deltastrings : formatDeltaInto;
+
     sink.put("IRCParser parser;\n\n");
     sink.put("with (parser)\n");
     sink.put("{\n");
@@ -184,6 +185,7 @@ void formatEventAssertBlock(Sink)
     const IRCEvent event) pure @safe
 if (isOutputRange!(Sink, char[]))
 {
+    import lu.deltastrings : formatDeltaInto;
     import lu.string : tabs;
     import std.array : replace;
     import std.format : format, formattedWrite;
@@ -213,6 +215,7 @@ if (isOutputRange!(Sink, char[]))
 ///
 unittest
 {
+    import lu.deltastrings : formatDeltaInto;
     import lu.string : tabs;
     import std.array : Appender;
     import std.format : formattedWrite;
@@ -313,6 +316,7 @@ else
 int main(string[] args) @system
 {
     import dialect.defs : IRCServer;
+    import lu.deltastrings : formatDeltaInto;
     import lu.string : strippedLeft;
     import std.array : Appender;
     import std.getopt : GetOptException, config, getopt;
