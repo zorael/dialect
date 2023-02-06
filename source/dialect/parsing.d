@@ -2725,7 +2725,7 @@ public:
 struct IRCParser
 {
 private:
-    import dialect.postprocessors : Postprocessors;
+    import dialect.postprocessors : Postprocessor;
 
 public:
     /++
