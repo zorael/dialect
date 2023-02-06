@@ -14,8 +14,6 @@ import lu.string : contains, nom;
 
 public:
 
-@safe:
-
 
 // typenumsOf
 /++
@@ -40,7 +38,7 @@ public:
     Returns:
         A `typenums` array of [dialect.defs.IRCEvent|IRCEvent]s mapped to numerics.
  +/
-auto typenumsOf(const IRCServer.Daemon daemon) pure nothrow @nogc
+auto typenumsOf(const IRCServer.Daemon daemon) pure @safe nothrow @nogc
 {
     import lu.meld : MeldingStrategy, meldInto;
 
@@ -214,7 +212,7 @@ auto typenumsOf(const IRCServer.Daemon daemon) pure nothrow @nogc
     Returns:
         A decoded string without `\s` in it.
  +/
-auto decodeIRCv3String(const string line) pure nothrow
+auto decodeIRCv3String(const string line) pure @safe nothrow
 {
     import std.array : Appender;
     import std.string : representation;
@@ -301,7 +299,7 @@ auto decodeIRCv3String(const string line) pure nothrow
 }
 
 ///
-unittest
+@safe unittest
 {
     immutable s1 = decodeIRCv3String(`kameloso\sjust\ssubscribed\swith\sa\s` ~
         `$4.99\ssub.\skameloso\ssubscribed\sfor\s40\smonths\sin\sa\srow!`);
@@ -362,7 +360,7 @@ unittest
     Returns:
         `true` if the `sender` is judged to be from nickname services, `false` if not.
  +/
-auto isAuthService(const IRCUser sender, const ref IRCParser parser) pure
+auto isAuthService(const IRCUser sender, const ref IRCParser parser) pure @safe
 {
     import lu.common : sharedDomains;
     import lu.string : contains;
@@ -450,7 +448,7 @@ auto isAuthService(const IRCUser sender, const ref IRCParser parser) pure
 }
 
 ///
-unittest
+/*@safe*/ unittest
 {
     IRCParser parser;
 
@@ -500,7 +498,7 @@ unittest
     Returns:
         `true` if the string content is judged to be a channel, `false` if not.
  +/
-auto isValidChannel(const string channel, const IRCServer server) pure nothrow @nogc
+auto isValidChannel(const string channel, const IRCServer server) pure @safe nothrow @nogc
 {
     import std.string : representation;
 
@@ -548,7 +546,7 @@ auto isValidChannel(const string channel, const IRCServer server) pure nothrow @
 }
 
 ///
-unittest
+@safe unittest
 {
     IRCServer s;
     s.chantypes = "#&";
@@ -595,7 +593,7 @@ unittest
     Returns:
         `true` if the nickname string is judged to be a nickname, `false` if not.
  +/
-auto isValidNickname(const string nickname, const IRCServer server) pure nothrow @nogc
+auto isValidNickname(const string nickname, const IRCServer server) pure @safe nothrow @nogc
 {
     import std.string : representation;
 
@@ -624,7 +622,7 @@ auto isValidNickname(const string nickname, const IRCServer server) pure nothrow
 }
 
 ///
-unittest
+@safe unittest
 {
     import std.range : repeat;
     import std.conv : to;
@@ -695,7 +693,7 @@ unittest
         `true` if the character is in the list of valid characters for
         nicknames, `false` if not.
  +/
-auto isValidNicknameCharacter(const ubyte c) pure nothrow @nogc
+auto isValidNicknameCharacter(const ubyte c) pure @safe nothrow @nogc
 {
     switch (c)
     {
@@ -725,7 +723,7 @@ auto isValidNicknameCharacter(const ubyte c) pure nothrow @nogc
 }
 
 ///
-unittest
+@safe unittest
 {
     import std.string : representation;
 
@@ -767,7 +765,7 @@ unittest
 auto stripModesign(
     const string nickname,
     const IRCServer server,
-    out string modesigns) pure nothrow @nogc
+    out string modesigns) pure @safe nothrow @nogc
 in (nickname.length, "Tried to strip modesigns off an empty nickname")
 do
 {
@@ -843,14 +841,14 @@ unittest
     Returns:
         The raw nickname, unsigned.
  +/
-auto stripModesign(const string nickname, const IRCServer server) pure nothrow @nogc
+auto stripModesign(const string nickname, const IRCServer server) pure @safe nothrow @nogc
 {
     string _;
     return stripModesign(nickname, server, _);
 }
 
 ///
-unittest
+@safe unittest
 {
     IRCServer server;
     server.prefixchars =
@@ -906,7 +904,7 @@ void setMode(
     ref IRCChannel channel,
     const string signedModestring,
     const string data,
-    const IRCServer server) pure
+    const IRCServer server) pure @safe
 {
     import lu.string : beginsWith;
     import std.array : array;
@@ -1196,7 +1194,7 @@ void setMode(
 }
 
 ///
-unittest
+@safe unittest
 {
     import std.conv;
     import std.stdio;
@@ -1375,7 +1373,6 @@ unittest
  +/
 final class IRCParseException : Exception
 {
-@safe:
     /// Bundled [dialect.defs.IRCEvent|IRCEvent], parsing which threw this exception.
     IRCEvent event;
 
@@ -1407,7 +1404,7 @@ final class IRCParseException : Exception
 }
 
 ///
-unittest
+@safe unittest
 {
     import std.exception : assertThrown;
 
@@ -1487,7 +1484,7 @@ enum IRCControlCharacter
 auto matchesByMask(
     const IRCUser this_,
     const IRCUser that,
-    const IRCServer.CaseMapping caseMapping = IRCServer.CaseMapping.rfc1459) pure nothrow
+    const IRCServer.CaseMapping caseMapping = IRCServer.CaseMapping.rfc1459) pure @safe nothrow
 {
     // unpatternedGlobMatch
     /++
@@ -1563,7 +1560,7 @@ auto matchesByMask(
 }
 
 ///
-unittest
+@safe unittest
 {
     IRCUser first = IRCUser("kameloso!NaN@wopkfoewopk.com");
 
@@ -1610,7 +1607,7 @@ unittest
     Returns:
         `true` if the passed `c` is in uppercase, `false` if not.
  +/
-auto isUpper(const char c, const IRCServer.CaseMapping caseMapping) pure nothrow @nogc
+auto isUpper(const char c, const IRCServer.CaseMapping caseMapping) pure @safe nothrow @nogc
 {
     import std.ascii : isUpper;
 
@@ -1646,7 +1643,7 @@ auto isUpper(const char c, const IRCServer.CaseMapping caseMapping) pure nothrow
     Returns:
         The passed `c` in lowercase as per the case mappings.
  +/
-auto toLower(const char c, const IRCServer.CaseMapping caseMapping) pure nothrow @nogc
+auto toLower(const char c, const IRCServer.CaseMapping caseMapping) pure @safe nothrow @nogc
 {
     import std.ascii : toLower;
 
@@ -1735,7 +1732,7 @@ auto toLowerCase(const string name, const IRCServer.CaseMapping caseMapping) pur
 }
 
 ///
-unittest
+@safe unittest
 {
     IRCServer.CaseMapping m = IRCServer.CaseMapping.rfc1459;
 
@@ -1801,7 +1798,7 @@ unittest
 auto opEqualsCaseInsensitive(
     const string lhs,
     const string rhs,
-    const IRCServer.CaseMapping mapping) pure nothrow @nogc
+    const IRCServer.CaseMapping mapping) pure @safe nothrow @nogc
 {
     if (lhs.length != rhs.length) return false;
     if (lhs is rhs) return true;
@@ -1865,7 +1862,7 @@ auto opEqualsCaseInsensitive(
 }
 
 ///
-unittest
+@safe unittest
 {
     immutable c = IRCServer.CaseMapping.rfc1459;
 
@@ -1892,7 +1889,7 @@ unittest
     Returns:
         `true` if the hostmask seems to be valid, `false` if it obviously is not.
  +/
-auto isValidHostmask(const string hostmask, const IRCServer server) pure nothrow @nogc
+auto isValidHostmask(const string hostmask, const IRCServer server) pure @safe nothrow @nogc
 {
     import std.string : indexOf, representation;
     import std.typecons : Flag, No, Yes;
@@ -2000,7 +1997,7 @@ auto isValidHostmask(const string hostmask, const IRCServer server) pure nothrow
 }
 
 ///
-unittest
+@safe unittest
 {
     IRCServer server;
 

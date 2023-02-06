@@ -79,8 +79,6 @@ import dialect.defs;
 import dialect.common : IRCParseException, Postprocessor;
 import lu.string : contains, nom;
 
-@safe:
-
 
 // toIRCEvent
 /++
@@ -102,7 +100,7 @@ import lu.string : contains, nom;
         [dialect.common.IRCParseException|IRCParseException] if an empty
         string was passed.
  +/
-public IRCEvent toIRCEvent(ref IRCParser parser, const string raw) pure
+public IRCEvent toIRCEvent(ref IRCParser parser, const string raw) pure @safe
 {
     import std.uni : toLower;
 
@@ -224,7 +222,7 @@ unittest
         [dialect.common.IRCParseException|IRCParseException] if an unknown
         type was encountered.
  +/
-void parseBasic(ref IRCParser parser, ref IRCEvent event) pure
+void parseBasic(ref IRCParser parser, ref IRCEvent event) pure @safe
 {
     string slice = event.raw;  // mutable
 
@@ -357,7 +355,7 @@ unittest
             working on.
         slice = Reference to the *slice* of the raw IRC string.
  +/
-void parsePrefix(ref IRCParser parser, ref IRCEvent event, ref string slice) pure
+void parsePrefix(ref IRCParser parser, ref IRCEvent event, ref string slice) pure @safe
 in (slice.length, "Tried to parse prefix on an empty slice")
 {
     string prefix = slice.nom(' ');  // mutable
@@ -463,7 +461,7 @@ unittest
         typestring to [dialect.defs.IRCEvent.Type|IRCEvent.Type] or typestring
         to a number failed.
  +/
-void parseTypestring(ref IRCParser parser, ref IRCEvent event, ref string slice) pure
+void parseTypestring(ref IRCParser parser, ref IRCEvent event, ref string slice) pure @safe
 in (slice.length, "Tried to parse typestring on an empty slice")
 {
     import std.conv : ConvException, to;
@@ -564,7 +562,7 @@ unittest
         to-connect-type event was encountered, or if the event was not
         recognised at all, as neither a normal type nor a numeric.
  +/
-void parseSpecialcases(ref IRCParser parser, ref IRCEvent event, ref string slice) pure
+void parseSpecialcases(ref IRCParser parser, ref IRCEvent event, ref string slice) pure @safe
 //in (slice.length, "Tried to parse specialcases on an empty slice")
 {
     import lu.string : beginsWith, strippedRight;
@@ -1513,7 +1511,7 @@ void parseSpecialcases(ref IRCParser parser, ref IRCEvent event, ref string slic
             working on.
         slice = Reference to the slice of the raw IRC string.
  +/
-void parseGeneralCases(const ref IRCParser parser, ref IRCEvent event, ref string slice) pure
+void parseGeneralCases(const ref IRCParser parser, ref IRCEvent event, ref string slice) pure @safe
 {
     import lu.string : beginsWith;
 
@@ -1745,7 +1743,7 @@ void parseGeneralCases(const ref IRCParser parser, ref IRCEvent event, ref strin
         event = Reference to the [dialect.defs.IRCEvent|IRCEvent] to continue
             working on.
  +/
-void postparseSanityCheck(const ref IRCParser parser, ref IRCEvent event) pure nothrow
+void postparseSanityCheck(const ref IRCParser parser, ref IRCEvent event) pure @safe nothrow
 {
     import lu.string : beginsWith;
     import std.array : Appender;
@@ -1811,7 +1809,7 @@ void postparseSanityCheck(const ref IRCParser parser, ref IRCEvent event) pure n
             working on.
         slice = Reference to the slice of the raw IRC string.
  +/
-void onNotice(ref IRCParser parser, ref IRCEvent event, ref string slice) pure
+void onNotice(ref IRCParser parser, ref IRCEvent event, ref string slice) pure @safe
 in (slice.length, "Tried to process `onNotice` on an empty slice")
 {
     import dialect.common : isAuthService;
@@ -1941,7 +1939,7 @@ in (slice.length, "Tried to process `onNotice` on an empty slice")
 
     Throws: [dialect.common.IRCParseException|IRCParseException] on unknown CTCP types.
  +/
-void onPRIVMSG(const ref IRCParser parser, ref IRCEvent event, ref string slice) pure
+void onPRIVMSG(const ref IRCParser parser, ref IRCEvent event, ref string slice) pure @safe
 in (slice.length, "Tried to process `onPRIVMSG` on an empty slice")
 {
     import dialect.common : IRCControlCharacter, isValidChannel;
@@ -2068,7 +2066,7 @@ in (slice.length, "Tried to process `onPRIVMSG` on an empty slice")
             working on.
         slice = Reference to the slice of the raw IRC string.
  +/
-void onMode(ref IRCParser parser, ref IRCEvent event, ref string slice) pure
+void onMode(ref IRCParser parser, ref IRCEvent event, ref string slice) pure @safe
 in (slice.length, "Tried to process `onMode` on an empty slice")
 {
     import dialect.common : isValidChannel;
@@ -2215,7 +2213,7 @@ unittest
         [dialect.common.IRCParseException|IRCParseException] if something
         could not be parsed or converted.
  +/
-void onISUPPORT(ref IRCParser parser, ref IRCEvent event, ref string slice) pure
+void onISUPPORT(ref IRCParser parser, ref IRCEvent event, ref string slice) pure @safe
 in (slice.length, "Tried to process `onISUPPORT` on an empty slice")
 {
     import lu.conv : Enum;
@@ -2404,7 +2402,7 @@ in (slice.length, "Tried to process `onISUPPORT` on an empty slice")
             working on.
         slice = Reference to the slice of the raw IRC string.
  +/
-void onMyInfo(ref IRCParser parser, ref IRCEvent event, ref string slice) pure
+void onMyInfo(ref IRCParser parser, ref IRCEvent event, ref string slice) pure @safe
 in (slice.length, "Tried to process `onMyInfo` on an empty slice")
 {
     import dialect.common : typenumsOf;
@@ -2692,7 +2690,6 @@ public:
  +/
 struct IRCParser
 {
-@safe:
 private:
     import dialect.postprocessors : Postprocessors;
 
@@ -2737,7 +2734,7 @@ public:
         Returns:
             A complete [dialect.defs.IRCEvent|IRCEvent].
      +/
-    auto toIRCEvent(const string raw)
+    auto toIRCEvent(const string raw) // infer @safe-ness
     {
         IRCEvent event = .toIRCEvent(this, raw);
 
@@ -2761,7 +2758,7 @@ public:
         Create a new [IRCParser] with the passed [dialect.defs.IRCClient|IRCClient]
         and [dialect.defs.IRCServer|IRCServer] as base context for parsing.
      +/
-    this(IRCClient client, IRCServer server) pure nothrow
+    auto this(IRCClient client, IRCServer server) pure nothrow
     {
         this.client = client;
         this.server = server;
@@ -2779,7 +2776,7 @@ public:
         Initialises defined postprocessors.
      +/
     version(Postprocessors)
-    void initPostprocessors() pure nothrow
+    auto initPostprocessors() pure nothrow
     {
         this.postprocessors.reserve(Postprocessors.length);
 
