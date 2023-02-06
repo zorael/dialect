@@ -2746,13 +2746,6 @@ public:
      +/
     IRCEvent.Type[1024] typenums = Typenums.base;
 
-    /++
-        Array of active [dialect.common.Postprocessor|Postprocessor]s, to be
-        iterated through and processed after parsing is complete.
-     +/
-    version(Postprocessors)
-    Postprocessor[] postprocessors;
-
     // toIRCEvent
     /++
         Parses an IRC string into an [dialect.defs.IRCEvent|IRCEvent].
@@ -2788,9 +2781,13 @@ public:
         return event;
     }
 
+    // ctor
     /++
         Create a new [IRCParser] with the passed [dialect.defs.IRCClient|IRCClient]
         and [dialect.defs.IRCServer|IRCServer] as base context for parsing.
+
+        Initialises any [dialect.common.Postprocessor|Postprocessor]s available
+        iff version `Postprocessors` is declared.
      +/
     auto this(
         IRCClient client,
@@ -2805,44 +2802,55 @@ public:
         }
     }
 
-    /// Disallow copying of this struct.
+    /++
+        Disallow copying of this struct.
+     +/
     @disable this(this);
 
-    /++
-        Initialises defined postprocessors.
-     +/
     version(Postprocessors)
-    auto initPostprocessors() pure nothrow
     {
-        this.postprocessors.reserve(Postprocessors.length);
+        /++
+            Array of active [dialect.common.Postprocessor|Postprocessor]s, to be
+            iterated through and processed after parsing is complete.
+         +/
+        Postprocessor[] postprocessors;
 
-        foreach (immutable moduleName; Postprocessors)
+        // initPostprocessors
+        /++
+            Initialises defined postprocessors.
+         +/
+        auto initPostprocessors() pure nothrow
         {
-            static if (!__traits(compiles, { mixin("import ", moduleName, ";"); }))
-            {
-                enum message = "Postprocessor module `" ~ moduleName ~ "` is missing or fails to compile";
-                static assert(0, message);
-            }
+            this.postprocessors.reserve(Postprocessors.length);
 
-            mixin("import postprocessorModule = ", moduleName, ";");
-
-            foreach (member; __traits(allMembers, postprocessorModule))
+            foreach (immutable moduleName; Postprocessors)
             {
-                static if (is(__traits(getMember, postprocessorModule, member) == class))
+                static if (!__traits(compiles, { mixin("import ", moduleName, ";"); }))
                 {
-                    alias Class = __traits(getMember, postprocessorModule, member);
+                    enum message = "Postprocessor module `" ~ moduleName ~ "` is missing or fails to compile";
+                    static assert(0, message);
+                }
 
-                    static if (is(Class : Postprocessor))
+                mixin("import postprocessorModule = ", moduleName, ";");
+
+                foreach (member; __traits(allMembers, postprocessorModule))
+                {
+                    static if (is(__traits(getMember, postprocessorModule, member) == class))
                     {
-                        static if (__traits(compiles, new Class))
+                        alias Class = __traits(getMember, postprocessorModule, member);
+
+                        static if (is(Class : Postprocessor))
                         {
-                            this.postprocessors ~= new Class;
-                        }
-                        else
-                        {
-                            import std.format : format;
-                            static assert(0, "`%s.%s` constructor does not compile"
-                                .format(moduleName, Class.stringof));
+                            static if (__traits(compiles, new Class))
+                            {
+                                this.postprocessors ~= new Class;
+                            }
+                            else
+                            {
+                                import std.format : format;
+                                static assert(0, "`%s.%s` constructor does not compile"
+                                    .format(moduleName, Class.stringof));
+                            }
                         }
                     }
                 }
