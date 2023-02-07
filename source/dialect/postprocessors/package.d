@@ -18,6 +18,9 @@ version(TwitchSupport)
         This is needed for the module constructor mixed in with
         [PostprocessorRegistration] to actually run. Without it, the Twitch
         postprocessor is never instantiated.
+
+        Currently the onus to do this is placed onto the importing project.
+        Version this back in if we ever change that stance.
      +/
     import dialect.postprocessors.twitch;
 }
