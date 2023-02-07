@@ -107,14 +107,21 @@ public IRCEvent toIRCEvent(
 {
     import std.uni : toLower;
 
-    if (!raw.length) throw new IRCParseException("Tried to parse empty string");
+    if (!raw.length)
+    {
+        enum message = "Tried to parse an empty string";
+        throw new IRCParseException(message);
+    }
 
     if (raw[0] != ':')
     {
         if (raw[0] == '@')
         {
-            if (raw.length < 2) throw new IRCParseException("Tried to parse " ~
-                "what was only the start of tags");
+            if (raw.length < 2)
+            {
+                enum message = "Tried to parse what was only the start of tags";
+                throw new IRCParseException(message);
+            }
 
             // IRCv3 tags
             // @badges=broadcaster/1;color=;display-name=Zorael;emote-sets=0;mod=0;subscriber=0;user-type= :tmi.twitch.tv USERSTATE #zorael
@@ -295,8 +302,9 @@ void parseBasic(
             event.type = UNSET;
             event.aux[0] = event.raw;
             event.errors = typestring;
-            /*throw new IRCParseException("Unknown basic type: " ~
-                typestring ~ ": please report this", event);*/
+
+            /*enum message = "Unknown basic type: " ~ typestring ~ ": please report this";
+            throw new IRCParseException(message, event);*/
         }
     }
 
@@ -495,8 +503,8 @@ in (slice.length, "Tried to parse typestring on an empty slice")
         }
         catch (ConvException e)
         {
-            throw new IRCParseException("Unknown typestring " ~ typestring,
-                event, e.file, e.line);
+            immutable message = "Unknown typestring: " ~ typestring;
+            throw new IRCParseException(message, event, e.file, e.line);
         }
     }
 }
@@ -1057,7 +1065,8 @@ void parseSpecialcases(
         }
         else
         {
-            throw new IRCParseException("Unknown variant of to-connect-type?", event);
+            enum message = "Unknown variant of to-connect-type?";
+            throw new IRCParseException(message, event);
         }
         break;
 
@@ -1466,7 +1475,8 @@ void parseSpecialcases(
     default:
         if ((event.type == NUMERIC) || (event.type == UNSET))
         {
-            throw new IRCParseException("Uncaught NUMERIC or UNSET", event);
+            enum message = "Uncaught `IRCEvent.Type.NUMERIC` or `IRCEvent.Type.UNSET`";
+            throw new IRCParseException(message, event);
         }
 
         return parser.parseGeneralCases(event, slice);
@@ -2041,7 +2051,8 @@ in (slice.length, "Tried to process `onPRIVMSG` on an empty slice")
         }
 
         default:
-            throw new IRCParseException("Unknown CTCP event: " ~ ctcpEvent, event);
+            immutable message = "Unknown CTCP event: `" ~ ctcpEvent ~ '`';
+            throw new IRCParseException(message, event);
         }
     }
 }
