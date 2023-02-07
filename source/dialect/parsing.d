@@ -2344,7 +2344,6 @@ in (slice.length, "Tried to process `IRCEvent.Type.RPL_ISUPPORT` on an empty sli
                 }
 
                 parser.server.network = value;
-                version(FlagAsUpdated) parser.updates |= IRCParser.Update.server;
                 break;
 
             case "NICKLEN":
