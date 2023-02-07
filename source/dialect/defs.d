@@ -1324,9 +1324,9 @@ struct IRCUser
         Returns:
             A hash.
      +/
-    auto toHash() const pure @safe @nogc nothrow
+    auto toHash() const pure @safe
     {
-        return nickname.hashOf + ident.hashOf + address.hashOf;
+        return this.hostmask.hashOf;
     }
 
     // toString
@@ -2482,10 +2482,10 @@ struct IRCChannel
             Returns:
                 A hash.
          +/
-        auto toHash() const pure @safe nothrow
+        auto toHash() const pure @safe
         {
             import std.conv : text;
-            return (modechar ~ data ~ user.hashOf.text ~ channel ~ negated ? "negated" : "not").hashOf;
+            return text(modechar, data, user.hashOf, channel, negated).hashOf;
         }
     }
 
