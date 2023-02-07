@@ -1941,7 +1941,7 @@ void onPRIVMSG(
     const ref IRCParser parser,
     ref IRCEvent event,
     ref string slice) pure @safe
-in (slice.length, "Tried to process `onPRIVMSG` on an empty slice")
+in (slice.length, "Tried to process `IRCEvent.Type.PRIVMSG` on an empty slice")
 {
     import dialect.common : IRCControlCharacter, isValidChannel;
 
@@ -2222,7 +2222,7 @@ void onISUPPORT(
     ref IRCParser parser,
     ref IRCEvent event,
     ref string slice) pure @safe
-in (slice.length, "Tried to process `onISUPPORT` on an empty slice")
+in (slice.length, "Tried to process `IRCEvent.Type.RPL_ISUPPORT` on an empty slice")
 {
     import lu.conv : Enum;
     import std.algorithm.iteration : splitter;

@@ -773,7 +773,6 @@ auto stripModesign(
     const IRCServer server,
     out string modesigns) pure @safe nothrow @nogc
 in (nickname.length, "Tried to strip modesigns off an empty nickname")
-do
 {
     size_t i;
 

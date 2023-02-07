@@ -37,7 +37,7 @@ private:
     /++
         How many elements should be allocated for auxiliary strings.
 
-        `ISUPPORT` can contain a lot of strings and should be considered the
+        `RPL_ISUPPORT` can contain a lot of strings and should be considered the
         worst case.
      +/
     enum numAuxStrings = 16;
@@ -53,15 +53,16 @@ public:
 
         Taken from https://tools.ietf.org/html/rfc1459 with many additions.
 
-        - https://www.alien.net.au/irc/irc2numerics.html
-
-        - https://defs.ircdocs.horse
-
         Some are outright fabrications of ours, like [Type.CHAN|CHAN] and
         [Type.QUERY|QUERY]. These are not prefixed with `RPL_` and `ERR_`
         (but not all such are made up, like [Type.AWAY|AWAY] and
         [Type.CHGHOST|CHGHOST] that are properly [Type.AWAY|AWAY] and
         [Type.CHGHOST|CHGHOST]).
+
+        See_Also:
+            https://tools.ietf.org/html/rfc1459
+            https://www.alien.net.au/irc/irc2numerics.html
+            https://defs.ircdocs.horse
      +/
     enum Type
     {
@@ -1314,8 +1315,10 @@ struct IRCUser
      +/
     auto opEquals(const IRCUser that) const pure @safe nothrow @nogc
     {
-        return (this.nickname == that.nickname) &&
-            (this.ident == that.ident) && (this.address == that.address);
+        return
+            (this.nickname == that.nickname) &&
+            (this.ident == that.ident) &&
+            (this.address == that.address);
     }
 
     /++
