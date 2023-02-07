@@ -1188,7 +1188,7 @@ auto parseTwitchTags(ref IRCParser parser, ref IRCEvent event) @safe
 }
 
 
-public:
+package:
 
 
 // TwitchPostprocessor
