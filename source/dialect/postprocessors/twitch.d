@@ -1178,10 +1178,22 @@ auto parseTwitchTags(ref IRCParser parser, ref IRCEvent event) @safe
         {
             import std.stdio : writefln, writeln;
 
+            void printStuffTrusted() @trusted
+            {
+                /+
+                    write{,f}ln is @trusted, but event.aux now being a static string[n]
+                    causes it to output a deprecation warning anyway.
+
+                    "Deprecation: `@safe` function `parseTwitchTags` calling `writefln`"
+                 +/
+                enum pattern = `%-35s%s`;
+                if (printAuxOnExit)   writefln(pattern, "event.aux", event.aux);
+                if (printCountOnExit) writefln(pattern, "event.count", event.count);
+                if (printAuxOnExit || printCountOnExit) writeln();
+            }
+
             printTags(tagRange, event);
-            if (printAuxOnExit || printCountOnExit) writeln();
-            if (printAuxOnExit) writefln(`%-35s%s`, "event.aux", event.aux);
-            if (printCountOnExit) writefln(`%-35s%s`, "event.count", event.count);
+            printStuffTrusted();
             writeln();
         }
     }
