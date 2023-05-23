@@ -62,7 +62,7 @@ unittest
             assert((type == IRCEvent.Type.ROOMSTATE), Enum!(IRCEvent.Type).toString(type));
             assert((sender.address == "tmi.twitch.tv"), sender.address);
             assert((channel == "#zorael"), channel);
-            assert((aux[0] == "22216721"), aux[0]);
+            assert((aux[$-1] == "22216721"), aux[0]);
             assert((tags == "broadcaster-lang=;emote-only=0;followers-only=-1;mercury=0;r9k=0;room-id=22216721;slow=0;subs-only=0"), tags);
         }
     }
