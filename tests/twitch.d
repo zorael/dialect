@@ -422,8 +422,8 @@ unittest
             assert((content == "WAHEEEEY DA CHOCOOOOOOOOOOOO"), content);
             assert((aux[0] == "1000"), aux[0]);
             assert((tags == `badge-info=subscriber/9;badges=subscriber/9,bits/100;color=#2B22B2;display-name=PoggyFifty;emotes=;flags=;id=21bb6867-1e5b-475c-90a4-c21bc5cf42d3;login=poggyfifty;mod=0;msg-id=resub;msg-param-cumulative-months=9;msg-param-months=0;msg-param-should-share-streak=1;msg-param-streak-months=9;msg-param-sub-plan-name=Channel\sSubscription\s(chocotaco);msg-param-sub-plan=1000;room-id=69906737;subscriber=1;system-msg=PoggyFifty\ssubscribed\sat\sTier\s1.\sThey've\ssubscribed\sfor\s9\smonths,\scurrently\son\sa\s9\smonth\sstreak!;tmi-sent-ts=1569006294587;user-id=204550522;user-type=`), tags);
-            assert((count[0] == 9), count[0].to!string);
             assert((count[1] == 9), count[1].to!string);
+            assert((count[3] == 9), count[3].to!string);
             assert((id == "21bb6867-1e5b-475c-90a4-c21bc5cf42d3"), id);
         }
     }
@@ -1165,7 +1165,7 @@ unittest
             assert((sender.id == 478167598), sender.id.to!string);
             assert((channel == "#amouranth"), channel);
             assert((content == "Can we get a L for the camera guy pls?"), content);
-            assert((aux[0] == "USD"), aux[0]);
+            assert((aux[1] == "USD"), aux[1]);
             assert((tags == "badge-info=;badges=glhf-pledge/1;color=#FF69B4;display-name=bethiehem;emotes=;first-msg=0;flags=;id=2ff6d2fb-7a9a-47f3-b64a-01b9abf08765;mod=0;pinned-chat-paid-amount=500;pinned-chat-paid-canonical-amount=5;pinned-chat-paid-currency=USD;pinned-chat-paid-exponent=2;returning-chatter=0;room-id=125387632;subscriber=0;tmi-sent-ts=1665358650971;turbo=0;user-id=478167598;user-type="), tags);
             assert((count[0] == 500), count[0].to!string);
             assert((id == "2ff6d2fb-7a9a-47f3-b64a-01b9abf08765"), id);
