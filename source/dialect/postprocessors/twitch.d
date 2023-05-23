@@ -514,8 +514,9 @@ auto parseTwitchTags(ref IRCParser parser, ref IRCEvent event) @safe
             case "no_vips":
             case "no_mods":
                 // Generic Twitch server reply.
-                event.type = TWITCH_NOTICE;
+                version(TwitchWarnings) warnAboutOverwrittenAuxString(0, key, "notice");
                 event.aux[0] = msgID;
+                event.type = TWITCH_NOTICE;
                 break;
 
             case "midnightsquid":
