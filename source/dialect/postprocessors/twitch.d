@@ -799,6 +799,7 @@ auto parseTwitchTags(ref IRCParser parser, ref IRCEvent event) @safe
             // New midnightsquid direct cheer
         case "pinned-chat-paid-amount":
             // elevated message amount
+        case "msg-param-gift-months":
 
             /+
                 Count 0
@@ -862,7 +863,6 @@ auto parseTwitchTags(ref IRCParser parser, ref IRCEvent event) @safe
         case "msg-param-total-reward-count":
             // reward gift, to how many users a reward was gifted
             // alias of msg-param-selected-count?
-        case "msg-param-gift-months":
 
             /+
                 Count 3
