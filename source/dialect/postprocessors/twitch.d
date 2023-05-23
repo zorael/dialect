@@ -1029,8 +1029,11 @@ auto parseTwitchTags(ref IRCParser parser, ref IRCEvent event) @safe
 
         case "room-id":
             // The channel ID.
-            version(TwitchWarnings) warnAboutOverwrittenAuxString(event.aux.length+(-1), key);
-            if (event.type == ROOMSTATE) event.aux[$-1] = value;
+            if (event.type == ROOMSTATE)
+            {
+                version(TwitchWarnings) warnAboutOverwrittenAuxString(event.aux.length+(-1), key);
+                event.aux[$-1] = value;
+            }
             break;
 
         case "reply-parent-display-name":
