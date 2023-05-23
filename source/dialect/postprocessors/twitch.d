@@ -1031,8 +1031,8 @@ auto parseTwitchTags(ref IRCParser parser, ref IRCEvent event) @safe
             // The channel ID.
             if (event.type == ROOMSTATE)
             {
-                version(TwitchWarnings) warnAboutOverwrittenAuxString(event.aux.length+(-1), key);
-                event.aux[$-1] = value;
+                version(TwitchWarnings) warnAboutOverwrittenAuxString(0, key);
+                event.aux[0] = value;
             }
             break;
 
