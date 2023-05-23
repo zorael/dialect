@@ -93,7 +93,7 @@ auto parseTwitchTags(ref IRCParser parser, ref IRCEvent event) @safe
                 import std.conv : text;
                 import std.stdio : writeln;
 
-                immutable msg = text(key, " overwrote `count[", i, "]`: ", event.count[i]);
+                immutable msg = text(key, " overwrote `count[", i, "]`: ", event.count[i].get);
                 appendToErrors(event, msg);
                 writeln(msg);
                 printTagsOnExit = true;
@@ -101,14 +101,17 @@ auto parseTwitchTags(ref IRCParser parser, ref IRCEvent event) @safe
             }
         }
 
-        void warnAboutOverwrittenAuxString(const size_t i, const string key)
+        void warnAboutOverwrittenAuxString(
+            const size_t i,
+            const string key,
+            const string type = "tag")
         {
             if (event.aux[i].length)
             {
                 import std.conv : text;
                 import std.stdio : writeln;
 
-                immutable msg = text(key, " overwrote `aux[", i, "]`: ", event.aux[i]);
+                immutable msg = text(type, ' ', key, " overwrote `aux[", i, "]`: ", event.aux[i]);
                 appendToErrors(event, msg);
                 writeln(msg);
                 printTagsOnExit = true;
@@ -123,7 +126,7 @@ auto parseTwitchTags(ref IRCParser parser, ref IRCEvent event) @safe
         import lu.string : contains, nom;
 
         immutable key = tag.nom('=');
-        immutable value = tag;
+        string value = tag;  // mutable
 
         switch (key)
         {
@@ -519,28 +522,14 @@ auto parseTwitchTags(ref IRCParser parser, ref IRCEvent event) @safe
                 // New direct cheer with real currency
                 event.type = TWITCH_DIRECTCHEER;
 
-                version(TwitchWarnings) warnAboutOverwrittenAuxString(1, key);
+                version(TwitchWarnings) warnAboutOverwrittenAuxString(1, key, "msg-id");
                 event.aux[1] = msgID;
                 break;
 
             default:
                 import lu.string : beginsWith;
 
-                version(TwitchWarnings)
-                {
-                    if (event.aux[0].length)
-                    {
-                        import std.conv : text;
-                        import std.stdio : writeln;
-
-                        immutable msg = text("msg-id ", msgID, " overwrote an aux: ", event.aux[0]);
-                        appendToErrors(event, msg);
-                        writeln(msg);
-                        printTagsOnExit = true;
-                        printAuxOnExit = true;
-                    }
-                }
-
+                version(TwitchWarnings) warnAboutOverwrittenAuxString(0, key, "msg-id");
                 event.aux[0] = msgID;
 
                 if (msgID.beginsWith("bad_"))
@@ -698,6 +687,13 @@ auto parseTwitchTags(ref IRCParser parser, ref IRCEvent event) @safe
             event.type = TWITCH_CHEER;
             goto case "ban-duration";
 
+        case "first-msg":
+            // first-msg = 0
+            // Whether or not it's the user's first message after joining the channel?
+            if (value == "0") break;
+            value = tag;
+            goto case;
+
         case "msg-param-sub-plan":
             // The type of subscription plan being used.
             // Valid values: Prime, 1000, 2000, 3000.
@@ -727,28 +723,81 @@ auto parseTwitchTags(ref IRCParser parser, ref IRCEvent event) @safe
             // seen in a TWITCH_ANNOUNCEMENT
         case "msg-param-currency":
             // New midnightsquid direct cheer currency
-        case "pinned-chat-paid-currency":
-            // elevated message currency
+        case "message-id":
+            // message-id = 3
+            // WHISPER, rolling number enumerating messages
 
             /+
                 Aux 0
              +/
-            version(TwitchWarnings)
-            {
-                if (event.aux[0].length)
-                {
-                    import std.conv : text;
-                    import std.stdio : writeln;
-
-                    immutable msg = text(key, " overwrote an aux: ", event.aux[0]);
-                    appendToErrors(event, msg);
-                    writeln(msg);
-                    printTagsOnExit = true;
-                    printAuxOnExit = true;
-                }
-            }
-
+            version(TwitchWarnings) warnAboutOverwrittenAuxString(0, key);
             event.aux[0] = value;
+            break;
+
+        case "msg-param-goal-contribution-type":
+            // msg-param-goal-contribution-type = SUB_POINTS
+        case "msg-param-gift-theme":
+            // msg-param-gift-theme = party
+            // Theme of a bulkgift?
+        case "msg-param-fun-string":
+            // msg-param-fun-string = FunStringTwo
+            // [subgift] [#waifugate] AnAnonymousGifter (Asdf): "An anonymous user gifted a Tier 1 sub to Asdf!" (1000) {1}
+            // Unsure. Useless.
+        case "msg-param-ritual-name":
+            // msg-param-ritual-name = 'new_chatter'
+        case "msg-param-middle-man":
+            // msg-param-middle-man = gabepeixe
+            // Prime community gift "middle-man"? Name of the channel?
+        case "msg-param-domain":
+            // msg-param-domain = owl2018
+            // [rewardgift] [#overwatchleague] Asdf [bits]: "A Cheer shared Rewards to 35 others in Chat!" {35}
+            // Name of the context?
+            // Swapped places with msg-param-trigger-type
+        case "msg-param-prior-gifter-display-name":
+            // Prior gifter display name when a user pays forward a gift
+        case "pinned-chat-paid-currency":
+            // elevated message currency
+
+            /+
+                Aux 1
+             +/
+            version(TwitchWarnings) warnAboutOverwrittenAuxString(1, key);
+            event.aux[1] = value;
+            break;
+
+        case "msg-param-sub-plan-name":
+            // The display name of the subscription plan. This may be a default
+            // name or one created by the channel owner.
+        case "msg-param-exponent":
+            // something with new midnightsquid direct cheers
+
+            /+
+                Aux 2
+             +/
+            version(TwitchWarnings) warnAboutOverwrittenAuxString(2, key);
+            event.aux[2] = value;
+            break;
+
+        case "msg-param-goal-description":
+            // msg-param-goal-description = Lali-this\sis\sa\sgoal-ho
+        case "msg-param-pill-type":
+            // something with new midnightsquid direct cheers
+
+            /+
+                Aux 3
+             +/
+            version(TwitchWarnings) warnAboutOverwrittenAuxString(3, key);
+            event.aux[3] = value;
+            break;
+
+        case "msg-param-is-highlighted":
+            // something with new midnightsquid direct cheers
+
+            /+
+                Aux 4
+             +/
+            version(TwitchWarnings) warnAboutOverwrittenAuxString(4, key);
+            event.aux[4] = value;
             break;
 
         case "emotes":
@@ -778,10 +827,6 @@ auto parseTwitchTags(ref IRCParser parser, ref IRCEvent event) @safe
             // Total amount donated to this charity
         case "msg-param-threshold":
             // (Sent only on bitsbadgetier) The tier of the bits badge the user just earned; e.g. 100, 1000, 10000.
-        case "msg-param-streak-months":
-        case "msg-param-streak-tenure-months":
-        case "msg-param-sub-benefit-end-month":
-            /// "...extended their Tier 1 sub to {month}"
 
             // These events are generally present with value of 0, so in most case they're noise
             if (value == "0") break;
@@ -800,6 +845,9 @@ auto parseTwitchTags(ref IRCParser parser, ref IRCEvent event) @safe
         case "pinned-chat-paid-amount":
             // elevated message amount
         case "msg-param-gift-months":
+            // ...
+        case "msg-param-sub-benefit-end-month":
+            /// "...extended their Tier 1 sub to {month}"
 
             /+
                 Count 0
@@ -863,6 +911,8 @@ auto parseTwitchTags(ref IRCParser parser, ref IRCEvent event) @safe
         case "msg-param-total-reward-count":
             // reward gift, to how many users a reward was gifted
             // alias of msg-param-selected-count?
+        case "msg-param-streak-months":
+            /// "...extended their Tier 1 sub to {month}"
 
             /+
                 Count 3
@@ -873,6 +923,8 @@ auto parseTwitchTags(ref IRCParser parser, ref IRCEvent event) @safe
             event.count[3] = value.to!long;
             break;
 
+        case "msg-param-streak-tenure-months":
+            /// "...extended their Tier 1 sub to {month}"
         case "msg-param-goal-user-contributions":
             // msg-param-goal-user-contributions = 1
 
@@ -1004,9 +1056,6 @@ auto parseTwitchTags(ref IRCParser parser, ref IRCEvent event) @safe
                 /*if (value == "0") break;
                 if (event.type == CHAN) event.type = EMOTE;
                 break;*/
-            case "msg-param-sub-plan-name":
-                // The display name of the subscription plan. This may be a default
-                // name or one created by the channel owner.
             case "broadcaster-lang":
                 // The chat language when broadcaster language mode is enabled;
                 // otherwise, empty. Examples: en (English), fi (Finnish), es-MX
@@ -1069,13 +1118,6 @@ auto parseTwitchTags(ref IRCParser parser, ref IRCEvent event) @safe
             case "msg-param-origin-id":
                 // msg-param-origin-id = 6e\s15\s70\s6d\s34\s2a\s7e\s5b\sd9\s45\sd3\sd2\sce\s20\sd3\s4b\s9c\s07\s49\sc4
                 // [subgift] [#savjz] sender [SP] (target): "sender gifted a Tier 1 sub to target! This is their first Gift Sub in the channel!" (1000) {1}
-            case "msg-param-fun-string":
-                // msg-param-fun-string = FunStringTwo
-                // [subgift] [#waifugate] AnAnonymousGifter (Asdf): "An anonymous user gifted a Tier 1 sub to Asdf!" (1000) {1}
-                // Unsure. Useless.
-            case "message-id":
-                // message-id = 3
-                // WHISPER, rolling number enumerating messages
             case "thread-id":
                 // thread-id = 22216721_404208264
                 // WHISPER, private message session?
@@ -1092,24 +1134,11 @@ auto parseTwitchTags(ref IRCParser parser, ref IRCEvent event) @safe
                 // Do nothing; everything is done at msg-id charity
             case "message":
                 // The message.
-            case "msg-param-ritual-name":
-                // msg-param-ritual-name = 'new_chatter'
-            case "msg-param-middle-man":
-                // msg-param-middle-man = gabepeixe
-                // Prime community gift "middle-man"? Name of the channel?
-                // Would store in aux but it's already reserved for msg-param-gift-name
             case "custom-reward-id":
                 // custom-reward-id = f597fc7c-703e-42d8-98ed-f5ada6d19f4b
                 // Unsure, was just part of an emote-only PRIVMSG
-            case "msg-param-domain":
-                // msg-param-domain = owl2018
-                // [rewardgift] [#overwatchleague] Asdf [bits]: "A Cheer shared Rewards to 35 others in Chat!" {35}
-                // Name of the context?
-                // Swapped places with msg-param-trigger-type
             case "msg-param-prior-gifter-anonymous":
                 // Paying forward gifts, whether or not the prior gifter was anonymous
-            case "msg-param-prior-gifter-display-name":
-                // Prior gifter display name when a user pays forward a gift
             case "msg-param-prior-gifter-id":
                 // Numeric id of prior gifter when a user pays forward a gift
             case "client-nonce":
@@ -1123,35 +1152,17 @@ auto parseTwitchTags(ref IRCParser parser, ref IRCEvent event) @safe
                 // On subscription events, whether or not the sub was from a gift.
             case "msg-param-anon-gift":
                 // msg-param-anon-gift = false
-            case "first-msg":
-                // first-msg = 0
-                // Whether or not it's the user's first message after joining the channel?
-            case "msg-param-gift-theme":
-                // msg-param-gift-theme = party
-                // Theme of a bulkgift?
             case "crowd-chant-parent-msg-id":
                 // crowd-chant-parent-msg-id = <uuid>
                 // Chant? Seems to be a reply/quote
-            case "msg-param-goal-contribution-type":
-                // msg-param-goal-contribution-type = SUB_POINTS
-                // Nowhere to put this without an altaux.
-            case "msg-param-goal-description":
-                // msg-param-goal-description = Lali-this\sis\sa\sgoal-ho
-                // Nowhere to put this without a triaux.
             case "returning-chatter":
                 // returning-chatter = 0
                 // Unsure.
             case "vip":
                 // vip = 1
                 // Whether or not the sender is a VIP. Superfluous; we can tell from the badges
-            case "msg-param-exponent":
-                // something with new midnightsquid direct cheers
             case "msg-param-emote-id":
-                // ditto
-            case "msg-param-is-highlighted":
-                // ditto
-            case "msg-param-pill-type":
-                // ditto
+                // something with new midnightsquid direct cheers
 
                 // Ignore these events.
                 break;
