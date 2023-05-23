@@ -452,6 +452,8 @@ auto parseTwitchTags(ref IRCParser parser, ref IRCEvent event) @safe
             case "unavailable_command":
                 // Generic Twitch error.
                 event.type = TWITCH_ERROR;
+
+                version(TwitchWarnings) warnAboutOverwrittenAuxString(0, key, "error");
                 event.aux[0] = msgID;
                 break;
 
@@ -626,6 +628,7 @@ auto parseTwitchTags(ref IRCParser parser, ref IRCEvent event) @safe
 
             if (event.type == TWITCH_RITUAL)
             {
+                version(TwitchWarnings) warnAboutOverwrittenAuxString(0, key);
                 event.aux[0] = message;
             }
             else if (!event.content.length)
@@ -1026,6 +1029,7 @@ auto parseTwitchTags(ref IRCParser parser, ref IRCEvent event) @safe
 
         case "room-id":
             // The channel ID.
+            version(TwitchWarnings) warnAboutOverwrittenAuxString(0, key);
             if (event.type == ROOMSTATE) event.aux[0] = value;
             break;
 
@@ -1039,6 +1043,7 @@ auto parseTwitchTags(ref IRCParser parser, ref IRCEvent event) @safe
         case "reply-parent-msg-body":
             // The body of the message that is being replied to
             // reply-parent-msg-body = she's\sgonna\swin\s2truths\sand\sa\slie\severytime
+            version(TwitchWarnings) warnAboutOverwrittenAuxString(0, key);
             event.aux[0] = decodeIRCv3String(value);
             break;
 
