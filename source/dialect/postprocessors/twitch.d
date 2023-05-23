@@ -86,14 +86,16 @@ auto parseTwitchTags(ref IRCParser parser, ref IRCEvent event) @safe
             }
         }
 
-        void warnAboutOverwrittenCount(const size_t i, const string key)
+        void warnAboutOverwrittenCount(
+            const size_t i,
+            const string key)
         {
             if (!event.count[i].isNull)
             {
                 import std.conv : text;
                 import std.stdio : writeln;
 
-                immutable msg = text(key, " overwrote `count[", i, "]`: ", event.count[i].get);
+                immutable msg = text("tag ", key, " overwrote `count[", i, "]`: ", event.count[i].get);
                 appendToErrors(event, msg);
                 writeln(msg);
                 printTagsOnExit = true;
@@ -514,9 +516,10 @@ auto parseTwitchTags(ref IRCParser parser, ref IRCEvent event) @safe
             case "no_vips":
             case "no_mods":
                 // Generic Twitch server reply.
+                event.type = TWITCH_NOTICE;
+
                 version(TwitchWarnings) warnAboutOverwrittenAuxString(0, key, "notice");
                 event.aux[0] = msgID;
-                event.type = TWITCH_NOTICE;
                 break;
 
             case "midnightsquid":
