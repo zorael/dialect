@@ -88,14 +88,15 @@ auto parseTwitchTags(ref IRCParser parser, ref IRCEvent event) @safe
 
         void warnAboutOverwrittenCount(
             const size_t i,
-            const string key)
+            const string key,
+            const string type = "tag")
         {
             if (!event.count[i].isNull)
             {
                 import std.conv : text;
                 import std.stdio : writeln;
 
-                immutable msg = text("tag ", key, " overwrote `count[", i, "]`: ", event.count[i].get);
+                immutable msg = text(type, ' ', key, " overwrote `count[", i, "]`: ", event.count[i].get);
                 appendToErrors(event, msg);
                 writeln(msg);
                 printTagsOnExit = true;
@@ -343,6 +344,7 @@ auto parseTwitchTags(ref IRCParser parser, ref IRCEvent event) @safe
             case "highlighted-message":
             case "skip-subs-mode-message":
                 // These are PRIVMSGs
+                version(TwitchWarnings) warnAboutOverwrittenCount(0, msgID, "msg-id");
                 event.aux[0] = msgID;
                 break;
 
@@ -694,13 +696,6 @@ auto parseTwitchTags(ref IRCParser parser, ref IRCEvent event) @safe
             event.type = TWITCH_CHEER;
             goto case "ban-duration";
 
-        case "first-msg":
-            // first-msg = 0
-            // Whether or not it's the user's first message after joining the channel?
-            if (value == "0") break;
-            value = tag;
-            goto case;
-
         case "msg-param-sub-plan":
             // The type of subscription plan being used.
             // Valid values: Prime, 1000, 2000, 3000.
@@ -720,10 +715,6 @@ auto parseTwitchTags(ref IRCParser parser, ref IRCEvent event) @safe
         case "msg-param-prior-gifter-user-name":
             // msg-param-prior-gifter-user-name = "coopamantv"
             // Prior gifter when a user pays forward a gift
-        //case "msg-param-prior-gifter-display-name":
-            // "msg-param-prior-gifter-display-name" = "CoopaManTV"
-            // Prefer msg-param-prior-gifter-user-name as we can deduce the
-            // display name from that but not the other way around.
         case "msg-param-color":
             // msg-param-color = PRIMARY
             // msg-param-color = PURPLE
@@ -733,13 +724,23 @@ auto parseTwitchTags(ref IRCParser parser, ref IRCEvent event) @safe
         case "message-id":
             // message-id = 3
             // WHISPER, rolling number enumerating messages
+        case "reply-parent-msg-body":
+            // The body of the message that is being replied to
+            // reply-parent-msg-body = she's\sgonna\swin\s2truths\sand\sa\slie\severytime
 
             /+
                 Aux 0
              +/
             version(TwitchWarnings) warnAboutOverwrittenAuxString(0, key);
-            event.aux[0] = value;
+            event.aux[0] = decodeIRCv3String(value);
             break;
+
+        case "first-msg":
+            // first-msg = 0
+            // Whether or not it's the user's first message after joining the channel?
+            if (value == "0") break;
+            value = tag;
+            goto case;
 
         case "msg-param-goal-contribution-type":
             // msg-param-goal-contribution-type = SUB_POINTS
@@ -769,7 +770,7 @@ auto parseTwitchTags(ref IRCParser parser, ref IRCEvent event) @safe
                 Aux 1
              +/
             version(TwitchWarnings) warnAboutOverwrittenAuxString(1, key);
-            event.aux[1] = value;
+            event.aux[1] = decodeIRCv3String(value);
             break;
 
         case "msg-param-sub-plan-name":
@@ -782,7 +783,7 @@ auto parseTwitchTags(ref IRCParser parser, ref IRCEvent event) @safe
                 Aux 2
              +/
             version(TwitchWarnings) warnAboutOverwrittenAuxString(2, key);
-            event.aux[2] = value;
+            event.aux[2] = decodeIRCv3String(value);
             break;
 
         case "msg-param-goal-description":
@@ -794,7 +795,7 @@ auto parseTwitchTags(ref IRCParser parser, ref IRCEvent event) @safe
                 Aux 3
              +/
             version(TwitchWarnings) warnAboutOverwrittenAuxString(3, key);
-            event.aux[3] = value;
+            event.aux[3] = decodeIRCv3String(value);
             break;
 
         case "msg-param-is-highlighted":
@@ -804,7 +805,7 @@ auto parseTwitchTags(ref IRCParser parser, ref IRCEvent event) @safe
                 Aux 4
              +/
             version(TwitchWarnings) warnAboutOverwrittenAuxString(4, key);
-            event.aux[4] = value;
+            event.aux[4] = value;  // no need to decode?
             break;
 
         case "emotes":
@@ -1041,13 +1042,6 @@ auto parseTwitchTags(ref IRCParser parser, ref IRCEvent event) @safe
             // The display name of the user that is being replied to
             // reply-parent-display-name = zenArc
             event.target.displayName = value;
-            break;
-
-        case "reply-parent-msg-body":
-            // The body of the message that is being replied to
-            // reply-parent-msg-body = she's\sgonna\swin\s2truths\sand\sa\slie\severytime
-            version(TwitchWarnings) warnAboutOverwrittenAuxString(0, key);
-            event.aux[0] = decodeIRCv3String(value);
             break;
 
         case "reply-parent-user-login":
