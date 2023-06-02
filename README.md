@@ -118,7 +118,7 @@ with (event)
     assert(sender.address == "address.tld");
     assert(target.nickname == "nickname");
     assert(channel == "#channel");
-    assert(aux = "+v");
+    assert(aux[0] = "+v");
 }
 
 string alsoFromServer = ":cherryh.freenode.net 435 oldnick newnick #d :Cannot change nickname while banned on channel";
@@ -131,7 +131,7 @@ with (event2)
     assert(channel == "#d");
     assert(target.nickname == "oldnick");
     assert(content == "Cannot change nickname while banned on channel");
-    assert(aux == "newnick");
+    assert(aux[0] == "newnick");
     assert(num == 435);
 }
 
@@ -147,9 +147,9 @@ with (event3)
     assert(sender.badges == "subscriber/12");
     assert(channel == "#xqcow");
     assert(content == "SomeoneOnTwitch is gifting 1 Tier 1 Subs to xQcOW's community! They've gifted a total of 4 in the channel!");
-    assert(aux == "1000");
-    assert(count == 1);
-    assert(altcount == 4);
+    assert(aux[0] == "1000");
+    assert(count[0] == 1);
+    assert(count[1] == 4);
 }
 ```
 
