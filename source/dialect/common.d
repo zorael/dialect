@@ -771,14 +771,19 @@ auto isValidNicknameCharacter(const ubyte c) pure @safe nothrow @nogc
     import std.string : representation;
 
     {
-        immutable line = "abcDEFghi0{}29304_[]`\\^|---";
+        enum line = "abcDEFghi0{}29304_[]`\\^|---";
         foreach (immutable char c; line.representation)
         {
             assert(c.isValidNicknameCharacter, c ~ "");
         }
     }
-
-    assert(!' '.isValidNicknameCharacter);
+    {
+        enum line = "åÄö高所恐怖症１２３なにぬねの ";
+        foreach (immutable char c; line.representation)
+        {
+            assert(!c.isValidNicknameCharacter, c ~ "");
+        }
+    }
 }
 
 
