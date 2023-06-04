@@ -494,14 +494,14 @@ auto isAuthService(
     ---
 
     Params:
-        channel = String of a potential channel name.
+        channelName = String of a potential channel name.
         server = The current [dialect.defs.IRCServer|IRCServer] with all its settings.
 
     Returns:
         `true` if the string content is judged to be a channel, `false` if not.
  +/
 auto isValidChannel(
-    const string channel,
+    const string channelName,
     const IRCServer server) pure @safe nothrow @nogc
 {
     import std.string : representation;
@@ -516,30 +516,38 @@ auto isValidChannel(
 
         - https://tools.ietf.org/html/rfc1459.html
      +/
-    if ((channel.length < 2) || (channel.length > server.maxChannelLength))
+    if ((channelName.length < 2) || (channelName.length > server.maxChannelLength))
     {
         // Too short or too long a word
         return false;
     }
 
-    if (!server.chantypes.contains(channel[0])) return false;
+    if (!server.chantypes.contains(channelName[0])) return false;
 
-    if (channel.contains(' ') ||
-        channel.contains(',') ||
-        channel.contains(7))
+    if (channelName.contains(' ') ||
+        channelName.contains(',') ||
+        channelName.contains(7))
     {
         // Contains spaces, commas or byte 7
         return false;
     }
 
-    if (channel.length == 2) return !server.chantypes.contains(channel[1]);
-    else if (channel.length == 3) return !server.chantypes.contains(channel[2]);
-    else if (channel.length > 3)
+    if (channelName.length == 2) return !server.chantypes.contains(channelName[1]);
+    else if (channelName.length == 3) return !server.chantypes.contains(channelName[2]);
+    else if (channelName.length > 3)
     {
         // Allow for two ##s (or &&s) in the name but no more
         foreach (immutable chansign; server.chantypes.representation)
         {
-            if (channel[2..$].contains(chansign)) return false;
+            if (channelName[2..$].contains(chansign)) return false;
+        }
+
+        version(TwitchSupport)
+        {
+            if (server.daemon == IRCServer.Daemon.twitch)
+            {
+                return channelName[1..$].isValidNickname(server);
+            }
         }
         return true;
     }
@@ -572,6 +580,17 @@ auto isValidChannel(
     assert(!"a".isValidChannel(s));
     assert(!" ".isValidChannel(s));
     //assert(!"".isValidChannel(s));
+
+    version(TwitchSupport)
+    {
+        s.daemon = IRCServer.Daemon.twitch;
+        s.chantypes = "#";
+        s.maxNickLength = 25;
+
+        assert("#1oz".isValidChannel(s));
+        assert(!"#åäö".isValidChannel(s));
+        assert("#arunero9029".isValidChannel(s));
+    }
 }
 
 
