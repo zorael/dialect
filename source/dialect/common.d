@@ -322,16 +322,21 @@ auto decodeIRCv3String(const string line) pure @safe nothrow
     assert((s6 == "9 raiders from VHSGlitch have joined\n!"), s6);
 
     {
-        immutable before = `\s\s\s`;
+        enum before = `\s\s\s`;
         immutable after = decodeIRCv3String(before);
         assert((after == "   "), after);
         assert(before !is after);
     }
     {
-        immutable before = `foo bar`;
+        enum before = `foo bar`;
         immutable after = decodeIRCv3String(before);
         assert((after == "foo bar"), after);
         assert(before is after);
+    }
+    {
+        enum before = `This\sline\sis\sencoded\:\swith\s\\s`;
+        immutable after = decodeIRCv3String(before);
+        assert((after == r"This line is encoded; with \s"), after);
     }
 }
 
