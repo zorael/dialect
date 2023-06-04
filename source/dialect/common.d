@@ -203,7 +203,7 @@ auto typenumsOf(const IRCServer.Daemon daemon) pure @safe nothrow @nogc
     ---
     string encoded = `This\sline\sis\sencoded\:\swith\s\\s`;
     string decoded = decodeIRCv3String(encoded);
-    assert(decoded == "This line is encoded; with \\s");
+    assert(decoded == r"This line is encoded; with \s");
     ---
 
     Params:
@@ -450,7 +450,8 @@ auto isAuthService(
     // We're here if nick nickserv/sasl/etc and unknown ident, or server mismatch
     // As such, no need to be as strict as isSpecial is
 
-    return (sharedDomains(sender.address, parser.server.address) >= 2) ||
+    return
+        (sharedDomains(sender.address, parser.server.address) >= 2) ||
         (sharedDomains(sender.address, parser.server.resolvedAddress) >= 2);
 }
 
@@ -607,11 +608,11 @@ auto isValidChannel(
 
     Example:
     ---
-    assert("kameloso".isValidNickname);
-    assert("kameloso^".isValidNickname);
-    assert("kamelåså".isValidNickname);
-    assert(!"#kameloso".isValidNickname);
-    assert(!"k&&me##so".isValidNickname);
+    assert("kameloso".isValidNickname(server));
+    assert("kameloso^".isValidNickname(server));
+    assert("kamelåså".isValidNickname(server));
+    assert(!"#kameloso".isValidNickname(server));
+    assert(!"k&&me##so".isValidNickname(server));
     ---
 
     Params:
@@ -765,6 +766,7 @@ auto isValidNicknameCharacter(const ubyte c) pure @safe nothrow @nogc
     case '`':
     case '|':
         return true;
+
     default:
         return false;
     }
@@ -881,7 +883,7 @@ unittest
     ---
     IRCServer server;
     immutable signed = "@+kameloso";
-    immutable nickname = server.stripModeSign(signed);
+    immutable nickname = signed.stripModeSign(server);
     assert((nickname == "kameloso"), nickname);
     assert((signs == "@+"), signs);
     ---
@@ -937,12 +939,14 @@ auto stripModesign(
 
     Example:
     ---
+    IRCServer server;
     IRCChannel channel;
-    channel.setMode("+oo zorael!NaN@* kameloso!*@*")
+
+    channel.setMode("+oo", "zorael!NaN@* kameloso!*@*", server);
     assert(channel.modes.length == 2);
-    channel.setMode("-o kameloso!*@*");
+    channel.setMode("-o", "kameloso!*@*", server);
     assert(channel.modes.length == 1);
-    channel.setMode("-o *!*@*");
+    channel.setMode("-o" "*!*@*", server);
     assert(!channel.modes.length);
     ---
 
@@ -1506,6 +1510,8 @@ enum IRCControlCharacter
 
     Example:
     ---
+    IRCServer server;
+
     IRCUser u1;
     with (u1)
     {
@@ -1518,12 +1524,12 @@ enum IRCControlCharacter
     with (u2)
     {
         nickname = "*";
-         ident = "NaN";
+        ident = "NaN";
         address = "*";
     }
 
-    assert(u1.matchesByMask(u2));
-    assert(u1.matchesByMask("f*!NaN@*.com"));
+    assert(u1.matchesByMask(u2, server.caseMapping));
+    assert(u1.matchesByMask(IRCUser("f*!NaN@*.com"), server.caseMapping));
     ---
 
     Params:
