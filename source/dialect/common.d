@@ -608,22 +608,32 @@ auto isValidNickname(
         return false;
     }
 
+    version(TwitchSupport)
+    {
+        immutable firstCharacterMayBeNumber = (server.daemon == IRCServer.Daemon.twitch);
+    }
+    else
+    {
+        enum firstCharacterMayBeNumber = false;
+    }
+
     immutable rep = nickname.representation;
 
-    if (((rep[0] >= '0') && (rep[0] <= '9')) || (rep[0] == '-'))
+    if (!firstCharacterMayBeNumber && (rep[0] >= '0') && (rep[0] <= '9'))
     {
         return false;
     }
-    else if (!rep[0].isValidNicknameCharacter)
+    else if (rep[0] == '-')
     {
         return false;
     }
 
-    foreach (immutable c; rep[1..$])
+    foreach (immutable c; rep)
     {
         if (!c.isValidNicknameCharacter) return false;
     }
 
+    // All seem okay
     return true;
 }
 
@@ -661,6 +671,7 @@ auto isValidNickname(
         "$deity",
         "0kameloso",
         "-kameloso",
+        "1oz",
     ];
 
     foreach (immutable nickname; validNicknames)
@@ -671,6 +682,13 @@ auto isValidNickname(
     foreach (immutable nickname; invalidNicknames)
     {
         assert(!nickname.isValidNickname(s), nickname);
+    }
+
+    version(TwitchSupport)
+    {
+        // Twitch supports numbers as first character
+        s.daemon = IRCServer.Daemon.twitch;
+        assert("1oz".isValidNickname(s));
     }
 }
 
