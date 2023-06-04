@@ -183,6 +183,7 @@ unittest
         server.dModes = "CFLMPQScgimnprstz";
         server.prefixchars = ['v':'+', 'o':'@'];
         server.prefixes = "ov";
+        server.maxNickLength = 25;
     }
 
     parser.typenums = typenumsOf(parser.server.daemon);
