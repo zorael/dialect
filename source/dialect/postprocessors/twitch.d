@@ -736,8 +736,6 @@ auto parseTwitchTags(ref IRCParser parser, ref IRCEvent event) @safe
             value = tag;
             goto case;
 
-        case "msg-param-goal-contribution-type":
-            // msg-param-goal-contribution-type = SUB_POINTS
         case "msg-param-gift-theme":
             // msg-param-gift-theme = party
             // Theme of a bulkgift?
@@ -792,6 +790,8 @@ auto parseTwitchTags(ref IRCParser parser, ref IRCEvent event) @safe
             event.aux[3] = decodeIRCv3String(value);
             break;
 
+        case "msg-param-goal-contribution-type":
+            // msg-param-goal-contribution-type = SUB_POINTS
         case "msg-param-is-highlighted":
             // something with new midnightsquid direct cheers
 
