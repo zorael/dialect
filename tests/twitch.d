@@ -1191,6 +1191,33 @@ unittest
             assert((id == "03c13cd4-225c-4f0c-b85c-6c3a74446f31"), id);
         }
     }
-
-
+    {
+        // @badge-info=;badges=;color=;display-name=AnAnonymousGifter;emotes=;flags=;id=01af180f-5efd-40c8-94fb-d0a346c7be86;login=ananonymousgifter;mod=0;msg-id=subgift;msg-param-fun-string=FunStringFour;msg-param-gift-months=1;msg-param-goal-contribution-type=SUB_POINTS;msg-param-goal-current-contributions=15624;msg-param-goal-target-contributions=20000;msg-param-goal-user-contributions=1;msg-param-months=24;msg-param-origin-id=54\s41\s9a\s69\s6c\sb4\s3c\s8b\s0b\se4\sdf\s4c\sba\s5b\s9b\s23\s4c\sa7\s9b\sc4;msg-param-recipient-display-name=niku4949;msg-param-recipient-id=547206601;msg-param-recipient-user-name=niku4949;msg-param-sub-plan-name=Channel\sSubscription\s(fps_shaka);msg-param-sub-plan=1000;room-id=49207184;subscriber=0;system-msg=An\sanonymous\suser\sgifted\sa\sTier\s1\ssub\sto\sniku4949!\s;tmi-sent-ts=1685982143345;user-id=274598607;user-type= :tmi.twitch.tv USERNOTICE #fps_shaka
+        immutable event = parser.toIRCEvent("@badge-info=;badges=;color=;display-name=AnAnonymousGifter;emotes=;flags=;id=01af180f-5efd-40c8-94fb-d0a346c7be86;login=ananonymousgifter;mod=0;msg-id=subgift;msg-param-fun-string=FunStringFour;msg-param-gift-months=1;msg-param-goal-contribution-type=SUB_POINTS;msg-param-goal-current-contributions=15624;msg-param-goal-target-contributions=20000;msg-param-goal-user-contributions=1;msg-param-months=24;msg-param-origin-id=54\\s41\\s9a\\s69\\s6c\\sb4\\s3c\\s8b\\s0b\\se4\\sdf\\s4c\\sba\\s5b\\s9b\\s23\\s4c\\sa7\\s9b\\sc4;msg-param-recipient-display-name=niku4949;msg-param-recipient-id=547206601;msg-param-recipient-user-name=niku4949;msg-param-sub-plan-name=Channel\\sSubscription\\s(fps_shaka);msg-param-sub-plan=1000;room-id=49207184;subscriber=0;system-msg=An\\sanonymous\\suser\\sgifted\\sa\\sTier\\s1\\ssub\\sto\\sniku4949!\\s;tmi-sent-ts=1685982143345;user-id=274598607;user-type= :tmi.twitch.tv USERNOTICE #fps_shaka");
+        with (event)
+        {
+            assert((type == IRCEvent.Type.TWITCH_SUBGIFT), Enum!(IRCEvent.Type).toString(type));
+            assert((sender.nickname == "ananonymousgifter"), sender.nickname);
+            assert((sender.address == "tmi.twitch.tv"), sender.address);
+            assert((sender.account == "ananonymousgifter"), sender.account);
+            assert((sender.displayName == "AnAnonymousGifter"), sender.displayName);
+            assert((sender.badges == "*"), sender.badges);
+            assert((sender.id == 274598607), sender.id.to!string);
+            assert((channel == "#fps_shaka"), channel);
+            assert((target.nickname == "niku4949"), target.nickname);
+            assert((target.account == "niku4949"), target.account);
+            assert((target.displayName == "niku4949"), target.displayName);
+            assert((content == "An anonymous user gifted a Tier 1 sub to niku4949!"), content);
+            assert((aux[0] == "1000"), aux[0]);
+            assert((aux[1] == "FunStringFour"), aux[1]);
+            assert((aux[2] == "Channel Subscription (fps_shaka)"), aux[2]);
+            assert((aux[4] == "SUB_POINTS"), aux[4]);
+            assert((tags == "badge-info=;badges=;color=;display-name=AnAnonymousGifter;emotes=;flags=;id=01af180f-5efd-40c8-94fb-d0a346c7be86;login=ananonymousgifter;mod=0;msg-id=subgift;msg-param-fun-string=FunStringFour;msg-param-gift-months=1;msg-param-goal-contribution-type=SUB_POINTS;msg-param-goal-current-contributions=15624;msg-param-goal-target-contributions=20000;msg-param-goal-user-contributions=1;msg-param-months=24;msg-param-origin-id=54\\s41\\s9a\\s69\\s6c\\sb4\\s3c\\s8b\\s0b\\se4\\sdf\\s4c\\sba\\s5b\\s9b\\s23\\s4c\\sa7\\s9b\\sc4;msg-param-recipient-display-name=niku4949;msg-param-recipient-id=547206601;msg-param-recipient-user-name=niku4949;msg-param-sub-plan-name=Channel\\sSubscription\\s(fps_shaka);msg-param-sub-plan=1000;room-id=49207184;subscriber=0;system-msg=An\\sanonymous\\suser\\sgifted\\sa\\sTier\\s1\\ssub\\sto\\sniku4949!\\s;tmi-sent-ts=1685982143345;user-id=274598607;user-type="), tags);
+            assert((count[0] == 1), count[0].to!string);
+            assert((count[2] == 20000), count[2].to!string);
+            assert((count[3] == 15624), count[3].to!string);
+            assert((count[4] == 1), count[4].to!string);
+            assert((id == "01af180f-5efd-40c8-94fb-d0a346c7be86"), id);
+        }
+    }
 }
