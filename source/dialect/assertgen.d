@@ -460,11 +460,12 @@ int main(string[] args) @system
         }
     }
 
-    enum scissors = "\n8<  --  8<  --  8<  --  8<  --  8<  --  8<  --  8<  --  8<  --  8<\n";
+    enum scissors = "// 8<  --  8<  --  8<  --  8<  --  8<  --  8<  --  8<  --  8<  --  8<\n";
 
     buffer.formatClientAssignment(parser.client, parser.server);
-    buffer.put("\n\nparser.typenums = typenumsOf(parser.server.daemon);");
+    buffer.put("\n\nparser.typenums = typenumsOf(parser.server.daemon);\n");
 
+    writeln();
     writeln(scissors);
     writeln(buffer.data);
     writeln(scissors);
