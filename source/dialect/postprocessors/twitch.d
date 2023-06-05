@@ -60,8 +60,6 @@ auto parseTwitchTags(ref IRCParser parser, ref IRCEvent event) @safe
         /// Whether or not an error occured and debug information should be printed
         /// upon leaving the function.
         bool printTagsOnExit;
-        bool printAuxOnExit;
-        bool printCountOnExit;
 
         static void appendToErrors(ref IRCEvent event, const string msg)
         {
@@ -100,7 +98,6 @@ auto parseTwitchTags(ref IRCParser parser, ref IRCEvent event) @safe
                 appendToErrors(event, msg);
                 writeln(msg);
                 printTagsOnExit = true;
-                printCountOnExit = true;
             }
         }
 
@@ -118,7 +115,6 @@ auto parseTwitchTags(ref IRCParser parser, ref IRCEvent event) @safe
                 appendToErrors(event, msg);
                 writeln(msg);
                 printTagsOnExit = true;
-                printAuxOnExit = true;
             }
         }
     }
@@ -311,8 +307,6 @@ auto parseTwitchTags(ref IRCParser parser, ref IRCEvent event) @safe
                 {
                     appendToErrors(event, "RECORD TWITCH CHARITY");
                     printTagsOnExit = true;
-                    printAuxOnExit = true;
-                    printCountOnExit = true;
                 }
                 break;
 
@@ -1204,9 +1198,9 @@ auto parseTwitchTags(ref IRCParser parser, ref IRCEvent event) @safe
                     "Deprecation: `@safe` function `parseTwitchTags` calling `writefln`"
                  +/
                 enum pattern = `%-35s%s`;
-                if (printAuxOnExit)   writefln(pattern, "event.aux", event.aux);
-                if (printCountOnExit) writefln(pattern, "event.count", event.count);
-                if (printAuxOnExit || printCountOnExit) writeln();
+                writefln(pattern, "event.aux", event.aux);
+                writefln(pattern, "event.count", event.count);
+                writeln();
             }
 
             printTags(tagRange, event);
