@@ -736,9 +736,6 @@ auto parseTwitchTags(ref IRCParser parser, ref IRCEvent event) @safe
             value = tag;
             goto case;
 
-        case "msg-param-gift-theme":
-            // msg-param-gift-theme = party
-            // Theme of a bulkgift?
         case "msg-param-fun-string":
             // msg-param-fun-string = FunStringTwo
             // [subgift] [#waifugate] AnAnonymousGifter (Asdf): "An anonymous user gifted a Tier 1 sub to Asdf!" (1000) {1}
@@ -782,6 +779,9 @@ auto parseTwitchTags(ref IRCParser parser, ref IRCEvent event) @safe
             // msg-param-goal-description = Lali-this\sis\sa\sgoal-ho
         case "msg-param-pill-type":
             // something with new midnightsquid direct cheers
+        case "msg-param-gift-theme":
+            // msg-param-gift-theme = party
+            // Theme of a bulkgift?
 
             /+
                 Aux 3
