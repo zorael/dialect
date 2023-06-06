@@ -1220,4 +1220,30 @@ unittest
             assert((id == "01af180f-5efd-40c8-94fb-d0a346c7be86"), id);
         }
     }
+    {
+        // @badge-info=;badges=;color=;display-name=AnAnonymousGifter;emotes=;flags=;id=7c1a48d9-f74f-468e-9019-730a5934e636;login=ananonymousgifter;mod=0;msg-id=subgift;msg-param-fun-string=FunStringOne;msg-param-gift-months=1;msg-param-gift-theme=lul;msg-param-months=1;msg-param-origin-id=ca\s71\s60\sb3\sa1\s8a\s8a\sbe\se9\s92\s8e\s6b\s99\s87\s1f\s71\s43\sf8\scf\s2d;msg-param-recipient-display-name=SpecterCRP;msg-param-recipient-id=48357366;msg-param-recipient-user-name=spectercrp;msg-param-sub-plan-name=FextraLITE;msg-param-sub-plan=1000;room-id=156037856;subscriber=0;system-msg=An\sanonymous\suser\sgifted\sa\sTier\s1\ssub\sto\sSpecterCRP!\s;tmi-sent-ts=1686025729209;user-id=274598607;user-type= :tmi.twitch.tv USERNOTICE #fextralife
+        immutable event = parser.toIRCEvent("@badge-info=;badges=;color=;display-name=AnAnonymousGifter;emotes=;flags=;id=7c1a48d9-f74f-468e-9019-730a5934e636;login=ananonymousgifter;mod=0;msg-id=subgift;msg-param-fun-string=FunStringOne;msg-param-gift-months=1;msg-param-gift-theme=lul;msg-param-months=1;msg-param-origin-id=ca\\s71\\s60\\sb3\\sa1\\s8a\\s8a\\sbe\\se9\\s92\\s8e\\s6b\\s99\\s87\\s1f\\s71\\s43\\sf8\\scf\\s2d;msg-param-recipient-display-name=SpecterCRP;msg-param-recipient-id=48357366;msg-param-recipient-user-name=spectercrp;msg-param-sub-plan-name=FextraLITE;msg-param-sub-plan=1000;room-id=156037856;subscriber=0;system-msg=An\\sanonymous\\suser\\sgifted\\sa\\sTier\\s1\\ssub\\sto\\sSpecterCRP!\\s;tmi-sent-ts=1686025729209;user-id=274598607;user-type= :tmi.twitch.tv USERNOTICE #fextralife");
+        with (event)
+        {
+            assert((type == IRCEvent.Type.TWITCH_SUBGIFT), Enum!(IRCEvent.Type).toString(type));
+            assert((sender.nickname == "ananonymousgifter"), sender.nickname);
+            assert((sender.address == "tmi.twitch.tv"), sender.address);
+            assert((sender.account == "ananonymousgifter"), sender.account);
+            assert((sender.displayName == "AnAnonymousGifter"), sender.displayName);
+            assert((sender.badges == "*"), sender.badges);
+            assert((sender.id == 274598607), sender.id.to!string);
+            assert((channel == "#fextralife"), channel);
+            assert((target.nickname == "spectercrp"), target.nickname);
+            assert((target.account == "spectercrp"), target.account);
+            assert((target.displayName == "SpecterCRP"), target.displayName);
+            assert((content == "An anonymous user gifted a Tier 1 sub to SpecterCRP!"), content);
+            assert((aux[0] == "1000"), aux[0]);
+            assert((aux[1] == "FunStringOne"), aux[1]);
+            assert((aux[2] == "FextraLITE"), aux[2]);
+            assert((aux[3] == "lul"), aux[3]);
+            assert((tags == "badge-info=;badges=;color=;display-name=AnAnonymousGifter;emotes=;flags=;id=7c1a48d9-f74f-468e-9019-730a5934e636;login=ananonymousgifter;mod=0;msg-id=subgift;msg-param-fun-string=FunStringOne;msg-param-gift-months=1;msg-param-gift-theme=lul;msg-param-months=1;msg-param-origin-id=ca\\s71\\s60\\sb3\\sa1\\s8a\\s8a\\sbe\\se9\\s92\\s8e\\s6b\\s99\\s87\\s1f\\s71\\s43\\sf8\\scf\\s2d;msg-param-recipient-display-name=SpecterCRP;msg-param-recipient-id=48357366;msg-param-recipient-user-name=spectercrp;msg-param-sub-plan-name=FextraLITE;msg-param-sub-plan=1000;room-id=156037856;subscriber=0;system-msg=An\\sanonymous\\suser\\sgifted\\sa\\sTier\\s1\\ssub\\sto\\sSpecterCRP!\\s;tmi-sent-ts=1686025729209;user-id=274598607;user-type="), tags);
+            assert((count[0] == 1), count[0].to!string);
+            assert((id == "7c1a48d9-f74f-468e-9019-730a5934e636"), id);
+        }
+    }
 }
