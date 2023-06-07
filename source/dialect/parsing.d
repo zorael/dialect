@@ -1017,7 +1017,12 @@ void parseSpecialcases(
 
     case PONG:
         // PONG :<address>
-        event.content = string.init;
+        // :<address> PONG <address> :<what was pinged>
+        if (slice.contains(" :"))
+        {
+            event.aux[0] = slice.nom(" :");
+        }
+        event.content = slice;
         break;
 
     case ERR_NOTREGISTERED: // 451
