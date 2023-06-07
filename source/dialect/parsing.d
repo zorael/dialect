@@ -1236,6 +1236,14 @@ void parseSpecialcases(
         event.target.nickname = slice.nom(" :");
         event.content = slice;
 
+        if (!parser.server.resolvedAddress.length)
+        {
+            // No RPL_HELLO. Twitch?
+            // Inherit the sender address as the resolved server address
+            parser.server.resolvedAddress = event.sender.address;
+            version(FlagAsUpdated) parser.updates |= IRCParser.Update.server;
+        }
+
         if (parser.client.nickname != event.target.nickname)
         {
             parser.client.nickname = event.target.nickname;
