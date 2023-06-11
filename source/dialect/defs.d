@@ -868,6 +868,11 @@ public:
     Type type;
 
     /++
+        With a numeric event, the number of the event type.
+     +/
+    uint num;
+
+    /++
         The raw IRC string, untouched.
      +/
     @Hidden string raw;
@@ -901,11 +906,6 @@ public:
         IRCv3 message tags attached to this event
      +/
     string tags;
-
-    /++
-        With a numeric event, the number of the event type.
-     +/
-    uint num;
 
     /++
         Count array.
@@ -1088,6 +1088,16 @@ struct IRCServer
         string chantypes = "#";
 
         /++
+            Contents of the [IRCEvent.Type.RPL_ISUPPORT|RPL_ISUPPORT] response(s).
+         +/
+        string supports;
+
+        /++
+            `EXTBAN` types.
+         +/
+        string extbanTypes;
+
+        /++
             The current case mapping, dictating how case-insensitivity works.
          +/
         CaseMapping caseMapping;
@@ -1098,11 +1108,6 @@ struct IRCServer
         char extbanPrefix = '$';
 
         /++
-            `EXTBAN` types.
-         +/
-        string extbanTypes;
-
-        /++
             The modechar for mode exceptions.
          +/
         char exceptsChar = 'e';
@@ -1111,11 +1116,6 @@ struct IRCServer
             The modechar for invite exceptions.
          +/
         char invexChar = 'I';
-
-        /++
-            Contents of the [IRCEvent.Type.RPL_ISUPPORT|RPL_ISUPPORT] response(s).
-         +/
-        string supports;
     }
 
     /++
@@ -1169,6 +1169,14 @@ struct IRCUser
         Class class_;
     }
 
+    version(TwitchSupport)
+    {
+        /++
+            The Twitch ID of this user's account.
+         +/
+        uint id;
+    }
+
     /++
         The user's GECOS/"real name".
      +/
@@ -1212,11 +1220,6 @@ struct IRCUser
             The Twitch colour (RRGGBB) to tint the user's nickname with.
          +/
         string colour;
-
-        /++
-            The Twitch ID of this user's account.
-         +/
-        uint id;
     }
 
     /++
