@@ -1293,7 +1293,7 @@ unittest
             assert((target.displayName == "Garvickian"), target.displayName);
             assert((content == "@Garvickian no they arent dumbass, he used dogwhistling incorrectly"), content);
             assert((aux[0] == "THEY ARE GASLIGHTING YOU @xqc THEY ARE GASLIGHTING YOU @xqc THEY ARE GASLIGHTING YOU @xqc THEY ARE GASLIGHTING YOU @xqc THEY ARE GASLIGHTING YOU @xqc"), aux[0]);
-            assert((aux[1] == "garvickian"), aux[1]);
+            assert((aux[2] == "garvickian"), aux[1]);
             assert((tags == "badge-info=subscriber/32;badges=subscriber/30,premium/1;client-nonce=4d9124729220070c5eeb6bd4811e59b3;color=#00FF1F;display-name=creaturesfan72;emotes=;first-msg=0;flags=26-33:A.3/P.3;id=bb439115-71b1-4aa5-820d-8180adf69625;mod=0;reply-parent-display-name=Garvickian;reply-parent-msg-body=THEY\\sARE\\sGASLIGHTING\\sYOU\\s@xqc\\sTHEY\\sARE\\sGASLIGHTING\\sYOU\\s@xqc\\sTHEY\\sARE\\sGASLIGHTING\\sYOU\\s@xqc\\sTHEY\\sARE\\sGASLIGHTING\\sYOU\\s@xqc\\sTHEY\\sARE\\sGASLIGHTING\\sYOU\\s@xqc;reply-parent-msg-id=9859b5a0-4b05-4053-979a-9965bafd5707;reply-parent-user-id=152126453;reply-parent-user-login=garvickian;reply-thread-parent-msg-id=9859b5a0-4b05-4053-979a-9965bafd5707;reply-thread-parent-user-login=garvickian;returning-chatter=0;room-id=71092938;subscriber=1;tmi-sent-ts=1687307715366;turbo=0;user-id=32291538;user-type="), tags);
             assert((id == "bb439115-71b1-4aa5-820d-8180adf69625"), id);
         }
