@@ -1246,4 +1246,56 @@ unittest
             assert((id == "7c1a48d9-f74f-468e-9019-730a5934e636"), id);
         }
     }
+    {
+        // @badge-info=;badges=;color=;display-name=AnAnonymousGifter;emotes=;flags=;id=0f0f82ae-0ab1-4a0d-a5b5-edfacc05db7e;login=ananonymousgifter;mod=0;msg-id=subgift;msg-param-fun-string=FunStringThree;msg-param-gift-months=1;msg-param-gift-theme=showlove;msg-param-months=1;msg-param-origin-id=23\s9d\sea\sda\s41\s08\s0e\s3b\se8\s85\scb\s5e\s90\sc8\se6\sd7\s86\se0\s6f\sd0;msg-param-recipient-display-name=apeguard;msg-param-recipient-id=503002485;msg-param-recipient-user-name=apeguard;msg-param-sub-plan-name=FextraLITE;msg-param-sub-plan=1000;room-id=156037856;subscriber=0;system-msg=An\sanonymous\suser\sgifted\sa\sTier\s1\ssub\sto\sapeguard!\s;tmi-sent-ts=1687139215919;user-id=274598607;user-type= :tmi.twitch.tv USERNOTICE #fextralife
+        immutable event = parser.toIRCEvent("@badge-info=;badges=;color=;display-name=AnAnonymousGifter;emotes=;flags=;id=0f0f82ae-0ab1-4a0d-a5b5-edfacc05db7e;login=ananonymousgifter;mod=0;msg-id=subgift;msg-param-fun-string=FunStringThree;msg-param-gift-months=1;msg-param-gift-theme=showlove;msg-param-months=1;msg-param-origin-id=23\\s9d\\sea\\sda\\s41\\s08\\s0e\\s3b\\se8\\s85\\scb\\s5e\\s90\\sc8\\se6\\sd7\\s86\\se0\\s6f\\sd0;msg-param-recipient-display-name=apeguard;msg-param-recipient-id=503002485;msg-param-recipient-user-name=apeguard;msg-param-sub-plan-name=FextraLITE;msg-param-sub-plan=1000;room-id=156037856;subscriber=0;system-msg=An\\sanonymous\\suser\\sgifted\\sa\\sTier\\s1\\ssub\\sto\\sapeguard!\\s;tmi-sent-ts=1687139215919;user-id=274598607;user-type= :tmi.twitch.tv USERNOTICE #fextralife");
+        with (event)
+        {
+            assert((type == IRCEvent.Type.TWITCH_SUBGIFT), Enum!(IRCEvent.Type).toString(type));
+            assert((sender.nickname == "ananonymousgifter"), sender.nickname);
+            assert((sender.id == 274598607), sender.id.to!string);
+            assert((sender.address == "tmi.twitch.tv"), sender.address);
+            assert((sender.account == "ananonymousgifter"), sender.account);
+            assert((sender.displayName == "AnAnonymousGifter"), sender.displayName);
+            assert((sender.badges == "*"), sender.badges);
+            assert((channel == "#fextralife"), channel);
+            assert((target.nickname == "apeguard"), target.nickname);
+            assert((target.account == "apeguard"), target.account);
+            assert((target.displayName == "apeguard"), target.displayName);
+            assert((content == "An anonymous user gifted a Tier 1 sub to apeguard!"), content);
+            assert((aux[0] == "1000"), aux[0]);
+            assert((aux[1] == "FunStringThree"), aux[1]);
+            assert((aux[2] == "FextraLITE"), aux[2]);
+            assert((aux[3] == "showlove"), aux[3]);
+            assert((tags == "badge-info=;badges=;color=;display-name=AnAnonymousGifter;emotes=;flags=;id=0f0f82ae-0ab1-4a0d-a5b5-edfacc05db7e;login=ananonymousgifter;mod=0;msg-id=subgift;msg-param-fun-string=FunStringThree;msg-param-gift-months=1;msg-param-gift-theme=showlove;msg-param-months=1;msg-param-origin-id=23\\s9d\\sea\\sda\\s41\\s08\\s0e\\s3b\\se8\\s85\\scb\\s5e\\s90\\sc8\\se6\\sd7\\s86\\se0\\s6f\\sd0;msg-param-recipient-display-name=apeguard;msg-param-recipient-id=503002485;msg-param-recipient-user-name=apeguard;msg-param-sub-plan-name=FextraLITE;msg-param-sub-plan=1000;room-id=156037856;subscriber=0;system-msg=An\\sanonymous\\suser\\sgifted\\sa\\sTier\\s1\\ssub\\sto\\sapeguard!\\s;tmi-sent-ts=1687139215919;user-id=274598607;user-type="), tags);
+            assert((count[0] == 1), count[0].to!string);
+            assert((id == "0f0f82ae-0ab1-4a0d-a5b5-edfacc05db7e"), id);
+        }
+    }
+    {
+        // @badge-info=subscriber/32;badges=subscriber/30,premium/1;client-nonce=4d9124729220070c5eeb6bd4811e59b3;color=#00FF1F;display-name=creaturesfan72;emotes=;first-msg=0;flags=26-33:A.3/P.3;id=bb439115-71b1-4aa5-820d-8180adf69625;mod=0;reply-parent-display-name=Garvickian;reply-parent-msg-body=THEY\sARE\sGASLIGHTING\sYOU\s@xqc\sTHEY\sARE\sGASLIGHTING\sYOU\s@xqc\sTHEY\sARE\sGASLIGHTING\sYOU\s@xqc\sTHEY\sARE\sGASLIGHTING\sYOU\s@xqc\sTHEY\sARE\sGASLIGHTING\sYOU\s@xqc;reply-parent-msg-id=9859b5a0-4b05-4053-979a-9965bafd5707;reply-parent-user-id=152126453;reply-parent-user-login=garvickian;reply-thread-parent-msg-id=9859b5a0-4b05-4053-979a-9965bafd5707;reply-thread-parent-user-login=garvickian;returning-chatter=0;room-id=71092938;subscriber=1;tmi-sent-ts=1687307715366;turbo=0;user-id=32291538;user-type= :creaturesfan72!creaturesfan72@creaturesfan72.tmi.twitch.tv PRIVMSG #xqc :@Garvickian no they arent dumbass, he used dogwhistling incorrectly
+        immutable event = parser.toIRCEvent("@badge-info=subscriber/32;badges=subscriber/30,premium/1;client-nonce=4d9124729220070c5eeb6bd4811e59b3;color=#00FF1F;display-name=creaturesfan72;emotes=;first-msg=0;flags=26-33:A.3/P.3;id=bb439115-71b1-4aa5-820d-8180adf69625;mod=0;reply-parent-display-name=Garvickian;reply-parent-msg-body=THEY\\sARE\\sGASLIGHTING\\sYOU\\s@xqc\\sTHEY\\sARE\\sGASLIGHTING\\sYOU\\s@xqc\\sTHEY\\sARE\\sGASLIGHTING\\sYOU\\s@xqc\\sTHEY\\sARE\\sGASLIGHTING\\sYOU\\s@xqc\\sTHEY\\sARE\\sGASLIGHTING\\sYOU\\s@xqc;reply-parent-msg-id=9859b5a0-4b05-4053-979a-9965bafd5707;reply-parent-user-id=152126453;reply-parent-user-login=garvickian;reply-thread-parent-msg-id=9859b5a0-4b05-4053-979a-9965bafd5707;reply-thread-parent-user-login=garvickian;returning-chatter=0;room-id=71092938;subscriber=1;tmi-sent-ts=1687307715366;turbo=0;user-id=32291538;user-type= :creaturesfan72!creaturesfan72@creaturesfan72.tmi.twitch.tv PRIVMSG #xqc :@Garvickian no they arent dumbass, he used dogwhistling incorrectly");
+        with (event)
+        {
+            assert((type == IRCEvent.Type.CHAN), Enum!(IRCEvent.Type).toString(type));
+            assert((sender.nickname == "creaturesfan72"), sender.nickname);
+            assert((sender.id == 32291538), sender.id.to!string);
+            assert((sender.ident == "creaturesfan72"), sender.ident);
+            assert((sender.address == "creaturesfan72.tmi.twitch.tv"), sender.address);
+            assert((sender.account == "creaturesfan72"), sender.account);
+            assert((sender.displayName == "creaturesfan72"), sender.displayName);
+            assert((sender.badges == "subscriber/30,premium/1"), sender.badges);
+            assert((sender.colour == "00FF1F"), sender.colour);
+            assert((channel == "#xqc"), channel);
+            assert((target.nickname == "garvickian"), target.nickname);
+            assert((target.id == 152126453), target.id.to!string);
+            assert((target.account == "garvickian"), target.account);
+            assert((target.displayName == "Garvickian"), target.displayName);
+            assert((content == "@Garvickian no they arent dumbass, he used dogwhistling incorrectly"), content);
+            assert((aux[0] == "THEY ARE GASLIGHTING YOU @xqc THEY ARE GASLIGHTING YOU @xqc THEY ARE GASLIGHTING YOU @xqc THEY ARE GASLIGHTING YOU @xqc THEY ARE GASLIGHTING YOU @xqc"), aux[0]);
+            assert((aux[1] == "garvickian"), aux[1]);
+            assert((tags == "badge-info=subscriber/32;badges=subscriber/30,premium/1;client-nonce=4d9124729220070c5eeb6bd4811e59b3;color=#00FF1F;display-name=creaturesfan72;emotes=;first-msg=0;flags=26-33:A.3/P.3;id=bb439115-71b1-4aa5-820d-8180adf69625;mod=0;reply-parent-display-name=Garvickian;reply-parent-msg-body=THEY\\sARE\\sGASLIGHTING\\sYOU\\s@xqc\\sTHEY\\sARE\\sGASLIGHTING\\sYOU\\s@xqc\\sTHEY\\sARE\\sGASLIGHTING\\sYOU\\s@xqc\\sTHEY\\sARE\\sGASLIGHTING\\sYOU\\s@xqc\\sTHEY\\sARE\\sGASLIGHTING\\sYOU\\s@xqc;reply-parent-msg-id=9859b5a0-4b05-4053-979a-9965bafd5707;reply-parent-user-id=152126453;reply-parent-user-login=garvickian;reply-thread-parent-msg-id=9859b5a0-4b05-4053-979a-9965bafd5707;reply-thread-parent-user-login=garvickian;returning-chatter=0;room-id=71092938;subscriber=1;tmi-sent-ts=1687307715366;turbo=0;user-id=32291538;user-type="), tags);
+            assert((id == "bb439115-71b1-4aa5-820d-8180adf69625"), id);
+        }
+    }
 }
