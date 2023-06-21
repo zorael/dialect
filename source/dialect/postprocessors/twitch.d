@@ -754,6 +754,8 @@ auto parseTwitchTags(ref IRCParser parser, ref IRCEvent event) @safe
             // Prior gifter display name when a user pays forward a gift
         case "pinned-chat-paid-currency":
             // elevated message currency
+        case "reply-thread-parent-user-login":
+            // Login of reply thread parent?
 
             /+
                 Aux 1
@@ -1163,6 +1165,8 @@ auto parseTwitchTags(ref IRCParser parser, ref IRCEvent event) @safe
                 // Whether or not the sender is a VIP. Superfluous; we can tell from the badges
             case "msg-param-emote-id":
                 // something with new midnightsquid direct cheers
+            case "reply-thread-parent-msg-id":
+                // Message ID of reply thread parent?
 
                 // Ignore these events.
                 break;
