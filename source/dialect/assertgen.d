@@ -406,6 +406,7 @@ int main(string[] args) @system
             parser.server.network = "Twitch";
             parser.server.daemonstring = "twitch";
             parser.server.address = "irc.chat.twitch.tv";
+            parser.server.maxNickLength = 25;
 
             // Provide skeletal user defaults.
             with (parser.client)
