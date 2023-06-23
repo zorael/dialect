@@ -1298,4 +1298,28 @@ unittest
             assert((id == "bb439115-71b1-4aa5-820d-8180adf69625"), id);
         }
     }
+    {
+        immutable event = parser.toIRCEvent("@badge-info=;badges=bits/25000;color=#00E2E4;display-name=OdraNet;emotes=;first-msg=0;flags=;id=5de67699-6441-4aa5-acd7-40106aeb9b78;mod=0;pinned-chat-paid-amount=120;pinned-chat-paid-canonical-amount=120;pinned-chat-paid-currency=EUR;pinned-chat-paid-exponent=2;pinned-chat-paid-is-system-message=1;pinned-chat-paid-level=ONE;returning-chatter=0;room-id=156037856;subscriber=0;tmi-sent-ts=1687507212838;turbo=0;user-id=265430223;user-type= :odranet!odranet@odranet.tmi.twitch.tv PRIVMSG #fextralife :User sent Hype Chat");
+        with (event)
+        {
+            assert((type == IRCEvent.Type.CHAN), Enum!(IRCEvent.Type).toString(type));
+            assert((sender.nickname == "odranet"), sender.nickname);
+            assert((sender.id == 265430223), sender.id.to!string);
+            assert((sender.ident == "odranet"), sender.ident);
+            assert((sender.address == "odranet.tmi.twitch.tv"), sender.address);
+            assert((sender.account == "odranet"), sender.account);
+            assert((sender.displayName == "OdraNet"), sender.displayName);
+            assert((sender.badges == "bits/25000"), sender.badges);
+            assert((sender.colour == "00E2E4"), sender.colour);
+            assert((channel == "#fextralife"), channel);
+            assert((content == "User sent Hype Chat"), content);
+            assert((aux[1] == "EUR"), aux[1]);
+            assert((aux[2] == "ONE"), aux[2]);
+            assert((tags == "badge-info=;badges=bits/25000;color=#00E2E4;display-name=OdraNet;emotes=;first-msg=0;flags=;id=5de67699-6441-4aa5-acd7-40106aeb9b78;mod=0;pinned-chat-paid-amount=120;pinned-chat-paid-canonical-amount=120;pinned-chat-paid-currency=EUR;pinned-chat-paid-exponent=2;pinned-chat-paid-is-system-message=1;pinned-chat-paid-level=ONE;returning-chatter=0;room-id=156037856;subscriber=0;tmi-sent-ts=1687507212838;turbo=0;user-id=265430223;user-type="), tags);
+            assert((count[0] == 120), count[0].to!string);
+            assert((count[1] == 120), count[1].to!string);
+            assert((count[2] == 2), count[2].to!string);
+            assert((id == "5de67699-6441-4aa5-acd7-40106aeb9b78"), id);
+        }
+    }
 }
