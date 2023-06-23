@@ -769,6 +769,9 @@ auto parseTwitchTags(ref IRCParser parser, ref IRCEvent event) @safe
             // something with new midnightsquid direct cheers
         case "reply-thread-parent-user-login":
             // Login of reply thread parent?
+        case "pinned-chat-paid-level":
+            // pinned-chat-paid-level = ONE
+            // Something about hype chat?
 
             /+
                 Aux 2
@@ -1167,6 +1170,9 @@ auto parseTwitchTags(ref IRCParser parser, ref IRCEvent event) @safe
                 // something with new midnightsquid direct cheers
             case "reply-thread-parent-msg-id":
                 // Message ID of reply thread parent?
+            case "pinned-chat-paid-is-system-message":
+                // pinned-chat-paid-is-system-message = 1
+                // Something about hype chat. ...what's a system message?
 
                 // Ignore these events.
                 break;
