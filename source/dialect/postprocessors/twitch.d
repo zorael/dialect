@@ -729,13 +729,6 @@ auto parseTwitchTags(ref IRCParser parser, ref IRCEvent event) @safe
             event.aux[0] = decodeIRCv3String(value);
             break;
 
-        case "first-msg":
-            // first-msg = 0
-            // Whether or not it's the user's first message after joining the channel?
-            if (value == "0") break;
-            value = tag;
-            goto case;
-
         case "msg-param-fun-string":
             // msg-param-fun-string = FunStringTwo
             // [subgift] [#waifugate] AnAnonymousGifter (Asdf): "An anonymous user gifted a Tier 1 sub to Asdf!" (1000) {1}
@@ -1173,6 +1166,9 @@ auto parseTwitchTags(ref IRCParser parser, ref IRCEvent event) @safe
             case "pinned-chat-paid-is-system-message":
                 // pinned-chat-paid-is-system-message = 1
                 // Something about hype chat. ...what's a system message?
+            case "first-msg":
+                // first-msg = 0
+                // Whether or not it's the user's first message after joining the channel?
 
                 // Ignore these events.
                 break;
