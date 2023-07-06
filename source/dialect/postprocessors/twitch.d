@@ -800,6 +800,20 @@ auto parseTwitchTags(ref IRCParser parser, ref IRCEvent event) @safe
             event.aux[4] = value;  // no need to decode?
             break;
 
+        case "first-msg":
+            // first-msg = 0
+            // Whether or not it's the user's first message after joining the channel
+            if (value == "0") break;
+
+            /+
+                Aux $-2
+
+                Reserve this for first-msg. Set the key, not the 0/1 value.
+             +/
+            version(TwitchWarnings) warnAboutOverwrittenAuxString(event.aux.length+(-2), key);
+            event.aux[$-2] = key;
+            break;
+
         case "emotes":
             /++ Information to replace text in the message with emote images.
                 This can be empty. Syntax:
@@ -1166,9 +1180,6 @@ auto parseTwitchTags(ref IRCParser parser, ref IRCEvent event) @safe
             case "pinned-chat-paid-is-system-message":
                 // pinned-chat-paid-is-system-message = 1
                 // Something about hype chat. ...what's a system message?
-            case "first-msg":
-                // first-msg = 0
-                // Whether or not it's the user's first message after joining the channel?
 
                 // Ignore these events.
                 break;
