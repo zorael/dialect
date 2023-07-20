@@ -760,8 +760,6 @@ auto parseTwitchTags(ref IRCParser parser, ref IRCEvent event) @safe
             // name or one created by the channel owner.
         case "msg-param-exponent":
             // something with new midnightsquid direct cheers
-        case "reply-thread-parent-user-login":
-            // Login of reply thread parent?
         case "pinned-chat-paid-level":
             // pinned-chat-paid-level = ONE
             // Something about hype chat?
@@ -1180,6 +1178,8 @@ auto parseTwitchTags(ref IRCParser parser, ref IRCEvent event) @safe
             case "pinned-chat-paid-is-system-message":
                 // pinned-chat-paid-is-system-message = 1
                 // Something about hype chat. ...what's a system message?
+            case "reply-thread-parent-user-login":
+                // Login of reply thread parent?
 
                 // Ignore these events.
                 break;
