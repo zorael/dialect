@@ -78,7 +78,7 @@ private:
 import dialect.defs;
 import dialect.common : IRCParseException;
 import dialect.postprocessors : Postprocessor;
-import lu.string : contains, nom;
+import lu.string : nom;
 
 
 // toIRCEvent
@@ -236,12 +236,14 @@ void parseBasic(
     ref IRCParser parser,
     ref IRCEvent event) pure @safe
 {
+    import std.string : indexOf;
+
     string slice = event.raw;  // mutable
 
     immutable typestring =
-        slice.contains(':') ?
+        (slice.indexOf(':') != -1) ?
             slice.nom(" :") :
-            slice.contains(' ') ?
+            (slice.indexOf(' ') != -1) ?
                 slice.nom(' ') :
                 slice;
 
@@ -253,7 +255,7 @@ void parseBasic(
         // PING :weber.freenode.net
         event.type = PING;
 
-        if (slice.contains('.'))
+        if (slice.indexOf('.') != -1)
         {
             event.sender.address = slice;
         }
@@ -289,9 +291,9 @@ void parseBasic(
         break;
 
     default:
-        import lu.string : beginsWith;
+        import std.algorithm.searching : startsWith;
 
-        if (event.raw.beginsWith("NOTICE"))
+        if (event.raw.startsWith("NOTICE"))
         {
             // Probably NOTICE <client.nickname>
             // NOTICE kameloso :*** If you are having problems connecting due to ping timeouts, please type /notice F94828E6 nospoof now.
@@ -374,16 +376,18 @@ void parsePrefix(
     ref string slice) pure @safe
 in (slice.length, "Tried to parse prefix on an empty slice")
 {
+    import std.string : indexOf;
+
     string prefix = slice.nom(' ');  // mutable
 
-    if (prefix.contains('!'))
+    if (prefix.indexOf('!') != -1)
     {
         // user!~ident@address
         event.sender.nickname = prefix.nom('!');
         event.sender.ident = prefix.nom('@');
         event.sender.address = prefix;
     }
-    else if (prefix.contains('.'))
+    else if (prefix.indexOf('.') != -1)
     {
         // dots signify an address
         event.sender.address = prefix;
@@ -486,7 +490,7 @@ in (slice.length, "Tried to parse typestring on an empty slice")
     import std.conv : ConvException, to;
     import std.typecons : Flag, No, Yes;
 
-    immutable typestring = slice.nom!(Yes.inherit)(' ');
+    immutable typestring = slice.nom(' ', Yes.inherit);
 
     if ((typestring[0] >= '0') && (typestring[0] <= '9'))
     {
@@ -587,8 +591,10 @@ void parseSpecialcases(
     ref string slice) pure @safe
 //in (slice.length, "Tried to parse specialcases on an empty slice")
 {
-    import lu.string : beginsWith, strippedRight;
+    import lu.string : strippedRight;
+    import std.algorithm.searching : startsWith;
     import std.conv : to;
+    import std.string : indexOf;
     import std.typecons : Flag, No, Yes;
 
     with (IRCEvent.Type)
@@ -606,7 +612,7 @@ void parseSpecialcases(
             SELFJOIN :
             JOIN;
 
-        if (slice.contains(' '))
+        if (slice.indexOf(' ') != -1)
         {
             import lu.string : stripped;
 
@@ -621,7 +627,7 @@ void parseSpecialcases(
         }
         else
         {
-            event.channel = slice.beginsWith(':') ?
+            event.channel = slice.startsWith(':') ?
                 slice[1..$] :
                 slice;
         }
@@ -636,7 +642,7 @@ void parseSpecialcases(
             SELFPART :
             PART;
 
-        if (slice.contains(' '))
+        if (slice.indexOf(' ') != -1)
         {
             import lu.string : unquoted;
             event.channel = slice.nom(" :");
@@ -645,7 +651,7 @@ void parseSpecialcases(
         else
         {
             // Seen on GameSurge
-            if (slice.beginsWith(':')) slice = slice[1..$];
+            if (slice.startsWith(':')) slice = slice[1..$];
             event.channel = slice;
         }
         break;
@@ -671,7 +677,7 @@ void parseSpecialcases(
             QUIT;
         event.content = slice[1..$].unquoted;
 
-        if (event.content.beginsWith("Quit: "))
+        if (event.content.startsWith("Quit: "))
         {
             event.content = event.content[6..$];
         }
@@ -701,7 +707,7 @@ void parseSpecialcases(
         // (freenode) :zorael!~NaN@2001:41d0:2:80b4:: INVITE kameloso :#hirrsteff
         // (quakenet) :zorael!~zorael@ns3363704.ip-94-23-253.eu INVITE kameloso #hirrsteff
         event.target.nickname = slice.nom(' ');
-        event.channel = slice.beginsWith(':') ? slice[1..$] : slice;
+        event.channel = slice.startsWith(':') ? slice[1..$] : slice;
         break;
 
     case AWAY:
@@ -751,7 +757,7 @@ void parseSpecialcases(
         if (event.channel == "*") event.channel = string.init;
 
         immutable userOrIdent = slice.nom(' ');
-        if (userOrIdent.beginsWith('~')) event.target.ident = userOrIdent;
+        if (userOrIdent.startsWith('~')) event.target.ident = userOrIdent;
 
         event.target.address = slice.nom(' ');
         slice.nom(' ');  // server
@@ -795,7 +801,7 @@ void parseSpecialcases(
         // :niven.freenode.net 728 kameloso^ #flerrp q qqqq!*@asdf.net zorael!~NaN@2001:41d0:2:80b4:: 1514405101
         // :irc.oftc.net 344 kameloso #garderoben harbl!snarbl@* kameloso!~NaN@194.117.188.126 1515418362
         slice.nom(' ');  // bot nickname
-        event.channel = slice.contains(" q ") ?
+        event.channel = (slice.indexOf(" q ") != -1) ?
             slice.nom(" q ") :
             slice.nom(' ');
         event.content = slice.nom(' ');
@@ -819,7 +825,7 @@ void parseSpecialcases(
         // <command> :Unknown command
         slice.nom(' ');  // bot nickname
 
-        if (slice.contains(" :Unknown command"))
+        if (slice.indexOf(" :Unknown command") != -1)
         {
             import std.string : lastIndexOf;
 
@@ -874,12 +880,12 @@ void parseSpecialcases(
         // :irc.rizon.no 266 kameloso^^ :Current global users: 16115  Max: 17360
         slice.nom(' ');  // bot nickname
 
-        if (slice.contains(" :"))
+        if (slice.indexOf(" :") != -1)
         {
             import std.uni : isNumber;
 
             string midfield = slice.nom(" :");  // mutable
-            immutable first = midfield.nom!(Yes.inherit)(' ');
+            immutable first = midfield.nom(' ', Yes.inherit);
             alias second = midfield;
             event.content = slice;
 
@@ -989,11 +995,11 @@ void parseSpecialcases(
         }
         else
         {
-            if (slice[0..colonPos].contains('.'))
+            if (slice[0..colonPos].indexOf('.') != -1)
             {
                 string addstring = slice.nom(" :");  // mutable
 
-                if (addstring.contains(' '))
+                if (addstring.indexOf(' ') != -1)
                 {
                     // :Prothid.NY.US.GameSurge.net 338 zorael zorael ~kameloso@195.196.10.12 195.196.10.12 :Actual user@host, Actual IP$
                     event.aux[0] = addstring.nom(' ');
@@ -1002,7 +1008,7 @@ void parseSpecialcases(
                 else
                 {
                     event.aux[0] = addstring;
-                    if (addstring.contains('@')) addstring.nom('@');
+                    if (addstring.indexOf('@') != -1) addstring.nom('@');
                     event.target.address = addstring;
                 }
 
@@ -1018,7 +1024,7 @@ void parseSpecialcases(
     case PONG:
         // PONG :<address>
         // :<address> PONG <address> :<what was pinged>
-        if (slice.contains(" :"))
+        if (slice.indexOf(" :") != -1)
         {
             event.aux[0] = slice.nom(" :");
         }
@@ -1027,7 +1033,7 @@ void parseSpecialcases(
 
     case ERR_NOTREGISTERED: // 451
         // :You have not registered
-        if (slice.beginsWith('*'))
+        if (slice.startsWith('*'))
         {
             // :niven.freenode.net 451 * :You have not registered
             slice.nom("* :");
@@ -1050,11 +1056,11 @@ void parseSpecialcases(
          +/
         // :irc.uworld.se 513 kameloso :To connect type /QUOTE PONG 3705964477
 
-        if (slice.contains(" :To connect"))
+        if (slice.indexOf(" :To connect") != -1)
         {
             event.target.nickname = slice.nom(" :To connect");
 
-            if (slice.beginsWith(','))
+            if (slice.startsWith(','))
             {
                 // ngircd?
                 /* "NOTICE %s :To connect, type /QUOTE PONG %ld",
@@ -1157,7 +1163,7 @@ void parseSpecialcases(
     case CAP:
         import std.algorithm.iteration : splitter;
 
-        if (slice.contains('*'))
+        if (slice.indexOf('*') != -1)
         {
             // :tmi.twitch.tv CAP * LS :twitch.tv/tags twitch.tv/commands twitch.tv/membership
             // More CAPs follow
@@ -1201,7 +1207,7 @@ void parseSpecialcases(
         case CLEARCHAT:
             // :tmi.twitch.tv CLEARCHAT #zorael
             // :tmi.twitch.tv CLEARCHAT #<channel> :<user>
-            if (slice.contains(" :"))
+            if (slice.indexOf(" :") != -1)
             {
                 // Banned
                 event.channel = slice.nom(" :");
@@ -1218,7 +1224,7 @@ void parseSpecialcases(
         // <nickname>!<ident>@<address> <nickname> :You are now logged in as <nickname>
         // :weber.freenode.net 900 kameloso kameloso!NaN@194.117.188.126 kameloso :You are now logged in as kameloso.
         // :kornbluth.freenode.net 900 * *!unknown@194.117.188.126 kameloso :You are now logged in as kameloso.
-        if (slice.contains('!'))
+        if (slice.indexOf('!') != -1)
         {
             event.target.nickname = slice.nom(' ');  // bot nick, or an asterisk if unknown
             if (event.target.nickname == "*") event.target.nickname = string.init;
@@ -1293,7 +1299,7 @@ void parseSpecialcases(
         // TRIED TO NOM TOO MUCH:':You are banned from this server- Your irc client seems broken and is flooding lots of channels. Banned for 240 min, if in error, please contact kline@freenode.net. (2017/12/1 21.08)' with ' :'
         string misc = slice.nom(" :");  // mutable
         event.content = slice;
-        misc.nom!(Yes.inherit)(' ');
+        misc.nom(' ', Yes.inherit);
         event.aux[0] = misc;
         break;
 
@@ -1305,7 +1311,7 @@ void parseSpecialcases(
         // content rather than aux, which is inconsistent with other mode events
         slice.nom(' '); // bot nickname
 
-        if (slice.beginsWith(':'))
+        if (slice.startsWith(':'))
         {
             slice = slice[1..$];
         }
@@ -1320,7 +1326,7 @@ void parseSpecialcases(
         slice.nom(' '); // bot nickname
         event.channel = slice.nom(' ');
 
-        if (slice.contains(' '))
+        if (slice.indexOf(' ') != -1)
         {
             event.aux[0] = slice.nom(' ');
             //event.content = slice.nom(' ');
@@ -1366,7 +1372,9 @@ void parseSpecialcases(
         // :niven.freenode.net 729 kameloso^ #hirrsteff q :End of Channel Quiet List
         // :irc.oftc.net 345 kameloso #garderoben :End of Channel Quiet List
         slice.nom(' ');
-        event.channel = slice.contains(" q :") ? slice.nom(" q :") : slice.nom(" :");
+        event.channel = (slice.indexOf(" q :") != -1) ?
+            slice.nom(" q :") :
+            slice.nom(" :");
         event.content = slice;
         break;
 
@@ -1376,7 +1384,7 @@ void parseSpecialcases(
         slice.nom(' '); // bot nickname
         event.target.nickname = slice.nom(" :is using modes ");
 
-        if (slice.contains(' '))
+        if (slice.indexOf(' ') != -1)
         {
             event.aux[0] = slice.nom(' ');
             event.content = slice;
@@ -1426,7 +1434,7 @@ void parseSpecialcases(
         slice.nom(' '); // bot nickname
         event.channel = slice.nom(' ');
 
-        if (slice.contains(' '))
+        if (slice.indexOf(' ') != -1)
         {
             event.content = slice.nom(' ');
             event.aux[0] = slice.nom(' ');  // nickname that set the mode
@@ -1464,7 +1472,7 @@ void parseSpecialcases(
         string portstring = slice.nom(" :");  // mutable
         event.content = slice;
 
-        if (portstring.beginsWith('+')) portstring = portstring[1..$];
+        if (portstring.startsWith('+')) portstring = portstring[1..$];
 
         event.aux[1] = portstring;
 
@@ -1519,18 +1527,19 @@ void parseGeneralCases(
     ref IRCEvent event,
     ref string slice) pure @safe
 {
-    import lu.string : beginsWith;
+    import std.algorithm.searching : startsWith;
+    import std.string : indexOf;
 
     if (!slice.length)
     {
         // Do nothing
     }
-    else if (slice.beginsWith(':'))
+    else if (slice.startsWith(':'))
     {
         // Merely nickname!ident@address.tld TYPESTRING :content
         event.content = slice[1..$];
     }
-    else if (slice.contains(" :"))
+    else if (slice.indexOf(" :") != -1)
     {
         // Has colon-content
         string targets = slice.nom(" :");  // mutable
@@ -1540,7 +1549,7 @@ void parseGeneralCases(
             // This should never happen, but ward against range errors
             event.content = slice;
         }
-        else if (targets.contains(' '))
+        else if (targets.indexOf(' ') != -1)
         {
             // More than one target
             immutable firstTarget = targets.nom(' ');
@@ -1550,12 +1559,12 @@ void parseGeneralCases(
                 // More than one target, first is bot
                 // Can't use isChan here since targets may contain spaces
 
-                if (parser.server.chantypes.contains(targets[0]))
+                if (parser.server.chantypes.indexOf(targets[0]) != -1)
                 {
                     // More than one target, first is bot
                     // Second target is/begins with a channel
 
-                    if (targets.contains(' '))
+                    if (targets.indexOf(' ') != -1)
                     {
                         // More than one target, first is bot
                         // Second target is more than one, first is channel
@@ -1594,7 +1603,7 @@ void parseGeneralCases(
                     {
                         // Only one second target
 
-                        if (parser.server.chantypes.contains(targets[0]))
+                        if (parser.server.chantypes.indexOf(targets[0]) != -1)
                         {
                             // Second is a channel
                             event.channel = targets;
@@ -1616,7 +1625,7 @@ void parseGeneralCases(
             {
                 // More than one target, first is not bot
 
-                if (parser.server.chantypes.contains(firstTarget[0]))
+                if (parser.server.chantypes.indexOf(firstTarget[0]) != -1)
                 {
                     // First target is a channel
                     // Assume second is a nickname
@@ -1632,7 +1641,7 @@ void parseGeneralCases(
                 }
             }
         }
-        else if (parser.server.chantypes.contains(targets[0]))
+        else if (parser.server.chantypes.indexOf(targets[0]) != -1)
         {
             // Only one target, it is a channel
             event.channel = targets;
@@ -1646,7 +1655,7 @@ void parseGeneralCases(
     else
     {
         // Does not have colon-content
-        if (slice.contains(' '))
+        if (slice.indexOf(' ') != -1)
         {
             // More than one target
             immutable target = slice.nom(' ');
@@ -1656,7 +1665,7 @@ void parseGeneralCases(
                 // This should never happen, but ward against range errors
                 event.content = slice;
             }
-            else if (parser.server.chantypes.contains(target[0]))
+            else if (parser.server.chantypes.indexOf(target[0]) != -1)
             {
                 // More than one target, first is a channel
                 // Assume second is content
@@ -1669,7 +1678,7 @@ void parseGeneralCases(
                 // Assume first is nickname and second is aux
                 event.target.nickname = target;
 
-                if ((target == parser.client.nickname) && slice.contains(' '))
+                if ((target == parser.client.nickname) && (slice.indexOf(' ') != -1))
                 {
                     // First target is bot, and there is more
                     // :asimov.freenode.net 333 kameloso^ #garderoben klarrt!~bsdrouter@h150n13-aahm-a11.ias.bredband.telia.com 1476294377
@@ -1678,12 +1687,12 @@ void parseGeneralCases(
                     // :irc.run.net 367 kameloso #Help *!*@broadband-5-228-255-*.moscow.rt.ru
                     // :irc.atw-inter.net 344 kameloso #debian.de towo!towo@littlelamb.szaf.org
 
-                    if (parser.server.chantypes.contains(slice[0]))
+                    if (parser.server.chantypes.indexOf(slice[0]) != -1)
                     {
                         // Second target is channel
                         event.channel = slice.nom(' ');
 
-                        if (slice.contains(' '))
+                        if (slice.indexOf(' ') != -1)
                         {
                             // Remaining slice has at least two fields;
                             // separate into content and aux
@@ -1715,7 +1724,7 @@ void parseGeneralCases(
         {
             // Only one target
 
-            if (parser.server.chantypes.contains(slice[0]))
+            if (parser.server.chantypes.indexOf(slice[0]) != -1)
             {
                 // Target is a channel
                 event.channel = slice;
@@ -1751,10 +1760,11 @@ void parseGeneralCases(
  +/
 void postparseSanityCheck(
     const ref IRCParser parser,
-    ref IRCEvent event) pure @safe nothrow
+    ref IRCEvent event) pure @safe
 {
-    import lu.string : beginsWith;
+    import std.algorithm.searching : startsWith;
     import std.array : Appender;
+    import std.string : indexOf;
 
     Appender!(char[]) sink;
     // The sink will very rarely be used; treat it as an edge case and don't reserve
@@ -1765,26 +1775,28 @@ void postparseSanityCheck(
         sink.put(event.errors);
     }
 
-    if (event.target.nickname.contains(' ') || event.channel.contains(' '))
+    if ((event.target.nickname.indexOf(' ') != -1) ||
+        (event.channel.indexOf(' ') != -1))
     {
         if (sink.data.length) sink.put(" | ");
         sink.put("Spaces in target nickname or channel");
     }
 
-    if (event.target.nickname.beginsWith(':'))
+    if (event.target.nickname.startsWith(':'))
     {
         if (sink.data.length) sink.put(" | ");
         sink.put("Colon in target nickname");
     }
 
-    if (event.target.nickname.length && parser.server.chantypes.contains(event.target.nickname[0]))
+    if (event.target.nickname.length &&
+        (parser.server.chantypes.indexOf(event.target.nickname[0]) != -1))
     {
         if (sink.data.length) sink.put(" | ");
         sink.put("Target nickname is a channel");
     }
 
     if (event.channel.length &&
-        !parser.server.chantypes.contains(event.channel[0]) &&
+        (parser.server.chantypes.indexOf(event.channel[0]) == -1) &&
         (event.type != IRCEvent.Type.ERR_NOSUCHCHANNEL) &&
         (event.type != IRCEvent.Type.RPL_ENDOFWHO) &&
         (event.type != IRCEvent.Type.RPL_NAMREPLY) &&
@@ -1824,7 +1836,9 @@ void onNotice(
 in (slice.length, "Tried to process `onNotice` on an empty slice")
 {
     import dialect.common : isAuthService;
-    import lu.string : beginsWith, beginsWithOneOf;
+    import std.algorithm.comparison : among;
+    import std.algorithm.searching : startsWith;
+    import std.string : indexOf;
     import std.typecons : Flag, No, Yes;
 
     // :ChanServ!ChanServ@services. NOTICE kameloso^ :[##linux-overflow] Make sure your nick is registered, then please try again to join ##linux.
@@ -1832,17 +1846,18 @@ in (slice.length, "Tried to process `onNotice` on an empty slice")
     // :tolkien.freenode.net NOTICE * :*** Checking Ident
 
     // At least Twitch sends NOTICEs to channels, maybe other daemons do too
-    immutable channelOrNickname = slice.nom!(Yes.inherit)(" :");
+    immutable channelOrNickname = slice.nom(" :", Yes.inherit);
     event.content = slice;
 
-    if (channelOrNickname.length && channelOrNickname.beginsWithOneOf(parser.server.chantypes))
+    if (channelOrNickname.length &&
+        (parser.server.chantypes.indexOf(channelOrNickname[0]) != -1))
     {
         event.channel = channelOrNickname;
     }
 
     if (!event.content.length) return;
 
-    if (!parser.server.resolvedAddress.length && event.content.beginsWith("***"))
+    if (!parser.server.resolvedAddress.length && event.content.startsWith("***"))
     {
         // This is where we catch the resolved address
         assert(!event.sender.nickname.length, "Unexpected nickname: " ~ event.sender.nickname);
@@ -1864,7 +1879,7 @@ in (slice.length, "Tried to process `onNotice` on an empty slice")
 
         if (event.content.asLowerCase.canFind("/msg nickserv identify") ||
             (event.content == AuthChallenge.dalnet) ||
-            event.content.beginsWith(AuthChallenge.oftc))
+            event.content.startsWith(cast(string)AuthChallenge.oftc))
         {
             event.type = IRCEvent.Type.AUTH_CHALLENGE;
             return;
@@ -1882,11 +1897,11 @@ in (slice.length, "Tried to process `onNotice` on an empty slice")
 
         alias AS = AuthSuccess;
 
-        if ((event.content.beginsWith(AS.freenode)) ||
-            (event.content.beginsWith(AS.quakenet)) || // also Freenode SASL
-            (event.content.beginsWith(AS.dalnet)) ||
-            (event.content.beginsWith(AS.oftc)) ||
-            event.content.among!(AS.rizon, AS.gamesurge))
+        if ((event.content.startsWith(cast(string)AS.freenode)) ||
+            (event.content.startsWith(cast(string)AS.quakenet)) || // also Freenode SASL
+            (event.content.startsWith(cast(string)AS.dalnet)) ||
+            (event.content.startsWith(cast(string)AS.oftc)) ||
+            event.content.among!(cast(string)AS.rizon, cast(string)AS.gamesurge))
         {
             event.type = IRCEvent.Type.AUTH_SUCCESS;
 
@@ -1913,12 +1928,12 @@ in (slice.length, "Tried to process `onNotice` on an empty slice")
 
         if (event.content.among!(AF.rizon, AF.quakenet, AF.gamesurgeInvalid,
                 AF.gamesurgeRejected, AF.geekshedRejected) ||
-            event.content.contains(cast(string)AF.freenodeInvalid) ||
-            event.content.beginsWith(cast(string)AF.freenodeRejected) ||
-            event.content.contains(cast(string)AF.dalnetInvalid) ||
-            event.content.beginsWith(cast(string)AF.dalnetRejected) ||
-            event.content.contains(cast(string)AF.unreal) ||
-            event.content.beginsWith(cast(string)AF.oftcRejected))
+            (event.content.indexOf(cast(string)AF.freenodeInvalid) != -1) ||
+            event.content.startsWith(cast(string)AF.freenodeRejected) ||
+            (event.content.indexOf(cast(string)AF.dalnetInvalid) != -1) ||
+            event.content.startsWith(cast(string)AF.dalnetRejected) ||
+            (event.content.indexOf(cast(string)AF.unreal) != -1) ||
+            event.content.startsWith(cast(string)AF.oftcRejected))
         {
             event.type = IRCEvent.Type.AUTH_FAILURE;
         }
@@ -1957,6 +1972,7 @@ void onPRIVMSG(
 in (slice.length, "Tried to process `IRCEvent.Type.PRIVMSG` on an empty slice")
 {
     import dialect.common : IRCControlCharacter, isValidChannel;
+    import std.string : indexOf;
 
     string target = slice.nom(' ');  // mutable
     if (slice.length && slice[0] == ':') slice = slice[1..$];
@@ -2004,7 +2020,7 @@ in (slice.length, "Tried to process `IRCEvent.Type.PRIVMSG` on an empty slice")
         import std.traits : EnumMembers;
 
         slice = slice[1..$-1];
-        immutable ctcpEvent = slice.contains(' ') ? slice.nom(' ') : slice;
+        immutable ctcpEvent = (slice.indexOf(' ') != -1) ? slice.nom(' ') : slice;
         event.content = slice;
 
         // :zorael!~NaN@ns3363704.ip-94-23-253.eu PRIVMSG #flerrp :ACTION test test content
@@ -2048,12 +2064,12 @@ in (slice.length, "Tried to process `IRCEvent.Type.PRIVMSG` on an empty slice")
         foreach (immutable type; EnumMembers!(IRCEvent.Type))
         {
             import lu.conv : Enum;
-            import lu.string : beginsWith;
+            import std.algorithm.searching : startsWith;
 
             //enum typestring = type.to!string;
             enum typestring = Enum!(IRCEvent.Type).toString(type);
 
-            static if (typestring.beginsWith("CTCP_"))
+            static if (typestring.startsWith("CTCP_"))
             {
                 case typestring[5..$]:
                     event.type = type;
@@ -2088,6 +2104,8 @@ void onMode(
 in (slice.length, "Tried to process `onMode` on an empty slice")
 {
     import dialect.common : isValidChannel;
+    import std.string : indexOf;
+    import std.algorithm.searching : startsWith;
 
     immutable target = slice.nom(' ');
 
@@ -2095,7 +2113,7 @@ in (slice.length, "Tried to process `onMode` on an empty slice")
     {
         event.channel = target;
 
-        if (slice.contains(' '))
+        if (slice.indexOf(' ') != -1)
         {
             // :zorael!~NaN@ns3363704.ip-94-23-253.eu MODE #flerrp +v kameloso^
             event.aux[0] = slice.nom(' ');
@@ -2112,7 +2130,6 @@ in (slice.length, "Tried to process `onMode` on an empty slice")
     }
     else
     {
-        import lu.string : beginsWith;
         import std.string : representation;
 
         // :kameloso^ MODE kameloso^ :+i
@@ -2120,7 +2137,7 @@ in (slice.length, "Tried to process `onMode` on an empty slice")
         // Does not always have the plus sign. Strip it if it's there.
 
         event.type = IRCEvent.Type.SELFMODE;
-        if (slice.beginsWith(':')) slice = slice[1..$];
+        if (slice.startsWith(':')) slice = slice[1..$];
 
         bool subtractive;
         string modechange = slice;  // mutable
@@ -2240,12 +2257,13 @@ in (slice.length, "Tried to process `IRCEvent.Type.RPL_ISUPPORT` on an empty sli
     import lu.conv : Enum;
     import std.algorithm.iteration : splitter;
     import std.conv : /*ConvException,*/ to;
+    import std.string : indexOf;
 
     // :barjavel.freenode.net 005 kameloso^ CHARSET=ascii NICKLEN=16 CHANNELLEN=50 TOPICLEN=390 DEAF=D FNC TARGMAX=NAMES:1,LIST:1,KICK:1,WHOIS:1,PRIVMSG:4,NOTICE:4,ACCEPT:,MONITOR: EXTBAN=$,ajrxz CLIENTVER=3.0 WHOX KNOCK CPRIVMSG :are supported by this server
     // :barjavel.freenode.net 005 kameloso^ CHANTYPES=# EXCEPTS INVEX CHANMODES=eIbq,k,flj,CFLMPQScgimnprstuz CHANLIMIT=#:120 PREFIX=(ov)@+ MAXLIST=bqeI:100 MODES=4 NETWORK=freenode STATUSMSG=@+ CALLERID=g CASEMAPPING=rfc1459 :are supported by this server
 
     slice.nom(' ');  // bot nickname
-    if (slice.contains(" :")) event.content = slice.nom(" :");
+    if (slice.indexOf(" :") != -1) event.content = slice.nom(" :");
 
     if (parser.server.supports.length)
     {
@@ -2267,7 +2285,7 @@ in (slice.length, "Tried to process `IRCEvent.Type.RPL_ISUPPORT` on an empty sli
                 event.aux[n++] = value;
             }
 
-            if (!value.contains('='))
+            if (value.indexOf('=') == -1)
             {
                 // insert switch on value for things like EXCEPTS, INVEX, CPRIVMSG, etc
                 continue;
@@ -2320,7 +2338,7 @@ in (slice.length, "Tried to process `IRCEvent.Type.RPL_ISUPPORT` on an empty sli
                 parser.server.bModes = modeslice.nom(',');
                 parser.server.cModes = modeslice.nom(',');
                 parser.server.dModes = modeslice;
-                assert(!parser.server.dModes.contains(','),
+                assert((parser.server.dModes.indexOf(',') == -1),
                     "Bad chanmodes; dModes has comma: " ~ parser.server.dModes);
                 break;
 
@@ -2429,6 +2447,7 @@ void onMyInfo(
 in (slice.length, "Tried to process `onMyInfo` on an empty slice")
 {
     import dialect.common : typenumsOf;
+    import std.string : indexOf;
     import std.uni : toLower;
 
     /*
@@ -2522,43 +2541,43 @@ in (slice.length, "Tried to process `onMyInfo` on an empty slice")
 
     with (IRCServer.Daemon)
     {
-        if (daemonstringLower.contains("unreal"))
+        if (daemonstringLower.indexOf("unreal") != -1)
         {
             daemon = unreal;
         }
-        else if (daemonstringLower.contains("solanum"))
+        else if (daemonstringLower.indexOf("solanum") != -1)
         {
             daemon = solanum;
         }
-        else if (daemonstringLower.contains("inspircd"))
+        else if (daemonstringLower.indexOf("inspircd") != -1)
         {
             daemon = inspircd;
         }
-        else if (daemonstringLower.contains("snircd"))
+        else if (daemonstringLower.indexOf("snircd") != -1)
         {
             daemon = snircd;
         }
-        else if (daemonstringLower.contains("u2."))
+        else if (daemonstringLower.indexOf("u2.") != -1)
         {
             daemon = u2;
         }
-        else if (daemonstringLower.contains("bahamut"))
+        else if (daemonstringLower.indexOf("bahamut") != -1)
         {
             daemon = bahamut;
         }
-        else if (daemonstringLower.contains("hybrid"))
+        else if (daemonstringLower.indexOf("hybrid") != -1)
         {
             daemon = hybrid;
         }
-        else if (daemonstringLower.contains("ratbox"))
+        else if (daemonstringLower.indexOf("ratbox") != -1)
         {
             daemon = ratbox;
         }
-        else if (daemonstringLower.contains("charybdis"))
+        else if (daemonstringLower.indexOf("charybdis") != -1)
         {
             daemon = charybdis;
         }
-        else if (daemonstringLower.contains("ircd-seven"))
+        else if (daemonstringLower.indexOf("ircd-seven") != -1)
         {
             daemon = ircdseven;
         }
@@ -2566,7 +2585,7 @@ in (slice.length, "Tried to process `onMyInfo` on an empty slice")
         {
             daemon = bsdunix;
         }
-        else if (daemonstring.contains("MFVX"))
+        else if (daemonstring.indexOf("MFVX") != -1)
         {
             daemon = mfvx;
         }
@@ -2598,9 +2617,10 @@ void applyTags(ref IRCEvent event) pure @safe
 
     foreach (tag; event.tags.splitter(";"))
     {
-        import lu.string : contains, nom;
+        import lu.string : nom;
+        import std.string : indexOf;
 
-        if (tag.contains('='))
+        if (tag.indexOf('=') != -1)
         {
             immutable key = tag.nom('=');
             alias value = tag;

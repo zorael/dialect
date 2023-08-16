@@ -122,7 +122,7 @@ auto parseTwitchTags(ref IRCParser parser, ref IRCEvent event) @safe
     with (IRCEvent.Type)
     foreach (tag; tagRange)
     {
-        import lu.string : contains, nom;
+        import lu.string : nom;
 
         immutable key = tag.nom('=');
         string value = tag;  // mutable
@@ -225,8 +225,8 @@ auto parseTwitchTags(ref IRCParser parser, ref IRCEvent event) @safe
                 break;
 
             case "charity":
-                import lu.string : beginsWith;
                 import std.algorithm.iteration : filter;
+                import std.algorithm.searching : startsWith;
                 import std.array : Appender;
                 import std.typecons : Flag, No, Yes;
 
@@ -234,7 +234,7 @@ auto parseTwitchTags(ref IRCParser parser, ref IRCEvent event) @safe
 
                 string[string] charityAA;
                 auto charityTags = tagRange
-                    .filter!(tagline => tagline.beginsWith("msg-param-charity"));
+                    .filter!(tagline => tagline.startsWith("msg-param-charity"));
 
                 foreach (immutable tagline; charityTags)
                 {
@@ -529,17 +529,17 @@ auto parseTwitchTags(ref IRCParser parser, ref IRCEvent event) @safe
                 break;
 
             default:
-                import lu.string : beginsWith;
+                import std.algorithm.searching : startsWith;
 
                 version(TwitchWarnings) warnAboutOverwrittenAuxString(0, key, "msg-id");
                 event.aux[0] = msgID;
 
-                if (msgID.beginsWith("bad_"))
+                if (msgID.startsWith("bad_"))
                 {
                     event.type = TWITCH_ERROR;
                     break;
                 }
-                else if (msgID.beginsWith("usage_"))
+                else if (msgID.startsWith("usage_"))
                 {
                     event.type = TWITCH_NOTICE;
                     break;

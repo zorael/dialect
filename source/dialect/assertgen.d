@@ -279,7 +279,7 @@ void inputServerInformation(ref IRCParser parser) @system
     stdout.flush();
     stdin.flush();
     string slice = readln().stripped;  // mutable so we can nom it
-    immutable daemonstring = slice.nom!(Yes.inherit)(' ').toLower;
+    immutable daemonstring = slice.nom(' ', Yes.inherit).toLower;
     immutable daemonLiteral = slice.length ? slice : daemonstring;
 
     parser.server.daemon = daemonstring.length ?
