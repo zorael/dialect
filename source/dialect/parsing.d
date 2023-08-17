@@ -78,7 +78,7 @@ private:
 import dialect.defs;
 import dialect.common : IRCParseException;
 import dialect.postprocessors : Postprocessor;
-import lu.string : nom;
+import lu.string : advancePast;
 
 
 // toIRCEvent
@@ -134,7 +134,7 @@ public IRCEvent toIRCEvent(
 
             // Get rid of the prepended @
             string newRaw = raw[1..$];  // mutable
-            immutable tags = newRaw.nom(' ');
+            immutable tags = newRaw.advancePast(' ');
             auto event = .toIRCEvent(parser, newRaw);
             event.tags = tags;
             applyTags(event);
@@ -242,9 +242,9 @@ void parseBasic(
 
     immutable typestring =
         (slice.indexOf(':') != -1) ?
-            slice.nom(" :") :
+            slice.advancePast(" :") :
             (slice.indexOf(' ') != -1) ?
-                slice.nom(' ') :
+                slice.advancePast(' ') :
                 slice;
 
     with (IRCEvent.Type)
@@ -378,13 +378,13 @@ in (slice.length, "Tried to parse prefix on an empty slice")
 {
     import std.string : indexOf;
 
-    string prefix = slice.nom(' ');  // mutable
+    string prefix = slice.advancePast(' ');  // mutable
 
     if (prefix.indexOf('!') != -1)
     {
         // user!~ident@address
-        event.sender.nickname = prefix.nom('!');
-        event.sender.ident = prefix.nom('@');
+        event.sender.nickname = prefix.advancePast('!');
+        event.sender.ident = prefix.advancePast('@');
         event.sender.address = prefix;
     }
     else if (prefix.indexOf('.') != -1)
@@ -490,7 +490,7 @@ in (slice.length, "Tried to parse typestring on an empty slice")
     import std.conv : ConvException, to;
     import std.typecons : Flag, No, Yes;
 
-    immutable typestring = slice.nom(' ', Yes.inherit);
+    immutable typestring = slice.advancePast(' ', Yes.inherit);
 
     if ((typestring[0] >= '0') && (typestring[0] <= '9'))
     {
@@ -620,8 +620,8 @@ void parseSpecialcases(
             // :nick!user@host JOIN #channelname * :Real Name
             // :nick!~identh@unaffiliated/nick JOIN #freenode login :realname
             // :kameloso!~NaN@2001:41d0:2:80b4:: JOIN #hirrsteff2 kameloso : kameloso!
-            event.channel = slice.nom(' ');
-            event.sender.account = slice.nom(" :");
+            event.channel = slice.advancePast(' ');
+            event.sender.account = slice.advancePast(" :");
             if (event.sender.account == "*") event.sender.account = string.init;
             event.sender.realName = slice.stripped;
         }
@@ -645,7 +645,7 @@ void parseSpecialcases(
         if (slice.indexOf(' ') != -1)
         {
             import lu.string : unquoted;
-            event.channel = slice.nom(" :");
+            event.channel = slice.advancePast(" :");
             event.content = slice.unquoted;
         }
         else
@@ -695,8 +695,8 @@ void parseSpecialcases(
 
     case KICK:
         // :zorael!~NaN@ns3363704.ip-94-23-253.eu KICK #flerrp kameloso^ :this is a reason
-        event.channel = slice.nom(' ');
-        event.target.nickname = slice.nom(" :");
+        event.channel = slice.advancePast(' ');
+        event.target.nickname = slice.advancePast(" :");
         event.content = slice;
         event.type = (event.target.nickname == parser.client.nickname) ?
             SELFKICK :
@@ -706,7 +706,7 @@ void parseSpecialcases(
     case INVITE:
         // (freenode) :zorael!~NaN@2001:41d0:2:80b4:: INVITE kameloso :#hirrsteff
         // (quakenet) :zorael!~zorael@ns3363704.ip-94-23-253.eu INVITE kameloso #hirrsteff
-        event.target.nickname = slice.nom(' ');
+        event.target.nickname = slice.advancePast(' ');
         event.channel = slice.startsWith(':') ? slice[1..$] : slice;
         break;
 
@@ -727,17 +727,17 @@ void parseSpecialcases(
     case ERR_NOSUCHCHANNEL: // 403
         // <channel name> :No such channel
         // :moon.freenode.net 403 kameloso archlinux :No such channel
-        slice.nom(' ');  // bot nickname
-        event.channel = slice.nom(" :");
+        slice.advancePast(' ');  // bot nickname
+        event.channel = slice.advancePast(" :");
         event.content = slice;
         break;
 
     case RPL_NAMREPLY: // 353
         // <channel> :[[@|+]<nick> [[@|+]<nick> [...]]]
         // :asimov.freenode.net 353 kameloso^ = #garderoben :kameloso^ ombudsman +kameloso @zorael @maku @klarrt
-        slice.nom(' ');  // bot nickname
-        slice.nom(' ');
-        event.channel = slice.nom(" :");
+        slice.advancePast(' ');  // bot nickname
+        slice.advancePast(' ');
+        event.channel = slice.advancePast(" :");
         event.content = slice.strippedRight;
         break;
 
@@ -752,18 +752,18 @@ void parseSpecialcases(
         // :moon.freenode.net 352 kameloso ##linux ~wzhang sea.mrow.org card.freenode.net wzhang H :0 wzhang
         // :irc.rizon.no 352 kameloso^^ * ~NaN C2802314.E23AD7D8.E9841504.IP * kameloso^^ H :0  kameloso!
         // :irc.rizon.no 352 kameloso^^ * ~zorael Rizon-64330364.ip-94-23-253.eu * wob^2 H :0 zorael
-        slice.nom(' ');  // bot nickname
-        event.channel = slice.nom(' ');
+        slice.advancePast(' ');  // bot nickname
+        event.channel = slice.advancePast(' ');
         if (event.channel == "*") event.channel = string.init;
 
-        immutable userOrIdent = slice.nom(' ');
+        immutable userOrIdent = slice.advancePast(' ');
         if (userOrIdent.startsWith('~')) event.target.ident = userOrIdent;
 
-        event.target.address = slice.nom(' ');
-        slice.nom(' ');  // server
-        event.target.nickname = slice.nom(' ');
+        event.target.address = slice.advancePast(' ');
+        slice.advancePast(' ');  // server
+        event.target.nickname = slice.advancePast(' ');
 
-        immutable hg = slice.nom(' ');  // H|G
+        immutable hg = slice.advancePast(' ');  // H|G
         if (hg.length > 1)
         {
             // H
@@ -773,7 +773,7 @@ void parseSpecialcases(
             event.aux[0] = hg[1..$];
         }
 
-        slice.nom(' ');  // hopcount
+        slice.advancePast(' ');  // hopcount
         event.content = slice.strippedLeft;
         event.sender.realName = event.content;
         break;
@@ -782,8 +782,8 @@ void parseSpecialcases(
         // <name> :End of /WHO list
         // :tolkien.freenode.net 315 kameloso^ ##linux :End of /WHO list.
         // :irc.rizon.no 315 kameloso^^ * :End of /WHO list.
-        slice.nom(' ');  // bot nickname
-        event.channel = slice.nom(" :");
+        slice.advancePast(' ');  // bot nickname
+        event.channel = slice.advancePast(" :");
         if (event.channel == "*") event.channel = string.init;
         event.content = slice;
         break;
@@ -800,12 +800,12 @@ void parseSpecialcases(
     case RPL_QUIETLIST: // 728, oftc/hybrid 344
         // :niven.freenode.net 728 kameloso^ #flerrp q qqqq!*@asdf.net zorael!~NaN@2001:41d0:2:80b4:: 1514405101
         // :irc.oftc.net 344 kameloso #garderoben harbl!snarbl@* kameloso!~NaN@194.117.188.126 1515418362
-        slice.nom(' ');  // bot nickname
+        slice.advancePast(' ');  // bot nickname
         event.channel = (slice.indexOf(" q ") != -1) ?
-            slice.nom(" q ") :
-            slice.nom(' ');
-        event.content = slice.nom(' ');
-        event.aux[0] = slice.nom(' ');
+            slice.advancePast(" q ") :
+            slice.advancePast(' ');
+        event.content = slice.advancePast(' ');
+        event.aux[0] = slice.advancePast(' ');
         event.count[0] = slice.to!long;
         break;
 
@@ -813,17 +813,17 @@ void parseSpecialcases(
         // <nickname> :is connecting from *@<address> <ip>
         // :wilhelm.freenode.net 378 kameloso^ kameloso^ :is connecting from *@81-233-105-62-no80.tbcn.telia.com 81.233.105.62
         // TRIED TO NOM TOO MUCH:'kameloso :is connecting from NaN@194.117.188.126 194.117.188.126' with ' :is connecting from *@'
-        slice.nom(' ');  // bot nickname
-        event.target.nickname = slice.nom(" :is connecting from ");
-        event.target.ident = slice.nom('@');
+        slice.advancePast(' ');  // bot nickname
+        event.target.nickname = slice.advancePast(" :is connecting from ");
+        event.target.ident = slice.advancePast('@');
         if (event.target.ident == "*") event.target.ident = string.init;
-        event.content = slice.nom(' ');
+        event.content = slice.advancePast(' ');
         event.aux[0] = slice;
         break;
 
     case ERR_UNKNOWNCOMMAND: // 421
         // <command> :Unknown command
-        slice.nom(' ');  // bot nickname
+        slice.advancePast(' ');  // bot nickname
 
         if (slice.indexOf(" :Unknown command") != -1)
         {
@@ -846,10 +846,10 @@ void parseSpecialcases(
     case RPL_WHOISIDLE: //  317
         // <nick> <integer> :seconds idle
         // :rajaniemi.freenode.net 317 kameloso zorael 0 1510219961 :seconds idle, signon time
-        slice.nom(' ');  // bot nickname
-        event.target.nickname = slice.nom(' ');
-        event.count[0] = slice.nom(' ').to!long;
-        event.count[1] = slice.nom(" :").to!long;
+        slice.advancePast(' ');  // bot nickname
+        event.target.nickname = slice.advancePast(' ');
+        event.count[0] = slice.advancePast(' ').to!long;
+        event.count[1] = slice.advancePast(" :").to!long;
         event.content = slice;
         break;
 
@@ -878,14 +878,14 @@ void parseSpecialcases(
         // :weber.freenode.net 266 kameloso 87056 93012 :Current global users 87056, max 93012
         // :irc.rizon.no 265 kameloso^^ :Current local users: 16115  Max: 17360
         // :irc.rizon.no 266 kameloso^^ :Current global users: 16115  Max: 17360
-        slice.nom(' ');  // bot nickname
+        slice.advancePast(' ');  // bot nickname
 
         if (slice.indexOf(" :") != -1)
         {
             import std.uni : isNumber;
 
-            string midfield = slice.nom(" :");  // mutable
-            immutable first = midfield.nom(' ', Yes.inherit);
+            string midfield = slice.advancePast(" :");  // mutable
+            immutable first = midfield.advancePast(' ', Yes.inherit);
             alias second = midfield;
             event.content = slice;
 
@@ -928,10 +928,10 @@ void parseSpecialcases(
 
         // <nick> <user> <host> * :<real name>
         // :orwell.freenode.net 311 kameloso^ kameloso ~NaN ns3363704.ip-94-23-253.eu * : kameloso
-        slice.nom(' ');  // bot nickname
-        event.target.nickname = slice.nom(' ');
-        event.target.ident = slice.nom(' ');
-        event.target.address = slice.nom(" * :");
+        slice.advancePast(' ');  // bot nickname
+        event.target.nickname = slice.advancePast(' ');
+        event.target.ident = slice.advancePast(' ');
+        event.target.address = slice.advancePast(" * :");
         event.content = slice.strippedLeft;
         event.target.realName = event.content;
         break;
@@ -939,18 +939,18 @@ void parseSpecialcases(
     case RPL_WHOISSERVER: // 312
         // <nick> <server> :<server info>
         // :asimov.freenode.net 312 kameloso^ zorael sinisalo.freenode.net :SE
-        slice.nom(' ');  // bot nickname
-        event.target.nickname = slice.nom(' ');
-        event.content = slice.nom(" :");
+        slice.advancePast(' ');  // bot nickname
+        event.target.nickname = slice.advancePast(' ');
+        event.content = slice.advancePast(" :");
         event.aux[0] = slice;
         break;
 
     case RPL_WHOISACCOUNT: // 330
         // <nickname> <account> :is logged in as
         // :asimov.freenode.net 330 kameloso^ xurael zorael :is logged in as
-        slice.nom(' ');  // bot nickname
-        event.target.nickname = slice.nom(' ');
-        event.target.account = slice.nom(" :");
+        slice.advancePast(' ');  // bot nickname
+        event.target.nickname = slice.advancePast(' ');
+        event.target.account = slice.advancePast(" :");
         event.content = event.target.account;
         break;
 
@@ -959,8 +959,8 @@ void parseSpecialcases(
         // :irc.x2x.cc 307 kameloso^^ py-ctcp :has identified for this nick
         // :irc.x2x.cc 307 kameloso^^ wob^2 :has identified for this nick
         // What is the nickname? Are they always the same?
-        slice.nom(' '); // bot nickname
-        event.target.account = slice.nom(" :");
+        slice.advancePast(' '); // bot nickname
+        event.target.account = slice.advancePast(" :");
         event.target.nickname = event.target.account;  // uneducated guess
         event.content = event.target.nickname;
         break;
@@ -973,16 +973,16 @@ void parseSpecialcases(
         // :Prothid.NY.US.GameSurge.net 338 zorael zorael ~kameloso@195.196.10.12 195.196.10.12 :Actual user@host, Actual IP$
         import std.string : indexOf;
 
-        slice.nom(' '); // bot nickname
-        event.target.nickname = slice.nom(' ');
+        slice.advancePast(' '); // bot nickname
+        event.target.nickname = slice.advancePast(' ');
         immutable colonPos = slice.indexOf(':');
 
         if ((colonPos == -1) || (colonPos == 0))
         {
             // :irc.link-net.be 338 zorael zorael is actually ~kameloso@195.196.10.12 [195.196.10.12]
             // :irc.rizon.club 338 kameloso^ kameloso^ :is actually ~kameloso@194.117.188.126 [194.117.188.126]
-            slice.nom("is actually ");
-            event.aux[0] = slice.nom(' ');
+            slice.advancePast("is actually ");
+            event.aux[0] = slice.advancePast(' ');
 
             if ((slice[0] == '[') && (slice[$-1] == ']'))
             {
@@ -997,18 +997,18 @@ void parseSpecialcases(
         {
             if (slice[0..colonPos].indexOf('.') != -1)
             {
-                string addstring = slice.nom(" :");  // mutable
+                string addstring = slice.advancePast(" :");  // mutable
 
                 if (addstring.indexOf(' ') != -1)
                 {
                     // :Prothid.NY.US.GameSurge.net 338 zorael zorael ~kameloso@195.196.10.12 195.196.10.12 :Actual user@host, Actual IP$
-                    event.aux[0] = addstring.nom(' ');
+                    event.aux[0] = addstring.advancePast(' ');
                     event.target.address = addstring;
                 }
                 else
                 {
                     event.aux[0] = addstring;
-                    if (addstring.indexOf('@') != -1) addstring.nom('@');
+                    if (addstring.indexOf('@') != -1) addstring.advancePast('@');
                     event.target.address = addstring;
                 }
 
@@ -1026,7 +1026,7 @@ void parseSpecialcases(
         // :<address> PONG <address> :<what was pinged>
         if (slice.indexOf(" :") != -1)
         {
-            event.aux[0] = slice.nom(" :");
+            event.aux[0] = slice.advancePast(" :");
         }
         event.content = slice;
         break;
@@ -1036,13 +1036,13 @@ void parseSpecialcases(
         if (slice.startsWith('*'))
         {
             // :niven.freenode.net 451 * :You have not registered
-            slice.nom("* :");
+            slice.advancePast("* :");
             event.content = slice;
         }
         else
         {
             // :irc.harblwefwoi.org 451 WHOIS :You have not registered
-            event.aux[0] = slice.nom(" :");
+            event.aux[0] = slice.advancePast(" :");
             event.content = slice;
         }
         break;
@@ -1058,7 +1058,7 @@ void parseSpecialcases(
 
         if (slice.indexOf(" :To connect") != -1)
         {
-            event.target.nickname = slice.nom(" :To connect");
+            event.target.nickname = slice.advancePast(" :To connect");
 
             if (slice.startsWith(','))
             {
@@ -1071,7 +1071,7 @@ void parseSpecialcases(
                 slice = slice[1..$];
             }
 
-            slice.nom(" type /QUOTE ");
+            slice.advancePast(" type /QUOTE ");
             event.content = slice;
         }
         else
@@ -1105,7 +1105,7 @@ void parseSpecialcases(
         // :verne.freenode.net 263 kameloso^ STATS :This command could not be completed because it has been used recently, and is rate-limited
         // :verne.freenode.net 262 kameloso^ verne.freenode.net :End of TRACE
         // :irc.rizon.no 263 kameloso^ :Server load is temporarily too heavy. Please wait a while and try again.
-        slice.nom(' '); // bot nickname
+        slice.advancePast(' '); // bot nickname
 
         if (!slice.length)
         {
@@ -1118,7 +1118,7 @@ void parseSpecialcases(
         }
         else
         {
-            event.aux[0] = slice.nom(" :");
+            event.aux[0] = slice.advancePast(" :");
         }
 
         event.content = slice;
@@ -1127,36 +1127,36 @@ void parseSpecialcases(
     case RPL_STATSLINKINFO: // 211
         // <linkname> <sendq> <sent messages> <sent bytes> <received messages> <received bytes> <time open>
         // :verne.freenode.net 211 kameloso^ kameloso^[~NaN@194.117.188.126] 0 109 8 15 0 :40 0 -
-        slice.nom(' '); // bot nickname
-        event.aux[0] = slice.nom(' ');
+        slice.advancePast(' '); // bot nickname
+        event.aux[0] = slice.advancePast(' ');
         event.content = slice;
         break;
 
     case RPL_TRACEUSER: // 205
         // User <class> <nick>
         // :wolfe.freenode.net 205 kameloso^ User v6users zorael[~NaN@2001:41d0:2:80b4::] (255.255.255.255) 16 :536
-        slice.nom(" User "); // bot nickname
-        event.aux[0] = slice.nom(' '); // "class"
-        event.content = slice.nom(" :");
+        slice.advancePast(" User "); // bot nickname
+        event.aux[0] = slice.advancePast(' '); // "class"
+        event.content = slice.advancePast(" :");
         event.count[0] = slice.to!long; // unsure
         break;
 
     case RPL_LINKS: // 364
         // <mask> <server> :<hopcount> <server info>
         // :rajaniemi.freenode.net 364 kameloso^ rajaniemi.freenode.net rajaniemi.freenode.net :0 Helsinki, FI, EU
-        slice.nom(' '); // bot nickname
-        slice.nom(' '); // "mask"
-        event.aux[0] = slice.nom(" :"); // server address
-        event.count[0] = slice.nom(' ').to!long; // hop count
+        slice.advancePast(' '); // bot nickname
+        slice.advancePast(' '); // "mask"
+        event.aux[0] = slice.advancePast(" :"); // server address
+        event.count[0] = slice.advancePast(' ').to!long; // hop count
         event.content = slice; // "server info"
         break;
 
     case ERR_BANONCHAN: // 435
         // <nickname> <target nickname> <channel> :Cannot change nickname while banned on channel
         // :cherryh.freenode.net 435 kameloso^ kameloso^^ #d3d9 :Cannot change nickname while banned on channel
-        event.target.nickname = slice.nom(' ');
-        event.aux[0] = slice.nom(' ');
-        event.channel = slice.nom(" :");
+        event.target.nickname = slice.advancePast(' ');
+        event.aux[0] = slice.advancePast(' ');
+        event.channel = slice.advancePast(" :");
         event.content = slice;
         break;
 
@@ -1167,17 +1167,17 @@ void parseSpecialcases(
         {
             // :tmi.twitch.tv CAP * LS :twitch.tv/tags twitch.tv/commands twitch.tv/membership
             // More CAPs follow
-            slice.nom("* ");
+            slice.advancePast("* ");
         }
         else
         {
             // :genesis.ks.us.irchighway.net CAP 867AAF66L LS :away-notify extended-join account-notify multi-prefix sasl tls userhost-in-names
             // Final CAP listing
-            /*immutable id =*/ slice.nom(' ');
+            /*immutable id =*/ slice.advancePast(' ');
         }
 
         // Store verb in content and caps in aux
-        event.content = slice.nom(" :");
+        event.content = slice.advancePast(" :");
 
         uint i;
         foreach (immutable cap; slice.splitter(' '))
@@ -1195,10 +1195,10 @@ void parseSpecialcases(
 
     case RPL_UMODEGMSG:
         // :rajaniemi.freenode.net 718 kameloso Freyjaun ~FREYJAUN@41.39.229.6 :is messaging you, and you have umode +g.
-        slice.nom(' '); // bot nickname
-        event.target.nickname = slice.nom(' ');
-        event.target.ident = slice.nom('@');
-        event.target.address = slice.nom(" :");
+        slice.advancePast(' '); // bot nickname
+        event.target.nickname = slice.advancePast(' ');
+        event.target.ident = slice.advancePast('@');
+        event.target.address = slice.advancePast(" :");
         event.content = slice;
         break;
 
@@ -1210,7 +1210,7 @@ void parseSpecialcases(
             if (slice.indexOf(" :") != -1)
             {
                 // Banned
-                event.channel = slice.nom(" :");
+                event.channel = slice.advancePast(" :");
                 event.target.nickname = slice;
             }
             else
@@ -1226,12 +1226,12 @@ void parseSpecialcases(
         // :kornbluth.freenode.net 900 * *!unknown@194.117.188.126 kameloso :You are now logged in as kameloso.
         if (slice.indexOf('!') != -1)
         {
-            event.target.nickname = slice.nom(' ');  // bot nick, or an asterisk if unknown
+            event.target.nickname = slice.advancePast(' ');  // bot nick, or an asterisk if unknown
             if (event.target.nickname == "*") event.target.nickname = string.init;
-            slice.nom('!');  // user
-            /*event.target.ident =*/ slice.nom('@');  // Doesn't seem to be the true ~ident
-            event.target.address = slice.nom(' ');
-            event.target.account = slice.nom(" :");
+            slice.advancePast('!');  // user
+            /*event.target.ident =*/ slice.advancePast('@');  // Doesn't seem to be the true ~ident
+            event.target.address = slice.advancePast(' ');
+            event.target.account = slice.advancePast(" :");
         }
         event.content = slice;
         break;
@@ -1244,7 +1244,7 @@ void parseSpecialcases(
     case RPL_WELCOME: // 001
         // :Welcome to <server name> <user>
         // :adams.freenode.net 001 kameloso^ :Welcome to the freenode Internet Relay Chat Network kameloso^
-        event.target.nickname = slice.nom(" :");
+        event.target.nickname = slice.advancePast(" :");
         event.content = slice;
 
         if (!parser.server.resolvedAddress.length)
@@ -1271,16 +1271,16 @@ void parseSpecialcases(
     case RPL_HOSTHIDDEN: // 396
         // <nickname> <host> :is now your hidden host
         // :TAL.DE.EU.GameSurge.net 396 kameloso ~NaN@1b24f4a7.243f02a4.5cd6f3e3.IP4 :is now your hidden host
-        slice.nom(' '); // bot nickname
-        event.aux[0] = slice.nom(" :");
+        slice.advancePast(' '); // bot nickname
+        event.aux[0] = slice.advancePast(" :");
         event.content = slice;
         break;
 
     case RPL_VERSION: // 351
         // <version>.<debuglevel> <server> :<comments>
         // :irc.rizon.no 351 kameloso^^ plexus-4(hybrid-8.1.20)(20170821_0-607). irc.rizon.no :TS6ow
-        slice.nom(' '); // bot nickname
-        event.content = slice.nom(" :");
+        slice.advancePast(' '); // bot nickname
+        event.content = slice.advancePast(" :");
         event.aux[0] = slice;
         break;
 
@@ -1297,9 +1297,9 @@ void parseSpecialcases(
         // :miranda.chathispano.com 465 kameloso 1511086908 :[1511000504768] G-Lined by ChatHispano Network. Para mas informacion visite http://chathispano.com/gline/?id=<id> (expires at Dom, 19/11/2017 11:21:48 +0100).
         // event.time was 1511000921
         // TRIED TO NOM TOO MUCH:':You are banned from this server- Your irc client seems broken and is flooding lots of channels. Banned for 240 min, if in error, please contact kline@freenode.net. (2017/12/1 21.08)' with ' :'
-        string misc = slice.nom(" :");  // mutable
+        string misc = slice.advancePast(" :");  // mutable
         event.content = slice;
-        misc.nom(' ', Yes.inherit);
+        misc.advancePast(' ', Yes.inherit);
         event.aux[0] = misc;
         break;
 
@@ -1309,7 +1309,7 @@ void parseSpecialcases(
         // :port80b.se.quakenet.org 221 kameloso +i
         // The general heuristics is good enough for this but places modes in
         // content rather than aux, which is inconsistent with other mode events
-        slice.nom(' '); // bot nickname
+        slice.advancePast(' '); // bot nickname
 
         if (slice.startsWith(':'))
         {
@@ -1323,13 +1323,13 @@ void parseSpecialcases(
         // <channel> <mode> <mode params>
         // :niven.freenode.net 324 kameloso^ ##linux +CLPcnprtf ##linux-overflow
         // :kornbluth.freenode.net 324 kameloso #flerrp +ns
-        slice.nom(' '); // bot nickname
-        event.channel = slice.nom(' ');
+        slice.advancePast(' '); // bot nickname
+        event.channel = slice.advancePast(' ');
 
         if (slice.indexOf(' ') != -1)
         {
-            event.aux[0] = slice.nom(' ');
-            //event.content = slice.nom(' ');
+            event.aux[0] = slice.advancePast(' ');
+            //event.content = slice.advancePast(' ');
             event.content = slice.strippedRight;
         }
         else
@@ -1340,8 +1340,8 @@ void parseSpecialcases(
 
     case RPL_CREATIONTIME: // 329
         // :kornbluth.freenode.net 329 kameloso #flerrp 1512995737
-        slice.nom(' ');
-        event.channel = slice.nom(' ');
+        slice.advancePast(' ');
+        event.channel = slice.advancePast(' ');
         event.count[0] = slice.to!long;
         break;
 
@@ -1356,9 +1356,9 @@ void parseSpecialcases(
             milky | Unreal inserts that instead of not sending the result
             milky | Other IRCd may do same because they are all derivatives
          */
-        slice.nom(' '); // bot nickname
-        event.channel = slice.nom(' ');
-        event.count[0] = slice.nom(" :").to!long;
+        slice.advancePast(' '); // bot nickname
+        event.channel = slice.advancePast(' ');
+        event.count[0] = slice.advancePast(" :").to!long;
         event.content = slice;
         break;
 
@@ -1371,22 +1371,22 @@ void parseSpecialcases(
     case RPL_ENDOFQUIETLIST: // 729, oftc/hybrid 345
         // :niven.freenode.net 729 kameloso^ #hirrsteff q :End of Channel Quiet List
         // :irc.oftc.net 345 kameloso #garderoben :End of Channel Quiet List
-        slice.nom(' ');
+        slice.advancePast(' ');
         event.channel = (slice.indexOf(" q :") != -1) ?
-            slice.nom(" q :") :
-            slice.nom(" :");
+            slice.advancePast(" q :") :
+            slice.advancePast(" :");
         event.content = slice;
         break;
 
     case RPL_WHOISMODES: // 379
         // <nickname> :is using modes <modes>
         // :cadance.canternet.org 379 kameloso kameloso :is using modes +ix
-        slice.nom(' '); // bot nickname
-        event.target.nickname = slice.nom(" :is using modes ");
+        slice.advancePast(' '); // bot nickname
+        event.target.nickname = slice.advancePast(" :is using modes ");
 
         if (slice.indexOf(' ') != -1)
         {
-            event.aux[0] = slice.nom(' ');
+            event.aux[0] = slice.advancePast(' ');
             event.content = slice;
         }
         else
@@ -1400,10 +1400,10 @@ void parseSpecialcases(
 
         // <nick> <user> <host> * :<real name>
         // :irc.uworld.se 314 kameloso^^ kameloso ~NaN C2802314.E23AD7D8.E9841504.IP * : kameloso!
-        slice.nom(' '); // bot nickname
-        event.target.nickname = slice.nom(' ');
-        event.target.ident = slice.nom(' ');
-        event.aux[0] = slice.nom(" * :");
+        slice.advancePast(' '); // bot nickname
+        event.target.nickname = slice.advancePast(' ');
+        event.target.ident = slice.advancePast(' ');
+        event.aux[0] = slice.advancePast(" * :");
         if (event.aux[0].length) event.target.address = event.aux[0];
         event.content = slice.stripped;
         event.target.realName = event.content;
@@ -1411,7 +1411,7 @@ void parseSpecialcases(
 
     case CHGHOST:
         // :Miyabro!~Miyabro@DA8192E8:4D54930F:650EE60D:IP CHGHOST ~Miyabro Miyako.is.mai.waifu
-        event.sender.ident = slice.nom(' ');
+        event.sender.ident = slice.advancePast(' ');
         event.sender.address = slice;
         event.content = slice;
         break;
@@ -1419,7 +1419,7 @@ void parseSpecialcases(
     case RPL_HELLO: // 020
         // :irc.run.net 020 irc.run.net :*** You are connected to RusNet. Please wait...
         // :irc.portlane.se 020 * :Please wait while we process your connection.
-        slice.nom(" :");
+        slice.advancePast(" :");
         event.content = slice;
         parser.server.resolvedAddress = event.sender.address;
         version(FlagAsUpdated) parser.updates |= IRCParser.Update.server;
@@ -1431,13 +1431,13 @@ void parseSpecialcases(
         // :siren.de.SpotChat.org 941 kameloso #linuxmint-help spotify.com/album Butterfly 1513796216
         // ":kornbluth.freenode.net 367 kameloso #flerrp harbl!harbl@snarbl.com zorael!~NaN@2001:41d0:2:80b4:: 1513899521"
         // :irc.run.net 367 kameloso #politics *!*@broadband-46-242-*.ip.moscow.rt.ru
-        slice.nom(' '); // bot nickname
-        event.channel = slice.nom(' ');
+        slice.advancePast(' '); // bot nickname
+        event.channel = slice.advancePast(' ');
 
         if (slice.indexOf(' ') != -1)
         {
-            event.content = slice.nom(' ');
-            event.aux[0] = slice.nom(' ');  // nickname that set the mode
+            event.content = slice.advancePast(' ');
+            event.aux[0] = slice.advancePast(' ');  // nickname that set the mode
             event.count[0] = slice.to!long;
         }
         else
@@ -1450,8 +1450,8 @@ void parseSpecialcases(
         // <nick> :<away message>
         // :hitchcock.freenode.net 301 kameloso^ Morrolan :Auto away at Tue Mar  3 09:43:26 2020
         // Sent if you send a message (or WHOIS) a user who is away
-        slice.nom(' '); // bot nickname
-        event.sender.nickname = slice.nom(" :");
+        slice.advancePast(' '); // bot nickname
+        event.sender.nickname = slice.advancePast(" :");
         event.sender.address = string.init;
         version(BotElements) event.sender.class_ = IRCUser.Class.unset;
         event.content = slice;
@@ -1459,7 +1459,7 @@ void parseSpecialcases(
 
     case RPL_SASLSUCCESS: // 903
         // :weber.freenode.net 903 * :SASL authentication successful
-        slice.nom(" :");  // asterisk, possible nickname?
+        slice.advancePast(" :");  // asterisk, possible nickname?
         event.content = slice;
         break;
 
@@ -1467,9 +1467,9 @@ void parseSpecialcases(
         // :irc.link-net.be 010 zorael irc.link-net.be +6697 :Please use this Server/Port instead$
         import std.conv : ConvException, to;
 
-        slice.nom(' '); // bot nickname
-        event.aux[0] = slice.nom(' ');
-        string portstring = slice.nom(" :");  // mutable
+        slice.advancePast(' '); // bot nickname
+        event.aux[0] = slice.advancePast(' ');
+        string portstring = slice.advancePast(" :");  // mutable
         event.content = slice;
 
         if (portstring.startsWith('+')) portstring = portstring[1..$];
@@ -1488,8 +1488,8 @@ void parseSpecialcases(
 
     case ERR_BADCHANNAME: // 479
         // :helix.oftc.net 479 zorael|8 - :Illegal channel name
-        slice.nom(' '); // bot nickname
-        event.aux[0] = slice.nom(" :");
+        slice.advancePast(' '); // bot nickname
+        event.aux[0] = slice.advancePast(" :");
         event.content = slice;
         break;
 
@@ -1542,7 +1542,7 @@ void parseGeneralCases(
     else if (slice.indexOf(" :") != -1)
     {
         // Has colon-content
-        string targets = slice.nom(" :");  // mutable
+        string targets = slice.advancePast(" :");  // mutable
 
         if (!targets.length)
         {
@@ -1552,7 +1552,7 @@ void parseGeneralCases(
         else if (targets.indexOf(' ') != -1)
         {
             // More than one target
-            immutable firstTarget = targets.nom(' ');
+            immutable firstTarget = targets.advancePast(' ');
 
             if ((firstTarget == parser.client.nickname) || (firstTarget == "*"))
             {
@@ -1569,7 +1569,7 @@ void parseGeneralCases(
                         // More than one target, first is bot
                         // Second target is more than one, first is channel
                         // assume third is content
-                        event.channel = targets.nom(' ');
+                        event.channel = targets.advancePast(' ');
                         event.content = targets;
                     }
                     else
@@ -1591,7 +1591,7 @@ void parseGeneralCases(
                     if (numSpaces == 1)
                     {
                         // Two extra targets; assume nickname and channel
-                        event.target.nickname = targets.nom(' ');
+                        event.target.nickname = targets.advancePast(' ');
                         event.channel = targets;
                     }
                     else if (numSpaces > 1)
@@ -1658,7 +1658,7 @@ void parseGeneralCases(
         if (slice.indexOf(' ') != -1)
         {
             // More than one target
-            immutable target = slice.nom(' ');
+            immutable target = slice.advancePast(' ');
 
             if (!target.length)
             {
@@ -1690,13 +1690,13 @@ void parseGeneralCases(
                     if (parser.server.chantypes.indexOf(slice[0]) != -1)
                     {
                         // Second target is channel
-                        event.channel = slice.nom(' ');
+                        event.channel = slice.advancePast(' ');
 
                         if (slice.indexOf(' ') != -1)
                         {
                             // Remaining slice has at least two fields;
                             // separate into content and aux
-                            event.content = slice.nom(' ');
+                            event.content = slice.advancePast(' ');
                             event.aux[0] = slice;
                         }
                         else
@@ -1846,7 +1846,7 @@ in (slice.length, "Tried to process `onNotice` on an empty slice")
     // :tolkien.freenode.net NOTICE * :*** Checking Ident
 
     // At least Twitch sends NOTICEs to channels, maybe other daemons do too
-    immutable channelOrNickname = slice.nom(" :", Yes.inherit);
+    immutable channelOrNickname = slice.advancePast(" :", Yes.inherit);
     event.content = slice;
 
     if (channelOrNickname.length &&
@@ -1974,7 +1974,7 @@ in (slice.length, "Tried to process `IRCEvent.Type.PRIVMSG` on an empty slice")
     import dialect.common : IRCControlCharacter, isValidChannel;
     import std.string : indexOf;
 
-    string target = slice.nom(' ');  // mutable
+    string target = slice.advancePast(' ');  // mutable
     if (slice.length && slice[0] == ':') slice = slice[1..$];
     event.content = slice;
 
@@ -2020,7 +2020,7 @@ in (slice.length, "Tried to process `IRCEvent.Type.PRIVMSG` on an empty slice")
         import std.traits : EnumMembers;
 
         slice = slice[1..$-1];
-        immutable ctcpEvent = (slice.indexOf(' ') != -1) ? slice.nom(' ') : slice;
+        immutable ctcpEvent = (slice.indexOf(' ') != -1) ? slice.advancePast(' ') : slice;
         event.content = slice;
 
         // :zorael!~NaN@ns3363704.ip-94-23-253.eu PRIVMSG #flerrp :ACTION test test content
@@ -2054,7 +2054,7 @@ in (slice.length, "Tried to process `IRCEvent.Type.PRIVMSG` on an empty slice")
         switch (ctcpEvent)
         {
         case "ACTION":
-            // We already sliced away the control characters and nommed the
+            // We already sliced away the control characters and advanced past the
             // "ACTION" ctcpEvent string, so just set the type and break.
             event.type = (event.sender.nickname == parser.client.nickname) ?
                 IRCEvent.Type.SELFEMOTE :
@@ -2107,7 +2107,7 @@ in (slice.length, "Tried to process `onMode` on an empty slice")
     import std.string : indexOf;
     import std.algorithm.searching : startsWith;
 
-    immutable target = slice.nom(' ');
+    immutable target = slice.advancePast(' ');
 
     if (target.isValidChannel(parser.server))
     {
@@ -2116,7 +2116,7 @@ in (slice.length, "Tried to process `onMode` on an empty slice")
         if (slice.indexOf(' ') != -1)
         {
             // :zorael!~NaN@ns3363704.ip-94-23-253.eu MODE #flerrp +v kameloso^
-            event.aux[0] = slice.nom(' ');
+            event.aux[0] = slice.advancePast(' ');
             // save target in content; there may be more than one
             event.content = slice;
         }
@@ -2262,8 +2262,8 @@ in (slice.length, "Tried to process `IRCEvent.Type.RPL_ISUPPORT` on an empty sli
     // :barjavel.freenode.net 005 kameloso^ CHARSET=ascii NICKLEN=16 CHANNELLEN=50 TOPICLEN=390 DEAF=D FNC TARGMAX=NAMES:1,LIST:1,KICK:1,WHOIS:1,PRIVMSG:4,NOTICE:4,ACCEPT:,MONITOR: EXTBAN=$,ajrxz CLIENTVER=3.0 WHOX KNOCK CPRIVMSG :are supported by this server
     // :barjavel.freenode.net 005 kameloso^ CHANTYPES=# EXCEPTS INVEX CHANMODES=eIbq,k,flj,CFLMPQScgimnprstuz CHANLIMIT=#:120 PREFIX=(ov)@+ MAXLIST=bqeI:100 MODES=4 NETWORK=freenode STATUSMSG=@+ CALLERID=g CASEMAPPING=rfc1459 :are supported by this server
 
-    slice.nom(' ');  // bot nickname
-    if (slice.indexOf(" :") != -1) event.content = slice.nom(" :");
+    slice.advancePast(' ');  // bot nickname
+    if (slice.indexOf(" :") != -1) event.content = slice.advancePast(" :");
 
     if (parser.server.supports.length)
     {
@@ -2291,7 +2291,7 @@ in (slice.length, "Tried to process `IRCEvent.Type.RPL_ISUPPORT` on an empty sli
                 continue;
             }
 
-            immutable key = value.nom('=');
+            immutable key = value.advancePast('=');
 
             /// http://www.irc.org/tech_docs/005.html
 
@@ -2334,9 +2334,9 @@ in (slice.length, "Tried to process `IRCEvent.Type.RPL_ISUPPORT` on an empty sli
                     Freenode: CHANMODES=eIbq,k,flj,CFLMPQScgimnprstz
                  +/
                 string modeslice = value;  // mutable
-                parser.server.aModes = modeslice.nom(',');
-                parser.server.bModes = modeslice.nom(',');
-                parser.server.cModes = modeslice.nom(',');
+                parser.server.aModes = modeslice.advancePast(',');
+                parser.server.bModes = modeslice.advancePast(',');
+                parser.server.cModes = modeslice.advancePast(',');
                 parser.server.dModes = modeslice;
                 assert((parser.server.dModes.indexOf(',') == -1),
                     "Bad chanmodes; dModes has comma: " ~ parser.server.dModes);
@@ -2393,7 +2393,7 @@ in (slice.length, "Tried to process `IRCEvent.Type.RPL_ISUPPORT` on an empty sli
                 // EXTBAN=$,ajrxz
                 // EXTBAN=
                 // no character means implicitly $, I believe?
-                immutable prefix = value.nom(',');
+                immutable prefix = value.advancePast(',');
                 parser.server.extbanPrefix = prefix.length ? prefix.to!char : '$';
                 parser.server.extbanTypes = value;
                 break;
@@ -2503,7 +2503,7 @@ in (slice.length, "Tried to process `onMyInfo` on an empty slice")
         return;
     }*/
 
-    slice.nom(' ');  // nickname
+    slice.advancePast(' ');  // nickname
 
     version(TwitchSupport)
     {
@@ -2529,8 +2529,8 @@ in (slice.length, "Tried to process `onMyInfo` on an empty slice")
         }
     }
 
-    slice.nom(' ');  // server address
-    immutable daemonstring = slice.nom(' ');
+    slice.advancePast(' ');  // server address
+    immutable daemonstring = slice.advancePast(' ');
     immutable daemonstringLower = daemonstring.toLower;
     event.content = slice;
     event.aux[0] = daemonstring;
@@ -2617,12 +2617,12 @@ void applyTags(ref IRCEvent event) pure @safe
 
     foreach (tag; event.tags.splitter(";"))
     {
-        import lu.string : nom;
+        import lu.string : advancePast;
         import std.string : indexOf;
 
         if (tag.indexOf('=') != -1)
         {
-            immutable key = tag.nom('=');
+            immutable key = tag.advancePast('=');
             alias value = tag;
 
             switch (key)

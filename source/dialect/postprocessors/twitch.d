@@ -70,7 +70,7 @@ auto parseTwitchTags(ref IRCParser parser, ref IRCEvent event) @safe
 
         static void printTags(typeof(tagRange) tagRange, const IRCEvent event)
         {
-            import lu.string : nom;
+            import lu.string : advancePast;
             import std.stdio : writefln, writeln;
 
             writeln('@', event.tags, ' ', event.raw, '$');
@@ -78,7 +78,7 @@ auto parseTwitchTags(ref IRCParser parser, ref IRCEvent event) @safe
             foreach (immutable tagline; tagRange)
             {
                 string slice = tagline;  // mutable
-                immutable key = slice.nom('=');
+                immutable key = slice.advancePast('=');
 
                 writefln(`%-35s"%s"`, key, slice);
             }
@@ -122,9 +122,9 @@ auto parseTwitchTags(ref IRCParser parser, ref IRCEvent event) @safe
     with (IRCEvent.Type)
     foreach (tag; tagRange)
     {
-        import lu.string : nom;
+        import lu.string : advancePast;
 
-        immutable key = tag.nom('=');
+        immutable key = tag.advancePast('=');
         string value = tag;  // mutable
 
         switch (key)
@@ -239,7 +239,7 @@ auto parseTwitchTags(ref IRCParser parser, ref IRCEvent event) @safe
                 foreach (immutable tagline; charityTags)
                 {
                     string slice = tagline;  // mutable
-                    immutable charityKey = slice.nom('=');
+                    immutable charityKey = slice.advancePast('=');
                     charityAA[charityKey] = slice;
                 }
 

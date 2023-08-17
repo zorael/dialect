@@ -10,7 +10,7 @@ private:
 
 import dialect.defs;
 import dialect.parsing;
-import lu.string : nom;
+import lu.string : advancePast;
 
 public:
 
@@ -1063,12 +1063,12 @@ void setMode(
                 if (slice.indexOf(':') != -1)
                 {
                     // More than one field
-                    slice.nom(':');
+                    slice.advancePast(':');
 
                     if (slice.indexOf('$') != -1)
                     {
                         // More than one field, first is account
-                        newMode.user.account = slice.nom('$');
+                        newMode.user.account = slice.advancePast('$');
                         newMode.data = slice;
                     }
                     else
@@ -1091,7 +1091,7 @@ void setMode(
             case 'j':
             //case 'c':  // Conflicts with colour ban
                 // Match channel
-                slice.nom(':');
+                slice.advancePast(':');
                 newMode.channel = slice;
                 break;
 

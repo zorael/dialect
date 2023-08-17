@@ -265,7 +265,7 @@ void inputServerInformation(ref IRCParser parser) @system
 {
     import dialect.common : typenumsOf;
     import lu.conv : Enum;
-    import lu.string : nom, stripped;
+    import lu.string : advancePast, stripped;
     import std.range : chunks, only;
     import std.traits : EnumMembers;
     import std.stdio : readln, stdin, stdout, write, writefln, writeln;
@@ -278,8 +278,8 @@ void inputServerInformation(ref IRCParser parser) @system
     write("Enter daemon [optional daemon literal] (solanum): ");
     stdout.flush();
     stdin.flush();
-    string slice = readln().stripped;  // mutable so we can nom it
-    immutable daemonstring = slice.nom(' ', Yes.inherit).toLower;
+    string slice = readln().stripped;  // mutable so we can advancePast it
+    immutable daemonstring = slice.advancePast(' ', Yes.inherit).toLower;
     immutable daemonLiteral = slice.length ? slice : daemonstring;
 
     parser.server.daemon = daemonstring.length ?
