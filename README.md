@@ -9,7 +9,7 @@ API documentation can be found [here](http://dialect.dpldocs.info).
 ```d
 struct IRCEvent
 {
-    enum Type { ... }  // *large* enum of IRC event types
+    enum Type { ... }  // large enum of IRC event types
 
     Type type;
     string raw;
@@ -89,9 +89,11 @@ struct IRCParser
 * `bot` includes some code specifically useful for bot applications
 * `twitchbot` is `twitch` and `bot` combined
 
+It is `pure` and `@safe` in the default `library` configuration.
+
 ## How to use
 
-> This assumes you have a program set up to read from an IRC server. This is not a bot framework; for that you're better off with the full [kameloso](https://github.com/zorael/kameloso) and writing a plugin that suits your needs.
+> This assumes you have a program set up to read from an IRC server. This is not a bot framework; for that you're better off with the full reference-implementation [`kameloso`](https://github.com/zorael/kameloso) and writing a plugin for it that suits your needs.
 
 * Create an [`IRCClient`](http://dialect.dpldocs.info/dialect.defs.IRCClient.html) and configure its members. (required for context when parsing)
 * Create an [`IRCServer`](http://dialect.dpldocs.info/dialect.defs.IRCServer.html) and configure its members. (it may work without but just give it at minimum a host address)
@@ -155,9 +157,9 @@ with (event3)
 
 See the [`/tests`](/tests) directory for more example parses.
 
-## Unittest generation
+## Unit test generation
 
-Compiling the `assertgen` dub subpackage builds a command-line tool with which it is easy to generate assert blocks like the one above. These can then be pasted into an according file in [`/tests`](/tests), then ideally submitted as a GitHub pull request for upstream inclusion. You can use it to contribute known-good parses and increase coverage of event types.
+Compiling the `assertgen` dub subpackage builds a command-line tool with which it is easy to generate assert blocks like the one above. These can then be pasted into an according file in [`/tests`](/tests) and ideally submitted as a GitHub pull request for upstream inclusion. You can use it to contribute known-good parses and increase coverage of event types.
 
 Simply run `dub run :assertgen` and follow the on-screen instructions.
 
@@ -184,7 +186,7 @@ Enter server address (irc.freenode.net): irc.server.tld
 }
 ```
 
-The output will by default also be saved to a `unittest.log` file in the current directory. See the `--help` listing for more details, passed through dub with `dub run :assertgen -- --help`.
+The output will by default also be saved to a `unittest.log` file in the current directory. See the `--help` listing for more details, passed through `dub` with `dub run :assertgen -- --help`.
 
 ## Caveats
 
