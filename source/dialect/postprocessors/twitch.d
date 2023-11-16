@@ -778,6 +778,8 @@ auto parseTwitchTags(ref IRCParser parser, ref IRCEvent event) @safe
         case "msg-param-gift-theme":
             // msg-param-gift-theme = party
             // Theme of a bulkgift?
+        case "msg-param-community-gift-id":
+            // submysterygift ID?
 
             /+
                 Aux 3
@@ -924,7 +926,7 @@ auto parseTwitchTags(ref IRCParser parser, ref IRCEvent event) @safe
             // reward gift, to how many users a reward was gifted
             // alias of msg-param-selected-count?
         case "msg-param-streak-months":
-            /// "...extended their Tier 1 sub to {month}"
+            // "...extended their Tier 1 sub to {month}"
 
             /+
                 Count 3
@@ -1180,6 +1182,10 @@ auto parseTwitchTags(ref IRCParser parser, ref IRCEvent event) @safe
                 // Something about hype chat. ...what's a system message?
             case "reply-thread-parent-user-login":
                 // Login of reply thread parent?
+            case "reply-thread-parent-user-id":
+                // Parent Twitch ID
+            case "reply-thread-parent-display-name":
+                // Display name of reply thread parent? We're not interested in the parent at the moment
 
                 // Ignore these events.
                 break;
