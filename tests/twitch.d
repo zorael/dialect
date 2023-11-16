@@ -1321,4 +1321,52 @@ unittest
             assert((id == "5de67699-6441-4aa5-acd7-40106aeb9b78"), id);
         }
     }
+    {
+        // @badge-info=subscriber/1;badges=subscriber/0,premium/1;color=#9ACD32;display-name=ch0senpotato;emotes=;flags=;id=0fabf780-4c25-4b2a-84ad-16a79a828d61;login=ch0senpotato;mod=0;msg-id=submysterygift;msg-param-community-gift-id=3310941710135024083;msg-param-mass-gift-count=1;msg-param-origin-id=3310941710135024083;msg-param-sender-count=1;msg-param-sub-plan=1000;room-id=28640725;subscriber=1;system-msg=ch0senpotato\sis\sgifting\s1\sTier\s1\sSubs\sto\sLobosJr's\scommunity!\sThey've\sgifted\sa\stotal\sof\s1\sin\sthe\schannel!;tmi-sent-ts=1700079134099;user-id=249069270;user-type=;vip=0 :tmi.twitch.tv USERNOTICE #lobosjr
+        immutable event = parser.toIRCEvent("@badge-info=subscriber/1;badges=subscriber/0,premium/1;color=#9ACD32;display-name=ch0senpotato;emotes=;flags=;id=0fabf780-4c25-4b2a-84ad-16a79a828d61;login=ch0senpotato;mod=0;msg-id=submysterygift;msg-param-community-gift-id=3310941710135024083;msg-param-mass-gift-count=1;msg-param-origin-id=3310941710135024083;msg-param-sender-count=1;msg-param-sub-plan=1000;room-id=28640725;subscriber=1;system-msg=ch0senpotato\\sis\\sgifting\\s1\\sTier\\s1\\sSubs\\sto\\sLobosJr's\\scommunity!\\sThey've\\sgifted\\sa\\stotal\\sof\\s1\\sin\\sthe\\schannel!;tmi-sent-ts=1700079134099;user-id=249069270;user-type=;vip=0 :tmi.twitch.tv USERNOTICE #lobosjr");
+        with (event)
+        {
+            assert((type == IRCEvent.Type.TWITCH_BULKGIFT), Enum!(IRCEvent.Type).toString(type));
+            assert((sender.nickname == "ch0senpotato"), sender.nickname);
+            assert((sender.id == 249069270), sender.id.to!string);
+            assert((sender.address == "tmi.twitch.tv"), sender.address);
+            assert((sender.account == "ch0senpotato"), sender.account);
+            assert((sender.displayName == "ch0senpotato"), sender.displayName);
+            assert((sender.badges == "subscriber/0,premium/1"), sender.badges);
+            assert((sender.colour == "9ACD32"), sender.colour);
+            assert((channel == "#lobosjr"), channel);
+            assert((content == "ch0senpotato is gifting 1 Tier 1 Subs to LobosJr's community! They've gifted a total of 1 in the channel!"), content);
+            assert((aux[0] == "1000"), aux[0]);
+            assert((aux[3] == "3310941710135024083"), aux[2]);
+            assert((tags == "badge-info=subscriber/1;badges=subscriber/0,premium/1;color=#9ACD32;display-name=ch0senpotato;emotes=;flags=;id=0fabf780-4c25-4b2a-84ad-16a79a828d61;login=ch0senpotato;mod=0;msg-id=submysterygift;msg-param-community-gift-id=3310941710135024083;msg-param-mass-gift-count=1;msg-param-origin-id=3310941710135024083;msg-param-sender-count=1;msg-param-sub-plan=1000;room-id=28640725;subscriber=1;system-msg=ch0senpotato\\sis\\sgifting\\s1\\sTier\\s1\\sSubs\\sto\\sLobosJr's\\scommunity!\\sThey've\\sgifted\\sa\\stotal\\sof\\s1\\sin\\sthe\\schannel!;tmi-sent-ts=1700079134099;user-id=249069270;user-type=;vip=0"), tags);
+            assert((count[0] == 1), count[0].to!string);
+            assert((count[1] == 1), count[1].to!string);
+            assert((id == "0fabf780-4c25-4b2a-84ad-16a79a828d61"), id);
+        }
+    }
+    {
+        // @badge-info=;badges=premium/1;client-nonce=b5065e6ea4749db330189bde7b381239;color=#2CD1D5;display-name=mojazu;emotes=;first-msg=0;flags=40-49:P.0;id=f8039222-2069-434e-a37e-b5d955425028;mod=0;reply-parent-display-name=TyranosaurusBrett;reply-parent-msg-body=but\sI\scan't\stouch\sit;reply-parent-msg-id=7575d246-43f1-4128-80a5-cb092ae0610f;reply-parent-user-id=172563770;reply-parent-user-login=tyranosaurusbrett;reply-thread-parent-display-name=TyranosaurusBrett;reply-thread-parent-msg-id=7575d246-43f1-4128-80a5-cb092ae0610f;reply-thread-parent-user-id=172563770;reply-thread-parent-user-login=tyranosaurusbrett;returning-chatter=0;room-id=28640725;subscriber=0;tmi-sent-ts=1700104586321;turbo=0;user-id=8216630;user-type= :mojazu!mojazu@mojazu.tmi.twitch.tv PRIVMSG #lobosjr :@TyranosaurusBrett haha we're all there goddammit. So much temptation
+        immutable event = parser.toIRCEvent("@badge-info=;badges=premium/1;client-nonce=b5065e6ea4749db330189bde7b381239;color=#2CD1D5;display-name=mojazu;emotes=;first-msg=0;flags=40-49:P.0;id=f8039222-2069-434e-a37e-b5d955425028;mod=0;reply-parent-display-name=TyranosaurusBrett;reply-parent-msg-body=but\\sI\\scan't\\stouch\\sit;reply-parent-msg-id=7575d246-43f1-4128-80a5-cb092ae0610f;reply-parent-user-id=172563770;reply-parent-user-login=tyranosaurusbrett;reply-thread-parent-display-name=TyranosaurusBrett;reply-thread-parent-msg-id=7575d246-43f1-4128-80a5-cb092ae0610f;reply-thread-parent-user-id=172563770;reply-thread-parent-user-login=tyranosaurusbrett;returning-chatter=0;room-id=28640725;subscriber=0;tmi-sent-ts=1700104586321;turbo=0;user-id=8216630;user-type= :mojazu!mojazu@mojazu.tmi.twitch.tv PRIVMSG #lobosjr :@TyranosaurusBrett haha we're all there goddammit. So much temptation");
+        with (event)
+        {
+            assert((type == IRCEvent.Type.CHAN), Enum!(IRCEvent.Type).toString(type));
+            assert((sender.nickname == "mojazu"), sender.nickname);
+            assert((sender.id == 8216630), sender.id.to!string);
+            assert((sender.ident == "mojazu"), sender.ident);
+            assert((sender.address == "mojazu.tmi.twitch.tv"), sender.address);
+            assert((sender.account == "mojazu"), sender.account);
+            assert((sender.displayName == "mojazu"), sender.displayName);
+            assert((sender.badges == "premium/1"), sender.badges);
+            assert((sender.colour == "2CD1D5"), sender.colour);
+            assert((channel == "#lobosjr"), channel);
+            assert((target.nickname == "tyranosaurusbrett"), target.nickname);
+            assert((target.id == 172563770), target.id.to!string);
+            assert((target.account == "tyranosaurusbrett"), target.account);
+            assert((target.displayName == "TyranosaurusBrett"), target.displayName);
+            assert((content == "@TyranosaurusBrett haha we're all there goddammit. So much temptation"), content);
+            assert((aux[0] == "but I can't touch it"), aux[0]);
+            assert((tags == "badge-info=;badges=premium/1;client-nonce=b5065e6ea4749db330189bde7b381239;color=#2CD1D5;display-name=mojazu;emotes=;first-msg=0;flags=40-49:P.0;id=f8039222-2069-434e-a37e-b5d955425028;mod=0;reply-parent-display-name=TyranosaurusBrett;reply-parent-msg-body=but\\sI\\scan't\\stouch\\sit;reply-parent-msg-id=7575d246-43f1-4128-80a5-cb092ae0610f;reply-parent-user-id=172563770;reply-parent-user-login=tyranosaurusbrett;reply-thread-parent-display-name=TyranosaurusBrett;reply-thread-parent-msg-id=7575d246-43f1-4128-80a5-cb092ae0610f;reply-thread-parent-user-id=172563770;reply-thread-parent-user-login=tyranosaurusbrett;returning-chatter=0;room-id=28640725;subscriber=0;tmi-sent-ts=1700104586321;turbo=0;user-id=8216630;user-type="), tags);
+            assert((id == "f8039222-2069-434e-a37e-b5d955425028"), id);
+        }
+    }
 }
