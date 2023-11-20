@@ -373,6 +373,11 @@ auto parseTwitchTags(ref IRCParser parser, ref IRCEvent event) @safe
                 event.type = TWITCH_INTRO;
                 break;
 
+            case "viewermilestone":
+                // Unknown Twitch msg-id: viewermilestone
+                event.type = TWITCH_MILESTONE;
+                break;
+
             /*case "bad_ban_admin":
             case "bad_ban_anon":
             case "bad_ban_broadcaster":
@@ -721,6 +726,8 @@ auto parseTwitchTags(ref IRCParser parser, ref IRCEvent event) @safe
         case "reply-parent-msg-body":
             // The body of the message that is being replied to
             // reply-parent-msg-body = she's\sgonna\swin\s2truths\sand\sa\slie\severytime
+        case "msg-param-category":
+            // Viewer milestone thing
 
             /+
                 Aux 0
@@ -861,7 +868,9 @@ auto parseTwitchTags(ref IRCParser parser, ref IRCEvent event) @safe
         case "msg-param-gift-months":
             // ...
         case "msg-param-sub-benefit-end-month":
-            /// "...extended their Tier 1 sub to {month}"
+            // "...extended their Tier 1 sub to {month}"
+        case "msg-param-value":
+            // Viewer milestone thing; consecutive streams watched
 
             /+
                 Count 0
@@ -882,6 +891,8 @@ auto parseTwitchTags(ref IRCParser parser, ref IRCEvent event) @safe
             // we can infer it from pinned-chat-paid-amount in event.count[0]
         case "msg-param-cumulative-months":
             // Total number of months subscribed, over time. Replaces msg-param-months
+        case "msg-param-copoReward":
+            // Viewer milestone thing
 
             /+
                 Count 1
@@ -1186,6 +1197,8 @@ auto parseTwitchTags(ref IRCParser parser, ref IRCEvent event) @safe
                 // Parent Twitch ID
             case "reply-thread-parent-display-name":
                 // Display name of reply thread parent? We're not interested in the parent at the moment
+            case "msg-param-id":
+                // Viewer milestone thing. Triggering message id?
 
                 // Ignore these events.
                 break;

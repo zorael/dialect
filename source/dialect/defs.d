@@ -159,6 +159,7 @@ public:
         TWITCH_ANNOUNCEMENT, /// Twitch channel announcement.
         TWITCH_DIRECTCHEER, /// Twitch direct cheer with real currency.
         TWITCH_INTRO,     /// Twitch, someone introducing themselves in a channel.
+        TWITCH_MILESTONE, /// Twitch, viewer milestone.
 
         RPL_WELCOME, // = 001,          // ":Welcome to <server name> <user>"
         RPL_YOURHOST, // = 002,         // ":Your host is <servername>, running version <version>"
