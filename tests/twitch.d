@@ -1369,4 +1369,26 @@ unittest
             assert((id == "f8039222-2069-434e-a37e-b5d955425028"), id);
         }
     }
+    {
+        // @badge-info=;badges=bits/1;color=#1E90FF;display-name=まっりゆみ;emotes=;flags=;id=86a3282b-2785-4f4a-a103-3e4fe19eb4d4;login=marriyumi;mod=0;msg-id=viewermilestone;msg-param-category=watch-streak;msg-param-copoReward=350;msg-param-id=c52b7cd6-9fd0-4814-bb7e-b7844665f5b7;msg-param-value=3;room-id=883612928;subscriber=0;system-msg=まっりゆみ\swatched\s3\sconsecutive\sstreams\sthis\smonth\sand\ssparked\sa\swatch\sstreak!;tmi-sent-ts=1700510454678;user-id=244695359;user-type=;vip=0 :tmi.twitch.tv USERNOTICE #nemefy0929 :ネメちゃんこんばんわ
+        immutable event = parser.toIRCEvent("@badge-info=;badges=bits/1;color=#1E90FF;display-name=まっりゆみ;emotes=;flags=;id=86a3282b-2785-4f4a-a103-3e4fe19eb4d4;login=marriyumi;mod=0;msg-id=viewermilestone;msg-param-category=watch-streak;msg-param-copoReward=350;msg-param-id=c52b7cd6-9fd0-4814-bb7e-b7844665f5b7;msg-param-value=3;room-id=883612928;subscriber=0;system-msg=まっりゆみ\\swatched\\s3\\sconsecutive\\sstreams\\sthis\\smonth\\sand\\ssparked\\sa\\swatch\\sstreak!;tmi-sent-ts=1700510454678;user-id=244695359;user-type=;vip=0 :tmi.twitch.tv USERNOTICE #nemefy0929 :ネメちゃんこんばんわ");
+        with (event)
+        {
+            assert((type == IRCEvent.Type.TWITCH_MILESTONE), Enum!(IRCEvent.Type).toString(type));
+            assert((sender.nickname == "marriyumi"), sender.nickname);
+            assert((sender.id == 244695359), sender.id.to!string);
+            assert((sender.address == "tmi.twitch.tv"), sender.address);
+            assert((sender.account == "marriyumi"), sender.account);
+            assert((sender.displayName == "まっりゆみ"), sender.displayName);
+            assert((sender.badges == "bits/1"), sender.badges);
+            assert((sender.colour == "1E90FF"), sender.colour);
+            assert((channel == "#nemefy0929"), channel);
+            assert((content == "ネメちゃんこんばんわ"), content);
+            assert((aux[0] == "watch-streak"), aux[0]);
+            assert((tags == "badge-info=;badges=bits/1;color=#1E90FF;display-name=まっりゆみ;emotes=;flags=;id=86a3282b-2785-4f4a-a103-3e4fe19eb4d4;login=marriyumi;mod=0;msg-id=viewermilestone;msg-param-category=watch-streak;msg-param-copoReward=350;msg-param-id=c52b7cd6-9fd0-4814-bb7e-b7844665f5b7;msg-param-value=3;room-id=883612928;subscriber=0;system-msg=まっりゆみ\\swatched\\s3\\sconsecutive\\sstreams\\sthis\\smonth\\sand\\ssparked\\sa\\swatch\\sstreak!;tmi-sent-ts=1700510454678;user-id=244695359;user-type=;vip=0"), tags);
+            assert((count[0] == 3), count[0].to!string);
+            assert((count[1] == 350), count[1].to!string);
+            assert((id == "86a3282b-2785-4f4a-a103-3e4fe19eb4d4"), id);
+        }
+    }
 }
