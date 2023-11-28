@@ -1337,7 +1337,6 @@ unittest
             assert((channel == "#lobosjr"), channel);
             assert((content == "ch0senpotato is gifting 1 Tier 1 Subs to LobosJr's community! They've gifted a total of 1 in the channel!"), content);
             assert((aux[0] == "1000"), aux[0]);
-            assert((aux[3] == "3310941710135024083"), aux[2]);
             assert((tags == "badge-info=subscriber/1;badges=subscriber/0,premium/1;color=#9ACD32;display-name=ch0senpotato;emotes=;flags=;id=0fabf780-4c25-4b2a-84ad-16a79a828d61;login=ch0senpotato;mod=0;msg-id=submysterygift;msg-param-community-gift-id=3310941710135024083;msg-param-mass-gift-count=1;msg-param-origin-id=3310941710135024083;msg-param-sender-count=1;msg-param-sub-plan=1000;room-id=28640725;subscriber=1;system-msg=ch0senpotato\\sis\\sgifting\\s1\\sTier\\s1\\sSubs\\sto\\sLobosJr's\\scommunity!\\sThey've\\sgifted\\sa\\stotal\\sof\\s1\\sin\\sthe\\schannel!;tmi-sent-ts=1700079134099;user-id=249069270;user-type=;vip=0"), tags);
             assert((count[0] == 1), count[0].to!string);
             assert((count[1] == 1), count[1].to!string);

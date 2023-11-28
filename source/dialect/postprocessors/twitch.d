@@ -785,8 +785,6 @@ auto parseTwitchTags(ref IRCParser parser, ref IRCEvent event) @safe
         case "msg-param-gift-theme":
             // msg-param-gift-theme = party
             // Theme of a bulkgift?
-        case "msg-param-community-gift-id":
-            // submysterygift ID?
 
             /+
                 Aux 3
@@ -1199,6 +1197,8 @@ auto parseTwitchTags(ref IRCParser parser, ref IRCEvent event) @safe
                 // Display name of reply thread parent? We're not interested in the parent at the moment
             case "msg-param-id":
                 // Viewer milestone thing. Triggering message id?
+            case "msg-param-community-gift-id":
+                // submysterygift ID?
 
                 // Ignore these events.
                 break;
