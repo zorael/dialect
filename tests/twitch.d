@@ -1390,4 +1390,30 @@ unittest
             assert((id == "86a3282b-2785-4f4a-a103-3e4fe19eb4d4"), id);
         }
     }
+    {
+        // @badge-info=subscriber/12;badges=subscriber/12,sub-gift-leader/1;color=#0000FF;display-name=万年二等兵;emotes=;flags=;id=2cf9322d-609e-4a7b-9d79-f4c7b05458e8;login=nitouheidayo;mod=0;msg-id=subgift;msg-param-community-gift-id=14473467917504761560;msg-param-gift-months=1;msg-param-gift-theme=biblethump;msg-param-months=1;msg-param-origin-id=14473467917504761560;msg-param-recipient-display-name=ドキドキ文芸部レギュラー;msg-param-recipient-id=923831373;msg-param-recipient-user-name=wakarimasitan;msg-param-sender-count=0;msg-param-sub-plan-name=Channel\sSubscription\s(nass_oisii);msg-param-sub-plan=1000;room-id=672917034;subscriber=1;system-msg=万年二等兵\sgifted\sa\sTier\s1\ssub\sto\sドキドキ文芸部レギュラー!;tmi-sent-ts=1701161053456;user-id=158834932;user-type=;vip=0 :tmi.twitch.tv USERNOTICE #nass_oisii
+        immutable event = parser.toIRCEvent("@badge-info=subscriber/12;badges=subscriber/12,sub-gift-leader/1;color=#0000FF;display-name=万年二等兵;emotes=;flags=;id=2cf9322d-609e-4a7b-9d79-f4c7b05458e8;login=nitouheidayo;mod=0;msg-id=subgift;msg-param-community-gift-id=14473467917504761560;msg-param-gift-months=1;msg-param-gift-theme=biblethump;msg-param-months=1;msg-param-origin-id=14473467917504761560;msg-param-recipient-display-name=ドキドキ文芸部レギュラー;msg-param-recipient-id=923831373;msg-param-recipient-user-name=wakarimasitan;msg-param-sender-count=0;msg-param-sub-plan-name=Channel\\sSubscription\\s(nass_oisii);msg-param-sub-plan=1000;room-id=672917034;subscriber=1;system-msg=万年二等兵\\sgifted\\sa\\sTier\\s1\\ssub\\sto\\sドキドキ文芸部レギュラー!;tmi-sent-ts=1701161053456;user-id=158834932;user-type=;vip=0 :tmi.twitch.tv USERNOTICE #nass_oisii");
+        with (event)
+        {
+            assert((type == IRCEvent.Type.TWITCH_SUBGIFT), Enum!(IRCEvent.Type).toString(type));
+            assert((sender.nickname == "nitouheidayo"), sender.nickname);
+            assert((sender.id == 158834932), sender.id.to!string);
+            assert((sender.address == "tmi.twitch.tv"), sender.address);
+            assert((sender.account == "nitouheidayo"), sender.account);
+            assert((sender.displayName == "万年二等兵"), sender.displayName);
+            assert((sender.badges == "subscriber/12,sub-gift-leader/1"), sender.badges);
+            assert((sender.colour == "0000FF"), sender.colour);
+            assert((channel == "#nass_oisii"), channel);
+            assert((target.nickname == "wakarimasitan"), target.nickname);
+            assert((target.account == "wakarimasitan"), target.account);
+            assert((target.displayName == "ドキドキ文芸部レギュラー"), target.displayName);
+            assert((content == "万年二等兵 gifted a Tier 1 sub to ドキドキ文芸部レギュラー!"), content);
+            assert((aux[0] == "1000"), aux[0]);
+            assert((aux[2] == "Channel Subscription (nass_oisii)"), aux[2]);
+            assert((aux[3] == "biblethump"), aux[3]);
+            assert((tags == "badge-info=subscriber/12;badges=subscriber/12,sub-gift-leader/1;color=#0000FF;display-name=万年二等兵;emotes=;flags=;id=2cf9322d-609e-4a7b-9d79-f4c7b05458e8;login=nitouheidayo;mod=0;msg-id=subgift;msg-param-community-gift-id=14473467917504761560;msg-param-gift-months=1;msg-param-gift-theme=biblethump;msg-param-months=1;msg-param-origin-id=14473467917504761560;msg-param-recipient-display-name=ドキドキ文芸部レギュラー;msg-param-recipient-id=923831373;msg-param-recipient-user-name=wakarimasitan;msg-param-sender-count=0;msg-param-sub-plan-name=Channel\\sSubscription\\s(nass_oisii);msg-param-sub-plan=1000;room-id=672917034;subscriber=1;system-msg=万年二等兵\\sgifted\\sa\\sTier\\s1\\ssub\\sto\\sドキドキ文芸部レギュラー!;tmi-sent-ts=1701161053456;user-id=158834932;user-type=;vip=0"), tags);
+            assert((count[0] == 1), count[0].to!string);
+            assert((id == "2cf9322d-609e-4a7b-9d79-f4c7b05458e8"), id);
+        }
+    }
 }
