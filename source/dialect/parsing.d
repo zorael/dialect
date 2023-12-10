@@ -658,6 +658,7 @@ void parseSpecialcases(
 
     case NICK:
         // :kameloso^!~NaN@81-233-105-62-no80.tbcn.telia.com NICK :kameloso_
+        event.target = event.sender;
         event.target.nickname = slice[1..$];
 
         if (event.sender.nickname == parser.client.nickname)
