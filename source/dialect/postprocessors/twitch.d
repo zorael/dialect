@@ -811,12 +811,12 @@ auto parseTwitchTags(ref IRCParser parser, ref IRCEvent event) @safe
             if (value == "0") break;
 
             /+
-                Aux $-2
+                Aux $-3
 
                 Reserve this for first-msg. Set the key, not the 0/1 value.
              +/
-            version(TwitchWarnings) warnAboutOverwrittenAuxString(event.aux.length+(-2), key);
-            event.aux[$-2] = key;
+            version(TwitchWarnings) warnAboutOverwrittenAuxString(event.aux.length+(-3), key);
+            event.aux[$-3] = key;
             break;
 
         case "emotes":
