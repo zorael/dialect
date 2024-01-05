@@ -11,8 +11,8 @@ module dialect.semver;
 enum DialectSemVer
 {
     major = 2,  /// SemVer major version of the library.
-    minor = 0,  /// SemVer minor version of the library.
-    patch = 4,  /// SemVer patch version of the library.
+    minor = 1,  /// SemVer minor version of the library.
+    patch = 0,  /// SemVer patch version of the library.
 }
 
 
