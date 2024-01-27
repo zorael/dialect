@@ -1973,7 +1973,6 @@ void onPRIVMSG(
 in (slice.length, "Tried to process `IRCEvent.Type.PRIVMSG` on an empty slice")
 {
     import dialect.common : IRCControlCharacter, isValidChannel;
-    import std.string : indexOf;
 
     string target = slice.advancePast(' ');  // mutable
     if (slice.length && slice[0] == ':') slice = slice[1..$];
@@ -2019,9 +2018,10 @@ in (slice.length, "Tried to process `IRCEvent.Type.PRIVMSG` on an empty slice")
     if ((slice[0] == IRCControlCharacter.ctcp) && (slice[$-1] == IRCControlCharacter.ctcp))
     {
         import std.traits : EnumMembers;
+        import std.typecons : Flag, No, Yes;
 
-        slice = slice[1..$-1];
-        immutable ctcpEvent = (slice.indexOf(' ') != -1) ? slice.advancePast(' ') : slice;
+        slice = slice[1..$-1];  // slice away the control characters
+        immutable ctcpEvent = slice.advancePast(' ', Yes.inherit);
         event.content = slice;
 
         // :zorael!~NaN@ns3363704.ip-94-23-253.eu PRIVMSG #flerrp :ACTION test test content
