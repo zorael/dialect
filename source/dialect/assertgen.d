@@ -73,6 +73,12 @@
 
     This makes it easy to generate tests that verify wanted side-effects
     incurred by events.
+
+    Copyright: [JR](https://github.com/zorael)
+    License: [Boost Software License 1.0](https://www.boost.org/users/license.html)
+
+    Authors:
+        [JR](https://github.com/zorael)
  +/
 module dialect.assertgen;
 
