@@ -13,14 +13,29 @@
 module dialect.semver;
 
 
-/// SemVer versioning of this build.
+/++
+    SemVer versioning of this build.
+ +/
 enum DialectSemVer
 {
-    major = 2,  /// SemVer major version of the library.
-    minor = 1,  /// SemVer minor version of the library.
-    patch = 0,  /// SemVer patch version of the library.
+    /++
+        SemVer major version of the library.
+     +/
+    major = 2,
+
+    /++
+        SemVer minor version of the library.
+     +/
+    minor = 1,
+
+    /++
+        SemVer patch version of the library.
+     +/
+    patch = 0,
 }
 
 
-/// Pre-release SemVer subversion of this build.
+/++
+    Pre-release SemVer subversion of this build.
+ +/
 enum DialectSemVerPrerelease = string.init;
