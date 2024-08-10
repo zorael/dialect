@@ -1971,11 +1971,10 @@ auto isValidHostmask(
     const IRCServer server) pure @safe nothrow @nogc
 {
     import std.string : indexOf, representation;
-    import std.typecons : Flag, No, Yes;
 
     string slice = hostmask;  // mutable
 
-    static bool isValidIdentOrAddressCharacter(const char c, const Flag!"address" address)
+    static bool isValidIdentOrAddressCharacter(const char c, const bool address)
     {
         switch (c)
         {
@@ -2019,7 +2018,7 @@ auto isValidHostmask(
 
         foreach (immutable c; ident.representation)
         {
-            if (!isValidIdentOrAddressCharacter(c, No.address)) return false;
+            if (!isValidIdentOrAddressCharacter(c, address: false)) return false;
         }
 
         return true;
@@ -2033,7 +2032,7 @@ auto isValidHostmask(
 
         foreach (immutable c; address.representation)
         {
-            if (!isValidIdentOrAddressCharacter(c, Yes.address)) return false;
+            if (!isValidIdentOrAddressCharacter(c, address: true)) return false;
         }
 
         return true;

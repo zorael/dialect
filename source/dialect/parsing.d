@@ -494,9 +494,8 @@ void parseTypestring(
 in (slice.length, "Tried to parse typestring on an empty slice")
 {
     import std.conv : ConvException, to;
-    import std.typecons : Flag, No, Yes;
 
-    immutable typestring = slice.advancePast(' ', Yes.inherit);
+    immutable typestring = slice.advancePast(' ', inherit: true);
 
     if ((typestring[0] >= '0') && (typestring[0] <= '9'))
     {
@@ -601,7 +600,6 @@ void parseSpecialcases(
     import std.algorithm.searching : startsWith;
     import std.conv : to;
     import std.string : indexOf;
-    import std.typecons : Flag, No, Yes;
 
     with (IRCEvent.Type)
     switch (event.type)
@@ -892,7 +890,7 @@ void parseSpecialcases(
             import std.uni : isNumber;
 
             string midfield = slice.advancePast(" :");  // mutable
-            immutable first = midfield.advancePast(' ', Yes.inherit);
+            immutable first = midfield.advancePast(' ', inherit: true);
             alias second = midfield;
             event.content = slice;
 
@@ -1306,7 +1304,7 @@ void parseSpecialcases(
         // TRIED TO NOM TOO MUCH:':You are banned from this server- Your irc client seems broken and is flooding lots of channels. Banned for 240 min, if in error, please contact kline@freenode.net. (2017/12/1 21.08)' with ' :'
         string misc = slice.advancePast(" :");  // mutable
         event.content = slice;
-        misc.advancePast(' ', Yes.inherit);
+        misc.advancePast(' ', inherit: true);
         event.aux[0] = misc;
         break;
 
@@ -1846,14 +1844,13 @@ in (slice.length, "Tried to process `onNotice` on an empty slice")
     import std.algorithm.comparison : among;
     import std.algorithm.searching : startsWith;
     import std.string : indexOf;
-    import std.typecons : Flag, No, Yes;
 
     // :ChanServ!ChanServ@services. NOTICE kameloso^ :[##linux-overflow] Make sure your nick is registered, then please try again to join ##linux.
     // :ChanServ!ChanServ@services. NOTICE kameloso^ :[#ubuntu] Welcome to #ubuntu! Please read the channel topic.
     // :tolkien.freenode.net NOTICE * :*** Checking Ident
 
     // At least Twitch sends NOTICEs to channels, maybe other daemons do too
-    immutable channelOrNickname = slice.advancePast(" :", Yes.inherit);
+    immutable channelOrNickname = slice.advancePast(" :", inherit: true);
     event.content = slice;
 
     if (channelOrNickname.length &&
@@ -2024,10 +2021,9 @@ in (slice.length, "Tried to process `IRCEvent.Type.PRIVMSG` on an empty slice")
     if ((slice[0] == IRCControlCharacter.ctcp) && (slice[$-1] == IRCControlCharacter.ctcp))
     {
         import std.traits : EnumMembers;
-        import std.typecons : Flag, No, Yes;
 
         slice = slice[1..$-1];  // slice away the control characters
-        immutable ctcpEvent = slice.advancePast(' ', Yes.inherit);
+        immutable ctcpEvent = slice.advancePast(' ', inherit: true);
         event.content = slice;
 
         // :zorael!~NaN@ns3363704.ip-94-23-253.eu PRIVMSG #flerrp :ACTION test test content

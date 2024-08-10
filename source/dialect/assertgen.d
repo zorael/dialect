@@ -285,7 +285,7 @@ void inputServerInformation(ref IRCParser parser) @system
     stdout.flush();
     stdin.flush();
     string slice = readln().stripped;  // mutable so we can advancePast it
-    immutable daemonstring = slice.advancePast(' ', Yes.inherit).toLower;
+    immutable daemonstring = slice.advancePast(' ', inherit: true).toLower;
     immutable daemonLiteral = slice.length ? slice : daemonstring;
 
     parser.server.daemon = daemonstring.length ?

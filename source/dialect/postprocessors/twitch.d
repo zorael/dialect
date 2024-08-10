@@ -234,7 +234,6 @@ auto parseTwitchTags(ref IRCParser parser, ref IRCEvent event) @safe
                 import std.algorithm.iteration : filter;
                 import std.algorithm.searching : startsWith;
                 import std.array : Appender;
-                import std.typecons : Flag, No, Yes;
 
                 event.type = TWITCH_CHARITY;
 
