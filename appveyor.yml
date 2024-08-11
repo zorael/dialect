@@ -6,13 +6,13 @@ environment:
       #DVersion: latest
       arch: x64
     - DC: dmd
-      DVersion: 2.084.0
+      DVersion: 2.108.0
       arch: x64
     - DC: ldc
       #DVersion: latest
       arch: x64
     - DC: ldc
-      DVersion: 1.14.0
+      DVersion: 1.38.0
       arch: x64
 
 branches:
@@ -32,11 +32,12 @@ install:
           cd "$env:USERPROFILE\dlang";
           if (Test-Path env:DVersion) {
             & bash install.sh install $env:DC-$env:DVersion;
+            $env:activator = & bash install.sh install $env:DC-$env:DVersion -a;
           }
           else {
             & bash install.sh install $env:DC;
+            $env:activator = & bash install.sh install $env:DC -a;
           }
-          $env:activator = & bash install.sh install $env:DC -a;
           popd;
         }
   - ps: SetUpDCompiler
