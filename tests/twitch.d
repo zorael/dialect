@@ -1416,4 +1416,94 @@ unittest
             assert((id == "2cf9322d-609e-4a7b-9d79-f4c7b05458e8"), id);
         }
     }
+    {
+        // @badge-info=subscriber/1;badges=subscriber/0,hype-train/1;color=;display-name=VALORANT;emotes=;flags=;id=363dd13c-3a48-4e06-986e-b9593a26d62d;login=valorant;mod=0;msg-id=submysterygift;msg-param-community-gift-id=11774446910225476645;msg-param-gift-match-bonus-count=5;msg-param-gift-match-extra-count=2;msg-param-gift-match-gifter-display-name=SuszterSpace;msg-param-gift-match=extra;msg-param-mass-gift-count=7;msg-param-origin-id=11774446910225476645;msg-param-sub-plan=1000;room-id=85498365;subscriber=1;system-msg=We\sadded\s5\sGift\sSubs\sAND\s2\sBonus\sGift\sSubs\sto\sSuszterSpace's\sgift!;tmi-sent-ts=1735655630455;user-id=490592527;user-type=;vip=0 :tmi.twitch.tv USERNOTICE #vedal987
+        immutable event = parser.toIRCEvent("@badge-info=subscriber/1;badges=subscriber/0,hype-train/1;color=;display-name=VALORANT;emotes=;flags=;id=363dd13c-3a48-4e06-986e-b9593a26d62d;login=valorant;mod=0;msg-id=submysterygift;msg-param-community-gift-id=11774446910225476645;msg-param-gift-match-bonus-count=5;msg-param-gift-match-extra-count=2;msg-param-gift-match-gifter-display-name=SuszterSpace;msg-param-gift-match=extra;msg-param-mass-gift-count=7;msg-param-origin-id=11774446910225476645;msg-param-sub-plan=1000;room-id=85498365;subscriber=1;system-msg=We\\sadded\\s5\\sGift\\sSubs\\sAND\\s2\\sBonus\\sGift\\sSubs\\sto\\sSuszterSpace's\\sgift!;tmi-sent-ts=1735655630455;user-id=490592527;user-type=;vip=0 :tmi.twitch.tv USERNOTICE #vedal987");
+        with (event)
+        {
+            assert((type == IRCEvent.Type.TWITCH_BULKGIFT), Enum!(IRCEvent.Type).toString(type));
+            assert((sender.nickname == "valorant"), sender.nickname);
+            assert((sender.id == 490592527), sender.id.to!string);
+            assert((sender.address == "tmi.twitch.tv"), sender.address);
+            assert((sender.account == "valorant"), sender.account);
+            assert((sender.displayName == "VALORANT"), sender.displayName);
+            assert((sender.badges == "subscriber/0,hype-train/1"), sender.badges);
+            assert((channel == "#vedal987"), channel);
+            assert((target.displayName == "SuszterSpace"), target.displayName);
+            assert((content == "We added 5 Gift Subs AND 2 Bonus Gift Subs to SuszterSpace's gift!"), content);
+            assert((aux[0] == "1000"), aux[0]);
+            assert((aux[1] == "extra"), aux[1]);
+            assert((tags == "badge-info=subscriber/1;badges=subscriber/0,hype-train/1;color=;display-name=VALORANT;emotes=;flags=;id=363dd13c-3a48-4e06-986e-b9593a26d62d;login=valorant;mod=0;msg-id=submysterygift;msg-param-community-gift-id=11774446910225476645;msg-param-gift-match-bonus-count=5;msg-param-gift-match-extra-count=2;msg-param-gift-match-gifter-display-name=SuszterSpace;msg-param-gift-match=extra;msg-param-mass-gift-count=7;msg-param-origin-id=11774446910225476645;msg-param-sub-plan=1000;room-id=85498365;subscriber=1;system-msg=We\\sadded\\s5\\sGift\\sSubs\\sAND\\s2\\sBonus\\sGift\\sSubs\\sto\\sSuszterSpace's\\sgift!;tmi-sent-ts=1735655630455;user-id=490592527;user-type=;vip=0"), tags);
+            assert((count[0] == 7), count[0].to!string);
+            assert((count[1] == 5), count[1].to!string);
+            assert((count[2] == 2), count[2].to!string);
+            assert((id == "363dd13c-3a48-4e06-986e-b9593a26d62d"), id);
+        }
+    }
+    {
+        immutable event = parser.toIRCEvent("@badge-info=subscriber/2;badges=subscriber/2;color=#0041CC;display-name=NewUnit;emote-only=1;emotes=emotesv2_e404c6a3a5c349ff90a7bc046ad1f2ea:0-8;first-msg=0;flags=;id=dfea51e0-1176-45a9-b8ac-2afc259fa520;mod=0;msg-id=gigantified-emote-message;returning-chatter=0;room-id=85498365;subscriber=1;tmi-sent-ts=1735662056428;turbo=0;user-id=49283792;user-type= :newunit!newunit@newunit.tmi.twitch.tv PRIVMSG #vedal987 :vedalBwaa");
+        with (event)
+        {
+            assert((type == IRCEvent.Type.EMOTE), Enum!(IRCEvent.Type).toString(type));
+            assert((sender.nickname == "newunit"), sender.nickname);
+            assert((sender.id == 49283792), sender.id.to!string);
+            assert((sender.ident == "newunit"), sender.ident);
+            assert((sender.address == "newunit.tmi.twitch.tv"), sender.address);
+            assert((sender.account == "newunit"), sender.account);
+            assert((sender.displayName == "NewUnit"), sender.displayName);
+            assert((sender.badges == "subscriber/2"), sender.badges);
+            assert((sender.colour == "0041CC"), sender.colour);
+            assert((channel == "#vedal987"), channel);
+            assert((content == "vedalBwaa"), content);
+            assert((aux[0] == "gigantified-emote-message"), aux[0]);
+            assert((tags == "badge-info=subscriber/2;badges=subscriber/2;color=#0041CC;display-name=NewUnit;emote-only=1;emotes=emotesv2_e404c6a3a5c349ff90a7bc046ad1f2ea:0-8;first-msg=0;flags=;id=dfea51e0-1176-45a9-b8ac-2afc259fa520;mod=0;msg-id=gigantified-emote-message;returning-chatter=0;room-id=85498365;subscriber=1;tmi-sent-ts=1735662056428;turbo=0;user-id=49283792;user-type="), tags);
+            assert((emotes == "emotesv2_e404c6a3a5c349ff90a7bc046ad1f2ea:0-8"), emotes);
+            assert((id == "dfea51e0-1176-45a9-b8ac-2afc259fa520"), id);
+        }
+    }
+    {
+        immutable event = parser.toIRCEvent("@animation-id=simmer;badge-info=subscriber/5;badges=subscriber/3,raging-wolf-helm/1;color=#008000;display-name=MongusaEye;emotes=emotesv2_20e1e7406e1342f7989227a2942f90b9:41-50;first-msg=0;flags=;id=08cbbd34-835d-4ae0-8b4d-ed5624ab7567;mod=0;msg-id=animated-message;returning-chatter=0;room-id=85498365;subscriber=1;tmi-sent-ts=1735766118589;turbo=0;user-id=151395194;user-type= :mongusaeye!mongusaeye@mongusaeye.tmi.twitch.tv PRIVMSG #vedal987 :my free bits from that one survey i took vedalCheer all i have");
+        with (event)
+        {
+            assert((type == IRCEvent.Type.CHAN), Enum!(IRCEvent.Type).toString(type));
+            assert((sender.nickname == "mongusaeye"), sender.nickname);
+            assert((sender.id == 151395194), sender.id.to!string);
+            assert((sender.ident == "mongusaeye"), sender.ident);
+            assert((sender.address == "mongusaeye.tmi.twitch.tv"), sender.address);
+            assert((sender.account == "mongusaeye"), sender.account);
+            assert((sender.displayName == "MongusaEye"), sender.displayName);
+            assert((sender.badges == "subscriber/3,raging-wolf-helm/1"), sender.badges);
+            assert((sender.colour == "008000"), sender.colour);
+            assert((channel == "#vedal987"), channel);
+            assert((content == "my free bits from that one survey i took vedalCheer all i have"), content);
+            assert((aux[0] == "animated-message"), aux[0]);
+            assert((aux[1] == "simmer"), aux[1]);
+            assert((tags == "animation-id=simmer;badge-info=subscriber/5;badges=subscriber/3,raging-wolf-helm/1;color=#008000;display-name=MongusaEye;emotes=emotesv2_20e1e7406e1342f7989227a2942f90b9:41-50;first-msg=0;flags=;id=08cbbd34-835d-4ae0-8b4d-ed5624ab7567;mod=0;msg-id=animated-message;returning-chatter=0;room-id=85498365;subscriber=1;tmi-sent-ts=1735766118589;turbo=0;user-id=151395194;user-type="), tags);
+            assert((emotes == "emotesv2_20e1e7406e1342f7989227a2942f90b9:41-50"), emotes);
+            assert((id == "08cbbd34-835d-4ae0-8b4d-ed5624ab7567"), id);
+        }
+    }
+    {
+        enum input = "@animation-id=cosmic-abyss;badge-info=subscriber/3;badges=subscriber/3,bits/100;color=#FF69B4;display-name=defie_;emotes=;first-msg=0;flags=;id=5737bf6c-7d94-4647-9c65-dd2ccddd6cdb;mod=0;msg-id=animated-message;returning-chatter=0;room-id=85498365;subscriber=1;tmi-sent-ts=1735766193723;turbo=0;user-id=244884001;user-type= :defie_!defie_@defie_.tmi.twitch.tv PRIVMSG #vedal987 :WAIT FOR 3D MODEL GIFT";
+        immutable event = parser.toIRCEvent(input);
+
+        with (event)
+        {
+            assert((type == IRCEvent.Type.CHAN), Enum!(IRCEvent.Type).toString(type));
+            assert((sender.nickname == "defie_"), sender.nickname);
+            assert((sender.id == 244884001), sender.id.to!string);
+            assert((sender.ident == "defie_"), sender.ident);
+            assert((sender.address == "defie_.tmi.twitch.tv"), sender.address);
+            assert((sender.account == "defie_"), sender.account);
+            assert((sender.displayName == "defie_"), sender.displayName);
+            assert((sender.badges == "subscriber/3,bits/100"), sender.badges);
+            assert((sender.colour == "FF69B4"), sender.colour);
+            assert((channel == "#vedal987"), channel);
+            assert((content == "WAIT FOR 3D MODEL GIFT"), content);
+            assert((aux[0] == "animated-message"), aux[0]);
+            assert((aux[1] == "cosmic-abyss"), aux[1]);
+            assert((tags == "animation-id=cosmic-abyss;badge-info=subscriber/3;badges=subscriber/3,bits/100;color=#FF69B4;display-name=defie_;emotes=;first-msg=0;flags=;id=5737bf6c-7d94-4647-9c65-dd2ccddd6cdb;mod=0;msg-id=animated-message;returning-chatter=0;room-id=85498365;subscriber=1;tmi-sent-ts=1735766193723;turbo=0;user-id=244884001;user-type="), tags);
+            assert((id == "5737bf6c-7d94-4647-9c65-dd2ccddd6cdb"), id);
+        }
+    }
 }
