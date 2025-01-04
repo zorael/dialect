@@ -205,7 +205,8 @@ if (isOutputRange!(Sink, char[]))
 
     sink.put("{\n");
     if (escaped != raw) sink.formattedWrite("%s// %s\n", 1.tabs, raw);
-    sink.formattedWrite("%simmutable event = parser.toIRCEvent(\"%s\");\n", 1.tabs, escaped);
+    sink.formattedWrite("%senum input = \"%s\";\n", 1.tabs, escaped);
+    sink.formattedWrite("%simmutable event = parser.toIRCEvent(input);\n\n", 1.tabs);
     sink.formattedWrite("%swith (event)\n", 1.tabs);
     sink.formattedWrite("%s{\n", 1.tabs);
     sink.formatDeltaInto!(Yes.asserts)(IRCEvent.init, event, 2);
@@ -221,10 +222,7 @@ if (isOutputRange!(Sink, char[]))
 ///
 unittest
 {
-    import lu.deltastrings : formatDeltaInto;
-    import lu.string : tabs;
     import std.array : Appender;
-    import std.format : formattedWrite;
 
     Appender!(char[]) sink;
     sink.reserve(1024);
@@ -234,19 +232,13 @@ unittest
     auto parser = IRCParser(client, server);
 
     immutable event = parser.toIRCEvent(":zorael!~NaN@2001:41d0:2:80b4:: PRIVMSG #flerrp :kameloso: 8ball");
-
-    // copy/paste the above
-    sink.put("{\n");
-    sink.formattedWrite("%simmutable event = parser.toIRCEvent(\"%s\");\n", 1.tabs, event.raw);
-    sink.formattedWrite("%swith (event)\n", 1.tabs);
-    sink.formattedWrite("%s{\n", 1.tabs);
-    sink.formatDeltaInto!(Yes.asserts)(IRCEvent.init, event, 2);
-    sink.formattedWrite("%s}\n", 1.tabs);
-    sink.put("}");
+    sink.formatEventAssertBlock(event);
 
     assert(sink.data ==
 `{
-    immutable event = parser.toIRCEvent(":zorael!~NaN@2001:41d0:2:80b4:: PRIVMSG #flerrp :kameloso: 8ball");
+    enum input = ":zorael!~NaN@2001:41d0:2:80b4:: PRIVMSG #flerrp :kameloso: 8ball";
+    immutable event = parser.toIRCEvent(input);
+
     with (event)
     {
         assert((type == IRCEvent.Type.CHAN), Enum!(IRCEvent.Type).toString(type));
