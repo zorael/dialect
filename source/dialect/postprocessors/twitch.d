@@ -383,6 +383,18 @@ auto parseTwitchTags(ref IRCParser parser, ref IRCEvent event) @safe
                 event.type = TWITCH_MILESTONE;
                 break;
 
+            case "gigantified-emote-message":
+                // Unknown Twitch msg-id: gigantified-emote-message
+                event.type = EMOTE;
+                goto case;
+
+            case "animated-message":
+                // Unknown Twitch msg-id: animated-message
+                // keep the type as PRIVMSG
+                version(TwitchWarnings) warnAboutOverwrittenAuxString(0, key, "msg-id");
+                event.aux[0] = msgID;
+                break;
+
             /*case "bad_ban_admin":
             case "bad_ban_anon":
             case "bad_ban_broadcaster":
@@ -759,6 +771,11 @@ auto parseTwitchTags(ref IRCParser parser, ref IRCEvent event) @safe
             // Prior gifter display name when a user pays forward a gift
         case "pinned-chat-paid-currency":
             // elevated message currency
+        case "msg-param-gift-match":
+            // msg-param-gift-match = extra
+        case "animation-id":
+            // Animated message animation ID
+            // values like "simmer", "rainbow-eclipse", "cosmic-abyss"
 
             /+
                 Aux 1
@@ -896,6 +913,8 @@ auto parseTwitchTags(ref IRCParser parser, ref IRCEvent event) @safe
             // Total number of months subscribed, over time. Replaces msg-param-months
         case "msg-param-copoReward":
             // Viewer milestone thing
+        case "msg-param-gift-match-bonus-count":
+            // msg-param-gift-match-bonus-count = 5
 
             /+
                 Count 1
@@ -922,6 +941,8 @@ auto parseTwitchTags(ref IRCParser parser, ref IRCEvent event) @safe
             // (eg "1000" for 1000 bits)
         case "pinned-chat-paid-exponent":
             // something with elevated messages
+        case "msg-param-gift-match-extra-count":
+            // msg-param-gift-match-extra-count = 2
 
             /+
                 Count 2
@@ -1056,6 +1077,11 @@ auto parseTwitchTags(ref IRCParser parser, ref IRCEvent event) @safe
                 event.aux[0] = value;
             }
             break;
+
+        case "msg-param-gift-match-gifter-display-name":
+            // msg-param-gift-match-gifter-display-name = SuszterSpace
+            // Gifter to whose gifting more gifts were added by a third party
+            // Drop down
 
         case "reply-parent-display-name":
         case "msg-param-gifter-name":
