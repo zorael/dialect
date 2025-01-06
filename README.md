@@ -2,9 +2,15 @@
 
 IRC parsing library.
 
+**Note**: Starting with `v4.0.0`, a more recent compiler version is required. This is to allow for use of named arguments, and to enable some compiler preview switches. You need a compiler based on D version **2.108** or later (April 2024). For **ldc** this translates to a minimum of version **1.38**, while for **gdc** you broadly need release series **14**.
+
+If your repositories (or other software sources) don't have compilers recent enough, you can use the official [`install.sh`](https://dlang.org/install.html) installation script to download current ones, or any version of choice.
+
+Releases of the library prior to `v4.0.0` remain available for older compilers.
+
 ## What it looks like
 
-API documentation can be found [here](http://dialect.dpldocs.info).
+API documentation can be found [here](http://zorael.github.io/dialect).
 
 ```d
 struct IRCEvent
