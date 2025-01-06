@@ -248,13 +248,13 @@ auto parseTwitchTags(ref IRCParser parser, ref IRCEvent event) @safe
                     charityAA[charityKey] = slice;
                 }
 
-                static immutable charityStringTags =
+                static immutable string[2] charityStringTags =
                 [
                     "msg-param-charity-learn-more",
                     "msg-param-charity-hashtag",
                 ];
 
-                static immutable charityCountTags =
+                static immutable string[2] charityCountTags =
                 [
                     //"msg-param-total"
                     "msg-param-charity-hours-remaining",
@@ -274,7 +274,7 @@ auto parseTwitchTags(ref IRCParser parser, ref IRCEvent event) @safe
                         .removeControlCharacters;
                 }
 
-                foreach (immutable i, charityKey; charityStringTags)
+                foreach (immutable i, charityKey; charityStringTags[])
                 {
                     if (const charityString = charityKey in charityAA)
                     {
@@ -294,7 +294,7 @@ auto parseTwitchTags(ref IRCParser parser, ref IRCEvent event) @safe
                     event.count[0] = (*charityTotal).to!int;
                 }*/
 
-                foreach (immutable i, charityKey; charityCountTags)
+                foreach (immutable i, charityKey; charityCountTags[])
                 {
                     if (const charityCount = charityKey in charityAA)
                     {
