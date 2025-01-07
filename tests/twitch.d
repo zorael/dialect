@@ -4,6 +4,15 @@ import std.conv : to;
 
 version(TwitchSupport):
 
+version(BotElements) {}
+else
+{
+    pragma(msg, "Twitch tests require version `BotElements`; skipping");
+}
+
+version(BotElements):
+
+
 unittest
 {
     IRCParser parser;
