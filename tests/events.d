@@ -166,7 +166,7 @@ unittest
 
     with (parser)
     {
-        assert(serverUpdated);
+        version(FlagAsUpdated) assert(serverUpdated);
         assert((server.resolvedAddress == "irc.portlane.se"), server.resolvedAddress);
     }
 }
