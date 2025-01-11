@@ -2,13 +2,7 @@
 
 IRC parsing library.
 
-**Note**: Starting with `v3.0.0`, a more recent compiler version is required. This is to allow for use of named arguments, and to enable some compiler preview switches. You need a compiler based on D version **2.108** or later (April 2024). For **ldc** this translates to a minimum of version **1.38**, while for **gdc** you broadly need release series **14**.
-
-If your repositories (or other software sources) don't have compilers recent enough, you can use the official [`install.sh`](https://dlang.org/install.html) installation script to download current ones, or any version of choice.
-
-Releases of the library prior to `v3.0.0` remain available for older compilers.
-
-## What it looks like
+### In brief
 
 API documentation can be found [here](http://zorael.github.io/dialect).
 
@@ -99,7 +93,11 @@ It is `pure` and `@safe` in the default `library` configuration.
 
 ## How to use
 
-> This assumes you have a program set up to read from an IRC server. This is not a bot framework; for that you're better off with the full reference-implementation [`kameloso`](https://github.com/zorael/kameloso) and writing a plugin for it that suits your needs.
+See the [/examples](/examples) directory for a simple bot client that connects to an IRC server and joins a channel.
+
+> This is not a bot framework; for that you're better off with the full reference-implementation [`kameloso`](https://github.com/zorael/kameloso) and writing a plugin for it that suits your needs.
+
+### Longer story
 
 * Create an [`IRCClient`](http://dialect.dpldocs.info/dialect.defs.IRCClient.html) and configure its members. (required for context when parsing)
 * Create an [`IRCServer`](http://dialect.dpldocs.info/dialect.defs.IRCServer.html) and configure its members. (it may work without but just give it at minimum a host address)
@@ -143,8 +141,8 @@ with (event2)
     assert(num == 435);
 }
 
-// Requires Twitch support via build configuration "twitch" or "twitchagnostic"
-string fullExample = "@badge-info=subscriber/15;badges=subscriber/12;color=;display-name=SomeoneOnTwitch;emotes=;flags=;id=d6729804-2bf3-495d-80ce-a2fe8ed00a26;login=someoneontwitch;mod=0;msg-id=submysterygift;msg-param-mass-gift-count=1;msg-param-origin-id=49\\s9d\\s3e\\s68\\sca\\s26\\se9\\s2a\\s6e\\s44\\sd4\\s60\\s9b\\s3d\\saa\\sb9\\s4c\\sad\\s43\\s5c;msg-param-sender-count=4;msg-param-sub-plan=1000;room-id=71092938;subscriber=1;system-msg=someoneOnTwitch\\sis\\sgifting\\s1\\sTier\\s1\\sSubs\\sto\\sxQcOW's\\scommunity!\\sThey've\\sgifted\\sa\\stotal\\sof\\s4\\sin\\sthe\\schannel!;tmi-sent-ts=1569013433362;user-id=224578549;user-type= :tmi.twitch.tv USERNOTICE #xqcow"
+// Requires Twitch support via build configuration "twitch" or "twitchbot"
+string fullExample = "@badge-info=subscriber/15;badges=subscriber/12;color=;display-name=SomeoneOnTwitch;emotes=;flags=;id=d6729804-2bf3-495d-80ce-a2fe8ed00a26;login=someoneontwitch;mod=0;msg-id=submysterygift;msg-param-mass-gift-count=1;msg-param-origin-id=49\\s9d\\s3e\\s68\\sca\\s26\\se9\\s2a\\s6e\\s44\\sd4\\s60\\s9b\\s3d\\saa\\sb9\\s4c\\sad\\s43\\s5c;msg-param-sender-count=4;msg-param-sub-plan=1000;room-id=71092938;subscriber=1;system-msg=someoneOnTwitch\\sis\\sgifting\\s1\\sTier\\s1\\sSubs\\sto\\sBlarp's\\scommunity!\\sThey've\\sgifted\\sa\\stotal\\sof\\s4\\sin\\sthe\\schannel!;tmi-sent-ts=1569013433362;user-id=224578549;user-type= :tmi.twitch.tv USERNOTICE #blarp"
 IRCEvent event3 = parser.toIRCEvent(fullExample);
 
 with (event3)
@@ -153,8 +151,8 @@ with (event3)
     assert(sender.nickname == "someoneontwitch");
     assert(sender.displayName == "SomeoneOnTwitch");
     assert(sender.badges == "subscriber/12");
-    assert(channel == "#xqcow");
-    assert(content == "SomeoneOnTwitch is gifting 1 Tier 1 Subs to xQcOW's community! They've gifted a total of 4 in the channel!");
+    assert(channel == "#blarp");
+    assert(content == "SomeoneOnTwitch is gifting 1 Tier 1 Subs to Blarp's community! They've gifted a total of 4 in the channel!");
     assert(aux[0] == "1000");
     assert(count[0] == 1);
     assert(count[1] == 4);
@@ -165,7 +163,7 @@ See the [`/tests`](/tests) directory for more example parses.
 
 ## Unit test generation
 
-Compiling the `assertgen` dub subpackage builds a command-line tool with which it is easy to generate assert blocks like the one above. These can then be pasted into an according file in [`/tests`](/tests) and ideally submitted as a GitHub pull request for upstream inclusion. You can use it to contribute known-good parses and increase coverage of event types.
+Compiling the `assertgen` dub subpackage builds a command-line tool with which it is easy to generate `assert` blocks like the ones above. These can then be pasted into an according file in [`/tests`](/tests) and ideally submitted as a GitHub pull request for upstream inclusion. You can use it to contribute known-good parses and increase coverage of event types.
 
 Simply run `dub run :assertgen` and follow the on-screen instructions.
 
@@ -195,6 +193,12 @@ Enter server address (irc.freenode.net): irc.server.tld
 The output will by default also be saved to a `unittest.log` file in the current directory. See the `--help` listing for more details, passed through `dub` with `dub run :assertgen -- --help`.
 
 ## Caveats
+
+Starting with `v3.0.0`, a more recent compiler version is required. This is to allow for use of named arguments and to enable some compiler preview switches. You need a compiler based on D version **2.108** or later (April 2024). For **ldc** this translates to a minimum of version **1.38**, while for **gdc** you broadly need release series **14**.
+
+If your repositories (or other software sources) don't have compilers recent enough, you can use the official [`install.sh`](https://dlang.org/install.html) installation script to download current ones, or any version of choice.
+
+Releases of the library prior to `v3.0.0` remain available for older compilers.
 
 Note that while IRC is standardised, servers still come in [many flavours](https://upload.wikimedia.org/wikipedia/commons/thumb/d/d5/IRCd_software_implementations3.svg/1533px-IRCd_software_implementations3.svg.png), some of which [outright conflict](http://defs.ircdocs.horse/defs/numerics.html) with others.
 
