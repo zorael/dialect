@@ -1,0 +1,8 @@
+name "dialect-example"
+description "A minimal example of how to use the dialect library"
+authors "jr"
+copyright "Copyright © 2016+, JR"
+license "BSL-1.0"
+
+targetType "executable"
+dependency "dialect" version="~>3.0.0"
