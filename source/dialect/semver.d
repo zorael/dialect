@@ -31,7 +31,7 @@ enum DialectSemVer
     /++
         SemVer patch version of the library.
      +/
-    patch = 0,
+    patch = 1,
 }
 
 
