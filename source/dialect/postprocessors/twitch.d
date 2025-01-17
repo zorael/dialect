@@ -962,7 +962,7 @@ auto parseTwitchTags(ref IRCParser parser, ref IRCEvent event) @safe
         }
     }
 
-    void deduplicateAndSortBadges(ref string badges)
+    static void deduplicateAndSortBadges(ref string badges)
     {
         import std.string : indexOf;
 
