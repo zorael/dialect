@@ -188,7 +188,7 @@ with (parser)
  +/
 void formatEventAssertBlock(Sink)
     (auto ref Sink sink,
-    const IRCEvent event) pure @safe
+    const ref IRCEvent event) pure @safe
 if (isOutputRange!(Sink, char[]))
 {
     import lu.deltastrings : formatDeltaInto;

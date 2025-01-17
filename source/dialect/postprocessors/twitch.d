@@ -1026,7 +1026,7 @@ void appendToErrors(ref IRCEvent event, const string message) pure @safe nothrow
         event = The [dialect.defs.IRCEvent|IRCEvent] to print the tags of.
  +/
 version(TwitchWarnings)
-void printTags(const IRCEvent event) @safe
+void printTags(const ref IRCEvent event) @safe
 {
     import lu.string : advancePast;
     import std.algorithm.iteration : splitter;
