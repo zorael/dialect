@@ -63,527 +63,34 @@ auto parseTwitchTags(ref IRCParser parser, ref IRCEvent event) @safe
 
     version(TwitchWarnings)
     {
-        /// Whether or not an error occured and debug information should be printed
-        /// upon leaving the function.
+        /++
+            Whether or not an error occured and debug information should be printed
+            upon leaving the function.
+         +/
         bool printTagsOnExit;
-
-        static void appendToErrors(ref IRCEvent event, const string msg)
-        {
-            import std.conv : text;
-            immutable spacer = (event.errors.length ? " | " : string.init);
-            event.errors ~= text(spacer, msg);
-        }
-
-        static void printTags(typeof(tagRange) tagRange, const IRCEvent event)
-        {
-            import lu.string : advancePast;
-            import std.stdio : writefln, writeln;
-
-            writeln('@', event.tags, ' ', event.raw, '$');
-
-            foreach (immutable tagline; tagRange)
-            {
-                string slice = tagline;  // mutable
-                immutable key = slice.advancePast('=');
-
-                writefln(`%-35s"%s"`, key, slice);
-            }
-        }
-
-        void warnAboutOverwrittenCount(
-            const size_t i,
-            const string key,
-            const string type = "tag")
-        {
-            if (!event.count[i].isNull)
-            {
-                import std.conv : text;
-                import std.stdio : writeln;
-
-                immutable msg = text(type, ' ', key, " overwrote `count[", i, "]`: ", event.count[i].get);
-                appendToErrors(event, msg);
-                writeln(msg);
-                printTagsOnExit = true;
-            }
-        }
-
-        void warnAboutOverwrittenAuxString(
-            const size_t i,
-            const string key,
-            const string type = "tag")
-        {
-            if (event.aux[i].length)
-            {
-                import std.conv : text;
-                import std.stdio : writeln;
-
-                immutable msg = text(type, ' ', key, " overwrote `aux[", i, "]`: ", event.aux[i]);
-                appendToErrors(event, msg);
-                writeln(msg);
-                printTagsOnExit = true;
-            }
-        }
     }
 
     with (IRCEvent.Type)
-    foreach (tag; tagRange)
+    foreach (immutable tagline; tagRange)
     {
         import lu.string : advancePast;
 
-        immutable key = tag.advancePast('=');
-        string value = tag;  // mutable
+        string slice = tagline;  // mutable
+        immutable key = slice.advancePast('=');
+        alias value = slice;
 
         switch (key)
         {
         case "msg-id":
-            // The type of notice (not the ID) / A message ID string.
-            // Can be used for i18ln. Valid values: see
-            // Msg-id Tags for the NOTICE Commands Capability.
-            // https://dev.twitch.tv/docs/irc#msg-id-tags-for-the-notice-commands-capability
-            // https://swiftyspiffy.com/TwitchLib/Client/_msg_ids_8cs_source.html
-            // https://dev.twitch.tv/docs/irc/msg-id/
+            if (!value.length) break;
 
-            /*
-                sub
-                resub
-                charity
-                already_banned          <user> is already banned in this room.
-                already_emote_only_off  This room is not in emote-only mode.
-                already_emote_only_on   This room is already in emote-only mode.
-                already_r9k_off         This room is not in r9k mode.
-                already_r9k_on          This room is already in r9k mode.
-                already_subs_off        This room is not in subscribers-only mode.
-                already_subs_on         This room is already in subscribers-only mode.
-                bad_unban_no_ban        <user> is not banned from this room.
-                ban_success             <user> is banned from this room.
-                emote_only_off          This room is no longer in emote-only mode.
-                emote_only_on           This room is now in emote-only mode.
-                hosts_remaining         There are <number> host commands remaining this half hour.
-                msg_channel_suspended   This channel is suspended.
-                r9k_off                 This room is no longer in r9k mode.
-                r9k_on                  This room is now in r9k mode.
-                slow_off                This room is no longer in slow mode.
-                slow_on                 This room is now in slow mode. You may send messages every <slow seconds> seconds.
-                subs_off                This room is no longer in subscribers-only mode.
-                subs_on                 This room is now in subscribers-only mode.
-                timeout_success         <user> has been timed out for <duration> seconds.
-                unban_success           <user> is no longer banned from this chat room.
-                unrecognized_cmd        Unrecognized command: <command>
-                raid                    Raiders from <other channel> have joined!\n
-            */
-
-            alias msgID = value;
-            if (!msgID.length) continue;  // Rare occurence but happens
-
-            switch (msgID)
-            {
-            case "sub":
-            case "resub":
-                // Subscription. Disambiguate subs from resubs by other tags, set
-                // in count and altcount.
-                event.type = TWITCH_SUB;
-                break;
-
-            case "subgift":
-                // A gifted subscription.
-                // "X subscribed with Twitch Prime."
-                // "Y subscribed at Tier 1. They've subscribed for 11 months!"
-                // "We added the msg-id “anonsubgift” to the user-notice which
-                // defaults the sender to the channel owner"
-                /+
-                    For anything anonomous
-                    The channel ID and Channel name are set as normal
-                    The Recipienet is set as normal
-                    The person giving the gift is anonomous
-
-                    https://discuss.dev.twitch.tv/t/msg-id-purchase/22067/8
-                 +/
-                // In reality the sender is "ananonymousgifter".
-                event.type = TWITCH_SUBGIFT;
-                break;
-
-            case "submysterygift":
-                // Gifting several subs to random people in one event.
-                // "A is gifting 1 Tier 1 Subs to C's community! They've gifted a total of n in the channel!"
-                event.type = TWITCH_BULKGIFT;
-                break;
-
-            case "ritual":
-                // Oneliner upon joining chat.
-                // content: "HeyGuys"
-                event.type = TWITCH_RITUAL;
-                break;
-
-            case "rewardgift":
-                event.type = TWITCH_REWARDGIFT;
-                break;
-
-            case "raid":
-                // Raid start. Seen in target channel.
-                // "3322 raiders from A have joined!"
-                event.type = TWITCH_RAID;
-                break;
-
-            case "unraid":
-                // Manual raid abort.
-                // "The raid has been cancelled."
-                event.type = TWITCH_UNRAID;
-                break;
-
-            case "charity":
-                import std.algorithm.iteration : filter;
-                import std.algorithm.searching : startsWith;
-                import std.array : Appender;
-
-                event.type = TWITCH_CHARITY;
-
-                string[string] charityAA;
-                auto charityTags = tagRange
-                    .filter!(tagline => tagline.startsWith("msg-param-charity"));
-
-                foreach (immutable tagline; charityTags)
-                {
-                    string slice = tagline;  // mutable
-                    immutable charityKey = slice.advancePast('=');
-                    charityAA[charityKey] = slice;
-                }
-
-                static immutable string[2] charityStringTags =
-                [
-                    "msg-param-charity-learn-more",
-                    "msg-param-charity-hashtag",
-                ];
-
-                static immutable string[2] charityCountTags =
-                [
-                    //"msg-param-total"
-                    "msg-param-charity-hours-remaining",
-                    "msg-param-charity-days-remaining",
-                ];
-
-                if (const charityName = "msg-param-charity-name" in charityAA)
-                {
-                    import lu.string : removeControlCharacters, strippedRight;
-
-                    //msg-param-charity-name = Direct\sRelief
-
-                    version(TwitchWarnings) warnAboutOverwrittenAuxString(0, "msg-param-charity-name");
-                    event.aux[0] = (*charityName)
-                        .decodeIRCv3String
-                        .strippedRight
-                        .removeControlCharacters;
-                }
-
-                foreach (immutable i, charityKey; charityStringTags[])
-                {
-                    if (const charityString = charityKey in charityAA)
-                    {
-                        //msg-param-charity-learn-more = https://link.twitch.tv/blizzardofbits
-                        //msg-param-charity-hashtag = #charity
-                        // Pad count by 1 to allow for msg-param-charity-name
-
-                        version(TwitchWarnings) warnAboutOverwrittenAuxString(i+1, charityKey);
-                        event.aux[i+1] = *charityString;
-                    }
-                }
-
-                // Doesn't start with msg-param-charity but it will be set later down
-                /*if (const charityTotal = "msg-param-total" in charityAA)
-                {
-                    //msg-param-charity-hours-remaining = 286
-                    event.count[0] = (*charityTotal).to!int;
-                }*/
-
-                foreach (immutable i, charityKey; charityCountTags[])
-                {
-                    if (const charityCount = charityKey in charityAA)
-                    {
-                        //msg-param-charity-hours-remaining
-                        //msg-param-charity-days-remaining = 11
-                        // Pad count by 1 to allow for msg-param-total
-
-                        version(TwitchWarnings) warnAboutOverwrittenCount(i+1, charityKey);
-                        event.count[i+1] = (*charityCount).to!long;
-                    }
-                }
-
-                // Remove once we have a recorded parse
-                version(TwitchWarnings)
-                {
-                    appendToErrors(event, "RECORD TWITCH CHARITY");
-                    printTagsOnExit = true;
-                }
-                break;
-
-            case "giftpaidupgrade":
-            case "anongiftpaidupgrade":
-                // "Continuing a gift sub" by gifting a sub you were gifted (?)
-                // "A is continuing the Gift Sub they got from B!"
-                event.type = TWITCH_GIFTCHAIN;
-                break;
-
-            case "primepaidupgrade":
-                // User upgrading a prime sub to a normal paid one.
-                // "A converted from a Twitch Prime sub to a Tier 1 sub!"
-                event.type = TWITCH_SUBUPGRADE;
-                break;
-
-            case "bitsbadgetier":
-                // User just earned a badge for a tier of bits
-                // content is the message body, e.g. "GG"
-                event.type = TWITCH_BITSBADGETIER;
-                break;
-
-            case "extendsub":
-                // User extended their sub, always by a month?
-                // "A extended their Tier 1 subscription through April!"
-                event.type = TWITCH_EXTENDSUB;
-                break;
-
-            case "highlighted-message":
-            case "skip-subs-mode-message":
-                // These are PRIVMSGs
-                version(TwitchWarnings) warnAboutOverwrittenCount(0, msgID, "msg-id");
-                event.aux[0] = msgID;
-                break;
-
-            case "primecommunitygiftreceived":
-                // "A viewer was gifted a World of Tanks: Care Package, courtesy of a Prime member!"
-                event.type = TWITCH_GIFTRECEIVED;
-                break;
-
-            case "standardpayforward":  // has a target
-            case "communitypayforward": // toward community, no target
-                // "A is paying forward the Gift they got from B to #channel!"
-                event.type = TWITCH_PAYFORWARD;
-                break;
-
-            case "crowd-chant":
-                // PRIVMSG #fextralife :Clap Clap FeelsBirthdayMan
-                // Seemingly no other interesting tags
-                event.type = TWITCH_CROWDCHANT;
-                break;
-
-            case "announcement":
-                // USERNOTICE #zorael :test
-                // by /announcement test
-                // Unknown Twitch msg-id: announcement
-                // Unknown Twitch tag: msg-param-color = PRIMARY
-                event.type = TWITCH_ANNOUNCEMENT;
-                break;
-
-            case "user-intro":
-                // PRIVMSG #ginomachino :yo this is much coller with actual music
-                // Unknown Twitch msg-id: user-intro
-                event.type = TWITCH_INTRO;
-                break;
-
-            case "viewermilestone":
-                // Unknown Twitch msg-id: viewermilestone
-                event.type = TWITCH_MILESTONE;
-                break;
-
-            case "gigantified-emote-message":
-                // Unknown Twitch msg-id: gigantified-emote-message
-                event.type = EMOTE;
-                goto case;
-
-            case "animated-message":
-                // Unknown Twitch msg-id: animated-message
-                // keep the type as PRIVMSG
-                version(TwitchWarnings) warnAboutOverwrittenAuxString(0, key, "msg-id");
-                event.aux[0] = msgID;
-                break;
-
-            /*case "bad_ban_admin":
-            case "bad_ban_anon":
-            case "bad_ban_broadcaster":
-            case "bad_ban_global_mod":
-            case "bad_ban_mod":
-            case "bad_ban_self":
-            case "bad_ban_staff":
-            case "bad_commercial_error":
-            case "bad_delete_message_broadcaster":
-            case "bad_delete_message_mod":
-            case "bad_delete_message_error":
-            case "bad_marker_client":
-            case "bad_mod_banned":
-            case "bad_mod_mod":
-            case "bad_slow_duration":
-            case "bad_timeout_admin":
-            case "bad_timeout_broadcaster":
-            case "bad_timeout_duration":
-            case "bad_timeout_global_mod":
-            case "bad_timeout_mod":
-            case "bad_timeout_self":
-            case "bad_timeout_staff":
-            case "bad_unban_no_ban":
-            case "bad_unmod_mod":*/
-
-            case "already_banned":
-            case "already_emote_only_on":
-            case "already_emote_only_off":
-            case "already_r9k_on":
-            case "already_r9k_off":
-            case "already_subs_on":
-            case "already_subs_off":
-            case "invalid_user":
-            case "msg_bad_characters":
-            case "msg_channel_blocked":
-            case "msg_r9k":
-            case "msg_ratelimit":
-            case "msg_rejected_mandatory":
-            case "msg_room_not_found":
-            case "msg_suspended":
-            case "msg_timedout":
-            case "no_help":
-            case "no_permission":
-            case "raid_already_raiding":
-            case "raid_error_forbidden":
-            case "raid_error_self":
-            case "raid_error_too_many_viewers":
-            case "raid_error_unexpected":
-            case "timeout_no_timeout":
-            case "unraid_error_no_active_raid":
-            case "unraid_error_unexpected":
-            case "unrecognized_cmd":
-            case "unsupported_chatrooms_cmd":
-            case "untimeout_banned":
-            case "whisper_banned":
-            case "whisper_banned_recipient":
-            case "whisper_restricted_recipient":
-            case "whisper_invalid_args":
-            case "whisper_invalid_login":
-            case "whisper_invalid_self":
-            case "whisper_limit_per_min":
-            case "whisper_limit_per_sec":
-            case "whisper_restricted":
-            case "msg_subsonly":
-            case "msg_verified_email":
-            case "msg_slowmode":
-            case "tos_ban":
-            case "msg_channel_suspended":
-            case "msg_banned":
-            case "msg_duplicate":
-            case "msg_facebook":
-            case "turbo_only_color":
-            case "unavailable_command":
-                // Generic Twitch error.
-                event.type = TWITCH_ERROR;
-
-                version(TwitchWarnings) warnAboutOverwrittenAuxString(0, key, "error");
-                event.aux[0] = msgID;
-                break;
-
-            case "emote_only_on":
-            case "emote_only_off":
-            case "r9k_on":
-            case "r9k_off":
-            case "slow_on":
-            case "slow_off":
-            case "subs_on":
-            case "subs_off":
-            case "followers_on":
-            case "followers_off":
-            case "followers_on_zero":
-
-            /*case "usage_ban":
-            case "usage_clear":
-            case "usage_color":
-            case "usage_commercial":
-            case "usage_disconnect":
-            case "usage_emote_only_off":
-            case "usage_emote_only_on":
-            case "usage_followers_off":
-            case "usage_followers_on":
-            case "usage_help":
-            case "usage_marker":
-            case "usage_me":
-            case "usage_mod":
-            case "usage_mods":
-            case "usage_r9k_off":
-            case "usage_r9k_on":
-            case "usage_raid":
-            case "usage_slow_off":
-            case "usage_slow_on":
-            case "usage_subs_off":
-            case "usage_subs_on":
-            case "usage_timeout":
-            case "usage_unban":
-            case "usage_unmod":
-            case "usage_unraid":
-            case "usage_untimeout":*/
-
-            case "mod_success":
-            case "msg_emotesonly":
-            case "msg_followersonly":
-            case "msg_followersonly_followed":
-            case "msg_followersonly_zero":
-            case "msg_rejected":  // "being checked by mods"
-            case "raid_notice_mature":
-            case "raid_notice_restricted_chat":
-            case "room_mods":
-            case "timeout_success":
-            case "unban_success":
-            case "unmod_success":
-            case "unraid_success":
-            case "untimeout_success":
-            case "cmds_available":
-            case "color_changed":
-            case "commercial_success":
-            case "delete_message_success":
-            case "ban_success":
-            case "no_vips":
-            case "no_mods":
-                // Generic Twitch server reply.
-                event.type = TWITCH_NOTICE;
-
-                version(TwitchWarnings) warnAboutOverwrittenAuxString(0, key, "notice");
-                event.aux[0] = msgID;
-                break;
-
-            case "midnightsquid":
-                // New direct cheer with real currency
-                event.type = TWITCH_DIRECTCHEER;
-
-                version(TwitchWarnings) warnAboutOverwrittenAuxString(1, key, "msg-id");
-                event.aux[1] = msgID;
-                break;
-
-            default:
-                import std.algorithm.searching : startsWith;
-
-                version(TwitchWarnings) warnAboutOverwrittenAuxString(0, key, "msg-id");
-                event.aux[0] = msgID;
-
-                if (msgID.startsWith("bad_"))
-                {
-                    event.type = TWITCH_ERROR;
-                    break;
-                }
-                else if (msgID.startsWith("usage_"))
-                {
-                    event.type = TWITCH_NOTICE;
-                    break;
-                }
-
-                version(TwitchWarnings)
-                {
-                    import std.conv : text;
-                    import std.stdio : writeln;
-
-                    immutable msg = text("Unknown Twitch msg-id: ", msgID);
-                    appendToErrors(event, msg);
-                    writeln(msg);
-                    printTagsOnExit = true;
-                }
-                break;
-            }
+            switchOnMsgID(
+                event: event,
+                msgID: value,
+                onlySetType: false);
             break;
 
-        ////////////////////////////////////////////////////////////////////////
-
-         case "display-name":
+        case "display-name":
             // The user’s display name, escaped as described in the IRCv3 spec.
             // This is empty if it is never set.
             import lu.string : strippedRight;
@@ -624,12 +131,30 @@ auto parseTwitchTags(ref IRCParser parser, ref IRCEvent event) @safe
             // badge (each in the format <badge>/<version>, such as admin/1).
             // Valid badge values: admin, bits, broadcaster, global_mod,
             // moderator, subscriber, staff, turbo.
-            // Save the whole list, let the printer deal with which to display
-            // Set an empty list to a placeholder asterisk
-            immutable badges = value.length ? value : "*";
-            event.sender.badges = event.sender.badges.length ?
-                event.sender.badges ~ ',' ~ badges :
-                badges;
+            // Save the whole list, let the user deal with which to display
+            if (!value.length)
+            {
+                if (!event.sender.badges.length)
+                {
+                    // Set an empty list to a placeholder asterisk
+                    event.sender.badges = "*";
+                }
+            }
+            else
+            {
+                if (event.sender.badges == "*")
+                {
+                    // If we have an asterisk, replace it with the new value
+                    event.sender.badges = value;
+                }
+                else
+                {
+                    // Order badge-info before badges
+                    event.sender.badges = event.sender.badges.length ?
+                        event.sender.badges ~ ',' ~ value :
+                        value;
+                }
+            }
             break;
 
         case "system-msg":
@@ -638,7 +163,6 @@ auto parseTwitchTags(ref IRCParser parser, ref IRCEvent event) @safe
             // The moderator’s reason for the timeout or ban.
             // system-msg: The message printed in chat along with this notice.
             import lu.string : removeControlCharacters, strippedRight;
-            import std.typecons : No, Yes;
 
             if (!value.length) break;
 
@@ -649,7 +173,16 @@ auto parseTwitchTags(ref IRCParser parser, ref IRCEvent event) @safe
 
             if (event.type == TWITCH_RITUAL)
             {
-                version(TwitchWarnings) warnAboutOverwrittenAuxString(0, key);
+                version(TwitchWarnings)
+                {
+                    warnAboutOverwrittenAuxString(
+                        event: event,
+                        i: 0,
+                        key: key,
+                        tagType: "tag",
+                        printTagsOnExit: printTagsOnExit);
+                }
+
                 event.aux[0] = message;
             }
             else if (!event.content.length)
@@ -713,7 +246,7 @@ auto parseTwitchTags(ref IRCParser parser, ref IRCEvent event) @safe
                 * size – A digit between 1 and 4
             */
             event.type = TWITCH_CHEER;
-            goto case "ban-duration";
+            goto case "ban-duration";  // set count[0]
 
         case "msg-param-sub-plan":
             // The type of subscription plan being used.
@@ -752,7 +285,16 @@ auto parseTwitchTags(ref IRCParser parser, ref IRCEvent event) @safe
             /+
                 Aux 0
              +/
-            version(TwitchWarnings) warnAboutOverwrittenAuxString(0, key);
+            version(TwitchWarnings)
+            {
+                warnAboutOverwrittenAuxString(
+                    event: event,
+                    i: 0,
+                    key: key,
+                    tagType: "tag",
+                    printTagsOnExit: printTagsOnExit);
+            }
+
             event.aux[0] = decodeIRCv3String(value);
             break;
 
@@ -783,7 +325,16 @@ auto parseTwitchTags(ref IRCParser parser, ref IRCEvent event) @safe
             /+
                 Aux 1
              +/
-            version(TwitchWarnings) warnAboutOverwrittenAuxString(1, key);
+            version(TwitchWarnings)
+            {
+                warnAboutOverwrittenAuxString(
+                    event: event,
+                    i: 1,
+                    key: key,
+                    tagType: "tag",
+                    printTagsOnExit: printTagsOnExit);
+            }
+
             event.aux[1] = decodeIRCv3String(value);
             break;
 
@@ -799,7 +350,16 @@ auto parseTwitchTags(ref IRCParser parser, ref IRCEvent event) @safe
             /+
                 Aux 2
              +/
-            version(TwitchWarnings) warnAboutOverwrittenAuxString(2, key);
+            version(TwitchWarnings)
+            {
+                warnAboutOverwrittenAuxString(
+                    event: event,
+                    i: 2,
+                    key: key,
+                    tagType: "tag",
+                    printTagsOnExit: printTagsOnExit);
+            }
+
             event.aux[2] = decodeIRCv3String(value);
             break;
 
@@ -814,7 +374,16 @@ auto parseTwitchTags(ref IRCParser parser, ref IRCEvent event) @safe
             /+
                 Aux 3
              +/
-            version(TwitchWarnings) warnAboutOverwrittenAuxString(3, key);
+            version(TwitchWarnings)
+            {
+                warnAboutOverwrittenAuxString(
+                    event: event,
+                    i: 3,
+                    key: key,
+                    tagType: "tag",
+                    printTagsOnExit: printTagsOnExit);
+            }
+
             event.aux[3] = decodeIRCv3String(value);
             break;
 
@@ -826,7 +395,16 @@ auto parseTwitchTags(ref IRCParser parser, ref IRCEvent event) @safe
             /+
                 Aux 4
              +/
-            version(TwitchWarnings) warnAboutOverwrittenAuxString(4, key);
+            version(TwitchWarnings)
+            {
+                warnAboutOverwrittenAuxString(
+                    event: event,
+                    i: 4,
+                    key: key,
+                    tagType: "tag",
+                    printTagsOnExit: printTagsOnExit);
+            }
+
             event.aux[4] = value;  // no need to decode?
             break;
 
@@ -840,7 +418,16 @@ auto parseTwitchTags(ref IRCParser parser, ref IRCEvent event) @safe
 
                 Reserve this for first-msg. Set the key, not the 0/1 value.
              +/
-            version(TwitchWarnings) warnAboutOverwrittenAuxString(event.aux.length+(-3), key);
+            version(TwitchWarnings)
+            {
+                warnAboutOverwrittenAuxString(
+                    event: event,
+                    i: event.aux.length+(-3),
+                    key: key,
+                    tagType: "tag",
+                    printTagsOnExit: printTagsOnExit);
+            }
+
             event.aux[$-3] = key;
             break;
 
@@ -898,7 +485,16 @@ auto parseTwitchTags(ref IRCParser parser, ref IRCEvent event) @safe
             /+
                 Count 0
              +/
-            version(TwitchWarnings) warnAboutOverwrittenCount(0, key);
+            version(TwitchWarnings)
+            {
+                warnAboutOverwrittenCount(
+                    event: event,
+                    i: 0,
+                    key: key,
+                    tagType: "tag",
+                    printTagsOnExit: printTagsOnExit);
+            }
+
             event.count[0] = (value == "0") ? 0 : value.to!long;
             break;
 
@@ -922,7 +518,15 @@ auto parseTwitchTags(ref IRCParser parser, ref IRCEvent event) @safe
             /+
                 Count 1
              +/
-            version(TwitchWarnings) warnAboutOverwrittenCount(1, key);
+            version(TwitchWarnings)
+            {
+                warnAboutOverwrittenCount(
+                    event: event,
+                    i: 1,
+                    key: key,
+                    tagType: "tag",
+                    printTagsOnExit: printTagsOnExit);
+            }
 
             if (value == "0") break;
             event.count[1] = value.to!long;
@@ -950,7 +554,15 @@ auto parseTwitchTags(ref IRCParser parser, ref IRCEvent event) @safe
             /+
                 Count 2
              +/
-            version(TwitchWarnings) warnAboutOverwrittenCount(2, key);
+            version(TwitchWarnings)
+            {
+                warnAboutOverwrittenCount(
+                    event: event,
+                    i: 2,
+                    key: key,
+                    tagType: "tag",
+                    printTagsOnExit: printTagsOnExit);
+            }
 
             if (value == "0") break;
             event.count[2] = value.to!long;
@@ -969,7 +581,15 @@ auto parseTwitchTags(ref IRCParser parser, ref IRCEvent event) @safe
             /+
                 Count 3
              +/
-            version(TwitchWarnings) warnAboutOverwrittenCount(3, key);
+            version(TwitchWarnings)
+            {
+                warnAboutOverwrittenCount(
+                    event: event,
+                    i: 3,
+                    key: key,
+                    tagType: "tag",
+                    printTagsOnExit: printTagsOnExit);
+            }
 
             if (value == "0") break;
             event.count[3] = value.to!long;
@@ -983,7 +603,15 @@ auto parseTwitchTags(ref IRCParser parser, ref IRCEvent event) @safe
             /+
                 Count 4
              +/
-            version(TwitchWarnings) warnAboutOverwrittenCount(4, key);
+            version(TwitchWarnings)
+            {
+                warnAboutOverwrittenCount(
+                    event: event,
+                    i: 4,
+                    key: key,
+                    tagType: "tag",
+                    printTagsOnExit: printTagsOnExit);
+            }
 
             if (value == "0") break;
             event.count[4] = value.to!long;
@@ -998,7 +626,15 @@ auto parseTwitchTags(ref IRCParser parser, ref IRCEvent event) @safe
             /+
                 Count 5
              +/
-            version(TwitchWarnings) warnAboutOverwrittenCount(5, key);
+            version(TwitchWarnings)
+            {
+                warnAboutOverwrittenCount(
+                    event: event,
+                    i: 5,
+                    key: key,
+                    tagType: "tag",
+                    printTagsOnExit: printTagsOnExit);
+            }
 
             if (value == "0") break;
             event.count[5] = value.to!long;
@@ -1014,7 +650,15 @@ auto parseTwitchTags(ref IRCParser parser, ref IRCEvent event) @safe
             /+
                 Count 6
              +/
-            version(TwitchWarnings) warnAboutOverwrittenCount(6, key);
+            version(TwitchWarnings)
+            {
+                warnAboutOverwrittenCount(
+                    event: event,
+                    i: 6,
+                    key: key,
+                    tagType: "tag",
+                    printTagsOnExit: printTagsOnExit);
+            }
 
             if (value == "0") break;
             event.count[6] = value.to!long;
@@ -1026,7 +670,15 @@ auto parseTwitchTags(ref IRCParser parser, ref IRCEvent event) @safe
             /+
                 Count 7
              +/
-            version(TwitchWarnings) warnAboutOverwrittenCount(7, key);
+            version(TwitchWarnings)
+            {
+                warnAboutOverwrittenCount(
+                    event: event,
+                    i: 7,
+                    key: key,
+                    tagType: "tag",
+                    printTagsOnExit: printTagsOnExit);
+            }
 
             if (value == "0") break;
             event.count[7] = value.to!long;
@@ -1045,9 +697,29 @@ auto parseTwitchTags(ref IRCParser parser, ref IRCEvent event) @safe
 
                 https://dev.twitch.tv/docs/irc/tags/
              +/
-            event.sender.badges = event.sender.badges.length ?
-                value ~ ',' ~ event.sender.badges :
-                value;
+            if (!value.length)
+            {
+                if (!event.sender.badges.length)
+                {
+                    // Set an empty list to a placeholder asterisk
+                    event.sender.badges = "*";
+                }
+            }
+            else
+            {
+                if (event.sender.badges == "*")
+                {
+                    // If we have an asterisk, replace it with the new value
+                    event.sender.badges = value;
+                }
+                else
+                {
+                    // Order badge-info before badges
+                    event.sender.badges = event.sender.badges.length ?
+                        value ~ ',' ~ event.sender.badges :
+                        value;
+                }
+            }
             break;
 
         case "id":
@@ -1075,7 +747,16 @@ auto parseTwitchTags(ref IRCParser parser, ref IRCEvent event) @safe
             // The channel ID.
             if (event.type == ROOMSTATE)
             {
-                version(TwitchWarnings) warnAboutOverwrittenAuxString(0, key);
+                version(TwitchWarnings)
+                {
+                    warnAboutOverwrittenAuxString(
+                        event: event,
+                        i: 0,
+                        key: key,
+                        tagType: "tag",
+                        printTagsOnExit: printTagsOnExit);
+                }
+
                 event.aux[0] = value;
             }
             break;
@@ -1098,6 +779,30 @@ auto parseTwitchTags(ref IRCParser parser, ref IRCEvent event) @safe
             // reply-parent-user-login = zenarc
             event.target.nickname = value;
             break;
+
+        case "source-msg-id":
+            if (!value.length) break;
+
+            switchOnMsgID(
+                event: event,
+                msgID: value,
+                onlySetType: true);
+            break;
+
+        case "source-room-id":
+            version(TwitchWarnings)
+            {
+                warnAboutOverwrittenAuxString(
+                    event: event,
+                    i: event.aux.length+(-4),
+                    key: key,
+                    tagType: "tag",
+                    printTagsOnExit: printTagsOnExit);
+            }
+
+            event.aux[$-4] = key;
+            break;
+
 
         // We only need set cases for every known tag if we want to be alerted
         // when we come across unknown ones, which is version TwitchWarnings.
@@ -1232,6 +937,11 @@ auto parseTwitchTags(ref IRCParser parser, ref IRCEvent event) @safe
                 // Viewer milestone thing. Triggering message id?
             case "msg-param-community-gift-id":
                 // submysterygift ID?
+            case "source-badge-info":
+            case "source-badges":
+            case "source-id":
+            //case "source-room-id":
+
 
                 // Ignore these events.
                 break;
@@ -1243,50 +953,31 @@ auto parseTwitchTags(ref IRCParser parser, ref IRCEvent event) @safe
                 import std.conv : text;
                 import std.stdio : writeln;
 
-                immutable msg = text("Unknown Twitch tag: ", key, " = ", value);
-                appendToErrors(event, msg);
-                writeln(msg);
+                immutable message = text("Unknown Twitch tag: ", key, " = ", value);
+                appendToErrors(event, message);
+                writeln(message);
                 printTagsOnExit = true;
             }
             break;
         }
     }
 
-    // Deduplicate subscriber badges
-    if (event.sender.badges.length)
+    void deduplicateAndSortBadges(ref string badges)
     {
         import std.string : indexOf;
 
-        enum badgeText = "subscriber/";
+        deduplicateSubscriberBadges(badges);
 
-        immutable firstSubscriberBadge = event.sender.badges.indexOf(badgeText);
-
-        if (firstSubscriberBadge != -1)
+        if (badges.indexOf("broadcaster/") > 0)
         {
-            immutable offset = firstSubscriberBadge+badgeText.length + 1;
-            immutable secondSubscriberBadge = event.sender.badges.indexOf(badgeText, offset);
-
-            if (secondSubscriberBadge != -1)
-            {
-                // There are at least two subscriber badges, one from the badge
-                // tag and one from badge-info. The first one is the one we want.
-                immutable secondOffset = offset + badgeText.length + 1;
-                immutable secondCommaPos = event.sender.badges.indexOf(',', secondOffset);
-
-                if (secondCommaPos != -1)
-                {
-                    // Remove the second subscriber badge
-                    event.sender.badges =
-                        event.sender.badges[0..secondSubscriberBadge] ~
-                        event.sender.badges[secondCommaPos+1..$];
-                }
-                else
-                {
-                    // Should never happen
-                }
-            }
+            // The broadcaster tag should, when present, always be first
+            // It seems it isn't.
+            sortBadgesBroadcasterFirst(badges);
         }
     }
+
+    if (event.sender.badges.length) deduplicateAndSortBadges(event.sender.badges);
+    if (event.target.badges.length) deduplicateAndSortBadges(event.target.badges);
 
     version(TwitchWarnings)
     {
@@ -1294,24 +985,864 @@ auto parseTwitchTags(ref IRCParser parser, ref IRCEvent event) @safe
         {
             import std.stdio : writefln, writeln;
 
-            void printStuffTrusted() @trusted
-            {
-                /+
-                    write{,f}ln is @trusted, but event.aux now being a static string[n]
-                    causes it to output a deprecation warning anyway.
+            enum pattern = `%-35s%s`;
 
-                    "Deprecation: `@safe` function `parseTwitchTags` calling `writefln`"
-                 +/
-                enum pattern = `%-35s%s`;
-                writefln(pattern, "event.aux", event.aux);
-                writefln(pattern, "event.count", event.count);
-                writeln();
-            }
-
-            printTags(tagRange, event);
-            printStuffTrusted();
+            printTags(event);
+            writefln(pattern, "event.aux", event.aux[]);
+            writefln(pattern, "event.count", event.count[]);
             writeln();
         }
+    }
+}
+
+
+// appendToErrors
+/++
+    Appends an error to an [dialect.defs.IRCEvent|IRCEvent]'s error string member.
+
+    Note: Gated behind version `TwitchWarnings`.
+
+    Params:
+        event = The [dialect.defs.IRCEvent|IRCEvent] to append the error to.
+        message = The error message to append.
+ +/
+version(TwitchWarnings)
+void appendToErrors(ref IRCEvent event, const string message) pure @safe nothrow
+{
+    enum spacer = " | ";
+    event.errors = event.errors.length ?
+        event.errors ~ spacer ~ message :
+        message;
+}
+
+
+// printTags
+/++
+    Prints the tags of an [dialect.defs.IRCEvent|IRCEvent] to the console.
+
+    Note: Gated behind version `TwitchWarnings`.
+
+    Params:
+        event = The [dialect.defs.IRCEvent|IRCEvent] to print the tags of.
+ +/
+version(TwitchWarnings)
+void printTags(const IRCEvent event) @safe
+{
+    import lu.string : advancePast;
+    import std.algorithm.iteration : splitter;
+    import std.stdio : writefln, writeln;
+
+    writeln('@', event.tags, ' ', event.raw, '$');
+    auto tagRange = event.tags.splitter(";");  // mutable
+
+    foreach (immutable tagline; tagRange)
+    {
+        string slice = tagline;  // mutable
+        immutable key = slice.advancePast('=');
+        alias value = slice;
+
+        enum pattern = `%-35s"%s"`;
+        writefln(pattern, key, value);
+    }
+}
+
+
+// warnAboutOverwrittenCount
+/++
+    Warns about the an element of the `count` array in an
+    [dialect.defs.IRCEvent|IRCEvent] being overwritten.
+
+    Note: Gated behind version `TwitchWarnings`.
+
+    Params:
+        event = The [dialect.defs.IRCEvent|IRCEvent] whose `count` element was overwritten.
+        i = The index of the `count` array element being overwritten.
+        key = The key of the tag that is overwriting the `count` array element.
+        tagType = The type of tag that is overwriting the `count` array element.
+        printTagsOnExit = Whether or not the caller should print the tags of the
+            [dialect.defs.IRCEvent|IRCEvent] upon leaving its function.
+ +/
+version(TwitchWarnings)
+void warnAboutOverwrittenCount(
+    /*const*/ ref IRCEvent event,
+    const size_t i,
+    const string key,
+    const string tagType,
+    ref bool printTagsOnExit) @safe
+{
+    if (!event.count[i].isNull)
+    {
+        import std.format : format;
+        import std.stdio : writeln;
+
+        enum pattern = "%s %s overwrote `count[%s]`: %s";
+        immutable message = pattern.format(
+            tagType,
+            key,
+            i,
+            event.count[i].get);
+
+        appendToErrors(event, message);
+        writeln(message);
+        printTagsOnExit = true;
+    }
+}
+
+
+// warnAboutOverwrittenAuxString
+/++
+    Warns about the an element of the `aux` array in an
+    [dialect.defs.IRCEvent|IRCEvent] being overwritten.
+
+    Note: Gated behind version `TwitchWarnings`.
+
+    Params:
+        event = The [dialect.defs.IRCEvent|IRCEvent] whose `aux` element was overwritten.
+        i = The index of the `aux` array element being overwritten.
+        key = The key of the tag that is overwriting the `aux` array element.
+        tagType = The type of tag that is overwriting the `aux` array element.
+        printTagsOnExit = Whether or not the caller should print the tags of the
+            [dialect.defs.IRCEvent|IRCEvent] upon leaving its function.
+ +/
+version(TwitchWarnings)
+void warnAboutOverwrittenAuxString(
+    /*const*/ ref IRCEvent event,
+    const size_t i,
+    const string key,
+    const string tagType,
+    ref bool printTagsOnExit) @safe
+{
+    if (event.aux[i].length)
+    {
+        import std.format : format;
+        import std.stdio : writeln;
+
+        enum pattern = "%s %s overwrote `aux[%s]`: %s";
+        immutable message = pattern.format(
+            tagType,
+            key,
+            i,
+            event.aux[i]);
+
+        appendToErrors(event, message);
+        writeln(message);
+        printTagsOnExit = true;
+    }
+}
+
+
+// switchOnMsgID
+/++
+    Switches on a message ID string and resolves the type of an
+    [dialect.defs.IRCEvent|IRCEvent].
+
+    Broken out of [parseTwitchTags] for readability.
+
+    Params:
+        event = The [dialect.defs.IRCEvent|IRCEvent] to resolve the type of.
+        msgID = The message ID string to switch on.
+        onlySetType = Whether or not to only set the type of the
+            [dialect.defs.IRCEvent|IRCEvent]; if `false`, more information is
+            set in the [dialect.defs.IRCEvent|IRCEvent].
+ +/
+void switchOnMsgID(
+    ref IRCEvent event,
+    const string msgID,
+    const bool onlySetType) @safe
+{
+    import std.conv : to;
+
+    // The type of notice (not the ID) / A message ID string.
+    // Can be used for i18ln. Valid values: see
+    // Msg-id Tags for the NOTICE Commands Capability.
+    // https://dev.twitch.tv/docs/irc#msg-id-tags-for-the-notice-commands-capability
+    // https://swiftyspiffy.com/TwitchLib/Client/_msg_ids_8cs_source.html
+    // https://dev.twitch.tv/docs/irc/msg-id/
+
+    /*
+        sub
+        resub
+        charity
+        already_banned          <user> is already banned in this room.
+        already_emote_only_off  This room is not in emote-only mode.
+        already_emote_only_on   This room is already in emote-only mode.
+        already_r9k_off         This room is not in r9k mode.
+        already_r9k_on          This room is already in r9k mode.
+        already_subs_off        This room is not in subscribers-only mode.
+        already_subs_on         This room is already in subscribers-only mode.
+        bad_unban_no_ban        <user> is not banned from this room.
+        ban_success             <user> is banned from this room.
+        emote_only_off          This room is no longer in emote-only mode.
+        emote_only_on           This room is now in emote-only mode.
+        hosts_remaining         There are <number> host commands remaining this half hour.
+        msg_channel_suspended   This channel is suspended.
+        r9k_off                 This room is no longer in r9k mode.
+        r9k_on                  This room is now in r9k mode.
+        slow_off                This room is no longer in slow mode.
+        slow_on                 This room is now in slow mode. You may send messages every <slow seconds> seconds.
+        subs_off                This room is no longer in subscribers-only mode.
+        subs_on                 This room is now in subscribers-only mode.
+        timeout_success         <user> has been timed out for <duration> seconds.
+        unban_success           <user> is no longer banned from this chat room.
+        unrecognized_cmd        Unrecognized command: <command>
+        raid                    Raiders from <other channel> have joined!\n
+    */
+
+    version(TwitchWarnings)
+    {
+        /++
+            Whether or not an error occured and debug information should be printed
+            upon leaving the function.
+         +/
+        bool printTagsOnExit;
+    }
+
+    with (IRCEvent.Type)
+    switch (msgID)
+    {
+    case "sub":
+    case "resub":
+        // Subscription. Disambiguate subs from resubs by other tags, set
+        // in count and altcount.
+        event.type = TWITCH_SUB;
+        break;
+
+    case "subgift":
+        // A gifted subscription.
+        // "X subscribed with Twitch Prime."
+        // "Y subscribed at Tier 1. They've subscribed for 11 months!"
+        // "We added the msg-id “anonsubgift” to the user-notice which
+        // defaults the sender to the channel owner"
+        /+
+            For anything anonomous
+            The channel ID and Channel name are set as normal
+            The Recipienet is set as normal
+            The person giving the gift is anonomous
+
+            https://discuss.dev.twitch.tv/t/msg-id-purchase/22067/8
+            +/
+        // In reality the sender is "ananonymousgifter".
+        event.type = TWITCH_SUBGIFT;
+        break;
+
+    case "submysterygift":
+        // Gifting several subs to random people in one event.
+        // "A is gifting 1 Tier 1 Subs to C's community! They've gifted a total of n in the channel!"
+        event.type = TWITCH_BULKGIFT;
+        break;
+
+    case "ritual":
+        // Oneliner upon joining chat.
+        // content: "HeyGuys"
+        event.type = TWITCH_RITUAL;
+        break;
+
+    case "rewardgift":
+        event.type = TWITCH_REWARDGIFT;
+        break;
+
+    case "raid":
+        // Raid start. Seen in target channel.
+        // "3322 raiders from A have joined!"
+        event.type = TWITCH_RAID;
+        break;
+
+    case "unraid":
+        // Manual raid abort.
+        // "The raid has been cancelled."
+        event.type = TWITCH_UNRAID;
+        break;
+
+    case "charity":
+        import std.algorithm.iteration : filter, splitter;
+        import std.algorithm.searching : startsWith;
+        import std.array : Appender;
+
+        event.type = TWITCH_CHARITY;
+        if (onlySetType) break;
+
+        auto tagRange = event.tags.splitter(";");  // mutable
+
+        string[string] charityAA;
+        auto charityTags = tagRange
+            .filter!(tagline => tagline.startsWith("msg-param-charity"));
+
+        foreach (immutable tagline; charityTags)
+        {
+            import lu.string : advancePast;
+            string slice = tagline;  // mutable
+            immutable charityKey = slice.advancePast('=');
+            charityAA[charityKey] = slice;
+        }
+
+        static immutable string[2] charityStringTags =
+        [
+            "msg-param-charity-learn-more",
+            "msg-param-charity-hashtag",
+        ];
+
+        static immutable string[2] charityCountTags =
+        [
+            //"msg-param-total"
+            "msg-param-charity-hours-remaining",
+            "msg-param-charity-days-remaining",
+        ];
+
+        if (const charityName = "msg-param-charity-name" in charityAA)
+        {
+            import dialect.common : decodeIRCv3String;
+            import lu.string : removeControlCharacters, strippedRight;
+
+            //msg-param-charity-name = Direct\sRelief
+
+            version(TwitchWarnings)
+            {
+                warnAboutOverwrittenAuxString(
+                    event: event,
+                    i: 0,
+                    key: "msg-param-charity-name",
+                    tagType: "msg-id",
+                    printTagsOnExit: printTagsOnExit);
+            }
+
+            event.aux[0] = (*charityName)
+                .decodeIRCv3String
+                .strippedRight
+                .removeControlCharacters;
+        }
+
+        foreach (immutable i, charityKey; charityStringTags[])
+        {
+            if (const charityString = charityKey in charityAA)
+            {
+                //msg-param-charity-learn-more = https://link.twitch.tv/blizzardofbits
+                //msg-param-charity-hashtag = #charity
+                // Pad count by 1 to allow for msg-param-charity-name
+
+                version(TwitchWarnings)
+                {
+                    warnAboutOverwrittenAuxString(
+                        event: event,
+                        i: i+1,
+                        key: charityKey,
+                        tagType: "msg-id",
+                        printTagsOnExit: printTagsOnExit);
+                }
+
+                event.aux[i+1] = *charityString;
+            }
+        }
+
+        // Doesn't start with msg-param-charity but it will be set later down
+        /*if (const charityTotal = "msg-param-total" in charityAA)
+        {
+            //msg-param-charity-hours-remaining = 286
+            event.count[0] = (*charityTotal).to!int;
+        }*/
+
+        foreach (immutable i, charityKey; charityCountTags[])
+        {
+            if (const charityCount = charityKey in charityAA)
+            {
+                //msg-param-charity-hours-remaining
+                //msg-param-charity-days-remaining = 11
+                // Pad count by 1 to allow for msg-param-total
+
+                version(TwitchWarnings)
+                {
+                    warnAboutOverwrittenCount(
+                        event: event,
+                        i: i+1,
+                        key: charityKey,
+                        tagType: "msg-id",
+                        printTagsOnExit: printTagsOnExit);
+                }
+
+                event.count[i+1] = (*charityCount).to!long;
+            }
+        }
+
+        // Remove once we have a recorded parse
+        version(TwitchWarnings)
+        {
+            appendToErrors(event, "RECORD TWITCH CHARITY");
+            printTagsOnExit = true;
+        }
+        break;
+
+    case "giftpaidupgrade":
+    case "anongiftpaidupgrade":
+        // "Continuing a gift sub" by gifting a sub you were gifted (?)
+        // "A is continuing the Gift Sub they got from B!"
+        event.type = TWITCH_GIFTCHAIN;
+        break;
+
+    case "primepaidupgrade":
+        // User upgrading a prime sub to a normal paid one.
+        // "A converted from a Twitch Prime sub to a Tier 1 sub!"
+        event.type = TWITCH_SUBUPGRADE;
+        break;
+
+    case "bitsbadgetier":
+        // User just earned a badge for a tier of bits
+        // content is the message body, e.g. "GG"
+        event.type = TWITCH_BITSBADGETIER;
+        break;
+
+    case "extendsub":
+        // User extended their sub, always by a month?
+        // "A extended their Tier 1 subscription through April!"
+        event.type = TWITCH_EXTENDSUB;
+        break;
+
+    case "highlighted-message":
+    case "skip-subs-mode-message":
+        // These are PRIVMSGs
+        if (onlySetType) break;
+
+        version(TwitchWarnings)
+        {
+            warnAboutOverwrittenCount(
+                event: event,
+                i: 0,
+                key: msgID,
+                tagType: "msg-id",
+                printTagsOnExit: printTagsOnExit);
+        }
+
+        event.aux[0] = msgID;
+        break;
+
+    case "primecommunitygiftreceived":
+        // "A viewer was gifted a World of Tanks: Care Package, courtesy of a Prime member!"
+        event.type = TWITCH_GIFTRECEIVED;
+        break;
+
+    case "standardpayforward":  // has a target
+    case "communitypayforward": // toward community, no target
+        // "A is paying forward the Gift they got from B to #channel!"
+        event.type = TWITCH_PAYFORWARD;
+        break;
+
+    case "crowd-chant":
+        // PRIVMSG #fextralife :Clap Clap FeelsBirthdayMan
+        // Seemingly no other interesting tags
+        event.type = TWITCH_CROWDCHANT;
+        break;
+
+    case "announcement":
+        // USERNOTICE #zorael :test
+        // by /announcement test
+        // Unknown Twitch msg-id: announcement
+        // Unknown Twitch tag: msg-param-color = PRIMARY
+        event.type = TWITCH_ANNOUNCEMENT;
+        break;
+
+    case "user-intro":
+        // PRIVMSG #ginomachino :yo this is much coller with actual music
+        // Unknown Twitch msg-id: user-intro
+        event.type = TWITCH_INTRO;
+        break;
+
+    case "viewermilestone":
+        // Unknown Twitch msg-id: viewermilestone
+        event.type = TWITCH_MILESTONE;
+        break;
+
+    case "gigantified-emote-message":
+        // Unknown Twitch msg-id: gigantified-emote-message
+        event.type = EMOTE;
+        goto case;
+
+    case "animated-message":
+        // Unknown Twitch msg-id: animated-message
+        // keep the type as PRIVMSG
+        if (onlySetType) break;
+
+        version(TwitchWarnings)
+        {
+            warnAboutOverwrittenAuxString(
+                event: event,
+                i: 0,
+                key: msgID,
+                tagType: "msg-id",
+                printTagsOnExit: printTagsOnExit);
+        }
+
+        event.aux[0] = msgID;
+        break;
+
+    /*case "bad_ban_admin":
+    case "bad_ban_anon":
+    case "bad_ban_broadcaster":
+    case "bad_ban_global_mod":
+    case "bad_ban_mod":
+    case "bad_ban_self":
+    case "bad_ban_staff":
+    case "bad_commercial_error":
+    case "bad_delete_message_broadcaster":
+    case "bad_delete_message_mod":
+    case "bad_delete_message_error":
+    case "bad_marker_client":
+    case "bad_mod_banned":
+    case "bad_mod_mod":
+    case "bad_slow_duration":
+    case "bad_timeout_admin":
+    case "bad_timeout_broadcaster":
+    case "bad_timeout_duration":
+    case "bad_timeout_global_mod":
+    case "bad_timeout_mod":
+    case "bad_timeout_self":
+    case "bad_timeout_staff":
+    case "bad_unban_no_ban":
+    case "bad_unmod_mod":*/
+
+    case "already_banned":
+    case "already_emote_only_on":
+    case "already_emote_only_off":
+    case "already_r9k_on":
+    case "already_r9k_off":
+    case "already_subs_on":
+    case "already_subs_off":
+    case "invalid_user":
+    case "msg_bad_characters":
+    case "msg_channel_blocked":
+    case "msg_r9k":
+    case "msg_ratelimit":
+    case "msg_rejected_mandatory":
+    case "msg_room_not_found":
+    case "msg_suspended":
+    case "msg_timedout":
+    case "no_help":
+    case "no_permission":
+    case "raid_already_raiding":
+    case "raid_error_forbidden":
+    case "raid_error_self":
+    case "raid_error_too_many_viewers":
+    case "raid_error_unexpected":
+    case "timeout_no_timeout":
+    case "unraid_error_no_active_raid":
+    case "unraid_error_unexpected":
+    case "unrecognized_cmd":
+    case "unsupported_chatrooms_cmd":
+    case "untimeout_banned":
+    case "whisper_banned":
+    case "whisper_banned_recipient":
+    case "whisper_restricted_recipient":
+    case "whisper_invalid_args":
+    case "whisper_invalid_login":
+    case "whisper_invalid_self":
+    case "whisper_limit_per_min":
+    case "whisper_limit_per_sec":
+    case "whisper_restricted":
+    case "msg_subsonly":
+    case "msg_verified_email":
+    case "msg_slowmode":
+    case "tos_ban":
+    case "msg_channel_suspended":
+    case "msg_banned":
+    case "msg_duplicate":
+    case "msg_facebook":
+    case "turbo_only_color":
+    case "unavailable_command":
+        // Generic Twitch error.
+        event.type = TWITCH_ERROR;
+        if (onlySetType) break;
+
+        version(TwitchWarnings)
+        {
+            warnAboutOverwrittenAuxString(
+                event: event,
+                i: 0,
+                key: msgID,
+                tagType: "msg-id",
+                printTagsOnExit: printTagsOnExit);
+        }
+
+        event.aux[0] = msgID;
+        break;
+
+    case "emote_only_on":
+    case "emote_only_off":
+    case "r9k_on":
+    case "r9k_off":
+    case "slow_on":
+    case "slow_off":
+    case "subs_on":
+    case "subs_off":
+    case "followers_on":
+    case "followers_off":
+    case "followers_on_zero":
+
+    /*case "usage_ban":
+    case "usage_clear":
+    case "usage_color":
+    case "usage_commercial":
+    case "usage_disconnect":
+    case "usage_emote_only_off":
+    case "usage_emote_only_on":
+    case "usage_followers_off":
+    case "usage_followers_on":
+    case "usage_help":
+    case "usage_marker":
+    case "usage_me":
+    case "usage_mod":
+    case "usage_mods":
+    case "usage_r9k_off":
+    case "usage_r9k_on":
+    case "usage_raid":
+    case "usage_slow_off":
+    case "usage_slow_on":
+    case "usage_subs_off":
+    case "usage_subs_on":
+    case "usage_timeout":
+    case "usage_unban":
+    case "usage_unmod":
+    case "usage_unraid":
+    case "usage_untimeout":*/
+
+    case "mod_success":
+    case "msg_emotesonly":
+    case "msg_followersonly":
+    case "msg_followersonly_followed":
+    case "msg_followersonly_zero":
+    case "msg_rejected":  // "being checked by mods"
+    case "raid_notice_mature":
+    case "raid_notice_restricted_chat":
+    case "room_mods":
+    case "timeout_success":
+    case "unban_success":
+    case "unmod_success":
+    case "unraid_success":
+    case "untimeout_success":
+    case "cmds_available":
+    case "color_changed":
+    case "commercial_success":
+    case "delete_message_success":
+    case "ban_success":
+    case "no_vips":
+    case "no_mods":
+        // Generic Twitch server reply.
+        event.type = TWITCH_NOTICE;
+        if (onlySetType) break;
+
+        version(TwitchWarnings)
+        {
+            warnAboutOverwrittenAuxString(
+                event: event,
+                i: 0,
+                key: msgID,
+                tagType: "msg-id",
+                printTagsOnExit: printTagsOnExit);
+        }
+
+        event.aux[0] = msgID;
+        break;
+
+    case "midnightsquid":
+        // New direct cheer with real currency
+        event.type = TWITCH_DIRECTCHEER;
+        if (onlySetType) break;
+
+        version(TwitchWarnings)
+        {
+            warnAboutOverwrittenAuxString(
+                event: event,
+                i: 1,
+                key: msgID,
+                tagType: "msg-id",
+                printTagsOnExit: printTagsOnExit);
+        }
+
+        event.aux[1] = msgID;
+        break;
+
+    case "sharedchatnotice":
+        // Let the source-msg-id tag set the event type
+        if (onlySetType) break;
+
+        version(TwitchWarnings)
+        {
+            warnAboutOverwrittenAuxString(
+                event: event,
+                i: 5,
+                key: msgID,
+                tagType: "msg-id",
+                printTagsOnExit: printTagsOnExit);
+        }
+
+        event.aux[5] = msgID;
+        break;
+
+    default:
+        import std.algorithm.searching : startsWith;
+
+        if (msgID.startsWith("bad_"))
+        {
+            event.type = TWITCH_ERROR;
+            break;
+        }
+        else if (msgID.startsWith("usage_"))
+        {
+            event.type = TWITCH_NOTICE;
+            break;
+        }
+
+        if (onlySetType) break;
+
+        version(TwitchWarnings)
+        {
+            warnAboutOverwrittenAuxString(
+                event: event,
+                i: 0,
+                key: msgID,
+                tagType: "msg-id",
+                printTagsOnExit: printTagsOnExit);
+        }
+
+        event.aux[0] = msgID;
+
+        version(TwitchWarnings)
+        {
+            import std.stdio : writeln;
+
+            immutable message = "Unknown Twitch msg-id: " ~ msgID;
+            appendToErrors(event, message);
+            writeln(message);
+            printTagsOnExit = true;
+        }
+        break;
+    }
+}
+
+
+// deduplicateSubscriberBadges
+/++
+    Deduplicates subscriber badges in a comma-separated list of badges.
+
+    Params:
+        badges = A reference to the comma-separated string of badges to deduplicate in place.
+ +/
+void deduplicateSubscriberBadges(ref string badges) pure @safe nothrow
+{
+    import std.string : indexOf;
+
+    enum badgeText = "subscriber/";
+
+    immutable firstSubscriberBadge = badges.indexOf(badgeText);
+
+    if (firstSubscriberBadge != -1)
+    {
+        immutable offset = firstSubscriberBadge+badgeText.length + 1;
+        immutable secondSubscriberBadge = badges.indexOf(badgeText, offset);
+
+        if (secondSubscriberBadge != -1)
+        {
+            // There are at least two subscriber badges, one from the badge
+            // tag and one from badge-info. The first one is the one we want.
+            immutable secondOffset = secondSubscriberBadge + badgeText.length + 1;
+            immutable secondCommaPos = badges.indexOf(',', secondOffset);
+
+            if (secondCommaPos != -1)
+            {
+                // Remove the second subscriber badge
+                badges =
+                    badges[0..secondSubscriberBadge] ~
+                    badges[secondCommaPos+1..$];
+            }
+            else
+            {
+                badges = badges[0..secondSubscriberBadge-1];
+            }
+        }
+    }
+}
+
+///
+unittest
+{
+    {
+        string badges = "subscriber/14,subscriber/12,bits/30000";
+        deduplicateSubscriberBadges(badges);
+        assert((badges == "subscriber/14,bits/30000"), badges);
+    }
+    {
+        string badges = "subscriber/1,subscriber/0";
+        deduplicateSubscriberBadges(badges);
+        assert((badges == "subscriber/1"), badges);
+    }
+    {
+        string badges = "vip/1,subscriber/19,subscriber/17,partner/1";
+        deduplicateSubscriberBadges(badges);
+        assert((badges == "vip/1,subscriber/19,partner/1"), badges);
+    }
+    {
+        string badges = "subscriber/28,broadcaster/1,subscriber/12,partner/1";
+        deduplicateSubscriberBadges(badges);
+        assert((badges == "subscriber/28,broadcaster/1,partner/1"), badges);
+    }
+    {
+        string badges;
+        deduplicateSubscriberBadges(badges);
+        assert(!badges.length, badges);
+    }
+}
+
+
+// sortBadgesBroadcasterFirst
+/++
+    Sorts a comma-separated list of badges so that the "broadcaster" badge is
+    first, if present.
+
+    Params:
+        badges = A reference to the comma-separated string of badges to sort in place.
+ +/
+void sortBadgesBroadcasterFirst(ref string badges) pure @safe
+{
+    import std.algorithm.iteration : splitter;
+    import std.algorithm.sorting : sort;
+    import std.array : array, join;
+
+    static auto broadcasterFirst(const string a, const string b)
+    {
+        import std.algorithm.searching : startsWith;
+        return a.startsWith("broadcaster/") && !b.startsWith("broadcaster/");
+    }
+
+    badges = badges
+        .splitter(',')
+        .array
+        .sort!broadcasterFirst()
+        .join(',');
+}
+
+///
+unittest
+{
+    {
+        string badges = "subscriber/14,broadcaster/1";
+        sortBadgesBroadcasterFirst(badges);
+        assert((badges == "broadcaster/1,subscriber/14"), badges);
+    }
+    {
+        string badges = "broadcaster/1,broadcaster/1";
+        sortBadgesBroadcasterFirst(badges);
+        assert((badges == "broadcaster/1,broadcaster/1"), badges);
+    }
+    {
+        string badges = "vip/1,subscriber/14";
+        sortBadgesBroadcasterFirst(badges);
+        assert((badges == "vip/1,subscriber/14"), badges);
+    }
+    {
+        string badges;
+        sortBadgesBroadcasterFirst(badges);
+        assert(!badges.length, badges);
+    }
+    {
+        string badges = "hirfharf";
+        sortBadgesBroadcasterFirst(badges);
+        assert((badges == "hirfharf"), badges);
     }
 }
 
