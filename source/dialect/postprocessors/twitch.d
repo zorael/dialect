@@ -626,7 +626,10 @@ auto parseTwitchTags(ref IRCParser parser, ref IRCEvent event) @safe
             // moderator, subscriber, staff, turbo.
             // Save the whole list, let the printer deal with which to display
             // Set an empty list to a placeholder asterisk
-            event.sender.badges = value.length ? value : "*";
+            immutable badges = value.length ? value : "*";
+            event.sender.badges = event.sender.badges.length ?
+                event.sender.badges ~ ',' ~ badges :
+                badges;
             break;
 
         case "system-msg":
@@ -1042,10 +1045,9 @@ auto parseTwitchTags(ref IRCParser parser, ref IRCEvent event) @safe
 
                 https://dev.twitch.tv/docs/irc/tags/
              +/
-            // As of yet we're not taking into consideration badge versions values.
-            // When/if we do, we'll have to make sure this value overwrites the
-            // subscriber/version value in the badges tag.
-            // For now, ignore, as "subscriber/*" is repeated in badges.
+            event.sender.badges = event.sender.badges.length ?
+                value ~ ',' ~ event.sender.badges :
+                value;
             break;
 
         case "id":
@@ -1247,6 +1249,42 @@ auto parseTwitchTags(ref IRCParser parser, ref IRCEvent event) @safe
                 printTagsOnExit = true;
             }
             break;
+        }
+    }
+
+    // Deduplicate subscriber badges
+    if (event.sender.badges.length)
+    {
+        import std.string : indexOf;
+
+        enum badgeText = "subscriber/";
+
+        immutable firstSubscriberBadge = event.sender.badges.indexOf(badgeText);
+
+        if (firstSubscriberBadge != -1)
+        {
+            immutable offset = firstSubscriberBadge+badgeText.length + 1;
+            immutable secondSubscriberBadge = event.sender.badges.indexOf(badgeText, offset);
+
+            if (secondSubscriberBadge != -1)
+            {
+                // There are at least two subscriber badges, one from the badge
+                // tag and one from badge-info. The first one is the one we want.
+                immutable secondOffset = offset + badgeText.length + 1;
+                immutable secondCommaPos = event.sender.badges.indexOf(',', secondOffset);
+
+                if (secondCommaPos != -1)
+                {
+                    // Remove the second subscriber badge
+                    event.sender.badges =
+                        event.sender.badges[0..secondSubscriberBadge] ~
+                        event.sender.badges[secondCommaPos+1..$];
+                }
+                else
+                {
+                    // Should never happen
+                }
+            }
         }
     }
 
