@@ -318,7 +318,7 @@ unittest
             assert((sender.ident == "gunnrysgt_buck"), sender.ident);
             assert((sender.address == "gunnrysgt_buck.tmi$twitch.tv"), sender.address);
             assert((sender.account == "gunnrysgt_buck"), sender.account);
-            assert((sender.badges == "subscriber/0,premium/1"), sender.badges);
+            assert((sender.badges == "subscriber/1,premium/1"), sender.badges);
             assert((sender.colour == "7403B4"), sender.colour);
             assert((channel == "#beardageddon"), channel);
             assert((content == "Theres no HWAY"), content);
@@ -353,7 +353,7 @@ unittest
             assert((sender.nickname == "nappy5074"), sender.nickname);
             assert((sender.displayName == "nappy5074"), sender.displayName);
             assert((sender.account == "nappy5074"), sender.account);
-            assert((sender.badges == "subscriber/12,sub-gifter/500"), sender.badges);
+            assert((sender.badges == "subscriber/15,sub-gifter/500"), sender.badges);
             assert((sender.colour == "0000FF"), sender.colour);
             assert((channel == "#chocotaco"), channel);
             assert((target.nickname == "buffalo_bison"), target.nickname);
@@ -372,7 +372,7 @@ unittest
             assert((sender.nickname == "nappy5074"), sender.nickname);
             assert((sender.displayName == "nappy5074"), sender.displayName);
             assert((sender.account == "nappy5074"), sender.account);
-            assert((sender.badges == "subscriber/12,sub-gifter/500"), sender.badges);
+            assert((sender.badges == "subscriber/15,sub-gifter/500"), sender.badges);
             assert((sender.colour == "0000FF"), sender.colour);
             assert((channel == "#chocotaco"), channel);
             assert((content == "nappy5074 is gifting 20 Tier 1 Subs to chocoTaco's community! They've gifted a total of 650 in the channel!"), content);
@@ -391,7 +391,7 @@ unittest
             assert((sender.nickname == "noahxcite"), sender.nickname);
             assert((sender.displayName == "Noahxcite"), sender.displayName);
             assert((sender.account == "noahxcite"), sender.account);
-            assert((sender.badges == "subscriber/9,premium/1"), sender.badges);
+            assert((sender.badges == "subscriber/11,premium/1"), sender.badges);
             assert((channel == "#chocotaco"), channel);
             assert((content == "Noahxcite subscribed at Tier 1. They've subscribed for 11 months!"), content);
             assert((aux[0] == "1000"), aux[0]);
@@ -447,7 +447,7 @@ unittest
             assert((sender.ident == "expressrr"), sender.ident);
             assert((sender.address == "expressrr.tmi.twitch.tv"), sender.address);
             assert((sender.account == "expressrr"), sender.account);
-            assert((sender.badges == "subscriber/12,twitchconNA2019/1"), sender.badges);
+            assert((sender.badges == "subscriber/13,twitchconNA2019/1"), sender.badges);
             assert((sender.colour == "0000FF"), sender.colour);
             assert((channel == "#chocotaco"), channel);
             assert((content == "chocotHello Subway100 bonus10 Did you see the chocomerch promo video I made last night??"), content);
@@ -477,7 +477,7 @@ unittest
             assert((sender.nickname == "burakk1912"), sender.nickname);
             assert((sender.displayName == "burakk1912"), sender.displayName);
             assert((sender.account == "burakk1912"), sender.account);
-            assert((sender.badges == "subscriber/0,premium/1"), sender.badges);
+            assert((sender.badges == "subscriber/1,premium/1"), sender.badges);
             assert((sender.colour == "9ACD32"), sender.colour);
             assert((channel == "#mithrain"), channel);
             assert((content == "burakk1912 converted from a Twitch Prime sub to a Tier 1 sub!"), content);
@@ -494,7 +494,7 @@ unittest
             assert((sender.nickname == "wait"), sender.nickname);
             assert((sender.displayName == "WaIt"), sender.displayName);
             assert((sender.account == "wait"), sender.account);
-            assert((sender.badges == "subscriber/0"), sender.badges);
+            assert((sender.badges == "subscriber/2"), sender.badges);
             assert((sender.colour == "7F7F7F"), sender.colour);
             assert((channel == "#chocotaco"), channel);
             assert((target.nickname == "fuzwuz"), target.nickname);
@@ -565,7 +565,7 @@ unittest
             assert((sender.nickname == "tayk47_mom"), sender.nickname);
             assert((sender.displayName == "tayk47_mom"), sender.displayName);
             assert((sender.account == "tayk47_mom"), sender.account);
-            assert((sender.badges == "subscriber/12"), sender.badges);
+            assert((sender.badges == "subscriber/15"), sender.badges);
             assert((channel == "#xqcow"), channel);
             assert((content == "tayk47_mom is gifting 1 Tier 1 Subs to xQcOW's community! They've gifted a total of 4 in the channel!"), content);
             assert((aux[0] == "1000"), aux[0]);
@@ -603,7 +603,7 @@ unittest
             assert((sender.nickname == "lil_bytch"), sender.nickname);
             assert((sender.account == "lil_bytch"), sender.account);
             assert((sender.displayName == "lil_bytch"), sender.displayName);
-            assert((sender.badges == "subscriber/0,premium/1"), sender.badges);
+            assert((sender.badges == "subscriber/1,premium/1"), sender.badges);
             assert((sender.colour == "1E90FF"), sender.colour);
             assert((channel == "#kitboga"), channel);
             assert((target.nickname == "just_illustrationz"), target.nickname);
@@ -623,7 +623,7 @@ unittest
             assert((sender.nickname == "havoc_sinz"), sender.nickname);
             assert((sender.account == "havoc_sinz"), sender.account);
             assert((sender.displayName == "havoc_sinz"), sender.displayName);
-            assert((sender.badges == "subscriber/0,premium/1"), sender.badges);
+            assert((sender.badges == "subscriber/1,premium/1"), sender.badges);
             assert((channel == "#trainwreckstv"), channel);
             assert((content == "havoc_sinz is paying forward the Gift they got from pytori1 to the community!"), content);
             assert((aux[0] == "pytori1"), aux[0]);
@@ -640,7 +640,7 @@ unittest
             assert((sender.nickname == "xari"), sender.nickname);
             assert((sender.account == "xari"), sender.account);
             assert((sender.displayName == "Xari"), sender.displayName);
-            assert((sender.badges == "vip/1,subscriber/12,partner/1"), sender.badges);
+            assert((sender.badges == "subscriber/19,vip/1,partner/1"), sender.badges);
             assert((sender.colour == "CC0000"), sender.colour);
             assert((channel == "#lestream"), channel);
             assert((content == "3322 raiders from Xari have joined!"), content);
@@ -657,7 +657,7 @@ unittest
             assert((sender.nickname == "mymii87"), sender.nickname);
             assert((sender.account == "mymii87"), sender.account);
             assert((sender.displayName == "mymii87"), sender.displayName);
-            assert((sender.badges == "subscriber/6"), sender.badges);
+            assert((sender.badges == "subscriber/8"), sender.badges);
             assert((channel == "#nokduro"), channel);
             assert((content == "mymii87 extended their Tier 1 subscription through April!"), content);
             assert((aux[0] == "1000"), aux[0]);
@@ -675,7 +675,7 @@ unittest
             assert((sender.nickname == "diegosaurs"), sender.nickname);
             assert((sender.account == "diegosaurs"), sender.account);
             assert((sender.displayName == "Diegosaurs"), sender.displayName);
-            assert((sender.badges == "broadcaster/1,subscriber/12,partner/1"), sender.badges);
+            assert((sender.badges == "broadcaster/1,subscriber/28,partner/1"), sender.badges);
             assert((sender.colour == "FF0000"), sender.colour);
             assert((channel == "#diegosaurs"), channel);
             assert((content == "The raid has been cancelled."), content);
@@ -691,7 +691,7 @@ unittest
             assert((sender.nickname == "high_depth"), sender.nickname);
             assert((sender.account == "high_depth"), sender.account);
             assert((sender.displayName == "High_Depth"), sender.displayName);
-            assert((sender.badges == "subscriber/0,bits/1000"), sender.badges);
+            assert((sender.badges == "subscriber/1,bits/1000"), sender.badges);
             assert((channel == "#timthetatman"), channel);
             assert((content == "GG"), content);
             assert((tags == "badge-info=subscriber/1;badges=subscriber/0,bits/1000;color=;display-name=High_Depth;emotes=;flags=;id=4ef6d438-dcfc-4435-b63e-730d5c400c10;login=high_depth;mod=0;msg-id=bitsbadgetier;msg-param-threshold=1000;room-id=36769016;subscriber=1;system-msg=bits\\sbadge\\stier\\snotification;tmi-sent-ts=1585240021586;user-id=457965105;user-type="), tags);
@@ -707,7 +707,7 @@ unittest
             assert((sender.nickname == "reykjaviik_"), sender.nickname);
             assert((sender.account == "reykjaviik_"), sender.account);
             assert((sender.displayName == "reykjaviik_"), sender.displayName);
-            assert((sender.badges == "subscriber/9,bits/1000"), sender.badges);
+            assert((sender.badges == "subscriber/10,bits/1000"), sender.badges);
             assert((channel == "#gaules"), channel);
             assert((content == "SAFE"), content);
             assert((tags == "badge-info=subscriber/10;badges=subscriber/9,bits/1000;color=;display-name=reykjaviik_;emotes=;flags=;id=efd7886f-45f3-4781-a9aa-dd601fd340eb;login=reykjaviik_;mod=0;msg-id=bitsbadgetier;msg-param-threshold=1000;room-id=181077473;subscriber=1;system-msg=bits\\sbadge\\stier\\snotification;tmi-sent-ts=1585336240505;user-id=248795812;user-type="), tags);
@@ -770,7 +770,7 @@ unittest
             assert((sender.address == "thatgirllalison.tmi.twitch.tv"), sender.address);
             assert((sender.account == "thatgirllalison"), sender.account);
             assert((sender.displayName == "thatgirllalison"), sender.displayName);
-            assert((sender.badges == "subscriber/3"), sender.badges);
+            assert((sender.badges == "subscriber/4"), sender.badges);
             assert((sender.colour == "5F9EA0"), sender.colour);
             assert((sender.id == 525941821), sender.id.to!string);
             assert((channel == "#sincerelylyn"), channel);
@@ -794,7 +794,7 @@ unittest
             assert((sender.address == "zenarc.tmi.twitch.tv"), sender.address);
             assert((sender.account == "zenarc"), sender.account);
             assert((sender.displayName == "zenArc"), sender.displayName);
-            assert((sender.badges == "subscriber/6,bits/100"), sender.badges);
+            assert((sender.badges == "subscriber/8,bits/100"), sender.badges);
             assert((sender.colour == "3ED8B3"), sender.colour);
             assert((sender.id == 50081302), sender.id.to!string);
             assert((channel == "#sincerelylyn"), channel);
@@ -839,7 +839,7 @@ unittest
             assert((sender.address == "tmi.twitch.tv"), sender.address);
             assert((sender.account == "oyaliyao"), sender.account);
             assert((sender.displayName == "oYALIYAo"), sender.displayName);
-            assert((sender.badges == "subscriber/0"), sender.badges);
+            assert((sender.badges == "subscriber/1"), sender.badges);
             assert((sender.colour == "0000FF"), sender.colour);
             assert((sender.id == 467476367), sender.id.to!string);
             assert((channel == "#p4wnyhof"), channel);
@@ -861,7 +861,7 @@ unittest
             assert((sender.address == "tmi.twitch.tv"), sender.address);
             assert((sender.account == "oyaliyao"), sender.account);
             assert((sender.displayName == "oYALIYAo"), sender.displayName);
-            assert((sender.badges == "subscriber/0"), sender.badges);
+            assert((sender.badges == "subscriber/1"), sender.badges);
             assert((sender.colour == "0000FF"), sender.colour);
             assert((sender.id == 467476367), sender.id.to!string);
             assert((channel == "#p4wnyhof"), channel);
@@ -902,7 +902,7 @@ unittest
             assert((sender.address == "tmi.twitch.tv"), sender.address);
             assert((sender.account == "multibatteri"), sender.account);
             assert((sender.displayName == "multibatteri"), sender.displayName);
-            assert((sender.badges == "subscriber/0,bits/1000"), sender.badges);
+            assert((sender.badges == "subscriber/1,bits/1000"), sender.badges);
             assert((sender.id == 492403027), sender.id.to!string);
             assert((channel == "#gamesdonequick"), channel);
             assert((content == "multibatteri's Cheer shared rewards to 25 others in Chat!"), content);
@@ -1003,7 +1003,7 @@ unittest
             assert((sender.address == "tmi.twitch.tv"), sender.address);
             assert((sender.account == "ithinkican"), sender.account);
             assert((sender.displayName == "ithinkican"), sender.displayName);
-            assert((sender.badges == "subscriber/12,bits/1000"), sender.badges);
+            assert((sender.badges == "subscriber/22,bits/1000"), sender.badges);
             assert((sender.colour == "008000"), sender.colour);
             assert((sender.id == 471292233), sender.id.to!string);
             assert((channel == "#jerma985"), channel);
@@ -1044,7 +1044,7 @@ unittest
             assert((sender.address == "gizmozgamer.tmi.twitch.tv"), sender.address);
             assert((sender.account == "gizmozgamer"), sender.account);
             assert((sender.displayName == "gizmozgamer"), sender.displayName);
-            assert((sender.badges == "moderator/1,subscriber/3012"), sender.badges);
+            assert((sender.badges == "subscriber/14,moderator/1"), sender.badges);
             assert((sender.colour == "DAA520"), sender.colour);
             assert((sender.id == 589846663), sender.id.to!string);
             assert((channel == "#fextralife"), channel);
@@ -1112,7 +1112,7 @@ unittest
             assert((sender.address == "lonesomewalker91.tmi.twitch.tv"), sender.address);
             assert((sender.account == "lonesomewalker91"), sender.account);
             assert((sender.displayName == "LonesomeWalker91"), sender.displayName);
-            assert((sender.badges == "subscriber/6"), sender.badges);
+            assert((sender.badges == "subscriber/7"), sender.badges);
             assert((sender.colour == "1E90FF"), sender.colour);
             assert((sender.id == 149935854), sender.id.to!string);
             assert((channel == "#gamesdonequick"), channel);
@@ -1131,7 +1131,7 @@ unittest
             assert((sender.address == "bacter1a_.tmi.twitch.tv"), sender.address);
             assert((sender.account == "bacter1a_"), sender.account);
             assert((sender.displayName == "bacter1a_"), sender.displayName);
-            assert((sender.badges == "vip/1,subscriber/36,partner/1"), sender.badges);
+            assert((sender.badges == "subscriber/39,vip/1,partner/1"), sender.badges);
             assert((sender.id == 28510438), sender.id.to!string);
             assert((channel == "#fps_shaka"), channel);
             assert((content == "content"), content);
@@ -1293,7 +1293,7 @@ unittest
             assert((sender.address == "creaturesfan72.tmi.twitch.tv"), sender.address);
             assert((sender.account == "creaturesfan72"), sender.account);
             assert((sender.displayName == "creaturesfan72"), sender.displayName);
-            assert((sender.badges == "subscriber/30,premium/1"), sender.badges);
+            assert((sender.badges == "subscriber/32,premium/1"), sender.badges);
             assert((sender.colour == "00FF1F"), sender.colour);
             assert((channel == "#xqc"), channel);
             assert((target.nickname == "garvickian"), target.nickname);
@@ -1341,7 +1341,7 @@ unittest
             assert((sender.address == "tmi.twitch.tv"), sender.address);
             assert((sender.account == "ch0senpotato"), sender.account);
             assert((sender.displayName == "ch0senpotato"), sender.displayName);
-            assert((sender.badges == "subscriber/0,premium/1"), sender.badges);
+            assert((sender.badges == "subscriber/1,premium/1"), sender.badges);
             assert((sender.colour == "9ACD32"), sender.colour);
             assert((channel == "#lobosjr"), channel);
             assert((content == "ch0senpotato is gifting 1 Tier 1 Subs to LobosJr's community! They've gifted a total of 1 in the channel!"), content);
@@ -1436,7 +1436,7 @@ unittest
             assert((sender.address == "tmi.twitch.tv"), sender.address);
             assert((sender.account == "valorant"), sender.account);
             assert((sender.displayName == "VALORANT"), sender.displayName);
-            assert((sender.badges == "subscriber/0,hype-train/1"), sender.badges);
+            assert((sender.badges == "subscriber/1,hype-train/1"), sender.badges);
             assert((channel == "#vedal987"), channel);
             assert((target.displayName == "SuszterSpace"), target.displayName);
             assert((content == "We added 5 Gift Subs AND 2 Bonus Gift Subs to SuszterSpace's gift!"), content);
@@ -1481,7 +1481,7 @@ unittest
             assert((sender.address == "mongusaeye.tmi.twitch.tv"), sender.address);
             assert((sender.account == "mongusaeye"), sender.account);
             assert((sender.displayName == "MongusaEye"), sender.displayName);
-            assert((sender.badges == "subscriber/3,raging-wolf-helm/1"), sender.badges);
+            assert((sender.badges == "subscriber/5,raging-wolf-helm/1"), sender.badges);
             assert((sender.colour == "008000"), sender.colour);
             assert((channel == "#vedal987"), channel);
             assert((content == "my free bits from that one survey i took vedalCheer all i have"), content);
