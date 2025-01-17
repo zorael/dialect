@@ -800,7 +800,7 @@ auto parseTwitchTags(ref IRCParser parser, ref IRCEvent event) @safe
                     printTagsOnExit: printTagsOnExit);
             }
 
-            event.aux[$-4] = key;
+            event.aux[$-4] = value;
             break;
 
 
