@@ -281,6 +281,8 @@ auto parseTwitchTags(ref IRCParser parser, ref IRCEvent event) @safe
             // reply-parent-msg-body = she's\sgonna\swin\s2truths\sand\sa\slie\severytime
         case "msg-param-category":
             // Viewer milestone thing
+        case "msg-param-donation-currency":
+            // msg-param-donation-currency = USD
 
             /+
                 Aux 0
@@ -341,7 +343,7 @@ auto parseTwitchTags(ref IRCParser parser, ref IRCEvent event) @safe
         case "msg-param-sub-plan-name":
             // The display name of the subscription plan. This may be a default
             // name or one created by the channel owner.
-        case "msg-param-exponent":
+        //case "msg-param-exponent":
             // something with new midnightsquid direct cheers
         case "pinned-chat-paid-level":
             // pinned-chat-paid-level = ONE
@@ -481,6 +483,9 @@ auto parseTwitchTags(ref IRCParser parser, ref IRCEvent event) @safe
             // "...extended their Tier 1 sub to {month}"
         case "msg-param-value":
             // Viewer milestone thing; consecutive streams watched
+        case "msg-param-donation-amount":
+            // msg-param-donation-amount = 500
+            // Real value is 1/100 the number, so here $5
 
             /+
                 Count 0
@@ -941,7 +946,9 @@ auto parseTwitchTags(ref IRCParser parser, ref IRCEvent event) @safe
             case "source-badges":
             case "source-id":
             //case "source-room-id":
-
+            case "msg-param-exponent":
+            // something with new midnightsquid direct cheers
+            // also present in charitydonation events, in which it is noise
 
                 // Ignore these events.
                 break;
@@ -1672,6 +1679,10 @@ void switchOnMsgID(
         }
 
         event.aux[5] = msgID;
+        break;
+
+    case "charitydonation":
+        event.type = TWITCH_CHARITYDONATION;
         break;
 
     default:
