@@ -675,7 +675,7 @@ unittest
             assert((sender.nickname == "diegosaurs"), sender.nickname);
             assert((sender.account == "diegosaurs"), sender.account);
             assert((sender.displayName == "Diegosaurs"), sender.displayName);
-            assert((sender.badges == "broadcaster/1,subscriber/28,partner/1"), sender.badges);
+            assert((sender.badges == "subscriber/28,broadcaster/1,partner/1"), sender.badges);
             assert((sender.colour == "FF0000"), sender.colour);
             assert((channel == "#diegosaurs"), channel);
             assert((content == "The raid has been cancelled."), content);
