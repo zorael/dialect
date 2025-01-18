@@ -1255,10 +1255,10 @@ void switchOnMsgID(
         event.type = TWITCH_CHARITY;
         if (onlySetType) break;
 
-        auto tagRange = event.tags.splitter(";");  // mutable
-
         string[string] charityAA;
-        auto charityTags = tagRange
+
+        auto charityTags = event.tags
+            .splitter(";")
             .filter!(tagline => tagline.startsWith("msg-param-charity"));
 
         foreach (immutable tagline; charityTags)
