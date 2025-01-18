@@ -969,22 +969,9 @@ auto parseTwitchTags(ref IRCParser parser, ref IRCEvent event) @safe
         }
     }
 
-    static void deduplicateAndSortBadges(ref string badges)
-    {
-        import std.string : indexOf;
-
-        deduplicateSubscriberBadges(badges);
-
-        if (badges.indexOf("broadcaster/") > 0)
-        {
-            // The broadcaster tag should, when present, always be first
-            // It seems it isn't.
-            sortBadgesBroadcasterFirst(badges);
-        }
-    }
-
-    if (event.sender.badges.length) deduplicateAndSortBadges(event.sender.badges);
-    if (event.target.badges.length) deduplicateAndSortBadges(event.target.badges);
+    // The subscriber badge is often duplicated
+    if (event.sender.badges.length) deduplicateBadges(event.sender.badges, "subscriber/");
+    if (event.target.badges.length) deduplicateBadges(event.target.badges, "subscriber/");
 
     version(TwitchWarnings)
     {
@@ -1727,43 +1714,47 @@ void switchOnMsgID(
 }
 
 
-// deduplicateSubscriberBadges
+// deduplicateBadges
 /++
-    Deduplicates subscriber badges in a comma-separated list of badges.
+    Deduplicates a badge in a comma-separated list of badges.
+
+    Note: This only removes one duplicate badge, if present. It can trivially
+    be made recursive.
 
     Params:
         badges = A reference to the comma-separated string of badges to deduplicate in place.
+        badge = The badge to deduplicate.
  +/
-void deduplicateSubscriberBadges(ref string badges) pure @safe nothrow
+void deduplicateBadges(ref string badges, const string badge) pure @safe nothrow
 {
     import std.string : indexOf;
 
-    enum badgeText = "subscriber/";
+    if (!badges.length || !badge.length) return;
 
-    immutable firstSubscriberBadge = badges.indexOf(badgeText);
+    immutable firstBadge = badges.indexOf(badge);
 
-    if (firstSubscriberBadge != -1)
+    if (firstBadge != -1)
     {
-        immutable offset = firstSubscriberBadge+badgeText.length + 1;
-        immutable secondSubscriberBadge = badges.indexOf(badgeText, offset);
+        immutable offset = firstBadge+badge.length + 1;
+        immutable secondBadge = badges.indexOf(badge, offset);
 
-        if (secondSubscriberBadge != -1)
+        if (secondBadge != -1)
         {
             // There are at least two subscriber badges, one from the badge
             // tag and one from badge-info. The first one is the one we want.
-            immutable secondOffset = secondSubscriberBadge + badgeText.length + 1;
+            immutable secondOffset = secondBadge + badge.length + 1;
             immutable secondCommaPos = badges.indexOf(',', secondOffset);
 
             if (secondCommaPos != -1)
             {
                 // Remove the second subscriber badge
                 badges =
-                    badges[0..secondSubscriberBadge] ~
+                    badges[0..secondBadge] ~
                     badges[secondCommaPos+1..$];
             }
             else
             {
-                badges = badges[0..secondSubscriberBadge-1];
+                badges = badges[0..secondBadge-1];
             }
         }
     }
@@ -1774,86 +1765,28 @@ unittest
 {
     {
         string badges = "subscriber/14,subscriber/12,bits/30000";
-        deduplicateSubscriberBadges(badges);
+        deduplicateBadges(badges, "subscriber/");
         assert((badges == "subscriber/14,bits/30000"), badges);
     }
     {
         string badges = "subscriber/1,subscriber/0";
-        deduplicateSubscriberBadges(badges);
+        deduplicateBadges(badges, "subscriber/");
         assert((badges == "subscriber/1"), badges);
     }
     {
         string badges = "vip/1,subscriber/19,subscriber/17,partner/1";
-        deduplicateSubscriberBadges(badges);
+        deduplicateBadges(badges, "subscriber/");
         assert((badges == "vip/1,subscriber/19,partner/1"), badges);
     }
     {
         string badges = "subscriber/28,broadcaster/1,subscriber/12,partner/1";
-        deduplicateSubscriberBadges(badges);
+        deduplicateBadges(badges, "subscriber/");
         assert((badges == "subscriber/28,broadcaster/1,partner/1"), badges);
     }
     {
         string badges;
-        deduplicateSubscriberBadges(badges);
+        deduplicateBadges(badges, string.init);
         assert(!badges.length, badges);
-    }
-}
-
-
-// sortBadgesBroadcasterFirst
-/++
-    Sorts a comma-separated list of badges so that the "broadcaster" badge is
-    first, if present.
-
-    Params:
-        badges = A reference to the comma-separated string of badges to sort in place.
- +/
-void sortBadgesBroadcasterFirst(ref string badges) pure @safe
-{
-    import std.algorithm.iteration : splitter;
-    import std.algorithm.sorting : sort;
-    import std.array : array, join;
-
-    static auto broadcasterFirst(const string a, const string b)
-    {
-        import std.algorithm.searching : startsWith;
-        return a.startsWith("broadcaster/") && !b.startsWith("broadcaster/");
-    }
-
-    badges = badges
-        .splitter(',')
-        .array
-        .sort!broadcasterFirst()
-        .join(',');
-}
-
-///
-unittest
-{
-    {
-        string badges = "subscriber/14,broadcaster/1";
-        sortBadgesBroadcasterFirst(badges);
-        assert((badges == "broadcaster/1,subscriber/14"), badges);
-    }
-    {
-        string badges = "broadcaster/1,broadcaster/1";
-        sortBadgesBroadcasterFirst(badges);
-        assert((badges == "broadcaster/1,broadcaster/1"), badges);
-    }
-    {
-        string badges = "vip/1,subscriber/14";
-        sortBadgesBroadcasterFirst(badges);
-        assert((badges == "vip/1,subscriber/14"), badges);
-    }
-    {
-        string badges;
-        sortBadgesBroadcasterFirst(badges);
-        assert(!badges.length, badges);
-    }
-    {
-        string badges = "hirfharf";
-        sortBadgesBroadcasterFirst(badges);
-        assert((badges == "hirfharf"), badges);
     }
 }
 
