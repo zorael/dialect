@@ -283,8 +283,6 @@ auto parseTwitchTags(ref IRCParser parser, ref IRCEvent event) @safe
             // reply-parent-msg-body = she's\sgonna\swin\s2truths\sand\sa\slie\severytime
         case "msg-param-category":
             // Viewer milestone thing
-        case "msg-param-donation-currency":
-            // msg-param-donation-currency = USD
         case "msg-param-charity-name":
             // msg-param-charity-name = Direct\sRelief
 
@@ -332,6 +330,8 @@ auto parseTwitchTags(ref IRCParser parser, ref IRCEvent event) @safe
             // values like "simmer", "rainbow-eclipse", "cosmic-abyss"
         case "msg-param-charity-learn-more":
             // msg-param-charity-learn-more = https://link.twitch.tv/blizzardofbits
+        case "msg-param-donation-currency":
+            // msg-param-donation-currency = USD
 
             /+
                 Aux 1
@@ -380,9 +380,6 @@ auto parseTwitchTags(ref IRCParser parser, ref IRCEvent event) @safe
             // msg-param-goal-description = Lali-this\sis\sa\sgoal-ho
         case "msg-param-pill-type":
             // something with new midnightsquid direct cheers
-        case "msg-param-gift-theme":
-            // msg-param-gift-theme = party
-            // Theme of a bulkgift?
 
             /+
                 Aux 3
@@ -400,10 +397,11 @@ auto parseTwitchTags(ref IRCParser parser, ref IRCEvent event) @safe
             event.aux[3] = decodeIRCv3String(value);
             break;
 
-        case "msg-param-goal-contribution-type":
-            // msg-param-goal-contribution-type = SUB_POINTS
         case "msg-param-is-highlighted":
             // something with new midnightsquid direct cheers
+        case "msg-param-gift-theme":
+            // msg-param-gift-theme = party
+            // Theme of a bulkgift?
 
             /+
                 Aux 4
@@ -419,6 +417,25 @@ auto parseTwitchTags(ref IRCParser parser, ref IRCEvent event) @safe
             }
 
             event.aux[4] = value;  // no need to decode?
+            break;
+
+        case "msg-param-goal-contribution-type":
+            // msg-param-goal-contribution-type = SUB_POINTS
+
+            /+
+                Aux 5
+             +/
+            version(TwitchWarnings)
+            {
+                warnAboutOverwrittenAuxString(
+                    event: event,
+                    i: 5,
+                    key: key,
+                    tagType: "tag",
+                    printTagsOnExit: printTagsOnExit);
+            }
+
+            event.aux[5] = value;  // no need to decode?
             break;
 
         case "first-msg":
@@ -1550,13 +1567,13 @@ void switchOnMsgID(
         {
             warnAboutOverwrittenAuxString(
                 event: event,
-                i: 5,
+                i: 6,
                 key: msgID,
                 tagType: "msg-id",
                 printTagsOnExit: printTagsOnExit);
         }
 
-        event.aux[5] = msgID;
+        event.aux[6] = msgID;
         break;
 
     case "charitydonation":
