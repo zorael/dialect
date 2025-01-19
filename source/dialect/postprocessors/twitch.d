@@ -283,6 +283,8 @@ auto parseTwitchTags(ref IRCParser parser, ref IRCEvent event) @safe
             // Viewer milestone thing
         case "msg-param-donation-currency":
             // msg-param-donation-currency = USD
+        case "msg-param-charity-name":
+            // msg-param-charity-name = Direct\sRelief
 
             /+
                 Aux 0
@@ -323,6 +325,8 @@ auto parseTwitchTags(ref IRCParser parser, ref IRCEvent event) @safe
         case "animation-id":
             // Animated message animation ID
             // values like "simmer", "rainbow-eclipse", "cosmic-abyss"
+        case "msg-param-charity-learn-more":
+            // msg-param-charity-learn-more = https://link.twitch.tv/blizzardofbits
 
             /+
                 Aux 1
@@ -348,6 +352,8 @@ auto parseTwitchTags(ref IRCParser parser, ref IRCEvent event) @safe
         case "pinned-chat-paid-level":
             // pinned-chat-paid-level = ONE
             // Something about hype chat?
+        case "msg-param-charity-hashtag":
+            // msg-param-charity-hashtag = #charity
 
             /+
                 Aux 2
@@ -519,6 +525,8 @@ auto parseTwitchTags(ref IRCParser parser, ref IRCEvent event) @safe
             // Viewer milestone thing
         case "msg-param-gift-match-bonus-count":
             // msg-param-gift-match-bonus-count = 5
+        case "msg-param-charity-hours-remaining":
+            // Number of hours remaining in a charity
 
             /+
                 Count 1
@@ -544,8 +552,6 @@ auto parseTwitchTags(ref IRCParser parser, ref IRCEvent event) @safe
         case "msg-param-min-cheer-amount":
             // REWARDGIFT; of interest?
             // msg-param-min-cheer-amount = '150'
-        case "msg-param-charity-hours-remaining":
-            // Number of hours remaining in a charity
         case "number-of-viewers":
             // (Optional) Number of viewers watching the host.
         case "msg-param-trigger-amount":
@@ -555,6 +561,8 @@ auto parseTwitchTags(ref IRCParser parser, ref IRCEvent event) @safe
             // something with elevated messages
         case "msg-param-gift-match-extra-count":
             // msg-param-gift-match-extra-count = 2
+        case "msg-param-charity-days-remaining":
+            // Number of days remaining in a charity
 
             /+
                 Count 2
@@ -575,8 +583,6 @@ auto parseTwitchTags(ref IRCParser parser, ref IRCEvent event) @safe
 
         case "msg-param-goal-current-contributions":
             // msg-param-goal-current-contributions = 90
-        case "msg-param-charity-days-remaining":
-            // Number of days remaining in a charity
         case "msg-param-total-reward-count":
             // reward gift, to how many users a reward was gifted
             // alias of msg-param-selected-count?
@@ -889,13 +895,6 @@ auto parseTwitchTags(ref IRCParser parser, ref IRCEvent event) @safe
                 // DEPRECATED in favour of msg-param-cumulative-months.
                 // The number of consecutive months the user has subscribed for,
                 // in a resub notice.
-            case "msg-param-charity-hashtag":
-                //msg-param-charity-hashtag = #charity
-            case "msg-param-charity-name":
-                //msg-param-charity-name = Direct\sRelief
-            case "msg-param-charity-learn-more":
-                //msg-param-charity-learn-more = https://link.twitch.tv/blizzardofbits
-                // Do nothing; everything is done at msg-id charity
             case "message":
                 // The message.
             case "custom-reward-id":
@@ -1248,120 +1247,7 @@ void switchOnMsgID(
         break;
 
     case "charity":
-        import std.algorithm.iteration : filter, splitter;
-        import std.algorithm.searching : startsWith;
-        import std.array : Appender;
-
         event.type = TWITCH_CHARITY;
-        if (onlySetType) break;
-
-        string[string] charityAA;
-
-        auto charityTags = event.tags
-            .splitter(";")
-            .filter!(tagline => tagline.startsWith("msg-param-charity"));
-
-        foreach (immutable tagline; charityTags)
-        {
-            import lu.string : advancePast;
-            string slice = tagline;  // mutable
-            immutable charityKey = slice.advancePast('=');
-            charityAA[charityKey] = slice;
-        }
-
-        static immutable string[2] charityStringTags =
-        [
-            "msg-param-charity-learn-more",
-            "msg-param-charity-hashtag",
-        ];
-
-        static immutable string[2] charityCountTags =
-        [
-            //"msg-param-total"
-            "msg-param-charity-hours-remaining",
-            "msg-param-charity-days-remaining",
-        ];
-
-        if (const charityName = "msg-param-charity-name" in charityAA)
-        {
-            import dialect.common : decodeIRCv3String;
-            import lu.string : removeControlCharacters, strippedRight;
-
-            //msg-param-charity-name = Direct\sRelief
-
-            version(TwitchWarnings)
-            {
-                warnAboutOverwrittenAuxString(
-                    event: event,
-                    i: 0,
-                    key: "msg-param-charity-name",
-                    tagType: "msg-id",
-                    printTagsOnExit: printTagsOnExit);
-            }
-
-            event.aux[0] = (*charityName)
-                .decodeIRCv3String
-                .strippedRight
-                .removeControlCharacters;
-        }
-
-        foreach (immutable i, charityKey; charityStringTags[])
-        {
-            if (const charityString = charityKey in charityAA)
-            {
-                //msg-param-charity-learn-more = https://link.twitch.tv/blizzardofbits
-                //msg-param-charity-hashtag = #charity
-                // Pad count by 1 to allow for msg-param-charity-name
-
-                version(TwitchWarnings)
-                {
-                    warnAboutOverwrittenAuxString(
-                        event: event,
-                        i: i+1,
-                        key: charityKey,
-                        tagType: "msg-id",
-                        printTagsOnExit: printTagsOnExit);
-                }
-
-                event.aux[i+1] = *charityString;
-            }
-        }
-
-        // Doesn't start with msg-param-charity but it will be set later down
-        /*if (const charityTotal = "msg-param-total" in charityAA)
-        {
-            //msg-param-charity-hours-remaining = 286
-            event.count[0] = (*charityTotal).to!int;
-        }*/
-
-        foreach (immutable i, charityKey; charityCountTags[])
-        {
-            if (const charityCount = charityKey in charityAA)
-            {
-                //msg-param-charity-hours-remaining
-                //msg-param-charity-days-remaining = 11
-                // Pad count by 1 to allow for msg-param-total
-
-                version(TwitchWarnings)
-                {
-                    warnAboutOverwrittenCount(
-                        event: event,
-                        i: i+1,
-                        key: charityKey,
-                        tagType: "msg-id",
-                        printTagsOnExit: printTagsOnExit);
-                }
-
-                event.count[i+1] = (*charityCount).to!long;
-            }
-        }
-
-        // Remove once we have a recorded parse
-        version(TwitchWarnings)
-        {
-            appendToErrors(event, "RECORD TWITCH CHARITY");
-            printTagsOnExit = true;
-        }
         break;
 
     case "giftpaidupgrade":
