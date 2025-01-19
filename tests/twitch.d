@@ -596,41 +596,54 @@ unittest
     }
     {
         // @badge-info=subscriber/1;badges=subscriber/0,premium/1;color=#1E90FF;display-name=lil_bytch;emotes=;flags=;id=f9f5c093-ebd3-447b-96f2-64fe94e19c9b;login=lil_bytch;mod=0;msg-id=standardpayforward;msg-param-prior-gifter-anonymous=false;msg-param-prior-gifter-display-name=CoopaManTV;msg-param-prior-gifter-id=444343916;msg-param-prior-gifter-user-name=coopamantv;msg-param-recipient-display-name=Just_Illustrationz;msg-param-recipient-id=236981420;msg-param-recipient-user-name=just_illustrationz;room-id=32787655;subscriber=1;system-msg=lil_bytch\sis\spaying\sforward\sthe\sGift\sthey\sgot\sfrom\sCoopaManTV\sto\sJust_Illustrationz!;tmi-sent-ts=1582159747742;user-id=229842635;user-type= :tmi.twitch.tv USERNOTICE #kitboga
-        immutable event = parser.toIRCEvent("@badge-info=subscriber/1;badges=subscriber/0,premium/1;color=#1E90FF;display-name=lil_bytch;emotes=;flags=;id=f9f5c093-ebd3-447b-96f2-64fe94e19c9b;login=lil_bytch;mod=0;msg-id=standardpayforward;msg-param-prior-gifter-anonymous=false;msg-param-prior-gifter-display-name=CoopaManTV;msg-param-prior-gifter-id=444343916;msg-param-prior-gifter-user-name=coopamantv;msg-param-recipient-display-name=Just_Illustrationz;msg-param-recipient-id=236981420;msg-param-recipient-user-name=just_illustrationz;room-id=32787655;subscriber=1;system-msg=lil_bytch\\sis\\spaying\\sforward\\sthe\\sGift\\sthey\\sgot\\sfrom\\sCoopaManTV\\sto\\sJust_Illustrationz!;tmi-sent-ts=1582159747742;user-id=229842635;user-type= :tmi.twitch.tv USERNOTICE #kitboga");
+        enum input = "@badge-info=subscriber/1;badges=subscriber/0,premium/1;color=#1E90FF;display-name=lil_bytch;emotes=;flags=;id=f9f5c093-ebd3-447b-96f2-64fe94e19c9b;login=lil_bytch;mod=0;msg-id=standardpayforward;msg-param-prior-gifter-anonymous=false;msg-param-prior-gifter-display-name=CoopaManTV;msg-param-prior-gifter-id=444343916;msg-param-prior-gifter-user-name=coopamantv;msg-param-recipient-display-name=Just_Illustrationz;msg-param-recipient-id=236981420;msg-param-recipient-user-name=just_illustrationz;room-id=32787655;subscriber=1;system-msg=lil_bytch\\sis\\spaying\\sforward\\sthe\\sGift\\sthey\\sgot\\sfrom\\sCoopaManTV\\sto\\sJust_Illustrationz!;tmi-sent-ts=1582159747742;user-id=229842635;user-type= :tmi.twitch.tv USERNOTICE #kitboga";
+        immutable event = parser.toIRCEvent(input);
+
         with (event)
         {
             assert((type == IRCEvent.Type.TWITCH_PAYFORWARD), Enum!(IRCEvent.Type).toString(type));
             assert((sender.nickname == "lil_bytch"), sender.nickname);
+            assert((sender.id == 229842635), sender.id.to!string);
+            assert((sender.address == "tmi.twitch.tv"), sender.address);
             assert((sender.account == "lil_bytch"), sender.account);
             assert((sender.displayName == "lil_bytch"), sender.displayName);
             assert((sender.badges == "subscriber/1,premium/1"), sender.badges);
             assert((sender.colour == "1E90FF"), sender.colour);
             assert((channel == "#kitboga"), channel);
             assert((target.nickname == "just_illustrationz"), target.nickname);
+            assert((target.id == 444343916), target.id.to!string);
+            assert((target.account == "just_illustrationz"), target.account);
             assert((target.displayName == "Just_Illustrationz"), target.displayName);
             assert((content == "lil_bytch is paying forward the Gift they got from CoopaManTV to Just_Illustrationz!"), content);
-            assert((aux[0] == "coopamantv"), aux[0]);
             assert((tags == "badge-info=subscriber/1;badges=subscriber/0,premium/1;color=#1E90FF;display-name=lil_bytch;emotes=;flags=;id=f9f5c093-ebd3-447b-96f2-64fe94e19c9b;login=lil_bytch;mod=0;msg-id=standardpayforward;msg-param-prior-gifter-anonymous=false;msg-param-prior-gifter-display-name=CoopaManTV;msg-param-prior-gifter-id=444343916;msg-param-prior-gifter-user-name=coopamantv;msg-param-recipient-display-name=Just_Illustrationz;msg-param-recipient-id=236981420;msg-param-recipient-user-name=just_illustrationz;room-id=32787655;subscriber=1;system-msg=lil_bytch\\sis\\spaying\\sforward\\sthe\\sGift\\sthey\\sgot\\sfrom\\sCoopaManTV\\sto\\sJust_Illustrationz!;tmi-sent-ts=1582159747742;user-id=229842635;user-type="), tags);
             assert((id == "f9f5c093-ebd3-447b-96f2-64fe94e19c9b"), id);
         }
     }
     {
         // @badge-info=subscriber/1;badges=subscriber/0,premium/1;color=;display-name=havoc_sinz;emotes=;flags=;id=f28a7d4c-5d2a-4182-b9a3-2fbf82eb3883;login=havoc_sinz;mod=0;msg-id=communitypayforward;msg-param-prior-gifter-anonymous=false;msg-param-prior-gifter-display-name=pytori1;msg-param-prior-gifter-id=35087710;msg-param-prior-gifter-user-name=pytori1;room-id=71190292;subscriber=1;system-msg=havoc_sinz\sis\spaying\sforward\sthe\sGift\sthey\sgot\sfrom\spytori1\sto\sthe\scommunity!;tmi-sent-ts=1582267055759;user-id=223347745;user-type= :tmi.twitch.tv USERNOTICE #trainwreckstv
-        immutable event = parser.toIRCEvent("@badge-info=subscriber/1;badges=subscriber/0,premium/1;color=;display-name=havoc_sinz;emotes=;flags=;id=f28a7d4c-5d2a-4182-b9a3-2fbf82eb3883;login=havoc_sinz;mod=0;msg-id=communitypayforward;msg-param-prior-gifter-anonymous=false;msg-param-prior-gifter-display-name=pytori1;msg-param-prior-gifter-id=35087710;msg-param-prior-gifter-user-name=pytori1;room-id=71190292;subscriber=1;system-msg=havoc_sinz\\sis\\spaying\\sforward\\sthe\\sGift\\sthey\\sgot\\sfrom\\spytori1\\sto\\sthe\\scommunity!;tmi-sent-ts=1582267055759;user-id=223347745;user-type= :tmi.twitch.tv USERNOTICE #trainwreckstv");
+        enum input = "@badge-info=subscriber/1;badges=subscriber/0,premium/1;color=;display-name=havoc_sinz;emotes=;flags=;id=f28a7d4c-5d2a-4182-b9a3-2fbf82eb3883;login=havoc_sinz;mod=0;msg-id=communitypayforward;msg-param-prior-gifter-anonymous=false;msg-param-prior-gifter-display-name=pytori1;msg-param-prior-gifter-id=35087710;msg-param-prior-gifter-user-name=pytori1;room-id=71190292;subscriber=1;system-msg=havoc_sinz\\sis\\spaying\\sforward\\sthe\\sGift\\sthey\\sgot\\sfrom\\spytori1\\sto\\sthe\\scommunity!;tmi-sent-ts=1582267055759;user-id=223347745;user-type= :tmi.twitch.tv USERNOTICE #trainwreckstv";
+        immutable event = parser.toIRCEvent(input);
+
         with (event)
         {
             assert((type == IRCEvent.Type.TWITCH_PAYFORWARD), Enum!(IRCEvent.Type).toString(type));
             assert((sender.nickname == "havoc_sinz"), sender.nickname);
+            assert((sender.id == 223347745), sender.id.to!string);
+            assert((sender.address == "tmi.twitch.tv"), sender.address);
             assert((sender.account == "havoc_sinz"), sender.account);
             assert((sender.displayName == "havoc_sinz"), sender.displayName);
             assert((sender.badges == "subscriber/1,premium/1"), sender.badges);
             assert((channel == "#trainwreckstv"), channel);
+            assert((target.nickname == "pytori1"), target.nickname);
+            assert((target.id == 35087710), target.id.to!string);
+            assert((target.account == "pytori1"), target.account);
+            assert((target.displayName == "pytori1"), target.displayName);
             assert((content == "havoc_sinz is paying forward the Gift they got from pytori1 to the community!"), content);
-            assert((aux[0] == "pytori1"), aux[0]);
             assert((tags == "badge-info=subscriber/1;badges=subscriber/0,premium/1;color=;display-name=havoc_sinz;emotes=;flags=;id=f28a7d4c-5d2a-4182-b9a3-2fbf82eb3883;login=havoc_sinz;mod=0;msg-id=communitypayforward;msg-param-prior-gifter-anonymous=false;msg-param-prior-gifter-display-name=pytori1;msg-param-prior-gifter-id=35087710;msg-param-prior-gifter-user-name=pytori1;room-id=71190292;subscriber=1;system-msg=havoc_sinz\\sis\\spaying\\sforward\\sthe\\sGift\\sthey\\sgot\\sfrom\\spytori1\\sto\\sthe\\scommunity!;tmi-sent-ts=1582267055759;user-id=223347745;user-type="), tags);
             assert((id == "f28a7d4c-5d2a-4182-b9a3-2fbf82eb3883"), id);
         }
     }
+
     {
         // @badge-info=subscriber/19;badges=vip/1,subscriber/12,partner/1;color=#CC0000;display-name=Xari;emotes=;flags=;id=85c3a060-07df-474a-abdc-bae457018dc5;login=xari;mod=0;msg-id=raid;msg-param-displayName=Xari;msg-param-login=xari;msg-param-profileImageURL=https://static-cdn.jtvnw.net/jtv_user_pictures/86214da3-1461-44d1-a2e9-43501af29538-profile_image-70x70.jpeg;msg-param-viewerCount=3322;room-id=147337432;subscriber=1;system-msg=3322\sraiders\sfrom\sXari\shave\sjoined!;tmi-sent-ts=1585054359220;user-id=88301612;user-type= :tmi.twitch.tv USERNOTICE #lestream
         immutable event = parser.toIRCEvent("@badge-info=subscriber/19;badges=vip/1,subscriber/12,partner/1;color=#CC0000;display-name=Xari;emotes=;flags=;id=85c3a060-07df-474a-abdc-bae457018dc5;login=xari;mod=0;msg-id=raid;msg-param-displayName=Xari;msg-param-login=xari;msg-param-profileImageURL=https://static-cdn.jtvnw.net/jtv_user_pictures/86214da3-1461-44d1-a2e9-43501af29538-profile_image-70x70.jpeg;msg-param-viewerCount=3322;room-id=147337432;subscriber=1;system-msg=3322\\sraiders\\sfrom\\sXari\\shave\\sjoined!;tmi-sent-ts=1585054359220;user-id=88301612;user-type= :tmi.twitch.tv USERNOTICE #lestream");
@@ -853,20 +866,25 @@ unittest
     }
     {
         // @badge-info=subscriber/1;badges=subscriber/0;color=#0000FF;display-name=oYALIYAo;emotes=;flags=;id=f7339efa-06a5-4708-a1bb-97592158781a;login=oyaliyao;mod=0;msg-id=communitypayforward;msg-param-prior-gifter-anonymous=false;msg-param-prior-gifter-display-name=HoadOne;msg-param-prior-gifter-id=472732828;msg-param-prior-gifter-user-name=hoadone;room-id=71672341;subscriber=1;system-msg=oYALIYAo\sis\spaying\sforward\sthe\sGift\sthey\sgot\sfrom\sHoadOne\sto\sthe\scommunity!;tmi-sent-ts=1597570304114;user-id=467476367;user-type= :tmi.twitch.tv USERNOTICE #p4wnyhof
-        immutable event = parser.toIRCEvent("@badge-info=subscriber/1;badges=subscriber/0;color=#0000FF;display-name=oYALIYAo;emotes=;flags=;id=f7339efa-06a5-4708-a1bb-97592158781a;login=oyaliyao;mod=0;msg-id=communitypayforward;msg-param-prior-gifter-anonymous=false;msg-param-prior-gifter-display-name=HoadOne;msg-param-prior-gifter-id=472732828;msg-param-prior-gifter-user-name=hoadone;room-id=71672341;subscriber=1;system-msg=oYALIYAo\\sis\\spaying\\sforward\\sthe\\sGift\\sthey\\sgot\\sfrom\\sHoadOne\\sto\\sthe\\scommunity!;tmi-sent-ts=1597570304114;user-id=467476367;user-type= :tmi.twitch.tv USERNOTICE #p4wnyhof");
+        enum input = "@badge-info=subscriber/1;badges=subscriber/0;color=#0000FF;display-name=oYALIYAo;emotes=;flags=;id=f7339efa-06a5-4708-a1bb-97592158781a;login=oyaliyao;mod=0;msg-id=communitypayforward;msg-param-prior-gifter-anonymous=false;msg-param-prior-gifter-display-name=HoadOne;msg-param-prior-gifter-id=472732828;msg-param-prior-gifter-user-name=hoadone;room-id=71672341;subscriber=1;system-msg=oYALIYAo\\sis\\spaying\\sforward\\sthe\\sGift\\sthey\\sgot\\sfrom\\sHoadOne\\sto\\sthe\\scommunity!;tmi-sent-ts=1597570304114;user-id=467476367;user-type= :tmi.twitch.tv USERNOTICE #p4wnyhof";
+        immutable event = parser.toIRCEvent(input);
+
         with (event)
         {
             assert((type == IRCEvent.Type.TWITCH_PAYFORWARD), Enum!(IRCEvent.Type).toString(type));
             assert((sender.nickname == "oyaliyao"), sender.nickname);
+            assert((sender.id == 467476367), sender.id.to!string);
             assert((sender.address == "tmi.twitch.tv"), sender.address);
             assert((sender.account == "oyaliyao"), sender.account);
             assert((sender.displayName == "oYALIYAo"), sender.displayName);
             assert((sender.badges == "subscriber/1"), sender.badges);
             assert((sender.colour == "0000FF"), sender.colour);
-            assert((sender.id == 467476367), sender.id.to!string);
             assert((channel == "#p4wnyhof"), channel);
+            assert((target.nickname == "hoadone"), target.nickname);
+            assert((target.id == 472732828), target.id.to!string);
+            assert((target.account == "hoadone"), target.account);
+            assert((target.displayName == "HoadOne"), target.displayName);
             assert((content == "oYALIYAo is paying forward the Gift they got from HoadOne to the community!"), content);
-            assert((aux[0] == "hoadone"), aux[0]);
             assert((tags == "badge-info=subscriber/1;badges=subscriber/0;color=#0000FF;display-name=oYALIYAo;emotes=;flags=;id=f7339efa-06a5-4708-a1bb-97592158781a;login=oyaliyao;mod=0;msg-id=communitypayforward;msg-param-prior-gifter-anonymous=false;msg-param-prior-gifter-display-name=HoadOne;msg-param-prior-gifter-id=472732828;msg-param-prior-gifter-user-name=hoadone;room-id=71672341;subscriber=1;system-msg=oYALIYAo\\sis\\spaying\\sforward\\sthe\\sGift\\sthey\\sgot\\sfrom\\sHoadOne\\sto\\sthe\\scommunity!;tmi-sent-ts=1597570304114;user-id=467476367;user-type="), tags);
             assert((id == "f7339efa-06a5-4708-a1bb-97592158781a"), id);
         }
