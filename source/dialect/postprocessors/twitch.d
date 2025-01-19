@@ -198,14 +198,19 @@ auto parseTwitchTags(ref IRCParser parser, ref IRCEvent event) @safe
 
         case "msg-param-recipient-display-name":
         case "msg-param-sender-name":
+        case "msg-param-prior-gifter-display-name":
             // In a GIFTCHAIN the display name of the one who started the gift sub train?
+            // Prior gifter display name when a user pays forward a gift
             event.target.displayName = value;
             break;
 
         case "msg-param-recipient-user-name":
         case "msg-param-sender-login":
         case "msg-param-recipient": // Prime community gift received
+        case "msg-param-prior-gifter-user-name":
             // In a GIFTCHAIN the one who started the gift sub train?
+            // msg-param-prior-gifter-user-name = "coopamantv"
+            // Prior gifter when a user pays forward a gift
             event.target.nickname = value;
             break;
 
@@ -264,9 +269,6 @@ auto parseTwitchTags(ref IRCParser parser, ref IRCEvent event) @safe
         case "msg-param-gift-name":
             // msg-param-gift-name = "World\sof\sTanks:\sCare\sPackage"
             // Prime community gift name
-        case "msg-param-prior-gifter-user-name":
-            // msg-param-prior-gifter-user-name = "coopamantv"
-            // Prior gifter when a user pays forward a gift
         case "msg-param-color":
             // msg-param-color = PRIMARY
             // msg-param-color = PURPLE
@@ -316,8 +318,6 @@ auto parseTwitchTags(ref IRCParser parser, ref IRCEvent event) @safe
             // [rewardgift] [#overwatchleague] Asdf [bits]: "A Cheer shared Rewards to 35 others in Chat!" {35}
             // Name of the context?
             // Swapped places with msg-param-trigger-type
-        case "msg-param-prior-gifter-display-name":
-            // Prior gifter display name when a user pays forward a gift
         case "pinned-chat-paid-currency":
             // elevated message currency
         case "msg-param-gift-match":
@@ -748,9 +748,11 @@ auto parseTwitchTags(ref IRCParser parser, ref IRCEvent event) @safe
         case "target-user-id":
         case "reply-parent-user-id":
         case "msg-param-gifter-id":
+        case "msg-param-prior-gifter-id":
             // The target's user ID
             // The user id of the author of the message that is being replied to
             // reply-parent-user-id = 50081302
+            // Numeric id of prior gifter when a user pays forward a gift
             if (value.length) event.target.id = value.to!uint;
             break;
 
@@ -902,8 +904,6 @@ auto parseTwitchTags(ref IRCParser parser, ref IRCEvent event) @safe
                 // Unsure, was just part of an emote-only PRIVMSG
             case "msg-param-prior-gifter-anonymous":
                 // Paying forward gifts, whether or not the prior gifter was anonymous
-            case "msg-param-prior-gifter-id":
-                // Numeric id of prior gifter when a user pays forward a gift
             case "client-nonce":
                 // Opaque nonce ID for this message
             case "reply-parent-msg-id":
