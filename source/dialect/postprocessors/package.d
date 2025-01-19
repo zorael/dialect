@@ -85,13 +85,9 @@ shared PostprocessorRegistrationEntry[] registeredPostprocessors;
     Module constructor that merely reserves space for [registeredPostprocessors]
     to grow into.
 
-    Only include this if the compiler is based on 2.095 or later, as the call to
-    [object.reserve|reserve] fails with those prior to that.
-
     This isn't really needed today as we only have one postprocessor.
  +/
 version(none)
-static if (__VERSION__ >= 2095L)
 shared static this()
 {
     enum initialSize = 4;
