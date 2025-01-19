@@ -1050,7 +1050,7 @@ unittest
             assert((channel == "#jerma985"), channel);
             assert((content == "ithinkican is gifting 5 Tier 1 Subs to Jerma985's community! They've gifted a total of 5 in the channel!"), content);
             assert((aux[0] == "1000"), aux[0]);
-            assert((aux[3] == "party"), aux[3]);
+            assert((aux[4] == "party"), aux[4]);
             assert((tags == "badge-info=subscriber/22;badges=subscriber/12,bits/1000;color=#008000;display-name=ithinkican;emotes=;flags=;id=9ece0157-f458-4e5a-b314-e0bb1674bc2f;login=ithinkican;mod=0;msg-id=submysterygift;msg-param-gift-theme=party;msg-param-mass-gift-count=5;msg-param-origin-id=74\\s74\\s42\\s57\\scd\\sc4\\sf7\\s8c\\se8\\s67\\s36\\sf3\\s43\\s29\\s8c\\s8c\\sd1\\s61\\sbe\\s0b;msg-param-sender-count=5;msg-param-sub-plan=1000;room-id=23936415;subscriber=1;system-msg=ithinkican\\sis\\sgifting\\s5\\sTier\\s1\\sSubs\\sto\\sJerma985's\\scommunity!\\sThey've\\sgifted\\sa\\stotal\\sof\\s5\\sin\\sthe\\schannel!;tmi-sent-ts=1629502318806;user-id=471292233;user-type="), tags);
             assert((count[0] == 5), count[0].to!string);
             assert((count[1] == 5), count[1].to!string);
@@ -1264,7 +1264,7 @@ unittest
             assert((aux[0] == "1000"), aux[0]);
             assert((aux[1] == "FunStringFour"), aux[1]);
             assert((aux[2] == "Channel Subscription (fps_shaka)"), aux[2]);
-            assert((aux[4] == "SUB_POINTS"), aux[4]);
+            assert((aux[5] == "SUB_POINTS"), aux[5]);
             assert((tags == "badge-info=;badges=;color=;display-name=AnAnonymousGifter;emotes=;flags=;id=01af180f-5efd-40c8-94fb-d0a346c7be86;login=ananonymousgifter;mod=0;msg-id=subgift;msg-param-fun-string=FunStringFour;msg-param-gift-months=1;msg-param-goal-contribution-type=SUB_POINTS;msg-param-goal-current-contributions=15624;msg-param-goal-target-contributions=20000;msg-param-goal-user-contributions=1;msg-param-months=24;msg-param-origin-id=54\\s41\\s9a\\s69\\s6c\\sb4\\s3c\\s8b\\s0b\\se4\\sdf\\s4c\\sba\\s5b\\s9b\\s23\\s4c\\sa7\\s9b\\sc4;msg-param-recipient-display-name=niku4949;msg-param-recipient-id=547206601;msg-param-recipient-user-name=niku4949;msg-param-sub-plan-name=Channel\\sSubscription\\s(fps_shaka);msg-param-sub-plan=1000;room-id=49207184;subscriber=0;system-msg=An\\sanonymous\\suser\\sgifted\\sa\\sTier\\s1\\ssub\\sto\\sniku4949!\\s;tmi-sent-ts=1685982143345;user-id=274598607;user-type="), tags);
             assert((count[0] == 1), count[0].to!string);
             assert((count[2] == 20000), count[2].to!string);
@@ -1295,7 +1295,7 @@ unittest
             assert((aux[0] == "1000"), aux[0]);
             assert((aux[1] == "FunStringOne"), aux[1]);
             assert((aux[2] == "FextraLITE"), aux[2]);
-            assert((aux[3] == "lul"), aux[3]);
+            assert((aux[4] == "lul"), aux[4]);
             assert((tags == "badge-info=;badges=;color=;display-name=AnAnonymousGifter;emotes=;flags=;id=7c1a48d9-f74f-468e-9019-730a5934e636;login=ananonymousgifter;mod=0;msg-id=subgift;msg-param-fun-string=FunStringOne;msg-param-gift-months=1;msg-param-gift-theme=lul;msg-param-months=1;msg-param-origin-id=ca\\s71\\s60\\sb3\\sa1\\s8a\\s8a\\sbe\\se9\\s92\\s8e\\s6b\\s99\\s87\\s1f\\s71\\s43\\sf8\\scf\\s2d;msg-param-recipient-display-name=SpecterCRP;msg-param-recipient-id=48357366;msg-param-recipient-user-name=spectercrp;msg-param-sub-plan-name=FextraLITE;msg-param-sub-plan=1000;room-id=156037856;subscriber=0;system-msg=An\\sanonymous\\suser\\sgifted\\sa\\sTier\\s1\\ssub\\sto\\sSpecterCRP!\\s;tmi-sent-ts=1686025729209;user-id=274598607;user-type="), tags);
             assert((count[0] == 1), count[0].to!string);
             assert((id == "7c1a48d9-f74f-468e-9019-730a5934e636"), id);
@@ -1323,7 +1323,7 @@ unittest
             assert((aux[0] == "1000"), aux[0]);
             assert((aux[1] == "FunStringThree"), aux[1]);
             assert((aux[2] == "FextraLITE"), aux[2]);
-            assert((aux[3] == "showlove"), aux[3]);
+            assert((aux[4] == "showlove"), aux[4]);
             assert((tags == "badge-info=;badges=;color=;display-name=AnAnonymousGifter;emotes=;flags=;id=0f0f82ae-0ab1-4a0d-a5b5-edfacc05db7e;login=ananonymousgifter;mod=0;msg-id=subgift;msg-param-fun-string=FunStringThree;msg-param-gift-months=1;msg-param-gift-theme=showlove;msg-param-months=1;msg-param-origin-id=23\\s9d\\sea\\sda\\s41\\s08\\s0e\\s3b\\se8\\s85\\scb\\s5e\\s90\\sc8\\se6\\sd7\\s86\\se0\\s6f\\sd0;msg-param-recipient-display-name=apeguard;msg-param-recipient-id=503002485;msg-param-recipient-user-name=apeguard;msg-param-sub-plan-name=FextraLITE;msg-param-sub-plan=1000;room-id=156037856;subscriber=0;system-msg=An\\sanonymous\\suser\\sgifted\\sa\\sTier\\s1\\ssub\\sto\\sapeguard!\\s;tmi-sent-ts=1687139215919;user-id=274598607;user-type="), tags);
             assert((count[0] == 1), count[0].to!string);
             assert((id == "0f0f82ae-0ab1-4a0d-a5b5-edfacc05db7e"), id);
@@ -1471,7 +1471,7 @@ unittest
             assert((content == "万年二等兵 gifted a Tier 1 sub to ドキドキ文芸部レギュラー!"), content);
             assert((aux[0] == "1000"), aux[0]);
             assert((aux[2] == "Channel Subscription (nass_oisii)"), aux[2]);
-            assert((aux[3] == "biblethump"), aux[3]);
+            assert((aux[4] == "biblethump"), aux[4]);
             assert((tags == "badge-info=subscriber/12;badges=subscriber/12,sub-gift-leader/1;color=#0000FF;display-name=万年二等兵;emotes=;flags=;id=2cf9322d-609e-4a7b-9d79-f4c7b05458e8;login=nitouheidayo;mod=0;msg-id=subgift;msg-param-community-gift-id=14473467917504761560;msg-param-gift-months=1;msg-param-gift-theme=biblethump;msg-param-months=1;msg-param-origin-id=14473467917504761560;msg-param-recipient-display-name=ドキドキ文芸部レギュラー;msg-param-recipient-id=923831373;msg-param-recipient-user-name=wakarimasitan;msg-param-sender-count=0;msg-param-sub-plan-name=Channel\\sSubscription\\s(nass_oisii);msg-param-sub-plan=1000;room-id=672917034;subscriber=1;system-msg=万年二等兵\\sgifted\\sa\\sTier\\s1\\ssub\\sto\\sドキドキ文芸部レギュラー!;tmi-sent-ts=1701161053456;user-id=158834932;user-type=;vip=0"), tags);
             assert((count[0] == 1), count[0].to!string);
             assert((id == "2cf9322d-609e-4a7b-9d79-f4c7b05458e8"), id);
@@ -1613,7 +1613,7 @@ unittest
             assert((content == "The_Guardian_01 gifted a Tier 1 sub to wofulrumble!"), content);
             assert((aux[0] == "1000"), aux[0]);
             assert((aux[2] == "Channel Subscription (hikarustation): $4.99 Sub"), aux[2]);
-            assert((aux[5] == "sharedchatnotice"), aux[5]);
+            assert((aux[6] == "sharedchatnotice"), aux[6]);
             assert((aux[12] == "110059426"), aux[12]);
             assert((tags == "badge-info=;badges=premium/1;color=#FF0000;display-name=The_Guardian_01;emotes=;flags=;id=44975199-cdff-4e10-aa68-bd67e280660d;login=the_guardian_01;mod=0;msg-id=sharedchatnotice;msg-param-community-gift-id=9333928271658164128;msg-param-gift-months=1;msg-param-months=1;msg-param-origin-id=9333928271658164128;msg-param-recipient-display-name=wofulrumble;msg-param-recipient-id=29716641;msg-param-recipient-user-name=wofulrumble;msg-param-sender-count=0;msg-param-sub-plan-name=Channel\\sSubscription\\s(hikarustation):\\s$4.99\\sSub;msg-param-sub-plan=1000;room-id=469632185;source-badge-info=subscriber/1;source-badges=subscriber/0,sub-gift-leader/2;source-id=d3439028-575f-461e-9433-4bb9df3fe566;source-msg-id=subgift;source-room-id=110059426;subscriber=0;system-msg=The_Guardian_01\\sgifted\\sa\\sTier\\s1\\ssub\\sto\\swofulrumble!;tmi-sent-ts=1737079293405;user-id=65208525;user-type=;vip=0"), tags);
             assert((count[0] == 1), count[0].to!string);
@@ -1638,7 +1638,7 @@ unittest
             assert((content == "Bao #1"), content);
             assert((aux[0] == "1000"), aux[0]);
             assert((aux[2] == "Channel Subscription (hikarustation): $4.99 Sub"), aux[2]);
-            assert((aux[5] == "sharedchatnotice"), aux[5]);
+            assert((aux[6] == "sharedchatnotice"), aux[6]);
             assert((aux[12] == "110059426"), aux[12]);
             assert((tags == "badge-info=;badges=turbo/1;color=;display-name=daltonmtaylor03;emotes=;flags=;id=69dd5b2c-dcb6-46f5-baa1-26d042ec219b;login=daltonmtaylor03;mod=0;msg-id=sharedchatnotice;msg-param-cumulative-months=2;msg-param-months=0;msg-param-multimonth-duration=3;msg-param-multimonth-tenure=1;msg-param-should-share-streak=0;msg-param-sub-plan-name=Channel\\sSubscription\\s(hikarustation):\\s$4.99\\sSub;msg-param-sub-plan=1000;msg-param-was-gifted=false;room-id=469632185;source-badge-info=subscriber/2;source-badges=subscriber/2,bits/100;source-id=de71b5e6-7a84-4dd8-b748-821eb1d9ef3a;source-msg-id=resub;source-room-id=110059426;subscriber=0;system-msg=daltonmtaylor03\\ssubscribed\\sat\\sTier\\s1.\\sThey've\\ssubscribed\\sfor\\s2\\smonths!;tmi-sent-ts=1737079135753;user-id=1211304166;user-type=;vip=0"), tags);
             assert((count[1] == 2), count[1].to!string);
@@ -1687,7 +1687,7 @@ unittest
             assert((channel == "#cerbervt"), channel);
             assert((content == "circuitbrew converted from a Prime sub to a Tier 1 sub!"), content);
             assert((aux[0] == "1000"), aux[0]);
-            assert((aux[5] == "sharedchatnotice"), aux[5]);
+            assert((aux[6] == "sharedchatnotice"), aux[6]);
             assert((aux[12] == "825937345"), aux[12]);
             assert((tags == "badge-info=;badges=;color=#478937;display-name=circuitbrew;emotes=;flags=;id=ffe48ef9-80f4-4d58-9a7e-cf2982a6da85;login=circuitbrew;mod=0;msg-id=sharedchatnotice;msg-param-sub-plan=1000;room-id=852880224;source-badge-info=subscriber/1;source-badges=subscriber/0;source-id=3a92eb2c-d4de-4ae7-b9b2-16092aa82b8d;source-msg-id=primepaidupgrade;source-room-id=825937345;subscriber=0;system-msg=circuitbrew\\sconverted\\sfrom\\sa\\sPrime\\ssub\\sto\\sa\\sTier\\s1\\ssub!;tmi-sent-ts=1737078882888;user-id=79158584;user-type=;vip=0"), tags);
             assert((id == "ffe48ef9-80f4-4d58-9a7e-cf2982a6da85"), id);
