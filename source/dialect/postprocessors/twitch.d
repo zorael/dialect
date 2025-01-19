@@ -169,7 +169,7 @@ auto parseTwitchTags(ref IRCParser parser, ref IRCEvent event) @safe
             immutable message = value
                 .decodeIRCv3String
                 .strippedRight
-                .removeControlCharacters;
+                .removeControlCharacters;  // Really necessary?
 
             if (event.type == TWITCH_RITUAL)
             {
@@ -291,6 +291,8 @@ auto parseTwitchTags(ref IRCParser parser, ref IRCEvent event) @safe
             /+
                 Aux 0
              +/
+            import lu.string : removeControlCharacters, strippedRight;
+
             version(TwitchWarnings)
             {
                 warnAboutOverwrittenAuxString(
@@ -301,7 +303,10 @@ auto parseTwitchTags(ref IRCParser parser, ref IRCEvent event) @safe
                     printTagsOnExit: printTagsOnExit);
             }
 
-            event.aux[0] = decodeIRCv3String(value);
+            event.aux[0] = value
+                .decodeIRCv3String
+                .strippedRight
+                .removeControlCharacters;  // Really necessary?
             break;
 
         case "msg-param-fun-string":
