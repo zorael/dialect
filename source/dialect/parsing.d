@@ -976,6 +976,7 @@ void parseSpecialcases(
         // :irc.rizon.club 338 kameloso^ kameloso^ :is actually ~kameloso@194.117.188.126 [194.117.188.126]
         // :irc.link-net.be 338 zorael zorael is actually ~kameloso@195.196.10.12 [195.196.10.12]
         // :Prothid.NY.US.GameSurge.net 338 zorael zorael ~kameloso@195.196.10.12 195.196.10.12 :Actual user@host, Actual IP$
+        // :silver.libera.chat 338 zorael deadmarshal 2605:6400:10:5bf:6f87:849d:f61e:2c8c :actually using host
         import std.string : indexOf;
 
         slice.advancePast(' '); // bot nickname
@@ -1019,9 +1020,16 @@ void parseSpecialcases(
 
                 event.content = slice;
             }
+            else if (slice.indexOf(" :") != -1)
+            {
+                // :silver.libera.chat 338 zorael deadmarshal 2605:6400:10:5bf:6f87:849d:f61e:2c8c :actually using host
+                event.aux[0] = slice.advancePast(" :");
+                event.content = slice;
+            }
             else
             {
-                event.content = slice[colonPos+1..$];
+                // Unsure
+                event.content = slice;
             }
         }
         break;
