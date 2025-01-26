@@ -119,15 +119,15 @@ void formatClientAssignment(Sink)
     const uint indents) pure @safe
 if (isOutputRange!(Sink, char[]))
 {
-    import lu.deltastrings : formatDeltaInto;
+    import lu.deltastrings : putDelta;
     import lu.string : tabs;
     import std.format : formattedWrite;
 
     sink.formattedWrite("%sIRCParser parser;\n\n", indents.tabs);
     sink.formattedWrite("%swith (parser)\n", indents.tabs);
     sink.formattedWrite("%s{\n", indents.tabs);
-    sink.formatDeltaInto(IRCClient.init, client, indents+1, "client");
-    sink.formatDeltaInto(IRCServer.init, server, indents+1, "server");
+    sink.putDelta(IRCClient.init, client, indents+1, "client");
+    sink.putDelta(IRCServer.init, server, indents+1, "server");
     sink.formattedWrite("%s}", indents.tabs);
 
     static if (!__traits(hasMember, Sink, "data"))
@@ -197,7 +197,7 @@ void formatEventAssertBlock(Sink)
     const uint indents) pure @safe
 if (isOutputRange!(Sink, char[]))
 {
-    import lu.deltastrings : formatDeltaInto;
+    import lu.deltastrings : putDelta;
     import lu.string : tabs;
     import std.array : replace;
     import std.conv : text;
@@ -219,7 +219,7 @@ if (isOutputRange!(Sink, char[]))
     sink.formattedWrite("%simmutable event = parser.toIRCEvent(input);\n\n", deeperIndents.tabs);
     sink.formattedWrite("%swith (event)\n", deeperIndents.tabs);
     sink.formattedWrite("%s{\n", deeperIndents.tabs);
-    sink.formatDeltaInto!(Yes.asserts)(IRCEvent.init, event, deeperIndents+1);
+    sink.putDelta!(Yes.asserts)(IRCEvent.init, event, deeperIndents+1);
     sink.formattedWrite("%s}\n", deeperIndents.tabs);
     sink.formattedWrite("%s}", indents.tabs);
 
@@ -251,7 +251,7 @@ unittest
 
     with (event)
     {
-        assert((type == IRCEvent.Type.CHAN), Enum!(IRCEvent.Type).toString(type));
+        assert((type == IRCEvent.Type.CHAN), type.toString());
         assert((sender.nickname == "zorael"), sender.nickname);
         assert((sender.ident == "~NaN"), sender.ident);
         assert((sender.address == "2001:41d0:2:80b4::"), sender.address);
@@ -324,7 +324,7 @@ else
 int main(string[] args) @system
 {
     import dialect.defs : IRCServer;
-    import lu.deltastrings : formatDeltaInto;
+    import lu.deltastrings : putDelta;
     import lu.string : strippedLeft, tabs;
     import std.array : Appender;
     import std.format : formattedWrite;
@@ -564,8 +564,8 @@ int main(string[] args) @system
                 buffer.put("\n\n");
                 buffer.formattedWrite("%swith (parser)\n", indents.tabs);
                 buffer.formattedWrite("%s{", indents.tabs);
-                buffer.formatDeltaInto!(Yes.asserts)(oldClient, parser.client, indents+1, "client");
-                buffer.formatDeltaInto!(Yes.asserts)(oldServer, parser.server, indents+1, "server");
+                buffer.putDelta!(Yes.asserts)(oldClient, parser.client, indents+1, "client");
+                buffer.putDelta!(Yes.asserts)(oldServer, parser.server, indents+1, "server");
                 buffer.formattedWrite("%s}", indents.tabs);
 
                 oldClient = parser.client;
