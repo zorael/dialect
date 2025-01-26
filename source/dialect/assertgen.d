@@ -16,7 +16,7 @@
         immutable event = parser.toIRCEvent("@badge-info=subscriber/15;badges=subscriber/12;color=;display-name=tayk47_mom;emotes=;flags=;id=d6729804-2bf3-495d-80ce-a2fe8ed00a26;login=tayk47_mom;mod=0;msg-id=submysterygift;msg-param-mass-gift-count=1;msg-param-origin-id=49\\s9d\\s3e\\s68\\sca\\s26\\se9\\s2a\\s6e\\s44\\sd4\\s60\\s9b\\s3d\\saa\\sb9\\s4c\\sad\\s43\\s5c;msg-param-sender-count=4;msg-param-sub-plan=1000;room-id=71092938;subscriber=1;system-msg=tayk47_mom\\sis\\sgifting\\s1\\sTier\\s1\\sSubs\\sto\\sxQcOW's\\scommunity!\\sThey've\\sgifted\\sa\\stotal\\sof\\s4\\sin\\sthe\\schannel!;tmi-sent-ts=1569013433362;user-id=224578549;user-type= :tmi.twitch.tv USERNOTICE #xqcow");
         with (event)
         {
-            assert((type == IRCEvent.Type.TWITCH_BULKGIFT), Enum!(IRCEvent.Type).toString(type));
+            assert((type == IRCEvent.Type.TWITCH_BULKGIFT), type.toString());
             assert((sender.nickname == "tayk47_mom"), sender.nickname);
             assert((sender.displayName == "tayk47_mom"), sender.displayName);
             assert((sender.account == "tayk47_mom"), sender.account);
@@ -53,12 +53,12 @@
         immutable event = parser.toIRCEvent("@badge-info=;badges=;color=#5F9EA0;display-name=Zorael;emote-sets=0,185411,771823,1511983;user-id=22216721;user-type= :tmi.twitch.tv GLOBALUSERSTATE");
         with (event)
         {
-            assert((type == IRCEvent.Type.GLOBALUSERSTATE), Enum!(IRCEvent.Type).toString(type));
+            assert((type == IRCEvent.Type.GLOBALUSERSTATE), type.toString());
             assert((sender.address == "tmi.twitch.tv"), sender.address);
-            assert((sender.class_ == IRCUser.Class.special), Enum!(IRCUser.Class).toString(sender.class_));
+            assert((sender.class_ == IRCUser.Class.special), sender.class_.toString());
             assert((target.nickname == "zorael"), target.nickname);
             assert((target.displayName == "Zorael"), target.displayName);
-            assert((target.class_ == IRCUser.Class.admin), Enum!(IRCUser.Class).toString(target.class_));
+            assert((target.class_ == IRCUser.Class.admin), target.class_.toString());
             assert((target.badges == "*"), target.badges);
             assert((target.colour == "5F9EA0"), target.colour);
             assert((tags == "badge-info=;badges=;color=#5F9EA0;display-name=Zorael;emote-sets=0,185411,771823,1511983;user-id=22216721;user-type="), tags);
@@ -275,8 +275,8 @@ void inputServerInformation(ref IRCParser parser) @system
     import lu.conv : Enum;
     import lu.string : advancePast, stripped;
     import std.range : chunks, only;
-    import std.traits : EnumMembers;
     import std.stdio : readln, stdin, stdout, write, writefln, writeln;
+    import std.traits : EnumMembers;
     import std.uni : toLower;
 
     writeln("-- Available daemons --");
@@ -291,7 +291,8 @@ void inputServerInformation(ref IRCParser parser) @system
     immutable daemonLiteral = slice.length ? slice : daemonstring;
 
     parser.server.daemon = daemonstring.length ?
-        Enum!(IRCServer.Daemon).fromString(daemonstring) : IRCServer.Daemon.solanum;
+        Enum!(IRCServer.Daemon).fromString(daemonstring) :
+        IRCServer.Daemon.solanum;
     parser.typenums = typenumsOf(parser.server.daemon);
     parser.server.daemonstring = daemonLiteral;
 

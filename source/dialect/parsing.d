@@ -323,7 +323,7 @@ void parseBasic(
 ///
 unittest
 {
-    import lu.conv : Enum;
+    import lu.conv : toString;
 
     IRCParser parser;
 
@@ -332,7 +332,7 @@ unittest
     {
         raw = "PING :irc.server.address";
         parser.parseBasic(e1);
-        assert((type == IRCEvent.Type.PING), Enum!(IRCEvent.Type).toString(type));
+        assert((type == IRCEvent.Type.PING), type.toString());
         assert((sender.address == "irc.server.address"), sender.address);
         assert(!sender.nickname.length, sender.nickname);
     }
@@ -343,7 +343,7 @@ unittest
         // QuakeNet and others not having the sending server as prefix
         raw = "NOTICE AUTH :*** Couldn't look up your hostname";
         parser.parseBasic(e2);
-        assert((type == IRCEvent.Type.NOTICE), Enum!(IRCEvent.Type).toString(type));
+        assert((type == IRCEvent.Type.NOTICE), type.toString());
         assert(!sender.nickname.length, sender.nickname);
         assert((content == "*** Couldn't look up your hostname"));
     }
@@ -353,7 +353,7 @@ unittest
     {
         raw = "ERROR :Closing Link: 81-233-105-62-no80.tbcn.telia.com (Quit: kameloso^)";
         parser.parseBasic(e3);
-        assert((type == IRCEvent.Type.ERROR), Enum!(IRCEvent.Type).toString(type));
+        assert((type == IRCEvent.Type.ERROR), type.toString());
         assert(!sender.nickname.length, sender.nickname);
         assert((content == "Closing Link: 81-233-105-62-no80.tbcn.telia.com (Quit: kameloso^)"), content);
     }
@@ -408,8 +408,6 @@ in (slice.length, "Tried to parse prefix on an empty slice")
 ///
 unittest
 {
-    import lu.conv : Enum;
-
     IRCParser parser;
 
     IRCEvent e1;
@@ -521,7 +519,7 @@ in (slice.length, "Tried to parse typestring on an empty slice")
 ///
 unittest
 {
-    import lu.conv : Enum;
+    import lu.conv : toString;
     import std.conv : to;
 
     IRCParser parser;
@@ -532,7 +530,7 @@ unittest
         raw = /*":port80b.se.quakenet.org */"421 kameloso åäö :Unknown command";
         string slice = raw;  // mutable
         parser.parseTypestring(e1, slice);
-        assert((type == IRCEvent.Type.ERR_UNKNOWNCOMMAND), Enum!(IRCEvent.Type).toString(type));
+        assert((type == IRCEvent.Type.ERR_UNKNOWNCOMMAND), type.toString());
         assert((num == 421), num.to!string);
     }
 
@@ -542,7 +540,7 @@ unittest
         raw = /*":port80b.se.quakenet.org */"353 kameloso = #garderoben :@kameloso'";
         string slice = raw;  // mutable
         parser.parseTypestring(e2, slice);
-        assert((type == IRCEvent.Type.RPL_NAMREPLY), Enum!(IRCEvent.Type).toString(type));
+        assert((type == IRCEvent.Type.RPL_NAMREPLY), type.toString());
         assert((num == 353), num.to!string);
     }
 
@@ -552,7 +550,7 @@ unittest
         raw = /*":zorael!~NaN@ns3363704.ip-94-23-253.eu */"PRIVMSG kameloso^ :test test content";
         string slice = raw;  // mutable
         parser.parseTypestring(e3, slice);
-        assert((type == IRCEvent.Type.PRIVMSG), Enum!(IRCEvent.Type).toString(type));
+        assert((type == IRCEvent.Type.PRIVMSG), type.toString());
     }
 
     IRCEvent e4;
@@ -561,7 +559,7 @@ unittest
         raw = /*`:zorael!~NaN@ns3363704.ip-94-23-253.eu */`PART #flerrp :"WeeChat 1.6"`;
         string slice = raw;  // mutable
         parser.parseTypestring(e4, slice);
-        assert((type == IRCEvent.Type.PART), Enum!(IRCEvent.Type).toString(type));
+        assert((type == IRCEvent.Type.PART), type.toString());
     }
 }
 
@@ -2074,11 +2072,11 @@ in (slice.length, "Tried to process `IRCEvent.Type.PRIVMSG` on an empty slice")
 
         foreach (immutable type; EnumMembers!(IRCEvent.Type))
         {
-            import lu.conv : Enum;
+            import lu.conv : toString;
             import std.algorithm.searching : startsWith;
 
             //enum typestring = type.to!string;
-            enum typestring = Enum!(IRCEvent.Type).toString(type);
+            enum typestring = type.toString();
 
             static if (typestring.startsWith("CTCP_"))
             {
@@ -2265,7 +2263,6 @@ void onISUPPORT(
     ref string slice) pure @safe
 in (slice.length, "Tried to process `IRCEvent.Type.RPL_ISUPPORT` on an empty slice")
 {
-    import lu.conv : Enum;
     import std.algorithm.iteration : splitter;
     import std.conv : /*ConvException,*/ to;
     import std.string : indexOf;
@@ -2397,6 +2394,7 @@ in (slice.length, "Tried to process `IRCEvent.Type.RPL_ISUPPORT` on an empty sli
                 break;
 
             case "CASEMAPPING":
+                import lu.conv : Enum;
                 parser.server.caseMapping = Enum!(IRCServer.CaseMapping).fromString(value);
                 break;
 
