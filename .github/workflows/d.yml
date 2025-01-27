@@ -49,6 +49,10 @@ jobs:
         dub build --nodeps -b release
         dub build --nodeps -b release -c dev
         dub build --nodeps :assertgen
+
+    - name: 'Build docs (dub)'
+      if: matrix.dc == 'dmd-latest' && matrix.os == 'ubuntu-latest' && success()
+      run : |
         dub build --nodeps -b docs
 
     - name: 'Generate documenation'
