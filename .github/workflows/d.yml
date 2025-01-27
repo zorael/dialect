@@ -39,21 +39,30 @@ jobs:
       with:
         compiler: ${{ matrix.dc }}
 
-    - name: 'Build and test'
-      run: |
-        dub test
-        dub build --nodeps -b debug
-        dub build --nodeps -b debug   -c dev
-        dub build --nodeps -b plain
-        dub build --nodeps -b plain   -c dev
-        dub build --nodeps -b release
-        dub build --nodeps -b release -c dev
-        dub build --nodeps :assertgen
+    - name: 'Run tests'
+      run: dub test
 
-    - name: 'Build docs (dub)'
+    - name: 'Build: library'
+      run: |
+        dub build --nodeps -b debug   -c library
+        dub build --nodeps -b release -c library
+
+    - name: 'Build: twitch'
+      run: |
+        dub build --nodeps -b debug   -c twitch
+        dub build --nodeps -b release -c twitch
+
+    - name: 'Build: dev'
+      run: |
+        dub build --nodeps -b debug   -c dev
+        dub build --nodeps -b release -c dev
+
+    - name: 'Build: assertgen'
+      run: dub build --nodeps -b debug :assertgen
+
+    - name: 'Build: docs'
       if: matrix.dc == 'dmd-latest' && matrix.os == 'ubuntu-latest' && success()
-      run : |
-        dub build --nodeps -b docs
+      run : dub build --nodeps -b docs
 
     - name: 'Generate documenation'
       if: matrix.dc == 'dmd-latest' && matrix.os == 'ubuntu-latest' && success()
