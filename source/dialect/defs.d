@@ -876,29 +876,19 @@ public:
     Type type;
 
     /++
-        With a numeric event, the number of the event type.
-     +/
-    uint num;
-
-    /++
-        The raw IRC string, untouched.
-     +/
-    @Hidden string raw;
-
-    /++
         The name of whoever (or whatever) sent this event.
      +/
     IRCUser sender;
 
     /++
-        The channel the event transpired in, or is otherwise related to.
-     +/
-    string channel;
-
-    /++
         The target user of the event.
      +/
     IRCUser target;
+
+    /++
+        The channel the event transpired in, or is otherwise related to.
+     +/
+    string channel;
 
     /++
         The main body of text of the event.
@@ -911,19 +901,29 @@ public:
     string[numAuxStrings] aux;
 
     /++
-        IRCv3 message tags attached to this event
-     +/
-    string tags;
-
-    /++
         Count array.
      +/
     Nullable!long[numCounts] count;
 
     /++
+        IRCv3 message tags attached to this event
+     +/
+    string tags;
+
+    /++
+        With a numeric event, the number of the event type.
+     +/
+    uint num;
+
+    /++
         A timestamp of when the event transpired.
      +/
     @Hidden long time;
+
+    /++
+        The raw IRC string, untouched.
+     +/
+    @Hidden string raw;
 
     /++
         What errors occurred during parsing, if any.
@@ -1148,11 +1148,6 @@ struct IRCServer
  +/
 struct IRCUser
 {
-    /++
-        The user's nickname.
-     +/
-    string nickname;
-
     version(BotElements)
     {
         /++
@@ -1177,13 +1172,10 @@ struct IRCUser
         Class class_;
     }
 
-    version(TwitchSupport)
-    {
-        /++
-            The Twitch ID of this user's account.
-         +/
-        uint id;
-    }
+    /++
+        The user's nickname.
+     +/
+    string nickname;
 
     /++
         The user's GECOS/"real name".
@@ -1228,6 +1220,11 @@ struct IRCUser
             The Twitch colour (RRGGBB) to tint the user's nickname with.
          +/
         string colour;
+
+        /++
+            The Twitch ID of this user's account.
+         +/
+        uint id;
     }
 
     /++
@@ -2592,17 +2589,17 @@ struct IRCClient
     /++
         Client nickname.
      +/
-    string nickname; // = "kameloso";
+    string nickname;
 
     /++
         Client "user".
      +/
-    string user; // = "kameloso";
+    string user;
 
     /++
         Client GECOS/"real name".
      +/
-    string realName; // = "kameloso IRC bot";
+    string realName;
 
     @Unserialisable
     {
@@ -2617,6 +2614,11 @@ struct IRCClient
          +/
         string ident;
 
+        /++
+            The current modechars active on the client (e.g. "ix");
+         +/
+        string modes;
+
         version(TwitchSupport)
         {
             /++
@@ -2624,10 +2626,5 @@ struct IRCClient
              +/
             string displayName;
         }
-
-        /++
-            The current modechars active on the client (e.g. "ix");
-         +/
-        string modes;
     }
 }
