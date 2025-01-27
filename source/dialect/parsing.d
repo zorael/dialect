@@ -1087,7 +1087,7 @@ void parseSpecialcases(
         }
         else
         {
-            enum message = "Unknown variant of to-connect-type?";
+            immutable message = "Unknown variant of to-connect-type: " ~ slice;
             throw new IRCParseException(message, event);
         }
         break;
