@@ -159,7 +159,7 @@ pure @safe unittest
 
     sink.formatClientAssignment(client, server, 0);
 
-    assert(sink.data ==
+    assert(sink[] ==
 `IRCParser parser;
 
 with (parser)
@@ -170,7 +170,7 @@ with (parser)
     server.port = 6667;
     server.daemon = IRCServer.Daemon.unreal;
     server.aModes = "eIbq";
-}`, '\n' ~ sink.data);
+}`, '\n' ~ sink[]);
 }
 
 
@@ -244,7 +244,7 @@ unittest
     immutable event = parser.toIRCEvent(":zorael!~NaN@2001:41d0:2:80b4:: PRIVMSG #flerrp :kameloso: 8ball");
     sink.formatEventAssertBlock(event, 0);
 
-    assert(sink.data ==
+    assert(sink[] ==
 `{
     enum input = ":zorael!~NaN@2001:41d0:2:80b4:: PRIVMSG #flerrp :kameloso: 8ball";
     immutable event = parser.toIRCEvent(input);
@@ -258,7 +258,7 @@ unittest
         assert((channel == "#flerrp"), channel);
         assert((content == "kameloso: 8ball"), content);
     }
-}`, '\n' ~ sink.data);
+}`, '\n' ~ sink[]);
 }
 
 
@@ -488,7 +488,7 @@ int main(string[] args) @system
 
     writeln();
     writeln(scissors);
-    writeln(buffer.data);
+    writeln(buffer[]);
     writeln(scissors);
     writeln("// Paste a raw event string and hit Enter to generate an assert block. " ~
         "Ctrl+C to exit.");
@@ -522,7 +522,7 @@ int main(string[] args) @system
         auto now = Clock.currTime;
         now.fracSecs = 0.msecs;
         file.writeln("// ========== ", args[0], ": ", now, '\n');
-        file.writeln(buffer.data);
+        file.writeln(buffer[]);
         file.flush();
     }
 
@@ -601,12 +601,12 @@ int main(string[] args) @system
 
         if (outputFile.length)
         {
-            file.writeln(buffer.data);
+            file.writeln(buffer[]);
             file.flush();
         }
 
         writeln();
-        writeln(buffer.data);
+        writeln(buffer[]);
         writeln();
         buffer.clear();
     }

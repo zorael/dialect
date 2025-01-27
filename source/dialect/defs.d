@@ -1375,7 +1375,7 @@ struct IRCUser
         sink.reserve(nickname.length + ident.length + address.length + 5);  // for ! and @ as well as ***
 
         this.toString(sink);
-        return sink.data;
+        return sink[];
     }
 
     ///

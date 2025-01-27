@@ -1789,20 +1789,20 @@ void postparseSanityCheck(
     if ((event.target.nickname.indexOf(' ') != -1) ||
         (event.channel.indexOf(' ') != -1))
     {
-        if (sink.data.length) sink.put(" | ");
+        if (sink[].length) sink.put(" | ");
         sink.put("Spaces in target nickname or channel");
     }
 
     if (event.target.nickname.startsWith(':'))
     {
-        if (sink.data.length) sink.put(" | ");
+        if (sink[].length) sink.put(" | ");
         sink.put("Colon in target nickname");
     }
 
     if (event.target.nickname.length &&
         (parser.server.chantypes.indexOf(event.target.nickname[0]) != -1))
     {
-        if (sink.data.length) sink.put(" | ");
+        if (sink[].length) sink.put(" | ");
         sink.put("Target nickname is a channel");
     }
 
@@ -1816,13 +1816,13 @@ void postparseSanityCheck(
         (event.type != IRCEvent.Type.SELFPART) &&  // Twitch
         (event.type != IRCEvent.Type.RPL_LIST))  // Some channels can be asterisks if they aren't public
     {
-        if (sink.data.length) sink.put(" | ");
+        if (sink[].length) sink.put(" | ");
         sink.put("Channel is not a channel");
     }
 
-    if (sink.data.length)
+    if (sink[].length)
     {
-        event.errors = sink.data.idup;
+        event.errors = sink[].idup;
     }
 }
 

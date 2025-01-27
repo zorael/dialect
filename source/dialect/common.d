@@ -301,7 +301,7 @@ auto decodeIRCv3String(const string line) pure @safe nothrow
         }
     }
 
-    return dirty ? sink.data : line;
+    return dirty ? sink[] : line;
 }
 
 ///
@@ -1755,7 +1755,7 @@ auto toLower(
 
     This function is `@trusted` to be able to cast the internal `output` char
     array to string. [std.array.Appender|Appender] does this with its
-    [std.array.Appender.data|data]/[std.array.Appender.opSlice|opSlice] methods.
+    [std.array.Appender.opSlice|opSlice] method.
 
     ---
     @property inout(ElementEncodingType!A)[] opSlice() inout @trusted pure nothrow
