@@ -2574,6 +2574,14 @@ struct IRCChannel
         When the channel was created, expressed in UNIX time.
      +/
     long created;
+
+    version(TwitchSupport)
+    {
+        /++
+            The Twitch user ID of the broadcaster of the channel.
+         +/
+        uint id;
+    }
 }
 
 
