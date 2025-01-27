@@ -1200,6 +1200,8 @@ void parseSpecialcases(
             else
             {
                 // Overflow! aux is too small.
+                if (!event.errors.length) event.errors = "CAP oveflow:";
+                event.errors ~= ' ' ~ cap;
             }
         }
         break;
