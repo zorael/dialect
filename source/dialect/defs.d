@@ -156,7 +156,7 @@ public:
         TWITCH_REWARDGIFT,/// Twitch "reward gift".
         TWITCH_GIFTCHAIN, /// Twitch "continuing the gift sub"
         TWITCH_SUBUPGRADE,/// Twitch, someone paying to upgrade their subscription.
-        TWITCH_CHARITY,   /// Twitch charity donation.
+        TWITCH_CHARITY,   /// Twitch charity donation (old).
         TWITCH_BULKGIFT,  /// Twitch no-target multiple gift event.
         TWITCH_EXTENDSUB, /// Twitch sub extension.
         TWITCH_GIFTRECEIVED , /// Twitch Prime community gift received.
@@ -166,7 +166,7 @@ public:
         TWITCH_DIRECTCHEER, /// Twitch direct cheer with real currency.
         TWITCH_INTRO,     /// Twitch, someone introducing themselves in a channel.
         TWITCH_MILESTONE, /// Twitch, viewer milestone.
-        TWITCH_CHARITYDONATION,/// Twitch charity donation.
+        TWITCH_CHARITYDONATION, /// Twitch charity donation (new).
 
         RPL_WELCOME, // = 001,          // ":Welcome to <server name> <user>"
         RPL_YOURHOST, // = 002,         // ":Your host is <servername>, running version <version>"
