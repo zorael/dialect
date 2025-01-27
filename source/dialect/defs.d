@@ -891,6 +891,11 @@ public:
     string channel;
 
     /++
+        The secondary channel of this event, when there are two.
+     +/
+    string subchannel;
+
+    /++
         The main body of text of the event.
      +/
     string content;
