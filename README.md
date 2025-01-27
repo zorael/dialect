@@ -2,9 +2,7 @@
 
 IRC parsing library.
 
-### In brief
-
-API documentation can be found [here](http://zorael.github.io/dialect).
+API documentation can be found [here](https://zorael.github.io/dialect/dialect.html).
 
 ```d
 struct IRCEvent
@@ -12,24 +10,30 @@ struct IRCEvent
     enum Type { ... }  // large enum of IRC event types
 
     Type type;
-    string raw;
     IRCUser sender;
     IRCUser target;
     string channel;
     string content;
     string[16] aux;
+    Nullable!long[16] count;
     string tags;
     uint num;
-    Nullable!long[16] count;
     long time;
+    string raw;
     string errors;
+
+    version(TwitchSupport)
+    {
+        string emotes;
+        string id;
+    }
 }
 
 struct IRCUser
 {
     version(BotElements)
     {
-        enum Class { ... }  // enum of IRC user types; operator, staff, and similar
+        enum Class { ... }  // enum of IRC user types in a channel; operator, staff, ...
         Class class_;
     }
 
@@ -39,11 +43,19 @@ struct IRCUser
     string address;
     string account;
     long updated;
+
+    version(TwitchSupport)
+    {
+        string displayName;
+        string badges;
+        string colour;
+        uint id;
+    }
 }
 
 struct IRCChannel
 {
-    struct Mode { ... }  // embodies the notion of a channel mode
+    static struct Mode { ... }  // embodies the notion of a channel mode
 
     string name;
     string topic;
@@ -82,7 +94,7 @@ struct IRCParser
 }
 ```
 
-## Available build configurations
+### Available build configurations
 
 * `library` is the base configuration
 * `twitch` includes extra parsing needed to interface with Twitch servers
@@ -91,18 +103,22 @@ struct IRCParser
 
 It is `pure` and `@safe` in the default `library` configuration.
 
-## How to use
+### How to use
 
 See the [/examples](/examples) directory for a simple bot client that connects to an IRC server and joins a channel.
 
-> This is not a bot framework; for that you're better off with the full reference-implementation [`kameloso`](https://github.com/zorael/kameloso) and writing a plugin for it that suits your needs.
+> This project is not a bot framework; for that you're better off with the full reference-implementation [`kameloso`](https://github.com/zorael/kameloso) and writing a plugin for it that suits your needs.
 
-### Longer story
+#### Longer story
 
-* Create an [`IRCClient`](http://dialect.dpldocs.info/dialect.defs.IRCClient.html) and configure its members. (required for context when parsing)
-* Create an [`IRCServer`](http://dialect.dpldocs.info/dialect.defs.IRCServer.html) and configure its members. (it may work without but just give it at minimum a host address)
-* Create an [`IRCParser`](http://dialect.dpldocs.info/dialect.parsing.IRCParser.html) with your client and server via constructor. Pass it by `ref` if passed around between functions.
-* Read a string from the server and parse it into an [`IRCEvent`](http://dialect.dpldocs.info/dialect.defs.IRCEvent.html) with [`yourParser.toIRCEvent(stringFromServer)`](http://dialect.dpldocs.info/dialect.parsing.toIRCEvent.html).
+* Write a client that connects to an IRC server and reads from it.
+* Create an [`IRCClient`](https://zorael.github.io/dialect/dialect.defs.IRCClient.html) and configure its members. (required for context when parsing)
+* Create an [`IRCServer`](https://zorael.github.io/dialect/dialect.defs.IRCServer.html) and configure its members. (it may work without but just give it at minimum a host address)
+* Create an [`IRCParser`](https://zorael.github.io/dialect/dialect.parsing.IRCParser.html) with your client and server via its constructor. Pass it by `ref` if passed around between functions.
+* Read a string from the server and parse it into an [`IRCEvent`](https://zorael.github.io/dialect/dialect.defs.IRCEvent.html) with [`yourParser.toIRCEvent(stringFromServer)`](https://zorael.github.io/dialect/dialect.parsing.IRCParser.toIRCEvent.html).
+* Switch on the event's [`type`](https://zorael.github.io/dialect/dialect.defs.IRCEvent.Type.html) member to handle the event.
+
+##### Like so
 
 ```d
 IRCClient client;
@@ -161,16 +177,16 @@ with (event3)
 
 See the [`/tests`](/tests) directory for more example parses.
 
-## Unit test generation
+### Unit test generation
 
 Compiling the `assertgen` dub subpackage builds a command-line tool with which it is easy to generate `assert` blocks like the ones above. These can then be pasted into an according file in [`/tests`](/tests) and ideally submitted as a GitHub pull request for upstream inclusion. You can use it to contribute known-good parses and increase coverage of event types.
 
 Simply run `dub run :assertgen` and follow the on-screen instructions.
 
 ```
-Enter daemon [optional daemon literal] (ircdseven): unreal
-Enter network (freenode): foobar
-Enter server address (irc.freenode.net): irc.server.tld
+Enter daemon [optional daemon literal] (solanum): unreal
+Enter network (Libera.Chat): foobar
+Enter server address (irc.libera.chat): irc.server.tld
 
 [...]
 
@@ -192,7 +208,7 @@ Enter server address (irc.freenode.net): irc.server.tld
 
 The output will by default also be saved to a `unittest.log` file in the current directory. See the `--help` listing for more details, passed through `dub` with `dub run :assertgen -- --help`.
 
-## Caveats
+### Caveats
 
 Starting with `v3.0.0`, a more recent compiler version is required. This is to allow for use of named arguments and to enable some compiler preview switches. You need a compiler based on D version **2.108** or later (April 2024). For **ldc** this translates to a minimum of version **1.38**, while for **gdc** you broadly need release series **14**.
 
@@ -204,16 +220,16 @@ Note that while IRC is standardised, servers still come in [many flavours](https
 
 **Please report bugs. Unreported bugs can only be fixed by accident.**
 
-## Roadmap
+### Roadmap
 
 * nothing right now, ideas needed
 
-## Built with
+### Built with
 
 * [**D**](https://dlang.org)
 * [`dub`](https://code.dlang.org)
 * [`lu`](https://github.com/zorael/lu) ([dub](http://code.dlang.org/packages/lu))
 
-## License
+### License
 
 This project is licensed under the **Boost Software License 1.0** - see the [LICENSE_1_0.txt](LICENSE_1_0.txt) file for details.
