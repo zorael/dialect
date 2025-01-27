@@ -1824,7 +1824,8 @@ void postparseSanityCheck(
 
     if (sink[].length)
     {
-        event.errors = sink[].idup;
+        if (event.errors.length) event.errors ~= " | ";
+        event.errors ~= sink[].idup;
     }
 }
 
