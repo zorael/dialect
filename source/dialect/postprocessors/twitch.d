@@ -369,6 +369,19 @@ auto parseTwitchTags(ref IRCParser parser, ref IRCEvent event) @safe
             event.aux[0] = message;
             break;
 
+        case "msg-param-prior-gifter-id":
+            // Numeric id of prior gifter when a user pays forward a gift
+            if (event.type == IRCEvent.Type.TWITCH_PAYFORWARD)
+            {
+                // Store it in event.aux[0]
+                goto case;
+            }
+            else
+            {
+                // Store it in event.target.id
+                goto case "target-user-id";
+            }
+
         case "msg-param-fun-string":
             // msg-param-fun-string = FunStringTwo
             // [subgift] [#waifugate] AnAnonymousGifter (Asdf): "An anonymous user gifted a Tier 1 sub to Asdf!" (1000) {1}
@@ -394,8 +407,6 @@ auto parseTwitchTags(ref IRCParser parser, ref IRCEvent event) @safe
             // msg-param-charity-learn-more = https://link.twitch.tv/blizzardofbits
         case "msg-param-donation-currency":
             // msg-param-donation-currency = USD
-        case "msg-param-prior-gifter-id":
-            // Numeric id of prior gifter when a user pays forward a gift
 
             /+
                 Aux 1
@@ -920,10 +931,10 @@ auto parseTwitchTags(ref IRCParser parser, ref IRCEvent event) @safe
             break;
 
         case "target-user-id":
-        case "reply-parent-user-id":
-        case "msg-param-recipient-id":
             // The target's user ID
+        case "reply-parent-user-id":
             // The user id of the author of the message that is being replied to
+        case "msg-param-recipient-id":
             // reply-parent-user-id = 50081302
             // sub gift target
             if (value.length)
