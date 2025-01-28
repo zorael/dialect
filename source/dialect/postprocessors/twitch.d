@@ -838,6 +838,10 @@ auto parseTwitchTags(ref IRCParser parser, ref IRCEvent event) @safe
             event.aux[$-4] = value;
             break;
 
+        case "msg-param-recipient-id":
+            // sub gifts
+            if (value.length) event.target.id = value.to!uint;
+            break;
 
         // We only need set cases for every known tag if we want to be alerted
         // when we come across unknown ones, which is version TwitchWarnings.
@@ -891,8 +895,6 @@ auto parseTwitchTags(ref IRCParser parser, ref IRCEvent event) @safe
 
                     spotted in the wild as = 0
                 +/
-            case "msg-param-recipient-id":
-                // sub gifts
             case "target-msg-id":
                 // banphrase
             case "msg-param-profileImageURL":
