@@ -271,18 +271,22 @@ unittest
 void inputServerInformation(ref IRCParser parser) @system
 {
     import dialect.common : typenumsOf;
-    import lu.conv : Enum;
+    import lu.conv : Enum, toString;
     import lu.string : advancePast, stripped;
     import std.range : chunks, only;
     import std.stdio : readln, stdin, stdout, write, writefln, writeln;
     import std.traits : EnumMembers;
     import std.uni : toLower;
 
+    enum defaultDaemon = IRCServer.Daemon.solanum;
+    enum defaultNetwork = "Libera.Chat";
+    enum defaultAddress = "irc.libera.chat";
+
     writeln("-- Available daemons --");
     writefln("%(%(%-14s%)\n%)", EnumMembers!(IRCServer.Daemon).only.chunks(3));
     writeln();
 
-    write("Enter daemon [optional daemon literal] (solanum): ");
+    write("Enter daemon (plus optional daemon literal) [", defaultDaemon.toString(), "]: ");
     stdout.flush();
     stdin.flush();
     string slice = readln().stripped;  // mutable so we can advancePast it
@@ -291,21 +295,21 @@ void inputServerInformation(ref IRCParser parser) @system
 
     parser.server.daemon = daemonstring.length ?
         Enum!(IRCServer.Daemon).fromString(daemonstring) :
-        IRCServer.Daemon.solanum;
+        defaultDaemon;
     parser.typenums = typenumsOf(parser.server.daemon);
     parser.server.daemonstring = daemonLiteral;
 
-    write("Enter network (Libera.Chat): ");
+    write("Enter network [", defaultNetwork, "]: ");
     stdout.flush();
     stdin.flush();
     parser.server.network = readln().stripped;
-    if (!parser.server.network.length) parser.server.network = "Libera.Chat";
+    if (!parser.server.network.length) parser.server.network = defaultNetwork;
 
-    write("Enter server address (irc.libera.chat): ");
+    write("Enter server address [", defaultAddress, "]: ");
     stdout.flush();
     stdin.flush();
     parser.server.address = readln().stripped;
-    if (!parser.server.address.length) parser.server.address = "irc.libera.chat";
+    if (!parser.server.address.length) parser.server.address = defaultAddress;
 }
 
 
@@ -333,6 +337,10 @@ int main(string[] args) @system
     import std.string : chomp;
 
     enum defaultOutputFilename = "unittest.log";
+    enum defaultNickname = "dialect";
+    enum defaultUser = "dialect";
+    enum defaultIdent = "~dialect";
+    enum defaultRealName = "dialect unit test";
 
     string nicknameOverride;
     string userOverride;
@@ -431,10 +439,10 @@ int main(string[] args) @system
             with (parser.client)
             {
                 // nickname, user and ident are always identical
-                nickname = nicknameOverride.length ? nicknameOverride : "kameloso";
+                nickname = nicknameOverride.length ? nicknameOverride : defaultNickname;
                 user = nickname;
                 ident = nickname;
-                //realName = "kameloso IRC bot";  // Not used on Twitch
+                //realName = defaultRealName;  // Not used on Twitch
             }
 
             writeln("Server set to Twitch as per command-line argument.");
@@ -461,10 +469,10 @@ int main(string[] args) @system
         // Provide skeletal user defaults.
         with (parser.client)
         {
-            nickname = nicknameOverride.length ? nicknameOverride : "kameloso";
-            user = userOverride.length ? userOverride : "kameloso";
-            ident = identOverride.length ? identOverride : "~kameloso";
-            realName = "kameloso IRC bot";
+            nickname = nicknameOverride.length ? nicknameOverride : defaultNickname;
+            user = userOverride.length ? userOverride : defaultUser;
+            ident = identOverride.length ? identOverride : defaultIdent;
+            realName = defaultRealName;
         }
 
         // Provide Libera.Chat defaults here, now that they're no longer in IRCServer.init
