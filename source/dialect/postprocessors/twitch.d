@@ -175,9 +175,11 @@ auto parseTwitchTags(ref IRCParser parser, ref IRCEvent event) @safe
             {
                 version(TwitchWarnings)
                 {
-                    warnAboutOverwrittenAuxString(
+                    warnAboutOverwrittenString(
                         event: event,
-                        i: 0,
+                        name: "event.aux[0]",
+                        oldValue: event.aux[0],
+                        newValue: message,
                         key: key,
                         tagType: "tag",
                         printTagsOnExit: printTagsOnExit);
@@ -196,27 +198,71 @@ auto parseTwitchTags(ref IRCParser parser, ref IRCEvent event) @safe
             }
             break;
 
+        case "msg-param-gift-match-gifter-display-name":
+            // msg-param-gift-match-gifter-display-name = SuszterSpace
+            // Gifter to whose gifting more gifts were added by a third party
+        case "reply-parent-display-name":
+        case "msg-param-gifter-name":
+            // The display name of the user that is being replied to
+            // reply-parent-display-name = zenArc
         case "msg-param-recipient-display-name":
         case "msg-param-sender-name":
-        case "msg-param-prior-gifter-display-name":
             // In a GIFTCHAIN the display name of the one who started the gift sub train?
-            // Prior gifter display name when a user pays forward a gift
+            version(TwitchWarnings)
+            {
+                warnAboutOverwrittenString(
+                    event: event,
+                    name: "event.target.displayName",
+                    oldValue: event.target.displayName,
+                    newValue: value,
+                    key: key,
+                    tagType: "tag",
+                    printTagsOnExit: printTagsOnExit);
+            }
+
             event.target.displayName = value;
             break;
 
         case "msg-param-recipient-user-name":
         case "msg-param-sender-login":
         case "msg-param-recipient": // Prime community gift received
-        case "msg-param-prior-gifter-user-name":
             // In a GIFTCHAIN the one who started the gift sub train?
             // msg-param-prior-gifter-user-name = "coopamantv"
-            // Prior gifter when a user pays forward a gift
+        case "reply-parent-user-login":
+        case "msg-param-gifter-login":
+            // The account name of the author of the message that is being replied to
+            // reply-parent-user-login = zenarc
+
+            version(TwitchWarnings)
+            {
+                warnAboutOverwrittenString(
+                    event: event,
+                    name: "event.target.nickname",
+                    oldValue: event.target.nickname,
+                    newValue: value,
+                    key: key,
+                    tagType: "tag",
+                    printTagsOnExit: printTagsOnExit);
+            }
+
             event.target.nickname = value;
             break;
 
         case "msg-param-displayName":
         case "msg-param-sender": // Prime community gift received (apparently display name)
             // RAID; sender alias and thus raiding channel cased
+            version(TwitchWarnings)
+            {
+                warnAboutOverwrittenString(
+                    event: event,
+                    name: "event.sender.displayName",
+                    oldValue: event.sender.displayName,
+                    newValue: value,
+                    key: key,
+                    tagType: "tag",
+                    printTagsOnExit: printTagsOnExit);
+            }
+
             event.sender.displayName = value;
             break;
 
@@ -224,6 +270,18 @@ auto parseTwitchTags(ref IRCParser parser, ref IRCEvent event) @safe
         case "login":
             // RAID; real sender nickname and thus raiding channel lowercased
             // CLEARMSG, SUBGIFT, lots
+            version(TwitchWarnings)
+            {
+                warnAboutOverwrittenString(
+                    event: event,
+                    name: "event.sender.nickname",
+                    oldValue: event.sender.nickname,
+                    newValue: value,
+                    key: key,
+                    tagType: "tag",
+                    printTagsOnExit: printTagsOnExit);
+            }
+
             event.sender.nickname = value;
             break;
 
@@ -291,20 +349,24 @@ auto parseTwitchTags(ref IRCParser parser, ref IRCEvent event) @safe
              +/
             import lu.string : removeControlCharacters, strippedRight;
 
+            immutable message = value
+                .decodeIRCv3String
+                .strippedRight
+                .removeControlCharacters;  // Really necessary?
+
             version(TwitchWarnings)
             {
-                warnAboutOverwrittenAuxString(
+                warnAboutOverwrittenString(
                     event: event,
-                    i: 0,
+                    name: "event.aux[0]",
+                    oldValue: event.aux[0],
+                    newValue: message,
                     key: key,
                     tagType: "tag",
                     printTagsOnExit: printTagsOnExit);
             }
 
-            event.aux[0] = value
-                .decodeIRCv3String
-                .strippedRight
-                .removeControlCharacters;  // Really necessary?
+            event.aux[0] = message;
             break;
 
         case "msg-param-fun-string":
@@ -332,21 +394,27 @@ auto parseTwitchTags(ref IRCParser parser, ref IRCEvent event) @safe
             // msg-param-charity-learn-more = https://link.twitch.tv/blizzardofbits
         case "msg-param-donation-currency":
             // msg-param-donation-currency = USD
+        case "msg-param-prior-gifter-id":
+            // Numeric id of prior gifter when a user pays forward a gift
 
             /+
                 Aux 1
              +/
+            immutable decoded = decodeIRCv3String(value);
+
             version(TwitchWarnings)
             {
-                warnAboutOverwrittenAuxString(
+                warnAboutOverwrittenString(
                     event: event,
-                    i: 1,
+                    name: "event.aux[1]",
+                    oldValue: event.aux[1],
+                    newValue: decoded,
                     key: key,
                     tagType: "tag",
                     printTagsOnExit: printTagsOnExit);
             }
 
-            event.aux[1] = decodeIRCv3String(value);
+            event.aux[1] = decoded;
             break;
 
         case "msg-param-sub-plan-name":
@@ -359,42 +427,54 @@ auto parseTwitchTags(ref IRCParser parser, ref IRCEvent event) @safe
             // Something about hype chat?
         case "msg-param-charity-hashtag":
             // msg-param-charity-hashtag = #charity
+        case "msg-param-prior-gifter-user-name":
+            // Prior gifter when a user pays forward a gift
 
             /+
                 Aux 2
              +/
+            immutable decoded = decodeIRCv3String(value);
+
             version(TwitchWarnings)
             {
-                warnAboutOverwrittenAuxString(
+                warnAboutOverwrittenString(
                     event: event,
-                    i: 2,
+                    name: "event.aux[2]",
+                    oldValue: event.aux[2],
+                    newValue: decoded,
                     key: key,
                     tagType: "tag",
                     printTagsOnExit: printTagsOnExit);
             }
 
-            event.aux[2] = decodeIRCv3String(value);
+            event.aux[2] = decoded;
             break;
 
         case "msg-param-goal-description":
             // msg-param-goal-description = Lali-this\sis\sa\sgoal-ho
         case "msg-param-pill-type":
             // something with new midnightsquid direct cheers
+        case "msg-param-prior-gifter-display-name":
+            // Prior gifter display name when a user pays forward a gift
 
             /+
                 Aux 3
              +/
+            immutable decoded = decodeIRCv3String(value);
+
             version(TwitchWarnings)
             {
-                warnAboutOverwrittenAuxString(
+                warnAboutOverwrittenString(
                     event: event,
-                    i: 3,
+                    name: "event.aux[3]",
+                    oldValue: event.aux[3],
+                    newValue: decoded,
                     key: key,
                     tagType: "tag",
                     printTagsOnExit: printTagsOnExit);
             }
 
-            event.aux[3] = decodeIRCv3String(value);
+            event.aux[3] = decoded;
             break;
 
         case "msg-param-is-highlighted":
@@ -402,15 +482,19 @@ auto parseTwitchTags(ref IRCParser parser, ref IRCEvent event) @safe
         case "msg-param-gift-theme":
             // msg-param-gift-theme = party
             // Theme of a bulkgift?
+        case "msg-param-gifter-id":
+            // How is this different from msg-param-prior-gifter-id?
 
             /+
                 Aux 4
              +/
             version(TwitchWarnings)
             {
-                warnAboutOverwrittenAuxString(
+                warnAboutOverwrittenString(
                     event: event,
-                    i: 4,
+                    name: "event.aux[4]",
+                    oldValue: event.aux[4],
+                    newValue: value,
                     key: key,
                     tagType: "tag",
                     printTagsOnExit: printTagsOnExit);
@@ -427,15 +511,43 @@ auto parseTwitchTags(ref IRCParser parser, ref IRCEvent event) @safe
              +/
             version(TwitchWarnings)
             {
-                warnAboutOverwrittenAuxString(
+                warnAboutOverwrittenString(
                     event: event,
-                    i: 5,
+                    name: "event.aux[5]",
+                    oldValue: event.aux[5],
+                    newValue: value,
                     key: key,
                     tagType: "tag",
                     printTagsOnExit: printTagsOnExit);
             }
 
             event.aux[5] = value;  // no need to decode?
+            break;
+
+        case "msg-param-was-gifted":
+            // msg-param-was-gifted = false
+            // On subscription events, whether or not the sub was from a gift.
+        case "msg-param-anon-gift":
+            // msg-param-anon-gift = false
+
+            /+
+                Aux 6
+             +/
+            if (value == "false") break;
+
+            version(TwitchWarnings)
+            {
+                warnAboutOverwrittenString(
+                    event: event,
+                    name: "event.aux[6]",
+                    oldValue: event.aux[6],
+                    newValue: key[10..$],
+                    key: key,
+                    tagType: "tag",
+                    printTagsOnExit: printTagsOnExit);
+            }
+
+            event.aux[6] = key[10..$];  // slice away "msg-param-"
             break;
 
         case "first-msg":
@@ -450,9 +562,11 @@ auto parseTwitchTags(ref IRCParser parser, ref IRCEvent event) @safe
              +/
             version(TwitchWarnings)
             {
-                warnAboutOverwrittenAuxString(
+                warnAboutOverwrittenString(
                     event: event,
-                    i: event.aux.length+(-3),
+                    name: "event.aux[$-3]",
+                    oldValue: event.aux[$-3],
+                    newValue: key,
                     key: key,
                     tagType: "tag",
                     printTagsOnExit: printTagsOnExit);
@@ -520,15 +634,17 @@ auto parseTwitchTags(ref IRCParser parser, ref IRCEvent event) @safe
              +/
             version(TwitchWarnings)
             {
-                warnAboutOverwrittenCount(
+                warnAboutOverwrittenNumber(
                     event: event,
-                    i: 0,
+                    name: "event.count[0]",
+                    oldValue: event.count[0],
+                    newValue: value,
                     key: key,
                     tagType: "tag",
                     printTagsOnExit: printTagsOnExit);
             }
 
-            event.count[0] = (value == "0") ? 0 : value.to!long;
+            event.count[0] = value.to!long;
             break;
 
         case "msg-param-selected-count":
@@ -553,17 +669,20 @@ auto parseTwitchTags(ref IRCParser parser, ref IRCEvent event) @safe
             /+
                 Count 1
              +/
+            if (value == "0") break;
+
             version(TwitchWarnings)
             {
-                warnAboutOverwrittenCount(
+                warnAboutOverwrittenNumber(
                     event: event,
-                    i: 1,
+                    name: "event.count[1]",
+                    oldValue: event.count[1],
+                    newValue: value,
                     key: key,
                     tagType: "tag",
                     printTagsOnExit: printTagsOnExit);
             }
 
-            if (value == "0") break;
             event.count[1] = value.to!long;
             break;
 
@@ -589,17 +708,20 @@ auto parseTwitchTags(ref IRCParser parser, ref IRCEvent event) @safe
             /+
                 Count 2
              +/
+            if (value == "0") break;
+
             version(TwitchWarnings)
             {
-                warnAboutOverwrittenCount(
+                warnAboutOverwrittenNumber(
                     event: event,
-                    i: 2,
+                    name: "event.count[2]",
+                    oldValue: event.count[2],
+                    newValue: value,
                     key: key,
                     tagType: "tag",
                     printTagsOnExit: printTagsOnExit);
             }
 
-            if (value == "0") break;
             event.count[2] = value.to!long;
             break;
 
@@ -614,17 +736,20 @@ auto parseTwitchTags(ref IRCParser parser, ref IRCEvent event) @safe
             /+
                 Count 3
              +/
+            if (value == "0") break;
+
             version(TwitchWarnings)
             {
-                warnAboutOverwrittenCount(
+                warnAboutOverwrittenNumber(
                     event: event,
-                    i: 3,
+                    name: "event.count[3]",
+                    oldValue: event.count[3],
+                    newValue: value,
                     key: key,
                     tagType: "tag",
                     printTagsOnExit: printTagsOnExit);
             }
 
-            if (value == "0") break;
             event.count[3] = value.to!long;
             break;
 
@@ -636,17 +761,20 @@ auto parseTwitchTags(ref IRCParser parser, ref IRCEvent event) @safe
             /+
                 Count 4
              +/
+            if (value == "0") break;
+
             version(TwitchWarnings)
             {
-                warnAboutOverwrittenCount(
+                warnAboutOverwrittenNumber(
                     event: event,
-                    i: 4,
+                    name: "event.count[4]",
+                    oldValue: event.count[4],
+                    newValue: value,
                     key: key,
                     tagType: "tag",
                     printTagsOnExit: printTagsOnExit);
             }
 
-            if (value == "0") break;
             event.count[4] = value.to!long;
             break;
 
@@ -659,17 +787,20 @@ auto parseTwitchTags(ref IRCParser parser, ref IRCEvent event) @safe
             /+
                 Count 5
              +/
+            if (value == "0") break;
+
             version(TwitchWarnings)
             {
-                warnAboutOverwrittenCount(
+                warnAboutOverwrittenNumber(
                     event: event,
-                    i: 5,
+                    name: "event.count[5]",
+                    oldValue: event.count[5],
+                    newValue: value,
                     key: key,
                     tagType: "tag",
                     printTagsOnExit: printTagsOnExit);
             }
 
-            if (value == "0") break;
             event.count[5] = value.to!long;
             break;
 
@@ -683,17 +814,20 @@ auto parseTwitchTags(ref IRCParser parser, ref IRCEvent event) @safe
             /+
                 Count 6
              +/
+            if (value == "0") break;
+
             version(TwitchWarnings)
             {
-                warnAboutOverwrittenCount(
+                warnAboutOverwrittenNumber(
                     event: event,
-                    i: 6,
+                    name: "event.count[6]",
+                    oldValue: event.count[6],
+                    newValue: value,
                     key: key,
                     tagType: "tag",
                     printTagsOnExit: printTagsOnExit);
             }
 
-            if (value == "0") break;
             event.count[6] = value.to!long;
             break;
 
@@ -703,17 +837,20 @@ auto parseTwitchTags(ref IRCParser parser, ref IRCEvent event) @safe
             /+
                 Count 7
              +/
+            if (value == "0") break;
+
             version(TwitchWarnings)
             {
-                warnAboutOverwrittenCount(
+                warnAboutOverwrittenNumber(
                     event: event,
-                    i: 7,
+                    name: "event.count[7]",
+                    oldValue: event.count[7],
+                    newValue: value,
                     key: key,
                     tagType: "tag",
                     printTagsOnExit: printTagsOnExit);
             }
 
-            if (value == "0") break;
             event.count[7] = value.to!long;
             break;
 
@@ -764,18 +901,47 @@ auto parseTwitchTags(ref IRCParser parser, ref IRCEvent event) @safe
         case "user-id":
         case "user-ID":
             // The sender's user ID.
-            if (value.length) event.sender.id = value.to!uint;
+            if (value.length)
+            {
+                version(TwitchWarnings)
+                {
+                    warnAboutOverwrittenNumber(
+                        event: event,
+                        name: "event.sender.id",
+                        oldValue: event.sender.id,
+                        newValue: value,
+                        key: key,
+                        tagType: "tag",
+                        printTagsOnExit: printTagsOnExit);
+                }
+
+                event.sender.id = value.to!uint;
+            }
             break;
 
         case "target-user-id":
         case "reply-parent-user-id":
-        case "msg-param-gifter-id":
-        case "msg-param-prior-gifter-id":
+        case "msg-param-recipient-id":
             // The target's user ID
             // The user id of the author of the message that is being replied to
             // reply-parent-user-id = 50081302
-            // Numeric id of prior gifter when a user pays forward a gift
-            if (value.length) event.target.id = value.to!uint;
+            // sub gift target
+            if (value.length)
+            {
+                version(TwitchWarnings)
+                {
+                    warnAboutOverwrittenNumber(
+                        event: event,
+                        name: "event.target.id",
+                        oldValue: event.target.id,
+                        newValue: value,
+                        key: key,
+                        tagType: "tag",
+                        printTagsOnExit: printTagsOnExit);
+                }
+
+                event.target.id = value.to!uint;
+            }
             break;
 
         case "room-id":
@@ -784,9 +950,11 @@ auto parseTwitchTags(ref IRCParser parser, ref IRCEvent event) @safe
             {
                 version(TwitchWarnings)
                 {
-                    warnAboutOverwrittenAuxString(
+                    warnAboutOverwrittenString(
                         event: event,
-                        i: 0,
+                        name: "event.aux[0]",
+                        oldValue: event.aux[0],
+                        newValue: value,
                         key: key,
                         tagType: "tag",
                         printTagsOnExit: printTagsOnExit);
@@ -794,25 +962,6 @@ auto parseTwitchTags(ref IRCParser parser, ref IRCEvent event) @safe
 
                 event.aux[0] = value;
             }
-            break;
-
-        case "msg-param-gift-match-gifter-display-name":
-            // msg-param-gift-match-gifter-display-name = SuszterSpace
-            // Gifter to whose gifting more gifts were added by a third party
-            // Drop down
-
-        case "reply-parent-display-name":
-        case "msg-param-gifter-name":
-            // The display name of the user that is being replied to
-            // reply-parent-display-name = zenArc
-            event.target.displayName = value;
-            break;
-
-        case "reply-parent-user-login":
-        case "msg-param-gifter-login":
-            // The account name of the author of the message that is being replied to
-            // reply-parent-user-login = zenarc
-            event.target.nickname = value;
             break;
 
         case "source-msg-id":
@@ -827,20 +976,17 @@ auto parseTwitchTags(ref IRCParser parser, ref IRCEvent event) @safe
         case "source-room-id":
             version(TwitchWarnings)
             {
-                warnAboutOverwrittenAuxString(
+                warnAboutOverwrittenString(
                     event: event,
-                    i: event.aux.length+(-4),
+                    name: "event.aux[$-4]",
+                    oldValue: event.aux[$-4],
+                    newValue: value,
                     key: key,
                     tagType: "tag",
                     printTagsOnExit: printTagsOnExit);
             }
 
             event.aux[$-4] = value;
-            break;
-
-        case "msg-param-recipient-id":
-            // sub gifts
-            if (value.length) event.target.id = value.to!uint;
             break;
 
         // We only need set cases for every known tag if we want to be alerted
@@ -934,11 +1080,6 @@ auto parseTwitchTags(ref IRCParser parser, ref IRCEvent event) @safe
                 // The msg-id of the message that is being replied to
                 // reply-parent-msg-id = 81b6262b-7ce3-4686-be4f-1f5c548c9d16
                 // Ignore. Let plugins who want it grep event.tags
-            case "msg-param-was-gifted":
-                // msg-param-was-gifted = false
-                // On subscription events, whether or not the sub was from a gift.
-            case "msg-param-anon-gift":
-                // msg-param-anon-gift = false
             case "crowd-chant-parent-msg-id":
                 // crowd-chant-parent-msg-id = <uuid>
                 // Chant? Seems to be a reply/quote
@@ -1004,6 +1145,7 @@ auto parseTwitchTags(ref IRCParser parser, ref IRCEvent event) @safe
 
             enum pattern = `%-35s%s`;
 
+            writeln();
             printTags(event);
             writefln(pattern, "event.aux", event.aux[]);
             writefln(pattern, "event.count", event.count[]);
@@ -1064,40 +1206,44 @@ void printTags(const ref IRCEvent event) @safe
 }
 
 
-// warnAboutOverwrittenCount
+// warnAboutOverwrittenString
 /++
-    Warns about the an element of the `count` array in an
-    [dialect.defs.IRCEvent|IRCEvent] being overwritten.
+    Warns about twhen a string member of an
+    [dialect.defs.IRCEvent|IRCEvent] is to be overwritten.
 
     Note: Gated behind version `TwitchWarnings`.
 
     Params:
-        event = The [dialect.defs.IRCEvent|IRCEvent] whose `count` element was overwritten.
-        i = The index of the `count` array element being overwritten.
-        key = The key of the tag that is overwriting the `count` array element.
-        tagType = The type of tag that is overwriting the `count` array element.
+        event = The [dialect.defs.IRCEvent|IRCEvent] whose `aux` element was overwritten.
+        value = The value of the string that will be overwriten.
+        name = The name of the string being overwritten.
+        key = The key of the tag that is overwriting the string.
+        tagType = The type of tag that is overwriting the string.
         printTagsOnExit = Whether or not the caller should print the tags of the
             [dialect.defs.IRCEvent|IRCEvent] upon leaving its function.
  +/
 version(TwitchWarnings)
-void warnAboutOverwrittenCount(
+void warnAboutOverwrittenString(
     /*const*/ ref IRCEvent event,
-    const size_t i,
+    const string name,
+    const string oldValue,
+    const string newValue,
     const string key,
     const string tagType,
     ref bool printTagsOnExit) @safe
 {
-    if (!event.count[i].isNull)
+    if (oldValue.length && (oldValue != newValue))
     {
         import std.format : format;
         import std.stdio : writeln;
 
-        enum pattern = "%s %s overwrote `count[%s]`: %s";
+        enum pattern = "%s %s overwrote string `%s`! \"%s\" --> \"%s\"";
         immutable message = pattern.format(
             tagType,
             key,
-            i,
-            event.count[i].get);
+            name,
+            oldValue,
+            newValue);
 
         appendToErrors(event, message);
         writeln(message);
@@ -1106,40 +1252,65 @@ void warnAboutOverwrittenCount(
 }
 
 
-// warnAboutOverwrittenAuxString
+// warnAboutOverwrittenNumber
 /++
-    Warns about the an element of the `aux` array in an
-    [dialect.defs.IRCEvent|IRCEvent] being overwritten.
+    Warns about twhen a numeric member of an
+    [dialect.defs.IRCEvent|IRCEvent] is to be overwritten.
 
     Note: Gated behind version `TwitchWarnings`.
 
     Params:
         event = The [dialect.defs.IRCEvent|IRCEvent] whose `aux` element was overwritten.
-        i = The index of the `aux` array element being overwritten.
-        key = The key of the tag that is overwriting the `aux` array element.
-        tagType = The type of tag that is overwriting the `aux` array element.
+        value = The value of the string that will be overwriten.
+        name = The name of the string being overwritten.
+        key = The key of the tag that is overwriting the string.
+        tagType = The type of tag that is overwriting the string.
         printTagsOnExit = Whether or not the caller should print the tags of the
             [dialect.defs.IRCEvent|IRCEvent] upon leaving its function.
  +/
 version(TwitchWarnings)
-void warnAboutOverwrittenAuxString(
-    /*const*/ ref IRCEvent event,
-    const size_t i,
+void warnAboutOverwrittenNumber(Old, New)
+    (/*const*/ ref IRCEvent event,
+    const string name,
+    const Old oldValue,
+    const New newValue,
     const string key,
     const string tagType,
     ref bool printTagsOnExit) @safe
 {
-    if (event.aux[i].length)
+    import std.typecons : Nullable;
+
+    static if (is(Old : Nullable!long))
+    {
+        immutable old_ = oldValue.isNull ? 0 : oldValue.get();
+    }
+    else
+    {
+        alias old_ = oldValue;
+    }
+
+    if (old_ != 0)
     {
         import std.format : format;
         import std.stdio : writeln;
 
-        enum pattern = "%s %s overwrote `aux[%s]`: %s";
+        static if (is(New : string))
+        {
+            import std.conv : to;
+            immutable new_ = newValue.to!long;
+        }
+        else
+        {
+            alias new_ = newValue;
+        }
+
+        enum pattern = "%s %s overwrote numeric `%s`! %d --> %d";
         immutable message = pattern.format(
             tagType,
             key,
-            i,
-            event.aux[i]);
+            name,
+            old_,
+            new_);
 
         appendToErrors(event, message);
         writeln(message);
@@ -1299,16 +1470,27 @@ void switchOnMsgID(
         event.type = TWITCH_EXTENDSUB;
         break;
 
+    case "gigantified-emote-message":
+        // Unknown Twitch msg-id: gigantified-emote-message
+        event.type = EMOTE;
+        goto case;
+
     case "highlighted-message":
     case "skip-subs-mode-message":
         // These are PRIVMSGs
+    case "animated-message":
+        // Unknown Twitch msg-id: animated-message
+        // keep the type as PRIVMSG
+
         if (onlySetType) break;
 
         version(TwitchWarnings)
         {
-            warnAboutOverwrittenCount(
+            warnAboutOverwrittenString(
                 event: event,
-                i: 0,
+                name: "event.aux[0]",
+                oldValue: event.aux[0],
+                newValue: msgID,
                 key: msgID,
                 tagType: "msg-id",
                 printTagsOnExit: printTagsOnExit);
@@ -1351,29 +1533,6 @@ void switchOnMsgID(
     case "viewermilestone":
         // Unknown Twitch msg-id: viewermilestone
         event.type = TWITCH_MILESTONE;
-        break;
-
-    case "gigantified-emote-message":
-        // Unknown Twitch msg-id: gigantified-emote-message
-        event.type = EMOTE;
-        goto case;
-
-    case "animated-message":
-        // Unknown Twitch msg-id: animated-message
-        // keep the type as PRIVMSG
-        if (onlySetType) break;
-
-        version(TwitchWarnings)
-        {
-            warnAboutOverwrittenAuxString(
-                event: event,
-                i: 0,
-                key: msgID,
-                tagType: "msg-id",
-                printTagsOnExit: printTagsOnExit);
-        }
-
-        event.aux[0] = msgID;
         break;
 
     /*case "bad_ban_admin":
@@ -1455,9 +1614,11 @@ void switchOnMsgID(
 
         version(TwitchWarnings)
         {
-            warnAboutOverwrittenAuxString(
+            warnAboutOverwrittenString(
                 event: event,
-                i: 0,
+                name: "event.aux[0]",
+                oldValue: event.aux[0],
+                newValue: msgID,
                 key: msgID,
                 tagType: "msg-id",
                 printTagsOnExit: printTagsOnExit);
@@ -1532,9 +1693,11 @@ void switchOnMsgID(
 
         version(TwitchWarnings)
         {
-            warnAboutOverwrittenAuxString(
+            warnAboutOverwrittenString(
                 event: event,
-                i: 0,
+                name: "event.aux[0]",
+                oldValue: event.aux[0],
+                newValue: msgID,
                 key: msgID,
                 tagType: "msg-id",
                 printTagsOnExit: printTagsOnExit);
@@ -1550,9 +1713,11 @@ void switchOnMsgID(
 
         version(TwitchWarnings)
         {
-            warnAboutOverwrittenAuxString(
+            warnAboutOverwrittenString(
                 event: event,
-                i: 1,
+                name: "event.aux[1]",
+                oldValue: event.aux[1],
+                newValue: msgID,
                 key: msgID,
                 tagType: "msg-id",
                 printTagsOnExit: printTagsOnExit);
@@ -1567,9 +1732,11 @@ void switchOnMsgID(
 
         version(TwitchWarnings)
         {
-            warnAboutOverwrittenAuxString(
+            warnAboutOverwrittenString(
                 event: event,
-                i: 6,
+                name: "event.aux[6]",
+                oldValue: event.aux[6],
+                newValue: msgID,
                 key: msgID,
                 tagType: "msg-id",
                 printTagsOnExit: printTagsOnExit);
@@ -1600,9 +1767,11 @@ void switchOnMsgID(
 
         version(TwitchWarnings)
         {
-            warnAboutOverwrittenAuxString(
+            warnAboutOverwrittenString(
                 event: event,
-                i: 0,
+                name: "event.aux[0]",
+                oldValue: event.aux[0],
+                newValue: msgID,
                 key: msgID,
                 tagType: "msg-id",
                 printTagsOnExit: printTagsOnExit);
