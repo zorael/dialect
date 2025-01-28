@@ -199,7 +199,7 @@ if (isOutputRange!(Sink, char[]))
 {
     import lu.deltastrings : putDelta;
     import lu.string : tabs;
-    import std.array : replace;
+    import std.algorithm.searching : canFind;
     import std.conv : text;
     import std.format : formattedWrite;
 
@@ -207,15 +207,14 @@ if (isOutputRange!(Sink, char[]))
         text('@', event.tags, ' ', event.raw) :
         event.raw;
 
-    immutable escaped = raw
-        .replace('\\', `\\`)
-        .replace('"', `\"`);
+    immutable enumInputPattern = (raw.canFind('\\') || raw.canFind('"')) ?
+        "%senum input = r\"%s\";\n" :  // raw wysiwyg string
+        "%senum input = \"%s\";\n";    // normal string
 
     immutable deeperIndents = indents + 1;
 
     sink.formattedWrite("%s{\n", indents.tabs);
-    if (escaped != raw) sink.formattedWrite("%s// %s\n", deeperIndents.tabs, raw);
-    sink.formattedWrite("%senum input = \"%s\";\n", deeperIndents.tabs, escaped);
+    sink.formattedWrite(enumInputPattern, deeperIndents.tabs, raw);
     sink.formattedWrite("%simmutable event = parser.toIRCEvent(input);\n\n", deeperIndents.tabs);
     sink.formattedWrite("%swith (event)\n", deeperIndents.tabs);
     sink.formattedWrite("%s{\n", deeperIndents.tabs);
