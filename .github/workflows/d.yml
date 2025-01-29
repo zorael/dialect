@@ -60,11 +60,11 @@ jobs:
     - name: 'Build: assertgen'
       run: dub build --nodeps -b debug :assertgen
 
-    - name: 'Build: docs'
+    - name: 'Run dscan'
       if: matrix.dc == 'dmd-latest' && matrix.os == 'ubuntu-latest' && success()
-      run : dub build --nodeps -b docs
+      run: dmd -run dscan.d
 
-    - name: 'Generate documenation'
+    - name: 'Generate documentation'
       if: matrix.dc == 'dmd-latest' && matrix.os == 'ubuntu-latest' && success()
       run: |
         git clone https://github.com/zorael/lu.git
