@@ -2,8 +2,8 @@
 
 set -uexo pipefail
 
-#DMD_VERSION="2.098.0"
-#LDC_VERSION="1.28.0"
+#DMD_VERSION="2.108.0"
+#LDC_VERSION="1.38.0"
 CURL_USER_AGENT="CirleCI $(curl --version | head -n 1)"
 
 update_repos() {
@@ -65,8 +65,6 @@ build() {
 
     shift 2  # shift away compiler and arch
     # "$@" is now any extra parameters passed to build
-
-    dub clean
 
     time dub test  "$compiler_switch" "$arch_switch" "$@"
     time dub build "$compiler_switch" "$arch_switch" "$@" --nodeps -b debug
