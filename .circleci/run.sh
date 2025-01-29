@@ -94,7 +94,7 @@ case $1 in
 
         #clone_and_add lu
 
-        time build dmd x86_64 lowmem
+        time build dmd x86_64
         ;;
 
     build-ldc)
@@ -104,7 +104,7 @@ case $1 in
 
         #clone_and_add lu
 
-        time build ldc2 x86_64 lowmem
+        time build ldc2 x86_64
         ;;
 
     *)
