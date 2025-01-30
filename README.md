@@ -113,23 +113,23 @@ struct IRCParser
 * `bot` includes some code specifically useful for bot applications
 * `twitchbot` is `twitch` and `bot` combined
 
-It is `pure` and `@safe` in the default `library` configuration.
+It is `pure` and `@safe` in the `library` and `bot` configurations.
 
 ### How to use
 
 See the [examples](/examples) directory for a simple bot client that connects to an IRC server and joins a channel.
 
-> This project is not a bot framework; for that you're likely better off with the [reference implementation bot](https://github.com/zorael/kameloso) and writing a plugin that suits your needs.
+> This project is bring-your-own-client and is not a bot framework. For that you're likely better off with the [reference implementation bot](https://github.com/zorael/kameloso) and writing a plugin that suits your needs.
 
 #### Longer story
 
-* Write a client that connects to an IRC server and reads from it.
+* Write a client that connects to an IRC server.
 * Create an [`IRCClient`](https://zorael.github.io/dialect/dialect.defs.IRCClient.html) and configure its members. (required for context when parsing)
 * Create an [`IRCServer`](https://zorael.github.io/dialect/dialect.defs.IRCServer.html) and configure its members. (it may work without but just give it at minimum a host address)
-* Create an [`IRCParser`](https://zorael.github.io/dialect/dialect.parsing.IRCParser.html) with your client and server via its constructor. Pass it between functions by `ref`.
-* Read a string from the server and parse it into an [`IRCEvent`](https://zorael.github.io/dialect/dialect.defs.IRCEvent.html) with [`yourParser.toIRCEvent(stringFromServer)`](https://zorael.github.io/dialect/dialect.parsing.IRCParser.toIRCEvent.html).
-* Switch on the [`IRCEvent.type`](https://zorael.github.io/dialect/dialect.defs.IRCEvent.Type.html) member and handle the event accordingly.
-* Draw the rest of the owl. Remember to `PONG` on `PING`.
+* Create an [`IRCParser`](https://zorael.github.io/dialect/dialect.parsing.IRCParser.html) by passing your client and server to its constructor. Pass it between functions by `ref`.
+* Read a string from the server and parse it into an [`IRCEvent`](https://zorael.github.io/dialect/dialect.defs.IRCEvent.html) with [`parser.toIRCEvent(stringFromServer)`](https://zorael.github.io/dialect/dialect.parsing.IRCParser.toIRCEvent.html).
+* Switch on the [`IRCEvent.type`](https://zorael.github.io/dialect/dialect.defs.IRCEvent.Type.html) member and handle the event accordingly. Remember to `PONG` on `PING`.
+* Draw the rest of the owl.
 
 ##### Like so
 
@@ -143,7 +143,7 @@ server.address = "...";
 IRCParser parser = IRCParser(client, server);
 
 {
-    string fromServer = ":zorael!~NaN@address.tld MODE #channel +v nickname";
+    const fromServer = `:zorael!~NaN@address.tld MODE #channel +v nickname`;
     auto event = parser.toIRCEvent(fromServer);
 
     with (event)
@@ -158,7 +158,7 @@ IRCParser parser = IRCParser(client, server);
     }
 }
 {
-    string fromServer = ":cherryh.freenode.net 435 oldnick newnick #d :Cannot change nickname while banned on channel";
+    const fromServer = ":cherryh.freenode.net 435 oldnick newnick #d :Cannot change nickname while banned on channel";
     auto event = parser.toIRCEvent(fromServer);
 
     with (event)
@@ -173,11 +173,7 @@ IRCParser parser = IRCParser(client, server);
     }
 }
 {
-    /+
-        Requires support for Twitch servers through build configurations
-        `twitch` or `twitchbot`.
-     +/
-    string fromServer = r"@badge-info=;badges=;color=;display-name=AnAnonymousGifter;emotes=;flags=;id=01af180f-5efd-40c8-94fb-d0a346c7fg86;login=ananonymousgifter;mod=0;msg-id=subgift;msg-param-fun-string=FunStringFour;msg-param-gift-months=1;msg-param-goal-contribution-type=SUB_POINTS;msg-param-goal-current-contributions=15624;msg-param-goal-target-contributions=20000;msg-param-goal-user-contributions=1;msg-param-months=24;msg-param-origin-id=54\s41\s9a\s69\s6c\sb4\s3c\s8b\s0b\se4\sdf\s4c\sba\s5b\s9b\s23\s4c\sa7\s9b\sc4;msg-param-recipient-display-name=SomeoneOnTwitch;msg-param-recipient-id=5472062201;msg-param-recipient-user-name=someoneontwitch;msg-param-sub-plan-name=Channel\sSubscription\s(some_streamer);msg-param-sub-plan=1000;room-id=4920718204;subscriber=0;system-msg=An\sanonymous\suser\sgifted\sa\sTier\s1\ssub\sto\sSomeoneOnTwitch!\s;tmi-sent-ts=1685982143345;user-id=2745918607;user-type= :tmi.twitch.tv USERNOTICE #some_streamer";
+    const fromServer = `@badge-info=;badges=;color=;display-name=AnAnonymousGifter;emotes=;flags=;id=01af180f-5efd-40c8-94fb-d0a346c7fg86;login=ananonymousgifter;mod=0;msg-id=subgift;msg-param-fun-string=FunStringFour;msg-param-gift-months=1;msg-param-goal-contribution-type=SUB_POINTS;msg-param-goal-current-contributions=15624;msg-param-goal-target-contributions=20000;msg-param-goal-user-contributions=1;msg-param-months=24;msg-param-origin-id=54\s41\s9a\s69\s6c\sb4\s3c\s8b\s0b\se4\sdf\s4c\sba\s5b\s9b\s23\s4c\sa7\s9b\sc4;msg-param-recipient-display-name=SomeoneOnTwitch;msg-param-recipient-id=547202201;msg-param-recipient-user-name=someoneontwitch;msg-param-sub-plan-name=Channel\sSubscription\s(some_streamer);msg-param-sub-plan=1000;room-id=4920718204;subscriber=0;system-msg=An\sanonymous\suser\sgifted\sa\sTier\s1\ssub\sto\sSomeoneOnTwitch!\s;tmi-sent-ts=1685982143345;user-id=274518607;user-type= :tmi.twitch.tv USERNOTICE #some_streamer`;
     auto event = parser.toIRCEvent(fromServer);
 
     with (event)
@@ -188,11 +184,11 @@ IRCParser parser = IRCParser(client, server);
         assert(sender.account == "ananonymousgifter");
         assert(sender.displayName == "AnAnonymousGifter");
         assert(sender.badges == "*");
-        assert(sender.id == 2745918607);
+        assert(sender.id == 274518607);
         assert(target.nickname == "someoneontwitch");
         assert(target.account == "someoneontwitch");
         assert(target.displayName == "SomeoneOnTwitch");
-        assert(target.id == 5472062201);
+        assert(target.id == 547202201);
         assert(channel == "#some_streamer");
         assert(content == "An anonymous user gifted a Tier 1 sub to SomeoneOnTwitch!");
         assert(aux[0] == "1000");
@@ -203,7 +199,7 @@ IRCParser parser = IRCParser(client, server);
         assert(count[2] == 20000);
         assert(count[3] == 15624);
         assert(count[4] == 1);
-        assert(tags == "badge-info=;badges=;color=;display-name=AnAnonymousGifter;emotes=;flags=;id=01af180f-5efd-40c8-94fb-d0a346c7fg86;login=ananonymousgifter;mod=0;msg-id=subgift;msg-param-fun-string=FunStringFour;msg-param-gift-months=1;msg-param-goal-contribution-type=SUB_POINTS;msg-param-goal-current-contributions=15624;msg-param-goal-target-contributions=20000;msg-param-goal-user-contributions=1;msg-param-months=24;msg-param-origin-id=54\\s41\\s9a\\s69\\s6c\\sb4\\s3c\\s8b\\s0b\\se4\\sdf\\s4c\\sba\\s5b\\s9b\\s23\\s4c\\sa7\\s9b\\sc4;msg-param-recipient-display-name=SomeoneOnTwitch;msg-param-recipient-id=5472062201;msg-param-recipient-user-name=someoneontwitch;msg-param-sub-plan-name=Channel\\sSubscription\\s(some_streamer);msg-param-sub-plan=1000;room-id=4920718204;subscriber=0;system-msg=An\\sanonymous\\suser\\sgifted\\sa\\sTier\\s1\\ssub\\sto\\sSomeoneOnTwitch!\\s;tmi-sent-ts=1685982143345;user-id=2745918607;user-type=");
+        assert(tags == "badge-info=;badges=;color=;display-name=AnAnonymousGifter;emotes=;flags=;id=01af180f-5efd-40c8-94fb-d0a346c7fg86;login=ananonymousgifter;mod=0;msg-id=subgift;msg-param-fun-string=FunStringFour;msg-param-gift-months=1;msg-param-goal-contribution-type=SUB_POINTS;msg-param-goal-current-contributions=15624;msg-param-goal-target-contributions=20000;msg-param-goal-user-contributions=1;msg-param-months=24;msg-param-origin-id=54\\s41\\s9a\\s69\\s6c\\sb4\\s3c\\s8b\\s0b\\se4\\sdf\\s4c\\sba\\s5b\\s9b\\s23\\s4c\\sa7\\s9b\\sc4;msg-param-recipient-display-name=SomeoneOnTwitch;msg-param-recipient-id=547202201;msg-param-recipient-user-name=someoneontwitch;msg-param-sub-plan-name=Channel\\sSubscription\\s(some_streamer);msg-param-sub-plan=1000;room-id=4920718204;subscriber=0;system-msg=An\\sanonymous\\suser\\sgifted\\sa\\sTier\\s1\\ssub\\sto\\sSomeoneOnTwitch!\\s;tmi-sent-ts=1685982143345;user-id=274518607;user-type=");
         assert(id == "01af180f-5efd-40c8-94fb-d0a346c7fg86");
     }
 }
@@ -213,7 +209,7 @@ See the [`tests`](/tests) directory for more example parses.
 
 ### Unit test generation
 
-Compiling the `assertgen` dub subpackage builds a command-line tool with which it is easy to generate `assert` blocks like the ones above. These can then be pasted into an appropriate file in [`tests`](tests), and ideally submitted as a GitHub pull request for upstream inclusion. You can use it to contribute known-good parses and increase coverage of event types.
+Compiling the `assertgen` dub subpackage builds a command-line tool with which it is easy to generate unit test `assert` blocks like the ones above. These can then be pasted into an appropriate file in the [`tests`](tests) directory, and ideally submitted as a GitHub pull request for upstream inclusion. You can use it to contribute known-good parses and increase coverage of event types.
 
 Simply run `dub run :assertgen` and follow the on-screen instructions.
 
@@ -231,7 +227,7 @@ Enter server address [irc.libera.chat]: irc.server.tld
 :irc.server.tld PRIVMSG #channel :i am a fish
 
 {
-    enum input = ":irc.server.tld PRIVMSG #channel :i am a fish";
+    enum input = `:irc.server.tld PRIVMSG #channel :i am a fish`;
     immutable event = parser.toIRCEvent(input);
 
     with (event)
@@ -254,7 +250,7 @@ If your repositories (or other software sources) don't have compilers recent eno
 
 Releases of the library prior to `v3.0.0` remain available for older compilers.
 
-Note that while IRC is standardised, servers still come in [many flavours](https://upload.wikimedia.org/wikipedia/commons/thumb/d/d5/IRCd_software_implementations3.svg/1533px-IRCd_software_implementations3.svg.png), some of which [outright conflict](http://defs.ircdocs.horse/defs/numerics.html) with others. Supporting conflicting event types is a challenge and requires manually adding special-casing to the parser. The framework for this *is* in place and *is* working (see [`struct Typenums`](source/dialect/defs.d)), but it is understandably not fully exhaustive. If you encounter an event that is not parsed correctly, please file an issue.
+Note that while IRC is standardised, servers still come in [many flavours](https://en.wikipedia.org/wiki/File:IRCd_software_implementations3.svg), some of which [outright conflict](http://defs.ircdocs.horse/defs/numerics.html) with others. Supporting conflicting event types is a challenge and requires manually adding special-casing to the parser. The groundwork for this *is* in place and *is* working (see [`dialect.defs.Typenums`](https://zorael.github.io/dialect/dialect.defs.Typenums.html)), but it is understandably not fully exhaustive. If you encounter an event that is not parsed correctly, please file an issue.
 
 **Please report bugs. Unreported bugs can only be fixed by accident.**
 
