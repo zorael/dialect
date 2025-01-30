@@ -1152,14 +1152,19 @@ auto parseTwitchTags(ref IRCParser parser, ref IRCEvent event) @safe
     {
         if (printTagsOnExit)
         {
+            import std.algorithm.iteration : map;
+            import std.conv : to;
             import std.stdio : writefln, writeln;
 
-            enum pattern = `%-35s%s`;
+            alias underscoreNull = (n) => n.isNull ? "_" : n.get().to!string;
+
+            enum auxPattern =   `%-35s[ %(%s, %) ]`;
+            enum countPattern = `%-35s[ %-(%s, %) ]`;
 
             writeln();
             printTags(event);
-            writefln(pattern, "event.aux", event.aux[]);
-            writefln(pattern, "event.count", event.count[]);
+            writefln(auxPattern, "event.aux", event.aux[]);
+            writefln(countPattern, "event.count", event.count[].map!underscoreNull);
             writeln();
         }
     }
