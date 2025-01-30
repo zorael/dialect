@@ -34,6 +34,9 @@ nothrow:
     The [IRCEvent] struct is a construct with fields extracted from raw server
     strings. Since structs are not polymorphic the [IRCEvent.Type|Type] enum
     dictates what kind of event it is.
+
+    See_Also:
+        [IRCUser]
  +/
 struct IRCEvent
 {
@@ -1418,6 +1421,9 @@ struct IRCUser
     different server daemons, to meld into `base` for a union of the two
     (or more). This speeds up translation greatly and allows us to have
     different mappings for different daemons.
+
+    See_Also:
+        [dialect.common.typenumsOf]
  +/
 struct Typenums
 {

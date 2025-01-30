@@ -106,6 +106,9 @@ import lu.string : advancePast;
     Throws:
         [dialect.common.IRCParseException|IRCParseException] if an empty
         string was passed.
+
+    See_Also:
+        [dialect.defs.IRCEvent]
  +/
 public IRCEvent toIRCEvent(
     ref IRCParser parser,
@@ -237,6 +240,12 @@ unittest
     Throws:
         [dialect.common.IRCParseException|IRCParseException] if an unknown
         type was encountered.
+
+    See_Also:
+        [parsePrefix]
+        [parseTypestring]
+        [parseSpecialcases]
+        [parseGeneralCases]
  +/
 void parseBasic(
     ref IRCParser parser,
@@ -375,6 +384,12 @@ unittest
         event = Reference to the [dialect.defs.IRCEvent|IRCEvent] to start
             working on.
         slice = Reference to the *slice* of the raw IRC string.
+
+    See_Also:
+        [parseBasic]
+        [parseTypestring]
+        [parseSpecialcases]
+        [parseGeneralCases]
  +/
 void parsePrefix(
     ref IRCParser parser,
@@ -484,6 +499,12 @@ unittest
         [dialect.common.IRCParseException|IRCParseException] if conversion from
         typestring to [dialect.defs.IRCEvent.Type|IRCEvent.Type] or typestring
         to a number failed.
+
+    See_Also:
+        [parsePrefix]
+        [parseBasic]
+        [parseSpecialcases]
+        [parseGeneralCases]
  +/
 void parseTypestring(
     ref IRCParser parser,
@@ -587,6 +608,12 @@ unittest
         [dialect.common.IRCParseException|IRCParseException] if an unknown
         to-connect-type event was encountered, or if the event was not
         recognised at all, as neither a normal type nor a numeric.
+
+    See_Also:
+        [parsePrefix]
+        [parseBasic]
+        [parseTypestring]
+        [parseGeneralCases]
  +/
 void parseSpecialcases(
     ref IRCParser parser,
@@ -1534,6 +1561,12 @@ void parseSpecialcases(
         event = Reference to the [dialect.defs.IRCEvent|IRCEvent] to continue
             working on.
         slice = Reference to the slice of the raw IRC string.
+
+    See_Also:
+        [parsePrefix]
+        [parseBasic]
+        [parseTypestring]
+        [parseSpecialcases]
  +/
 void parseGeneralCases(
     const ref IRCParser parser,

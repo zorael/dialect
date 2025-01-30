@@ -43,6 +43,9 @@ public:
 
     Returns:
         A `typenums` array of [dialect.defs.IRCEvent|IRCEvent]s mapped to numerics.
+
+    See_Also:
+        [dialect.defs.Typenums]
  +/
 auto typenumsOf(const IRCServer.Daemon daemon) pure @safe nothrow @nogc
 {
@@ -626,6 +629,9 @@ auto isValidChannel(
 
     Returns:
         `true` if the nickname string is judged to be a nickname, `false` if not.
+
+    See_Also:
+        [isValidNicknameCharacter]
  +/
 auto isValidNickname(
     const string nickname,
@@ -746,6 +752,9 @@ auto isValidNickname(
     Returns:
         `true` if the character is in the list of valid characters for
         nicknames, `false` if not.
+
+    See_Also:
+        [isValidNickname]
  +/
 auto isValidNicknameCharacter(const ubyte c) pure @safe nothrow @nogc
 {
@@ -962,6 +971,9 @@ auto stripModesign(
         data = Appendix to the signed modestring; arguments to the modes that
             are being set.
         server = The current [dialect.defs.IRCServer|IRCServer] with all its settings.
+
+    See_Also:
+        [dialect.defs.IRCChannel.Mode]
  +/
 void setMode(
     ref IRCChannel channel,
@@ -1715,6 +1727,9 @@ auto isUpper(
 
     Returns:
         The passed `c` in lowercase as per the case mappings.
+
+    See_Also:
+        [toLowerCase]
  +/
 auto toLower(
     const char c,
@@ -1776,6 +1791,9 @@ auto toLower(
     Returns:
         The passed `name` string with uppercase characters replaced as per
         the case mappings.
+
+    See_Also:
+        [toLower]
  +/
 auto toLowerCase(
     const string name,

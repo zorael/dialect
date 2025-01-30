@@ -635,7 +635,7 @@ struct Configuration
     bool overwrite;
 
     /++
-        Shortcut to Twitch input.
+        Shortcut for Twitch input.
      +/
     bool twitch;
 
@@ -927,7 +927,7 @@ auto callGetopt(string[] args)
 
     version(TwitchSupport)
     {
-        enum twitchString = "Shortcut to Twitch input";
+        enum twitchString = "Shortcut for Twitch input";
     }
     else
     {
