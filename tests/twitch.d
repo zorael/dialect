@@ -2000,4 +2000,32 @@ unittest
             assert((id == "01af180f-5efd-40c8-94fb-d0a346c7bf86"), id);
         }
     }
+    {
+        enum input = `@badge-info=subscriber/3;badges=subscriber/3,premium/1;color=#FF69B4;display-name=amaamasharku;emotes=;flags=;id=12141c74-bfbc-441f-a600-93b681c8a619;login=amaamasharku;mod=0;msg-id=resub;msg-param-anon-gift=true;msg-param-cumulative-months=3;msg-param-gift-month-being-redeemed=0;msg-param-gift-months=3;msg-param-months=0;msg-param-should-share-streak=1;msg-param-streak-months=3;msg-param-sub-plan-name=Subscription\s(cerbervt);msg-param-sub-plan=1000;msg-param-was-gifted=true;room-id=852880224;subscriber=1;system-msg=amaamasharku\ssubscribed\sat\sTier\s1.\sThey've\ssubscribed\sfor\s3\smonths,\scurrently\son\sa\s3\smonth\sstreak!;tmi-sent-ts=1738270210743;user-id=241759398;user-type=;vip=0 :tmi.twitch.tv USERNOTICE #cerbervt`;
+        immutable event = parser.toIRCEvent(input);
+
+        with (event)
+        {
+            assert((type == IRCEvent.Type.TWITCH_SUB), type.toString());
+            assert((sender.nickname == "amaamasharku"), sender.nickname);
+            assert((sender.address == "tmi.twitch.tv"), sender.address);
+            assert((sender.account == "amaamasharku"), sender.account);
+            assert((sender.displayName == "amaamasharku"), sender.displayName);
+            assert((sender.badges == "subscriber/3,premium/1"), sender.badges);
+            assert((sender.colour == "FF69B4"), sender.colour);
+            assert((sender.id == 241759398), sender.id.to!string);
+            assert((channel == "#cerbervt"), channel);
+            assert((content == "amaamasharku subscribed at Tier 1. They've subscribed for 3 months, currently on a 3 month streak!"), content);
+            assert((aux[0] == "1000"), aux[0]);
+            assert((aux[2] == "Subscription (cerbervt)"), aux[2]);
+            assert((aux[6] == "was-gifted"), aux[6]);
+            assert((aux[7] == "anon-gift"), aux[7]);
+            assert((count[0] == 3), count[0].to!string);
+            assert((count[1] == 3), count[1].to!string);
+            assert((count[3] == 3), count[3].to!string);
+            assert((count[7] == 1), count[7].to!string);
+            assert((tags == "badge-info=subscriber/3;badges=subscriber/3,premium/1;color=#FF69B4;display-name=amaamasharku;emotes=;flags=;id=12141c74-bfbc-441f-a600-93b681c8a619;login=amaamasharku;mod=0;msg-id=resub;msg-param-anon-gift=true;msg-param-cumulative-months=3;msg-param-gift-month-being-redeemed=0;msg-param-gift-months=3;msg-param-months=0;msg-param-should-share-streak=1;msg-param-streak-months=3;msg-param-sub-plan-name=Subscription\\s(cerbervt);msg-param-sub-plan=1000;msg-param-was-gifted=true;room-id=852880224;subscriber=1;system-msg=amaamasharku\\ssubscribed\\sat\\sTier\\s1.\\sThey've\\ssubscribed\\sfor\\s3\\smonths,\\scurrently\\son\\sa\\s3\\smonth\\sstreak!;tmi-sent-ts=1738270210743;user-id=241759398;user-type=;vip=0"), tags);
+            assert((id == "12141c74-bfbc-441f-a600-93b681c8a619"), id);
+        }
+    }
 }
