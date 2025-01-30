@@ -19,9 +19,9 @@ unittest
 
     with (client_)
     {
-        nickname = "dialect";
-        user = "dialect";
-        ident = "dialect";
+        nickname = "zorael";
+        user = "zorael";
+        ident = "zorael";
     }
 
     IRCServer server_;
@@ -213,8 +213,8 @@ unittest
             assert((type == IRCEvent.Type.GLOBALUSERSTATE), type.toString());
             assert((sender.address == "tmi.twitch.tv"), sender.address);
             assert((sender.id == 22216721), sender.id.to!string);
-            assert((target.nickname == "dialect"), target.nickname);
-            assert((target.account == "dialect"), target.account);
+            assert((target.nickname == "zorael"), target.nickname);
+            assert((target.account == "zorael"), target.account);
             assert((target.displayName == "Zorael"), target.displayName);
             assert((target.badges == "*"), target.badges);
             assert((target.colour == "5F9EA0"), target.colour);
@@ -247,7 +247,7 @@ unittest
 
         with (event)
         {
-            assert((type == IRCEvent.Type.JOIN), type.toString());
+            assert((type == IRCEvent.Type.SELFJOIN), type.toString());
             assert((sender.nickname == "zorael"), sender.nickname);
             assert((sender.ident == "zorael"), sender.ident);
             assert((sender.address == "zorael.tmi.twitch.tv"), sender.address);
@@ -263,8 +263,8 @@ unittest
         {
             assert((type == IRCEvent.Type.USERSTATE), type.toString());
             assert((sender.address == "tmi.twitch.tv"), sender.address);
-            assert((target.nickname == "dialect"), target.nickname);
-            assert((target.account == "dialect"), target.account);
+            assert((target.nickname == "zorael"), target.nickname);
+            assert((target.account == "zorael"), target.account);
             assert((target.displayName == "Zorael"), target.displayName);
             assert((target.badges == "moderator/1"), target.badges);
             assert((target.colour == "5F9EA0"), target.colour);
