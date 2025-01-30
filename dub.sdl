@@ -128,3 +128,20 @@ configuration "unittest" {
         "PrintStacktraces" \
         "AssertGeneration"
 }
+
+/**
+    unittest-noflags: Unittest build testing everything but without compiler preview flags
+ */
+configuration "unittest-noflags" {
+    sourcePaths "source" "tests"
+    importPaths "source" "tests"
+
+    versions \
+        "FlagAsUpdated" \
+        "BotElements" \
+        "Postprocessors" \
+        "TwitchSupport" \
+        "TwitchWarnings" \
+        "PrintStacktraces" \
+        "AssertGeneration"
+}
