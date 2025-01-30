@@ -538,8 +538,6 @@ auto parseTwitchTags(ref IRCParser parser, ref IRCEvent event) @safe
         case "msg-param-was-gifted":
             // msg-param-was-gifted = false
             // On subscription events, whether or not the sub was from a gift.
-        case "msg-param-anon-gift":
-            // msg-param-anon-gift = false
 
             /+
                 Aux 6
@@ -559,6 +557,30 @@ auto parseTwitchTags(ref IRCParser parser, ref IRCEvent event) @safe
             }
 
             event.aux[6] = key[10..$];  // slice away "msg-param-"
+            break;
+
+        case "msg-param-anon-gift":
+            // msg-param-anon-gift = false
+            // Can happen at the same time as msg-param-was-gifted, so has to be separate
+
+            /+
+                Aux 7
+             +/
+            if (value == "false") break;
+
+            version(TwitchWarnings)
+            {
+                warnAboutOverwrittenString(
+                    event: event,
+                    name: "event.aux[7]",
+                    oldValue: event.aux[7],
+                    newValue: key[10..$],
+                    key: key,
+                    tagType: "tag",
+                    printTagsOnExit: printTagsOnExit);
+            }
+
+            event.aux[7] = key[10..$];  // slice away "msg-param-"
             break;
 
         case "first-msg":
