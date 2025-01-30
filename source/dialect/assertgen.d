@@ -10,19 +10,19 @@
 
     // Paste a raw event string and hit Enter to generate an assert block. Ctrl+C to exit.
 
-    $(I :silver.libera.chat 338 zorael deadmarshal 2605:6400:10:5bf:6f87:849d:f61e:2c8c :actually using host)
+    $(I :silver.libera.chat 338 zorael livemarshal 2625:6400:11:5bf:6f57:829d:f62e:2d8c :actually using host)
 
     {
-        enum input = ":silver.libera.chat 338 zorael deadmarshal 2605:6400:10:5bf:6f87:849d:f61e:2c8c :actually using host";
+        enum input = `:silver.libera.chat 338 zorael livemarshal 2625:6400:11:5bf:6f57:829d:f62e:2d8c :actually using host`;
         immutable event = parser.toIRCEvent(input);
 
         with (event)
         {
             assert((type == IRCEvent.Type.RPL_WHOISACTUALLY), type.toString());
             assert((sender.address == "silver.libera.chat"), sender.address);
-            assert((target.nickname == "deadmarshal"), target.nickname);
+            assert((target.nickname == "livemarshal"), target.nickname);
             assert((content == "actually using host"), content);
-            assert((aux[0] == "2605:6400:10:5bf:6f87:849d:f61e:2c8c"), aux[0]);
+            assert((aux[0] == "2625:6400:11:5bf:6f57:829d:f62e:2d8c"), aux[0]);
             assert((num == 338), num.to!string);
         }
     }
@@ -43,7 +43,7 @@
     $(I @badge-info=;badges=;color=#5F9EA0;display-name=Zorael;emote-sets=0,185411,771823,1511983;user-id=22216721;user-type= :tmi.twitch.tv GLOBALUSERSTATE)
 
     {
-        enum input = "@badge-info=;badges=;color=#5F9EA0;display-name=Zorael;emote-sets=0,185411,771823,1511983;user-id=22216721;user-type= :tmi.twitch.tv GLOBALUSERSTATE";
+        enum input = `@badge-info=;badges=;color=#5F9EA0;display-name=Zorael;emote-sets=0,185411,771823,1511983;user-id=22216721;user-type= :tmi.twitch.tv GLOBALUSERSTATE`;
         immutable event = parser.toIRCEvent(input);
 
         with (event)
@@ -83,7 +83,7 @@
     $(I @badge-info=subscriber/15;badges=subscriber/12;color=;display-name=SomeoneOnTwitch;emotes=;flags=;id=d6229854-2bf3-415d-80ce-a2fe84d00a23;login=someoneontwitch;mod=0;msg-id=submysterygift;msg-param-mass-gift-count=1;msg-param-origin-id=49\s9d\s3e\s68\sca\s26\se9\s2a\s6e\s44\sd4\s60\s9b\s3d\saa\sb9\s4c\sad\s43\s5c;msg-param-sender-count=4;msg-param-sub-plan=1000;room-id=71092938;subscriber=1;system-msg=SomeoneOnTwitch\sis\sgifting\s1\sTier\s1\sSubs\sto\sSome_Streamer's\scommunity!\sThey've\sgifted\sa\stotal\sof\s4\sin\sthe\schannel!;tmi-sent-ts=1569013433362;user-id=22454856921;user-type= :tmi.twitch.tv USERNOTICE #some_streamer)
 
     {
-        enum input = r"@badge-info=subscriber/15;badges=subscriber/12;color=;display-name=SomeoneOnTwitch;emotes=;flags=;id=d6229854-2bf3-415d-80ce-a2fe84d00a23;login=someoneontwitch;mod=0;msg-id=submysterygift;msg-param-mass-gift-count=1;msg-param-origin-id=49\s9d\s3e\s68\sca\s26\se9\s2a\s6e\s44\sd4\s60\s9b\s3d\saa\sb9\s4c\sad\s43\s5c;msg-param-sender-count=4;msg-param-sub-plan=1000;room-id=71092938;subscriber=1;system-msg=SomeoneOnTwitch\sis\sgifting\s1\sTier\s1\sSubs\sto\sSome_Streamer's\scommunity!\sThey've\sgifted\sa\stotal\sof\s4\sin\sthe\schannel!;tmi-sent-ts=1569013433362;user-id=22454856921;user-type= :tmi.twitch.tv USERNOTICE #some_streamer";
+        enum input = `@badge-info=subscriber/15;badges=subscriber/12;color=;display-name=SomeoneOnTwitch;emotes=;flags=;id=d6229854-2bf3-415d-80ce-a2fe84d00a23;login=someoneontwitch;mod=0;msg-id=submysterygift;msg-param-mass-gift-count=1;msg-param-origin-id=49\s9d\s3e\s68\sca\s26\se9\s2a\s6e\s44\sd4\s60\s9b\s3d\saa\sb9\s4c\sad\s43\s5c;msg-param-sender-count=4;msg-param-sub-plan=1000;room-id=71092938;subscriber=1;system-msg=SomeoneOnTwitch\sis\sgifting\s1\sTier\s1\sSubs\sto\sSome_Streamer's\scommunity!\sThey've\sgifted\sa\stotal\sof\s4\sin\sthe\schannel!;tmi-sent-ts=1569013433362;user-id=2245456921;user-type= :tmi.twitch.tv USERNOTICE #some_streamer`;
         immutable event = parser.toIRCEvent(input);
 
         with (event)
@@ -94,13 +94,13 @@
             assert((sender.account == "someoneontwitch"), sender.account);
             assert((sender.displayName == "SomeoneOnTwitch"), sender.displayName);
             assert((sender.badges == "subscriber/15"), sender.badges);
-            assert((sender.id == 22454856921), sender.id.to!string);
+            assert((sender.id == 2245456921), sender.id.to!string);
             assert((channel == "#some_streamer"), channel);
             assert((content == "SomeoneOnTwitch is gifting 1 Tier 1 Subs to Some_Streamer's community! They've gifted a total of 4 in the channel!"), content);
             assert((aux[0] == "1000"), aux[0]);
             assert((count[0] == 1), count[0].to!string);
             assert((count[1] == 4), count[1].to!string);
-            assert((tags == "badge-info=subscriber/15;badges=subscriber/12;color=;display-name=SomeoneOnTwitch;emotes=;flags=;id=d6229854-2bf3-415d-80ce-a2fe84d00a23;login=someoneontwitch;mod=0;msg-id=submysterygift;msg-param-mass-gift-count=1;msg-param-origin-id=49\\s9d\\s3e\\s68\\sca\\s26\\se9\\s2a\\s6e\\s44\\sd4\\s60\\s9b\\s3d\\saa\\sb9\\s4c\\sad\\s43\\s5c;msg-param-sender-count=4;msg-param-sub-plan=1000;room-id=71092938;subscriber=1;system-msg=SomeoneOnTwitch\\sis\\sgifting\\s1\\sTier\\s1\\sSubs\\sto\\sSome_Streamer's\\scommunity!\\sThey've\\sgifted\\sa\\stotal\\sof\\s4\\sin\\sthe\\schannel!;tmi-sent-ts=1569013433362;user-id=22454856921;user-type="), tags);
+            assert((tags == "badge-info=subscriber/15;badges=subscriber/12;color=;display-name=SomeoneOnTwitch;emotes=;flags=;id=d6229854-2bf3-415d-80ce-a2fe84d00a23;login=someoneontwitch;mod=0;msg-id=submysterygift;msg-param-mass-gift-count=1;msg-param-origin-id=49\\s9d\\s3e\\s68\\sca\\s26\\se9\\s2a\\s6e\\s44\\sd4\\s60\\s9b\\s3d\\saa\\sb9\\s4c\\sad\\s43\\s5c;msg-param-sender-count=4;msg-param-sub-plan=1000;room-id=71092938;subscriber=1;system-msg=SomeoneOnTwitch\\sis\\sgifting\\s1\\sTier\\s1\\sSubs\\sto\\sSome_Streamer's\\scommunity!\\sThey've\\sgifted\\sa\\stotal\\sof\\s4\\sin\\sthe\\schannel!;tmi-sent-ts=1569013433362;user-id=2245456921;user-type="), tags);
             assert((id == "d6229854-2bf3-415d-80ce-a2fe84d00a23"), id);
         }
     }
@@ -194,7 +194,9 @@ public auto main(string[] args)
     }
 
     inputLoop(parser, configuration);
-    assert(0, "unreachable");
+
+    // probably text was piped in and stdin closed
+    return 0;
 }
 
 
@@ -240,12 +242,19 @@ void putClientServerDelta(Sink)
         static assert(0, message);
     }
 
-    sink.formattedWrite("%sIRCParser parser;\n\n", indents.tabs);
-    sink.formattedWrite("%swith (parser)\n", indents.tabs);
+    sink.formattedWrite("%sIRCClient client_;\n\n", indents.tabs);
+    sink.formattedWrite("%swith (client_)\n", indents.tabs);
     sink.formattedWrite("%s{\n", indents.tabs);
-    sink.putDelta(IRCClient.init, client, indents+1, "client");
-    sink.putDelta(IRCServer.init, server, indents+1, "server");
-    sink.formattedWrite("%s}", indents.tabs);
+    sink.putDelta(IRCClient.init, client, indents+1);
+    sink.formattedWrite("%s}\n\n", indents.tabs);
+
+    sink.formattedWrite("%sIRCServer server_;\n\n", indents.tabs);
+    sink.formattedWrite("%swith (server_)\n", indents.tabs);
+    sink.formattedWrite("%s{\n", indents.tabs);
+    sink.putDelta(IRCServer.init, server, indents+1);
+    sink.formattedWrite("%s}\n\n", indents.tabs);
+
+    sink.formattedWrite("%sauto parser = IRCParser(client_, server_);", indents.tabs);
 
     static if (!__traits(hasMember, Sink, "data"))
     {
@@ -267,7 +276,7 @@ pure @safe unittest
     with (client)
     {
         nickname = "NICKNAME";
-        user = "UUUUUSER";
+        user = "USER";
         server.address = "something.freenode.net";
         server.port = 6667;
         server.daemon = IRCServer.Daemon.unreal;
@@ -277,17 +286,36 @@ pure @safe unittest
     sink.putClientServerDelta(client, server, 0);
 
     assert(sink[] ==
+`IRCClient client_;
+
+with (client_)
+{
+    nickname = "NICKNAME";
+    user = "USER";
+}
+
+IRCServer server_;
+
+with (server_)
+{
+    address = "something.freenode.net";
+    port = 6667;
+    daemon = IRCServer.Daemon.unreal;
+    aModes = "eIbq";
+}
+
+auto parser = IRCParser(client_, server_);`, '\n' ~ sink[]);/*
 `IRCParser parser;
 
 with (parser)
 {
     client.nickname = "NICKNAME";
-    client.user = "UUUUUSER";
+    client.user = "USER";
     server.address = "something.freenode.net";
     server.port = 6667;
     server.daemon = IRCServer.Daemon.unreal;
     server.aModes = "eIbq";
-}`, '\n' ~ sink[]);
+}`, '\n' ~ sink[]);*/
 }
 
 
@@ -333,9 +361,11 @@ void putEventAssertBlock(Sink)
         text('@', event.tags, ' ', event.raw) :
         event.raw;
 
-    immutable enumInputPattern = (raw.canFind('\\') || raw.canFind('"')) ?
-        "%senum input = r\"%s\";\n" :  // raw wysiwyg string
-        "%senum input = \"%s\";\n";    // normal string
+    immutable enumInputPattern = !raw.canFind('`') ?
+        "%senum input = `%s`;\n" :  // backtick wysiwyg string
+        (raw.canFind('\\') || raw.canFind('"')) ?
+            "%senum input = r\"%s\";\n" :  // raw wysiwyg string
+            "%senum input = \"%s\";\n";    // normal string
 
     immutable deeperIndents = indents + 1;
 
@@ -370,20 +400,20 @@ unittest
     sink.putEventAssertBlock(event, 0);
 
     assert(sink[] ==
-`{
-    enum input = ":zorael!~NaN@2001:41d0:2:80b4:: PRIVMSG #flerrp :kameloso: 8ball";
+"{
+    enum input = `:zorael!~NaN@2001:41d0:2:80b4:: PRIVMSG #flerrp :kameloso: 8ball`;
     immutable event = parser.toIRCEvent(input);
 
     with (event)
     {
         assert((type == IRCEvent.Type.CHAN), type.toString());
-        assert((sender.nickname == "zorael"), sender.nickname);
-        assert((sender.ident == "~NaN"), sender.ident);
-        assert((sender.address == "2001:41d0:2:80b4::"), sender.address);
-        assert((channel == "#flerrp"), channel);
-        assert((content == "kameloso: 8ball"), content);
+        assert((sender.nickname == \"zorael\"), sender.nickname);
+        assert((sender.ident == \"~NaN\"), sender.ident);
+        assert((sender.address == \"2001:41d0:2:80b4::\"), sender.address);
+        assert((channel == \"#flerrp\"), channel);
+        assert((content == \"kameloso: 8ball\"), content);
     }
-}`, '\n' ~ sink[]);
+}", '\n' ~ sink[]);
 }
 
 
@@ -394,8 +424,11 @@ unittest
     Params:
         parser = Refrence to [dialect.parsing.IRCParser|IRCParser] to populate
             with server information.
+        configuration = Reference to [Configuration] to populate with server information.
  +/
-void inputServerInformation(ref IRCParser parser) @system
+void inputServerInformation(
+    ref IRCParser parser,
+    ref Configuration configuration) @system
 {
     import dialect.common : typenumsOf;
     import lu.conv : Enum, toString;
@@ -405,41 +438,96 @@ void inputServerInformation(ref IRCParser parser) @system
     import std.traits : EnumMembers;
     import std.uni : toLower;
 
-    enum defaultDaemon = IRCServer.Daemon.solanum;
-    enum defaultNetwork = "Libera.Chat";
-    enum defaultAddress = "irc.libera.chat";
-
     writeln("-- Available daemons --");
     writefln("%(%(%-14s%)\n%)", EnumMembers!(IRCServer.Daemon).only.chunks(3));
     writeln();
 
-    write("Enter daemon (plus optional daemon literal) [", defaultDaemon.toString(), "]: ");
+    write("Enter daemon (plus optional daemon literal) [", Configuration.defaultDaemon.toString(), "]: ");
+    stdout.flush();
+
+    if (configuration.daemonLine.length)
+    {
+        writeln(configuration.daemonLine);
+        stdout.flush();
+    }
+    else
+    {
+        stdin.flush();
+        configuration.daemonLine = readln().stripped;
+    }
+
+    write("Enter network [", Configuration.defaultNetwork, "]: ");
     stdout.flush();
     stdin.flush();
 
-    string slice = readln().stripped;  // mutable so we can advancePast it
+    if (configuration.network.length)
+    {
+        writeln(configuration.network);
+        stdout.flush();
+    }
+    else
+    {
+        stdin.flush();
+        configuration.network = readln().stripped;
+    }
+
+    write("Enter server address [", Configuration.defaultAddress, "]: ");
+    stdout.flush();
+    stdin.flush();
+
+    if (configuration.address.length)
+    {
+        writeln(configuration.address);
+        stdout.flush();
+    }
+    else
+    {
+        stdin.flush();
+        configuration.address = readln().stripped;
+    }
+
+    stdin.flush();
+    parseServerInformation(parser, configuration);
+}
+
+
+// parseServerInformation
+/++
+    Parses server information from a [Configuration] struct and populates an
+    [dialect.parsing.IRCParser|IRCParser] with it.
+
+    Params:
+        parser = Reference to [dialect.parsing.IRCParser|IRCParser] to populate
+            with server information.
+        configuration = [Configuration] struct to take server information from.
+ +/
+auto parseServerInformation(
+    ref IRCParser parser,
+    const Configuration configuration)
+{
+    import dialect.common : typenumsOf;
+    import lu.conv : Enum;
+    import lu.string : advancePast;
+    import std.string : toLower;
+
+    string slice = configuration.daemonLine;  // mutable
     immutable daemonstring = slice.advancePast(' ', inherit: true).toLower;
     immutable daemonLiteral = slice.length ? slice : daemonstring;
 
     parser.server.daemon = daemonstring.length ?
         Enum!(IRCServer.Daemon).fromString(daemonstring) :
-        defaultDaemon;
+        Configuration.defaultDaemon;
+
     parser.typenums = typenumsOf(parser.server.daemon);
     parser.server.daemonstring = daemonLiteral;
 
-    write("Enter network [", defaultNetwork, "]: ");
-    stdout.flush();
-    stdin.flush();
+    parser.server.network = configuration.network.length ?
+        configuration.network :
+        Configuration.defaultNetwork;
 
-    parser.server.network = readln().stripped;
-    if (!parser.server.network.length) parser.server.network = defaultNetwork;
-
-    write("Enter server address [", defaultAddress, "]: ");
-    stdout.flush();
-    stdin.flush();
-
-    parser.server.address = readln().stripped;
-    if (!parser.server.address.length) parser.server.address = defaultAddress;
+    parser.server.address = configuration.address.length ?
+        configuration.address :
+        Configuration.defaultAddress;
 }
 
 
@@ -453,7 +541,7 @@ struct Configuration
     /++
         Default output filename.
      +/
-    enum defaultOutputFilename = "unittest.log";
+    enum defaultOutputFilename = "assertgen.log"; //"unittest.log";
 
     /++
         Default nickname.
@@ -474,6 +562,21 @@ struct Configuration
         Default GECOS "real name".
      +/
     enum defaultRealName = "dialect unit test";
+
+    /++
+        Default IRC server daemon.
+     +/
+    enum defaultDaemon = IRCServer.Daemon.solanum;
+
+    /++
+        Default IRC network (name).
+     +/
+    enum defaultNetwork = "Libera.Chat";
+
+    /++
+        Default IRC server address.
+     +/
+    enum defaultAddress = "irc.libera.chat";
 
     /++
         Path to the executable; `args[0]`.
@@ -499,6 +602,22 @@ struct Configuration
         Actual GECOS "real name".
      +/
     string realName = defaultRealName;
+
+    /++
+        Line entered as IRC daemon on the command line, optionally followed with
+        the name of the daemon (where relevant).
+     +/
+    string daemonLine;
+
+    /++
+        IRC server address.
+     +/
+    string address;
+
+    /++
+        IRC server network.
+     +/
+    string network;
 
     /++
         Output file.
@@ -547,7 +666,7 @@ struct Configuration
  +/
 auto createParser(
     out IRCParser parser,
-    const Configuration configuration)
+    /**const*/ Configuration configuration)
 {
     import dialect.common : typenumsOf;
     import std.conv : ConvException;
@@ -569,7 +688,7 @@ auto createParser(
 
             server.daemon = IRCServer.Daemon.twitch;
             server.network = "Twitch";
-            server.daemonstring = "twitch";
+            server.daemonstring = "Twitch";
             server.address = "irc.chat.twitch.tv";
             server.maxNickLength = 25;
 
@@ -583,7 +702,7 @@ auto createParser(
 
     try
     {
-        inputServerInformation(parser);
+        inputServerInformation(parser, configuration);
     }
     catch (ConvException e)
     {
@@ -628,11 +747,11 @@ auto createParser(
         parser = [dialect.parsing.IRCParser|IRCParser] to use for parsing.
         configuration = [Configuration] with values derived from command-line arguments.
  +/
-auto inputLoop(
+void inputLoop(
     ref IRCParser parser,
     const Configuration configuration)
 {
-    import lu.string : tabs;
+    import lu.string : AdvanceException, tabs;
     import std.array : Appender;
     import std.format : formattedWrite;
     import std.stdio : File, readln, stdin, stdout, writefln, writeln;
@@ -644,7 +763,7 @@ auto inputLoop(
 
     buffer.putClientServerDelta(parser.client, parser.server, configuration.indents);
 
-    enum typenumsOfPattern = "\n\n%sparser.typenums = typenumsOf(parser.server.daemon);\n";
+    enum typenumsOfPattern = "\n%sparser.typenums = typenumsOf(parser.server.daemon);\n";
     buffer.formattedWrite(typenumsOfPattern, configuration.indents.tabs);
 
     writeln();
@@ -685,6 +804,7 @@ auto inputLoop(
         enum pattern = "// ========== %s: %s\n";
         file.writefln(pattern, configuration.args0, now);
         file.writeln(buffer[]);
+        file.writeln(configuration.indents.tabs, scissors);
         file.flush();
     }
 
@@ -728,7 +848,7 @@ auto inputLoop(
                 buffer.formattedWrite("%s{\n", configuration.indents.tabs);
                 buffer.putDelta!(Yes.asserts)(oldClient, parser.client, configuration.indents+1, "client");
                 buffer.putDelta!(Yes.asserts)(oldServer, parser.server, configuration.indents+1, "server");
-                buffer.formattedWrite("%s}", configuration.indents.tabs);
+                buffer.formattedWrite("%s}\n", configuration.indents.tabs);
 
                 oldClient = parser.client;
                 oldServer = parser.server;
@@ -739,6 +859,20 @@ auto inputLoop(
         {
             enum pattern = "\n// IRC Parse Exception at %s:%d: %s\n";
             buffer.formattedWrite(pattern, e.file, e.line, e.msg);
+
+            version(PrintStacktraces)
+            {
+                import std.conv : text;
+
+                buffer.put("/*\n");
+                buffer.put(e.info.text);
+                buffer.put("\n*/\n");
+            }
+        }
+        catch (AdvanceException e)
+        {
+            enum pattern = "\n// Advance Exception at %s:%d: %s (needle:\"%s\" haystack:\"%s\")\n";
+            buffer.formattedWrite(pattern, e.file, e.line, e.msg, e.needle, e.haystack);
 
             version(PrintStacktraces)
             {
@@ -773,8 +907,6 @@ auto inputLoop(
         writeln();
         buffer.clear();
     }
-
-    assert(0, "unreachable");
 }
 
 
@@ -790,6 +922,7 @@ auto inputLoop(
  +/
 auto callGetopt(string[] args)
 {
+    import lu.conv : toString;
     import std.getopt : config, getopt;
 
     version(TwitchSupport)
@@ -816,6 +949,15 @@ auto callGetopt(string[] args)
         "i|ident",
             "Override initial ident",
             &configuration.ident,
+        "d|daemon",
+            "IRC server daemon (plus optional daemon literal) [" ~ Configuration.defaultDaemon.toString() ~ "]",
+            &configuration.daemonLine,
+        "N|network",
+            "IRC network (name) [" ~ Configuration.defaultNetwork ~ "]",
+            &configuration.network,
+        "s|server",
+            "Server address",
+            &configuration.address,
         "o|output",
             "Output file (specify '-' to disable) [" ~ configuration.outputFile ~ "]",
             &configuration.outputFile,
