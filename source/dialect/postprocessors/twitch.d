@@ -1808,6 +1808,16 @@ void switchOnMsgID(
             break;
         }
 
+        version(TwitchWarnings)
+        {
+            import std.stdio : writeln;
+
+            immutable message = "Unknown Twitch msg-id: " ~ msgID;
+            appendToErrors(event, message);
+            writeln(message);
+            printTagsOnExit = true;
+        }
+
         if (onlySetType) break;
 
         version(TwitchWarnings)
@@ -1823,16 +1833,6 @@ void switchOnMsgID(
         }
 
         event.aux[0] = msgID;
-
-        version(TwitchWarnings)
-        {
-            import std.stdio : writeln;
-
-            immutable message = "Unknown Twitch msg-id: " ~ msgID;
-            appendToErrors(event, message);
-            writeln(message);
-            printTagsOnExit = true;
-        }
         break;
     }
 }
