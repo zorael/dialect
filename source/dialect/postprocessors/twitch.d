@@ -1174,19 +1174,24 @@ auto parseTwitchTags(ref IRCParser parser, ref IRCEvent event) @safe
     {
         if (printTagsOnExit)
         {
+            import lu.conv : toString;
             import std.algorithm.iteration : map;
             import std.conv : to;
             import std.stdio : writefln, writeln;
 
-            alias underscoreNull = (n) => n.isNull ? "_" : n.get().to!string;
+            enum quotedPattern = `%-35s"%s"`;
+            enum plainPattern  = `%-35s%s`;
+            enum arrayPattern  = `%-35s[%-(%s, %)]`;
 
-            enum auxPattern =   `%-35s[ %(%s, %) ]`;
-            enum countPattern = `%-35s[ %-(%s, %) ]`;
+            alias underscoreNull = (n) => n.isNull ? "_" : n.get().to!string;
 
             writeln();
             printTags(event);
-            writefln(auxPattern, "event.aux", event.aux[]);
-            writefln(countPattern, "event.count", event.count[].map!underscoreNull);
+            writeln("---");
+            writefln(quotedPattern, "event.content", event.content);
+            writefln(plainPattern, "event.aux", event.aux[]);
+            writefln(arrayPattern, "event.count", event.count[].map!underscoreNull);
+            writefln(plainPattern, "event.type", event.type.toString());
             writeln();
         }
     }
@@ -1231,6 +1236,8 @@ void printTags(const ref IRCEvent event) @safe
 
     writeln('@', event.tags, ' ', event.raw, '$');
     auto tagRange = event.tags.splitter(";");  // mutable
+
+    if (!tagRange.empty) writeln("---");
 
     foreach (immutable tagline; tagRange)
     {
