@@ -54,6 +54,7 @@ clone_and_add() {
     if [[ ! -d "$repo" ]]; then
         git clone "https://github.com/zorael/${repo}.git"
         dub add-local "$repo"
+        dub upgrade
     fi
 }
 
