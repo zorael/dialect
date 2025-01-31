@@ -307,7 +307,7 @@ auto parseTwitchTags(ref IRCParser parser, ref IRCEvent event) @safe
                 * color – red for 10000+ bits, blue for 5000-9999, green for
                   1000-4999, purple for 100-999, gray for 1-99
                 * size – A digit between 1 and 4
-            */
+             */
             event.type = TWITCH_CHEER;
             goto case "ban-duration";  // set count[0]
 
@@ -1073,7 +1073,7 @@ auto parseTwitchTags(ref IRCParser parser, ref IRCEvent event) @safe
                     launches in November."
 
                     spotted in the wild as = 0
-                +/
+                 +/
             case "target-msg-id":
                 // banphrase
             case "msg-param-profileImageURL":
@@ -1419,7 +1419,7 @@ void switchOnMsgID(
         unban_success           <user> is no longer banned from this chat room.
         unrecognized_cmd        Unrecognized command: <command>
         raid                    Raiders from <other channel> have joined!\n
-    */
+     */
 
     version(TwitchWarnings)
     {
@@ -1453,7 +1453,7 @@ void switchOnMsgID(
             The person giving the gift is anonomous
 
             https://discuss.dev.twitch.tv/t/msg-id-purchase/22067/8
-            +/
+         +/
         // In reality the sender is "ananonymousgifter".
         event.type = TWITCH_SUBGIFT;
         break;

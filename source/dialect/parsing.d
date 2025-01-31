@@ -2533,7 +2533,7 @@ in (slice.length, "Tried to process `onMyInfo` on an empty slice")
     CraZyPaLaCe.Be_ChatFun.Be_Webradio.VIP  CR1.8.03-Unreal3.2.8.1
     redhispana.org                          Unreal3.2.8+UDB-3.6.1
     irc.portlane.se (ircnet)                2.11.2p3
-    */
+     */
 
     // :asimov.freenode.net 004 kameloso^ asimov.freenode.net ircd-seven-1.1.4 DOQRSZaghilopswz CFILMPQSbcefgijklmnopqrstvz bkloveqjfI
     // :tmi.twitch.tv 004 zorael :-

@@ -871,7 +871,7 @@ public:
 
             writeln("];");
         }
-    */
+     */
 
     /++
         The event type, signifying what *kind* of event this is.
@@ -2422,7 +2422,7 @@ public:
     [
         672 : Type.RPL_UNKNOWNMODES,
     ];
-    */
+     */
 }
 
 
