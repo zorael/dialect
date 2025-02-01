@@ -203,9 +203,12 @@ auto parseTwitchTags(ref IRCParser parser, ref IRCEvent event) @safe
             }
             else
             {
-                import std.conv : text;
-                immutable errorMessage = text("No room in aux for ", key, ": \"", message, '"');
-                appendToErrors(event, errorMessage);
+                version(TwitchWarnings)
+                {
+                    import std.conv : text;
+                    immutable errorMessage = text("No room in aux for ", key, ": \"", message, '"');
+                    appendToErrors(event, errorMessage);
+                }
             }
             break;
 
