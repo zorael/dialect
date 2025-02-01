@@ -64,7 +64,7 @@ auto parseTwitchTags(ref IRCParser parser, ref IRCEvent event) @safe
     version(TwitchWarnings)
     {
         /++
-            Whether or not an error occured and debug information should be printed
+            Whether or not an error occurred and debug information should be printed
             upon leaving the function.
          +/
         bool printTagsOnExit;
@@ -1260,7 +1260,7 @@ void printTags(const ref IRCEvent event) @safe
 
     Params:
         event = The [dialect.defs.IRCEvent|IRCEvent] whose `aux` element was overwritten.
-        value = The value of the string that will be overwriten.
+        value = The value of the string that will be overwritten.
         name = The name of the string being overwritten.
         key = The key of the tag that is overwriting the string.
         tagType = The type of tag that is overwriting the string.
@@ -1306,7 +1306,7 @@ void warnAboutOverwrittenString(
 
     Params:
         event = The [dialect.defs.IRCEvent|IRCEvent] whose `aux` element was overwritten.
-        value = The value of the string that will be overwriten.
+        value = The value of the string that will be overwritten.
         name = The name of the string being overwritten.
         key = The key of the tag that is overwriting the string.
         tagType = The type of tag that is overwriting the string.
@@ -1424,7 +1424,7 @@ void switchOnMsgID(
     version(TwitchWarnings)
     {
         /++
-            Whether or not an error occured and debug information should be printed
+            Whether or not an error occurred and debug information should be printed
             upon leaving the function.
          +/
         bool printTagsOnExit;
@@ -1447,7 +1447,7 @@ void switchOnMsgID(
         // "We added the msg-id “anonsubgift” to the user-notice which
         // defaults the sender to the channel owner"
         /+
-            For anything anonomous
+            For anything anonomous [sic]
             The channel ID and Channel name are set as normal
             The Recipienet is set as normal
             The person giving the gift is anonomous

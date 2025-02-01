@@ -516,7 +516,7 @@ public:
         ERR_TOOMANYAWAY, // = 429,
         ERR_EVENTNICKCHANGE, // = 430,
         ERR_NONICKNAMEGIVEN, // = 431,  // ":No nickname given"
-        ERR_ERRONEOUSNICKNAME, // = 432,// "<nick> :Erroneus nickname"
+        ERR_ERRONEOUSNICKNAME, // = 432,// "<nick> :Erroneous nickname"
         ERR_NICKNAMEINUSE, // = 433,    // "<nick> :Nickname is already in use"
         ERR_SERVICENAMEINUSE, // = 434, //CONFLICT
         ERR_NORULES, // = 434,

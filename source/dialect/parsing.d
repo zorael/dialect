@@ -893,7 +893,7 @@ void parseSpecialcases(
         // <integer> :operator(s) online  // 252
         // <integer> :unknown connection(s)  // 253
         // <integer> :channels formed // 254
-        // <nick> :Erroneus nickname // 432
+        // <nick> :Erroneous nickname // 432
         // <command> :Not enough parameters // 461
         // :asimov.freenode.net 252 kameloso^ 31 :IRC Operators online
         // :asimov.freenode.net 253 kameloso^ 13 :unknown connection(s)
@@ -1227,7 +1227,7 @@ void parseSpecialcases(
             else
             {
                 // Overflow! aux is too small.
-                if (!event.errors.length) event.errors = "CAP oveflow:";
+                if (!event.errors.length) event.errors = "CAP overflow:";
                 event.errors ~= ' ' ~ cap;
             }
         }

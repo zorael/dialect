@@ -422,7 +422,7 @@ unittest
     Asks the user to enter server information via standard input.
 
     Params:
-        parser = Refrence to [dialect.parsing.IRCParser|IRCParser] to populate
+        parser = Reference to [dialect.parsing.IRCParser|IRCParser] to populate
             with server information.
         configuration = Reference to [Configuration] to populate with server information.
  +/
