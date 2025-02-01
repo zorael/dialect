@@ -956,7 +956,7 @@ auto callGetopt(string[] args)
             "IRC network (name) [" ~ Configuration.defaultNetwork ~ "]",
             &configuration.network,
         "s|server",
-            "Server address",
+            "Server address [" ~ Configuration.defaultAddress ~ "]",
             &configuration.address,
         "o|output",
             "Output file (specify '-' to disable) [" ~ configuration.outputFile ~ "]",
