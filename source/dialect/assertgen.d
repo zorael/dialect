@@ -120,7 +120,7 @@ private:
 
 import dialect.defs;
 import dialect.parsing : IRCParser;
-import lu.common : Next;
+import lu.misc : Next;
 
 import std.typecons : Flag, No, Yes;
 

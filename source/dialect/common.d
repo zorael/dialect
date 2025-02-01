@@ -378,7 +378,7 @@ auto isAuthService(
     const IRCUser sender,
     const ref IRCParser parser) pure @safe
 {
-    import lu.common : sharedDomains;
+    import lu.misc : sharedDomains;
 
     version(TwitchSupport)
     {
