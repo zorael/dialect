@@ -490,6 +490,7 @@ unittest
             assert((content == "WAHEEEEY DA CHOCOOOOOOOOOOOO`"), content);
             assert((aux[0] == "1000"), aux[0]);
             assert((aux[2] == "Channel Subscription (chocotaco)"), aux[2]);
+            assert((aux[14] == "PoggyFifty subscribed at Tier 1. They've subscribed for 9 months, currently on a 9 month streak!"), aux[14]);
             assert((count[1] == 9), count[1].to!string);
             assert((count[3] == 9), count[3].to!string);
             assert((count[7] == 1), count[7].to!string);
@@ -1091,6 +1092,7 @@ unittest
             assert((aux[2] == "Channel Subscription (xqcow)"), aux[2]);
             assert((aux[4] == "125181523"), aux[4]);
             assert((aux[6] == "was-gifted"), aux[6]);
+            assert((aux[14] == "poome subscribed at Tier 1. They've subscribed for 3 months, currently on a 3 month streak!"), aux[14]);
             assert((count[0] == 3), count[0].to!string);
             assert((count[1] == 3), count[1].to!string);
             assert((count[2] == 3), count[2].to!string);
@@ -1607,6 +1609,7 @@ unittest
             assert((channel == "#nemefy0929"), channel);
             assert((content == "ネメちゃんこんばんわ"), content);
             assert((aux[0] == "watch-streak"), aux[0]);
+            assert((aux[14] == "まっりゆみ watched 3 consecutive streams this month and sparked a watch streak!"), aux[14]);
             assert((count[0] == 3), count[0].to!string);
             assert((count[1] == 350), count[1].to!string);
             assert((tags == "badge-info=;badges=bits/1;color=#1E90FF;display-name=まっりゆみ;emotes=;flags=;id=86a3282b-2785-4f4a-a103-3e4fe19eb4d4;login=marriyumi;mod=0;msg-id=viewermilestone;msg-param-category=watch-streak;msg-param-copoReward=350;msg-param-id=c52b7cd6-9fd0-4814-bb7e-b7844665f5b7;msg-param-value=3;room-id=883612928;subscriber=0;system-msg=まっりゆみ\\swatched\\s3\\sconsecutive\\sstreams\\sthis\\smonth\\sand\\ssparked\\sa\\swatch\\sstreak!;tmi-sent-ts=1700510454678;user-id=244695359;user-type=;vip=0"), tags);
@@ -1780,7 +1783,7 @@ unittest
             assert((content == "The_Guardian_01 gifted a Tier 1 sub to wofulrumble!"), content);
             assert((aux[0] == "1000"), aux[0]);
             assert((aux[2] == "Channel Subscription (hikarustation): $4.99 Sub"), aux[2]);
-            assert((aux[7] == "sharedchatnotice"), aux[7]);
+            assert((aux[8] == "sharedchatnotice"), aux[8]);
             assert((aux[12] == "110059426"), aux[12]);
             assert((count[0] == 1), count[0].to!string);
             assert((tags == "badge-info=;badges=premium/1;color=#FF0000;display-name=The_Guardian_01;emotes=;flags=;id=44975199-cdff-4e10-aa68-bd67e280660d;login=the_guardian_01;mod=0;msg-id=sharedchatnotice;msg-param-community-gift-id=9333928271658164128;msg-param-gift-months=1;msg-param-months=1;msg-param-origin-id=9333928271658164128;msg-param-recipient-display-name=wofulrumble;msg-param-recipient-id=29716641;msg-param-recipient-user-name=wofulrumble;msg-param-sender-count=0;msg-param-sub-plan-name=Channel\\sSubscription\\s(hikarustation):\\s$4.99\\sSub;msg-param-sub-plan=1000;room-id=469632185;source-badge-info=subscriber/1;source-badges=subscriber/0,sub-gift-leader/2;source-id=d3439028-575f-461e-9433-4bb9df3fe566;source-msg-id=subgift;source-room-id=110059426;subscriber=0;system-msg=The_Guardian_01\\sgifted\\sa\\sTier\\s1\\ssub\\sto\\swofulrumble!;tmi-sent-ts=1737079293405;user-id=65208525;user-type=;vip=0"), tags);
@@ -1804,8 +1807,9 @@ unittest
             assert((content == "Bao #1"), content);
             assert((aux[0] == "1000"), aux[0]);
             assert((aux[2] == "Channel Subscription (hikarustation): $4.99 Sub"), aux[2]);
-            assert((aux[7] == "sharedchatnotice"), aux[7]);
+            assert((aux[8] == "sharedchatnotice"), aux[8]);
             assert((aux[12] == "110059426"), aux[12]);
+            assert((aux[14] == "daltonmtaylor03 subscribed at Tier 1. They've subscribed for 2 months!"), aux[14]);
             assert((count[1] == 2), count[1].to!string);
             assert((count[5] == 3), count[5].to!string);
             assert((count[6] == 1), count[6].to!string);
@@ -1851,7 +1855,7 @@ unittest
             assert((channel == "#cerbervt"), channel);
             assert((content == "circuitbrew converted from a Prime sub to a Tier 1 sub!"), content);
             assert((aux[0] == "1000"), aux[0]);
-            assert((aux[7] == "sharedchatnotice"), aux[7]);
+            assert((aux[8] == "sharedchatnotice"), aux[8]);
             assert((aux[12] == "825937345"), aux[12]);
             assert((tags == "badge-info=;badges=;color=#478937;display-name=circuitbrew;emotes=;flags=;id=ffe48ef9-80f4-4d58-9a7e-cf2982a6da85;login=circuitbrew;mod=0;msg-id=sharedchatnotice;msg-param-sub-plan=1000;room-id=852880224;source-badge-info=subscriber/1;source-badges=subscriber/0;source-id=3a92eb2c-d4de-4ae7-b9b2-16092aa82b8d;source-msg-id=primepaidupgrade;source-room-id=825937345;subscriber=0;system-msg=circuitbrew\\sconverted\\sfrom\\sa\\sPrime\\ssub\\sto\\sa\\sTier\\s1\\ssub!;tmi-sent-ts=1737078882888;user-id=79158584;user-type=;vip=0"), tags);
             assert((id == "ffe48ef9-80f4-4d58-9a7e-cf2982a6da85"), id);
@@ -1906,7 +1910,7 @@ unittest
             assert((aux[3] == "new emote slot!"), aux[3]);
             assert((aux[4] == "showlove"), aux[4]);
             assert((aux[5] == "SUB_POINTS"), aux[5]);
-            assert((aux[7] == "sharedchatnotice"), aux[7]);
+            assert((aux[8] == "sharedchatnotice"), aux[8]);
             assert((aux[12] == "1004060561"), aux[12]);
             assert((count[0] == 1), count[0].to!string);
             assert((count[1] == 1), count[1].to!string);
@@ -1935,7 +1939,7 @@ unittest
             assert((aux[0] == "1000"), aux[0]);
             assert((aux[3] == "new emote slot!"), aux[3]);
             assert((aux[5] == "SUB_POINTS"), aux[5]);
-            assert((aux[7] == "sharedchatnotice"), aux[7]);
+            assert((aux[8] == "sharedchatnotice"), aux[8]);
             assert((aux[12] == "1004060561"), aux[12]);
             assert((count[0] == 55), count[0].to!string);
             assert((count[1] == 55), count[1].to!string);
@@ -2057,5 +2061,4 @@ unittest
             assert((id == "0f107d27-3281-4bf7-a9b9-db780142ce62"), id);
         }
     }
-
 }
