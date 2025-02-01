@@ -501,9 +501,9 @@ void inputServerInformation(
             with server information.
         configuration = [Configuration] struct to take server information from.
  +/
-auto parseServerInformation(
+void parseServerInformation(
     ref IRCParser parser,
-    const Configuration configuration)
+    const Configuration configuration) pure @safe
 {
     import dialect.common : typenumsOf;
     import lu.conv : Enum;
