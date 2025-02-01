@@ -7,7 +7,7 @@ API documentation can be found [here](https://zorael.github.io/dialect/dialect.h
 ```d
 struct IRCEvent
 {
-    enum Type { ... }  // large enum of IRC event types
+    enum Type { ... }  // IRC event types
 
     Type type;
     IRCUser sender;
@@ -36,7 +36,7 @@ struct IRCUser
 {
     version(BotElements)
     {
-        enum Class { ... }  // enum of IRC user types in a channel; operator, staff, ...
+        enum Class { ... }  // user roles in a channel; operator, staff, ...
         Class class_;
     }
 
@@ -111,7 +111,7 @@ struct IRCParser
 * `library`
 * `twitch` includes extra parsing needed to interface with Twitch servers
 * `bot` includes some code specifically useful for bot applications
-* `twitchbot` is `twitch` and `bot` combined
+* `twitchbot` combines `twitch` and `bot`
 
 It is `pure` and `@safe` in the `library` and `bot` configurations.
 
@@ -119,7 +119,7 @@ It is `pure` and `@safe` in the `library` and `bot` configurations.
 
 See the [examples](/examples) directory for a simple bot client that connects to an IRC server and joins a channel.
 
-> This project is bring-your-own-client and is not a bot framework. For that you're likely better off with the [reference implementation bot](https://github.com/zorael/kameloso) and writing a plugin that suits your needs.
+> This project is **b**ring-**y**our-**o**wn-**c**lient and is not a bot framework. For that you're likely better off with the [reference implementation bot](https://github.com/zorael/kameloso) and writing a plugin that suits your needs.
 
 #### Longer story
 
@@ -240,7 +240,9 @@ Enter server address [irc.libera.chat]: irc.server.tld
 }
 ```
 
-The output will by default also be saved to a `unittest.log` file in the current directory. See the `--help` listing for more details, passed through `dub` with `dub run :assertgen -- --help`.
+The output will by default also be saved to an `assertgen.log` file in the current directory.
+
+See the `--help` listing for more flags, passed through `dub` with `dub run :assertgen -- --help`.
 
 ### Caveats
 
