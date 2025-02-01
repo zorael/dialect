@@ -1780,7 +1780,7 @@ unittest
             assert((content == "The_Guardian_01 gifted a Tier 1 sub to wofulrumble!"), content);
             assert((aux[0] == "1000"), aux[0]);
             assert((aux[2] == "Channel Subscription (hikarustation): $4.99 Sub"), aux[2]);
-            assert((aux[6] == "sharedchatnotice"), aux[6]);
+            assert((aux[7] == "sharedchatnotice"), aux[7]);
             assert((aux[12] == "110059426"), aux[12]);
             assert((count[0] == 1), count[0].to!string);
             assert((tags == "badge-info=;badges=premium/1;color=#FF0000;display-name=The_Guardian_01;emotes=;flags=;id=44975199-cdff-4e10-aa68-bd67e280660d;login=the_guardian_01;mod=0;msg-id=sharedchatnotice;msg-param-community-gift-id=9333928271658164128;msg-param-gift-months=1;msg-param-months=1;msg-param-origin-id=9333928271658164128;msg-param-recipient-display-name=wofulrumble;msg-param-recipient-id=29716641;msg-param-recipient-user-name=wofulrumble;msg-param-sender-count=0;msg-param-sub-plan-name=Channel\\sSubscription\\s(hikarustation):\\s$4.99\\sSub;msg-param-sub-plan=1000;room-id=469632185;source-badge-info=subscriber/1;source-badges=subscriber/0,sub-gift-leader/2;source-id=d3439028-575f-461e-9433-4bb9df3fe566;source-msg-id=subgift;source-room-id=110059426;subscriber=0;system-msg=The_Guardian_01\\sgifted\\sa\\sTier\\s1\\ssub\\sto\\swofulrumble!;tmi-sent-ts=1737079293405;user-id=65208525;user-type=;vip=0"), tags);
@@ -1804,7 +1804,7 @@ unittest
             assert((content == "Bao #1"), content);
             assert((aux[0] == "1000"), aux[0]);
             assert((aux[2] == "Channel Subscription (hikarustation): $4.99 Sub"), aux[2]);
-            assert((aux[6] == "sharedchatnotice"), aux[6]);
+            assert((aux[7] == "sharedchatnotice"), aux[7]);
             assert((aux[12] == "110059426"), aux[12]);
             assert((count[1] == 2), count[1].to!string);
             assert((count[5] == 3), count[5].to!string);
@@ -1851,7 +1851,7 @@ unittest
             assert((channel == "#cerbervt"), channel);
             assert((content == "circuitbrew converted from a Prime sub to a Tier 1 sub!"), content);
             assert((aux[0] == "1000"), aux[0]);
-            assert((aux[6] == "sharedchatnotice"), aux[6]);
+            assert((aux[7] == "sharedchatnotice"), aux[7]);
             assert((aux[12] == "825937345"), aux[12]);
             assert((tags == "badge-info=;badges=;color=#478937;display-name=circuitbrew;emotes=;flags=;id=ffe48ef9-80f4-4d58-9a7e-cf2982a6da85;login=circuitbrew;mod=0;msg-id=sharedchatnotice;msg-param-sub-plan=1000;room-id=852880224;source-badge-info=subscriber/1;source-badges=subscriber/0;source-id=3a92eb2c-d4de-4ae7-b9b2-16092aa82b8d;source-msg-id=primepaidupgrade;source-room-id=825937345;subscriber=0;system-msg=circuitbrew\\sconverted\\sfrom\\sa\\sPrime\\ssub\\sto\\sa\\sTier\\s1\\ssub!;tmi-sent-ts=1737078882888;user-id=79158584;user-type=;vip=0"), tags);
             assert((id == "ffe48ef9-80f4-4d58-9a7e-cf2982a6da85"), id);
@@ -1906,7 +1906,7 @@ unittest
             assert((aux[3] == "new emote slot!"), aux[3]);
             assert((aux[4] == "showlove"), aux[4]);
             assert((aux[5] == "SUB_POINTS"), aux[5]);
-            assert((aux[6] == "sharedchatnotice"), aux[6]);
+            assert((aux[7] == "sharedchatnotice"), aux[7]);
             assert((aux[12] == "1004060561"), aux[12]);
             assert((count[0] == 1), count[0].to!string);
             assert((count[1] == 1), count[1].to!string);
@@ -1935,7 +1935,7 @@ unittest
             assert((aux[0] == "1000"), aux[0]);
             assert((aux[3] == "new emote slot!"), aux[3]);
             assert((aux[5] == "SUB_POINTS"), aux[5]);
-            assert((aux[6] == "sharedchatnotice"), aux[6]);
+            assert((aux[7] == "sharedchatnotice"), aux[7]);
             assert((aux[12] == "1004060561"), aux[12]);
             assert((count[0] == 55), count[0].to!string);
             assert((count[1] == 55), count[1].to!string);
@@ -2028,4 +2028,34 @@ unittest
             assert((id == "12141c74-bfbc-441f-a600-93b681c8a619"), id);
         }
     }
+    {
+        enum input = `@badge-info=;badges=;color=#FF0000;display-name=Redskiii;emotes=;flags=;id=0f107d27-3281-4bf7-a9b9-db780142ce62;login=redskiii;mod=0;msg-id=sharedchatnotice;msg-param-anon-gift=true;msg-param-cumulative-months=7;msg-param-gift-month-being-redeemed=0;msg-param-gift-months=6;msg-param-months=0;msg-param-should-share-streak=0;msg-param-sub-plan-name=Subscription\s(honeythekawaiibunny);msg-param-sub-plan=1000;msg-param-was-gifted=true;room-id=825937345;source-badge-info=subscriber/7;source-badges=vip/1,subscriber/6,bits/100;source-id=0dd969bf-0511-4987-ba1d-91902910fc30;source-msg-id=resub;source-room-id=782660179;subscriber=0;system-msg=Redskiii\ssubscribed\sat\sTier\s1.\sThey've\ssubscribed\sfor\s7\smonths!;tmi-sent-ts=1738375460290;user-id=126137250;user-type=;vip=0 :tmi.twitch.tv USERNOTICE #ellie_minibot :i can beat everyone at chest`;
+        immutable event = parser.toIRCEvent(input);
+
+        with (event)
+        {
+            assert((type == IRCEvent.Type.TWITCH_SUB), type.toString());
+            assert((sender.nickname == "redskiii"), sender.nickname);
+            assert((sender.address == "tmi.twitch.tv"), sender.address);
+            assert((sender.account == "redskiii"), sender.account);
+            assert((sender.displayName == "Redskiii"), sender.displayName);
+            assert((sender.badges == "*"), sender.badges);
+            assert((sender.colour == "FF0000"), sender.colour);
+            assert((sender.id == 126137250), sender.id.to!string);
+            assert((channel == "#ellie_minibot"), channel);
+            assert((content == "i can beat everyone at chest"), content);
+            assert((aux[0] == "1000"), aux[0]);
+            assert((aux[2] == "Subscription (honeythekawaiibunny)"), aux[2]);
+            assert((aux[6] == "was-gifted"), aux[6]);
+            assert((aux[7] == "anon-gift"), aux[7]);
+            assert((aux[8] == "sharedchatnotice"), aux[8]);
+            assert((aux[12] == "782660179"), aux[12]);
+            assert((aux[14] == "Redskiii subscribed at Tier 1. They've subscribed for 7 months!"), aux[14]);
+            assert((count[0] == 6), count[0].to!string);
+            assert((count[1] == 7), count[1].to!string);
+            assert((tags == "badge-info=;badges=;color=#FF0000;display-name=Redskiii;emotes=;flags=;id=0f107d27-3281-4bf7-a9b9-db780142ce62;login=redskiii;mod=0;msg-id=sharedchatnotice;msg-param-anon-gift=true;msg-param-cumulative-months=7;msg-param-gift-month-being-redeemed=0;msg-param-gift-months=6;msg-param-months=0;msg-param-should-share-streak=0;msg-param-sub-plan-name=Subscription\\s(honeythekawaiibunny);msg-param-sub-plan=1000;msg-param-was-gifted=true;room-id=825937345;source-badge-info=subscriber/7;source-badges=vip/1,subscriber/6,bits/100;source-id=0dd969bf-0511-4987-ba1d-91902910fc30;source-msg-id=resub;source-room-id=782660179;subscriber=0;system-msg=Redskiii\\ssubscribed\\sat\\sTier\\s1.\\sThey've\\ssubscribed\\sfor\\s7\\smonths!;tmi-sent-ts=1738375460290;user-id=126137250;user-type=;vip=0"), tags);
+            assert((id == "0f107d27-3281-4bf7-a9b9-db780142ce62"), id);
+        }
+    }
+
 }

@@ -196,6 +196,17 @@ auto parseTwitchTags(ref IRCParser parser, ref IRCEvent event) @safe
                 // If event.content.length but no aux.length, store in aux
                 event.aux[0] = message;
             }
+            else if (!event.aux[$-2].length)
+            {
+                // Seems like it should be empty
+                event.aux[$-2] = message;
+            }
+            else
+            {
+                import std.conv : text;
+                immutable errorMessage = text("No room in aux for ", key, ": \"", message, '"');
+                appendToErrors(event, errorMessage);
+            }
             break;
 
         case "msg-param-gift-match-gifter-display-name":
@@ -1779,15 +1790,15 @@ void switchOnMsgID(
         {
             warnAboutOverwrittenString(
                 event: event,
-                name: "event.aux[6]",
-                oldValue: event.aux[6],
+                name: "event.aux[8]",
+                oldValue: event.aux[8],
                 newValue: msgID,
                 key: msgID,
                 tagType: "msg-id",
                 printTagsOnExit: printTagsOnExit);
         }
 
-        event.aux[6] = msgID;
+        event.aux[8] = msgID;
         break;
 
     case "charitydonation":
