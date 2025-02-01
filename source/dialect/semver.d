@@ -26,12 +26,12 @@ enum DialectSemVer
     /++
         SemVer minor version of the library.
      +/
-    minor = 0,
+    minor = 1,
 
     /++
         SemVer patch version of the library.
      +/
-    patch = 1,
+    patch = 0,
 }
 
 
