@@ -892,6 +892,7 @@ public:
             ulong id;
         }
 
+        version(ChannelMigrationCompatibility)
         deprecated("Use `Channel.name` instead")
         {
             /++
@@ -939,7 +940,7 @@ public:
     }
 
     ///
-    version(none)
+    version(ChannelMigrationCompatibility)
     unittest
     {
         import std.format : format;
