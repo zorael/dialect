@@ -150,7 +150,7 @@ unittest
         {
             assert((type == IRCEvent.Type.RPL_CHANNELMODEIS), Enum!(IRCEvent.Type).toString(type));
             assert((sender.address == "van-halen.snoonet.org"), sender.address);
-            assert((channel == "#garderoben123"), channel);
+            assert((channel.name == "#garderoben123"), channel.name);
             assert((content == "5:60 30:5 5:1 10:5"), content);
             assert((aux[0] == "+CFTfjntx"), aux[0]);
             assert((num == 324), num.to!string);
@@ -162,7 +162,7 @@ unittest
         {
             assert((type == IRCEvent.Type.MODELIST), Enum!(IRCEvent.Type).toString(type));
             assert((sender.address == "van-halen.snoonet.org"), sender.address);
-            assert((channel == "#garderoben123"), channel);
+            assert((channel.name == "#garderoben123"), channel.name);
             assert((target.nickname == "kameloso"), target.nickname);
             assert((content == "+noctcp"), content);
             assert((aux[0] == "+nickflood 5:60 +nonotice +flood 30:5 +joinflood 5:1 +noextmsg +topiclock +globalflood 10:5"), aux[0]);

@@ -118,7 +118,7 @@ unittest
         {
             assert((type == RPL_NAMREPLY), Enum!(IRCEvent.Type).toString(type));
             assert((sender.address == "port80b.se.quakenet.org"), sender.address);
-            assert((channel == "#garderoben"), channel);
+            assert((channel.name == "#garderoben"), channel.name);
             assert((content == "@kameloso"), content);
             assert((num == 353), num.to!string);
         }

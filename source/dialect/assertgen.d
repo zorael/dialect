@@ -387,6 +387,7 @@ void putEventAssertBlock(Sink)
 ///
 unittest
 {
+    import lu.assert_ : assertMultilineEquals;
     import std.array : Appender;
 
     Appender!(char[]) sink;
@@ -399,7 +400,7 @@ unittest
     immutable event = parser.toIRCEvent(":zorael!~NaN@2001:41d0:2:80b4:: PRIVMSG #flerrp :kameloso: 8ball");
     sink.putEventAssertBlock(event, 0);
 
-    assert(sink[] ==
+    enum expected =
 "{
     enum input = `:zorael!~NaN@2001:41d0:2:80b4:: PRIVMSG #flerrp :kameloso: 8ball`;
     immutable event = parser.toIRCEvent(input);
@@ -410,10 +411,12 @@ unittest
         assert((sender.nickname == \"zorael\"), sender.nickname);
         assert((sender.ident == \"~NaN\"), sender.ident);
         assert((sender.address == \"2001:41d0:2:80b4::\"), sender.address);
-        assert((channel == \"#flerrp\"), channel);
+        assert((channel.name == \"#flerrp\"), channel.name);
         assert((content == \"kameloso: 8ball\"), content);
     }
-}", '\n' ~ sink[]);
+}";
+
+    assertMultilineEquals(expected, sink[]);
 }
 
 

@@ -45,7 +45,7 @@ unittest
         {
             assert((type == RPL_LIST), Enum!(IRCEvent.Type).toString(type));
             assert((sender.address == "irc.RomaniaChat.eu"), sender.address);
-            assert((channel == "#gameofthrones"), channel);
+            assert((channel.name == "#gameofthrones"), channel.name);
             assert((content == "[+ntTGfB]"), content);
             assert((count[0] == 1), count[0].to!string);
             assert((num == 322), num.to!string);
@@ -58,7 +58,7 @@ unittest
         {
             assert((type == RPL_LIST), Enum!(IRCEvent.Type).toString(type));
             assert((sender.address == "irc.RomaniaChat.eu"), sender.address);
-            assert((channel == "#radioclick"), channel);
+            assert((channel.name == "#radioclick"), channel.name);
             assert((content == "[+ntr]  Bun venit pe #Radioclick! Site oficial www.radioclick.ro sau servere irc.romaniachat.eu, irc.radioclick.ro"), content);
             assert((count[0] == 63), count[0].to!string);
             assert((num == 322), num.to!string);
@@ -95,7 +95,7 @@ unittest
             assert((sender.nickname == "Iasdf666"), sender.nickname);
             assert((sender.ident == "~Iasdf666"), sender.ident);
             assert((sender.address == "The.Breakfast.Club"), sender.address);
-            assert((channel == "#uk"), channel);
+            assert((channel.name == "#uk"), channel.name);
             assert((content == "be more welcoming you negative twazzock"), content);
         }
     }
@@ -108,7 +108,7 @@ unittest
             assert((sender.nickname == "gallon"), sender.nickname);
             assert((sender.ident == "~MO.11063"), sender.ident);
             assert((sender.address == "482c29a5.e510bf75.97653814.IP4"), sender.address);
-            assert((channel == "#cncnet-yr"), channel);
+            assert((channel.name == "#cncnet-yr"), channel.name);
         }
     }
     {
@@ -140,7 +140,7 @@ unittest
         {
             assert((type == ENDOFEXEMPTOPSLIST), Enum!(IRCEvent.Type).toString(type));
             assert((sender.address == "cadance.canternet.org"), sender.address);
-            assert((channel == "#flerrp"), channel);
+            assert((channel.name == "#flerrp"), channel.name);
             assert((content == "End of channel exemptchanops list"), content);
             assert((num == 953), num.to!string);
         }

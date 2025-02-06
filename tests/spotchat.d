@@ -122,7 +122,7 @@ unittest
         {
             assert((type == IRCEvent.Type.CHANNELFORBIDDEN), Enum!(IRCEvent.Type).toString(type));
             assert((sender.address == "lamia.uk.SpotChat.org"), sender.address);
-            assert((channel == "#stuffwecantdiscuss"), channel);
+            assert((channel.name == "#stuffwecantdiscuss"), channel.name);
             assert((content == "Channel #stuffwecantdiscuss is forbidden: This channel is closed by request of the channel operators."), content);
             assert((num == 926), num.to!string);
         }
@@ -134,7 +134,7 @@ unittest
         {
             assert((type == ENDOFSPAMFILTERLIST), Enum!(IRCEvent.Type).toString(type));
             assert((sender.address == "lamia.ca.SpotChat.org"), sender.address);
-            assert((channel == "#garderoben"), channel);
+            assert((channel.name == "#garderoben"), channel.name);
             //assert((target.nickname == "kameloso"), target.nickname);
             assert((content == "End of channel spamfilter list"), content);
             assert((num == 940), num.to!string);

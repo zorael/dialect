@@ -125,7 +125,7 @@ unittest
         {
             assert((type == RPL_REOPLIST), Enum!(IRCEvent.Type).toString(type));
             assert((sender.address == "irc.atw-inter.net"), sender.address);
-            assert((channel == "#debian.de"), channel);
+            assert((channel.name == "#debian.de"), channel.name);
             assert((content == "towo!towo@littlelamb.szaf.org"), content);
             assert((num == 344), num.to!string);
         }
@@ -137,7 +137,7 @@ unittest
         {
             assert((type == RPL_ENDOFREOPLIST), Enum!(IRCEvent.Type).toString(type));
             assert((sender.address == "irc.atw-inter.net"), sender.address);
-            assert((channel == "#debian.de"), channel);
+            assert((channel.name == "#debian.de"), channel.name);
             assert((content == "End of Channel Reop List"), content);
             assert((num == 345), num.to!string);
         }

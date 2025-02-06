@@ -121,7 +121,7 @@ unittest
         {
             assert((type == RPL_ENDOFQUIETLIST), Enum!(IRCEvent.Type).toString(type));
             assert((sender.address == "irc.oftc.net"), sender.address);
-            assert((channel == "#garderoben"), channel);
+            assert((channel.name == "#garderoben"), channel.name);
             //assert((target.nickname == "kameloso"), target.nickname);
             assert((content == "End of Channel Quiet List"), content);
             assert((num == 345), num.to!string);
@@ -134,7 +134,7 @@ unittest
         {
             assert((type == RPL_QUIETLIST), Enum!(IRCEvent.Type).toString(type));
             assert((sender.address == "irc.oftc.net"), sender.address);
-            assert((channel == "#garderoben"), channel);
+            assert((channel.name == "#garderoben"), channel.name);
             assert((content == "harbl!snarbl@*"), content);
             assert((aux[0] == "kameloso!~NaN@194.117.188.126"), aux[0]);
             assert((count[0] == 1515418362), count[0].to!string);
