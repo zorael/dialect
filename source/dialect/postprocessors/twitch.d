@@ -504,6 +504,27 @@ auto parseTwitchTags(ref IRCParser parser, ref IRCEvent event) @safe
 
         case "msg-param-is-highlighted":
             // something with new midnightsquid direct cheers
+
+            /+
+                Aux 4, key as value
+             +/
+            if (value == "false") break;
+
+            version(TwitchWarnings)
+            {
+                warnAboutOverwrittenString(
+                    event: event,
+                    name: "event.aux[4]",
+                    oldValue: event.aux[4],
+                    newValue: key[10..$],
+                    key: key,
+                    tagType: "tag",
+                    printTagsOnExit: printTagsOnExit);
+            }
+
+            event.aux[4] = key[10..$];  // slice away "msg-param-"
+            break;
+
         case "msg-param-gift-theme":
             // msg-param-gift-theme = party
             // Theme of a bulkgift?
@@ -511,7 +532,7 @@ auto parseTwitchTags(ref IRCParser parser, ref IRCEvent event) @safe
             // How is this different from msg-param-prior-gifter-id?
 
             /+
-                Aux 4
+                Aux 4, value as value
              +/
             version(TwitchWarnings)
             {
