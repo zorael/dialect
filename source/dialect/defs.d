@@ -876,6 +876,9 @@ public:
     /++
         Represents a channel in terms of name and, if version `TwitchSupport` is
         declared, also a string ID.
+
+        See_Also:
+            [IRCChannel]
      +/
     static struct Channel
     {
@@ -888,6 +891,8 @@ public:
         {
             /++
                 The Twitch ID of this channel.
+
+                This correlates to the user ID of the channel owner.
              +/
             ulong id;
         }
@@ -896,6 +901,10 @@ public:
         deprecated("Use `Channel.name` instead")
         {
             /++
+                Returns the name of the channel.
+
+                Returns:
+                    The contents of the `name` member.
              +/
             auto toString() const
             {
@@ -903,6 +912,12 @@ public:
             }
 
             /++
+                Assigns the name of the channel.
+
+                Additionally resets the ID if `TwitchSupport` is declared.
+
+                Params:
+                    name = The name to assign to the channel.
              +/
             void opAssign(const string name)
             {
@@ -915,6 +930,16 @@ public:
             }
 
             /++
+                Compares two [Channel]s by name.
+
+                Additionally compares the IDs if `TwitchSupport` is declared.
+
+                Params:
+                    that = The [Channel] to compare to.
+
+                Returns:
+                    `true` if the names are equal, and if `TwitchSupport` is
+                    declared, the IDs are also equal.
              +/
             auto opEquals(const Channel that) const
             {
@@ -931,6 +956,14 @@ public:
             }
 
             /++
+                Compares the name of the channel to a string.
+
+                Params:
+                    name = The name to compare to.
+
+                Returns:
+                    `true` if the names are equal; `false` if not.
+                    The ID is not compared.
              +/
             auto opEquals(const string name) const
             {
