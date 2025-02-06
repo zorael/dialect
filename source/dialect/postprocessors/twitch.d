@@ -52,6 +52,7 @@ mixin PostprocessorRegistration!TwitchPostprocessor;
 auto parseTwitchTags(ref IRCParser parser, ref IRCEvent event) @safe
 {
     import dialect.common : decodeIRCv3String;
+    import lu.string : removeControlCharacters, strippedRight;
     import std.algorithm.iteration : splitter;
     import std.conv : to;
 
@@ -93,17 +94,15 @@ auto parseTwitchTags(ref IRCParser parser, ref IRCEvent event) @safe
         case "display-name":
             // The user’s display name, escaped as described in the IRCv3 spec.
             // This is empty if it is never set.
-            import lu.string : strippedRight;
-
             if (!value.length) break;
-
-            immutable displayName = decodeIRCv3String(value).strippedRight;
 
             if ((event.type == USERSTATE) || (event.type == GLOBALUSERSTATE))
             {
                 // USERSTATE describes the bot in the context of a specific channel,
                 // such as what badges are available. It's *always* about the bot,
                 // so expose the display name in event.target and let Persistence store it.
+                immutable displayName = decodeIRCv3String(value).strippedRight;
+
                 event.target = event.sender;  // get badges etc
                 event.target.nickname = parser.client.nickname;
                 event.target.displayName = displayName;
@@ -122,7 +121,7 @@ auto parseTwitchTags(ref IRCParser parser, ref IRCEvent event) @safe
             else
             {
                 // The display name of the sender.
-                event.sender.displayName = displayName;
+                goto case "msg-param-displayName";
             }
             break;
 
@@ -162,14 +161,12 @@ auto parseTwitchTags(ref IRCParser parser, ref IRCEvent event) @safe
             // @ban-duration=<ban-duration>;ban-reason=<ban-reason> :tmi.twitch.tv CLEARCHAT #<channel> :<user>
             // The moderator’s reason for the timeout or ban.
             // system-msg: The message printed in chat along with this notice.
-            import lu.string : removeControlCharacters, strippedRight;
-
             if (!value.length) break;
 
             immutable message = value
                 .decodeIRCv3String
                 .strippedRight
-                .removeControlCharacters;  // Really necessary?
+                .removeControlCharacters;
 
             if (!event.content.length && (event.type != TWITCH_RITUAL))
             {
@@ -246,19 +243,23 @@ auto parseTwitchTags(ref IRCParser parser, ref IRCEvent event) @safe
         case "msg-param-displayName":
         case "msg-param-sender": // Prime community gift received (apparently display name)
             // RAID; sender alias and thus raiding channel cased
+            immutable displayName = value
+                .decodeIRCv3String
+                .strippedRight;
+
             version(TwitchWarnings)
             {
                 warnAboutOverwrittenString(
                     event: event,
                     name: "event.sender.displayName",
                     oldValue: event.sender.displayName,
-                    newValue: value,
+                    newValue: displayName,
                     key: key,
                     tagType: "tag",
                     printTagsOnExit: printTagsOnExit);
             }
 
-            event.sender.displayName = value;
+            event.sender.displayName = displayName;
             break;
 
         case "msg-param-login":
@@ -309,12 +310,10 @@ auto parseTwitchTags(ref IRCParser parser, ref IRCEvent event) @safe
         case "reply-parent-msg-body":
             // The body of the message that is being replied to
             // reply-parent-msg-body = she's\sgonna\swin\s2truths\sand\sa\slie\severytime
-            import lu.string : removeControlCharacters, strippedRight;
-
             immutable message = value
                 .decodeIRCv3String
                 .strippedRight
-                .removeControlCharacters;  // Really necessary?
+                .removeControlCharacters;
 
             version(TwitchWarnings)
             {
@@ -364,12 +363,10 @@ auto parseTwitchTags(ref IRCParser parser, ref IRCEvent event) @safe
             /+
                 Aux 0
              +/
-            import lu.string : removeControlCharacters, strippedRight;
-
             immutable message = value
                 .decodeIRCv3String
                 .strippedRight
-                .removeControlCharacters;  // Really necessary?
+                .removeControlCharacters;
 
             version(TwitchWarnings)
             {
@@ -606,7 +603,7 @@ auto parseTwitchTags(ref IRCParser parser, ref IRCEvent event) @safe
             if (value == "0") break;
 
             /+
-                Aux $-3
+                Aux $-3, key as value
 
                 Reserve this for first-msg. Set the key, not the 0/1 value.
              +/
@@ -996,7 +993,7 @@ auto parseTwitchTags(ref IRCParser parser, ref IRCEvent event) @safe
 
         case "room-id":
             // The channel ID.
-            if (event.type == ROOMSTATE)
+            if (value.length)
             {
                 version(TwitchWarnings)
                 {
@@ -1024,6 +1021,7 @@ auto parseTwitchTags(ref IRCParser parser, ref IRCEvent event) @safe
             break;
 
         case "source-room-id":
+            // Origin channel ID of shared chat message
             version(TwitchWarnings)
             {
                 warnAboutOverwrittenNumber(
@@ -1789,7 +1787,7 @@ void switchOnMsgID(
         break;
 
     case "sharedchatnotice":
-        // Let the source-msg-id tag set the event type
+        // Leave event type as it is, it's probably CHAN
         if (onlySetType) break;
 
         version(TwitchWarnings)
