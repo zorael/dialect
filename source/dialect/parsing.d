@@ -174,7 +174,7 @@ public IRCEvent toIRCEvent(
     parser.parseSpecialcases(event, slice);
 
     // Final cosmetic touches
-    event.channel = event.channel.toLower;
+    event.channel.name = event.channel.name.toLower();
 
     return event;
 }
@@ -649,14 +649,14 @@ void parseSpecialcases(
             // :nick!user@host JOIN #channelname * :Real Name
             // :nick!~identh@unaffiliated/nick JOIN #freenode login :realname
             // :kameloso!~NaN@2001:41d0:2:80b4:: JOIN #hirrsteff2 kameloso : kameloso!
-            event.channel = slice.advancePast(' ');
+            event.channel.name = slice.advancePast(' ');
             event.sender.account = slice.advancePast(" :");
             if (event.sender.account == "*") event.sender.account = string.init;
             event.sender.realName = slice.stripped;
         }
         else
         {
-            event.channel = slice.startsWith(':') ?
+            event.channel.name = slice.startsWith(':') ?
                 slice[1..$] :
                 slice;
         }
@@ -674,14 +674,14 @@ void parseSpecialcases(
         if (slice.indexOf(' ') != -1)
         {
             import lu.string : unquoted;
-            event.channel = slice.advancePast(" :");
+            event.channel.name = slice.advancePast(" :");
             event.content = slice.unquoted;
         }
         else
         {
             // Seen on GameSurge
             if (slice.startsWith(':')) slice = slice[1..$];
-            event.channel = slice;
+            event.channel.name = slice;
         }
         break;
 
@@ -725,7 +725,7 @@ void parseSpecialcases(
 
     case KICK:
         // :zorael!~NaN@ns3363704.ip-94-23-253.eu KICK #flerrp kameloso^ :this is a reason
-        event.channel = slice.advancePast(' ');
+        event.channel.name = slice.advancePast(' ');
         event.target.nickname = slice.advancePast(" :");
         event.content = slice;
         event.type = (event.target.nickname == parser.client.nickname) ?
@@ -737,7 +737,7 @@ void parseSpecialcases(
         // (freenode) :zorael!~NaN@2001:41d0:2:80b4:: INVITE kameloso :#hirrsteff
         // (quakenet) :zorael!~zorael@ns3363704.ip-94-23-253.eu INVITE kameloso #hirrsteff
         event.target.nickname = slice.advancePast(' ');
-        event.channel = slice.startsWith(':') ? slice[1..$] : slice;
+        event.channel.name = slice.startsWith(':') ? slice[1..$] : slice;
         break;
 
     case AWAY:
@@ -758,7 +758,7 @@ void parseSpecialcases(
         // <channel name> :No such channel
         // :moon.freenode.net 403 kameloso archlinux :No such channel
         slice.advancePast(' ');  // bot nickname
-        event.channel = slice.advancePast(" :");
+        event.channel.name = slice.advancePast(" :");
         event.content = slice;
         break;
 
@@ -767,7 +767,7 @@ void parseSpecialcases(
         // :asimov.freenode.net 353 kameloso^ = #garderoben :kameloso^ ombudsman +kameloso @zorael @maku @klarrt
         slice.advancePast(' ');  // bot nickname
         slice.advancePast(' ');
-        event.channel = slice.advancePast(" :");
+        event.channel.name = slice.advancePast(" :");
         event.content = slice.strippedRight;
         break;
 
@@ -783,8 +783,8 @@ void parseSpecialcases(
         // :irc.rizon.no 352 kameloso^^ * ~NaN C2802314.E23AD7D8.E9841504.IP * kameloso^^ H :0  kameloso!
         // :irc.rizon.no 352 kameloso^^ * ~zorael Rizon-64330364.ip-94-23-253.eu * wob^2 H :0 zorael
         slice.advancePast(' ');  // bot nickname
-        event.channel = slice.advancePast(' ');
-        if (event.channel == "*") event.channel = string.init;
+        event.channel.name = slice.advancePast(' ');
+        if (event.channel.name == "*") event.channel.name = string.init;
 
         immutable userOrIdent = slice.advancePast(' ');
         if (userOrIdent.startsWith('~')) event.target.ident = userOrIdent;
@@ -813,8 +813,8 @@ void parseSpecialcases(
         // :tolkien.freenode.net 315 kameloso^ ##linux :End of /WHO list.
         // :irc.rizon.no 315 kameloso^^ * :End of /WHO list.
         slice.advancePast(' ');  // bot nickname
-        event.channel = slice.advancePast(" :");
-        if (event.channel == "*") event.channel = string.init;
+        event.channel.name = slice.advancePast(" :");
+        if (event.channel.name == "*") event.channel.name = string.init;
         event.content = slice;
         break;
 
@@ -831,7 +831,7 @@ void parseSpecialcases(
         // :niven.freenode.net 728 kameloso^ #flerrp q qqqq!*@asdf.net zorael!~NaN@2001:41d0:2:80b4:: 1514405101
         // :irc.oftc.net 344 kameloso #garderoben harbl!snarbl@* kameloso!~NaN@194.117.188.126 1515418362
         slice.advancePast(' ');  // bot nickname
-        event.channel = (slice.indexOf(" q ") != -1) ?
+        event.channel.name = (slice.indexOf(" q ") != -1) ?
             slice.advancePast(" q ") :
             slice.advancePast(' ');
         event.content = slice.advancePast(' ');
@@ -1194,7 +1194,7 @@ void parseSpecialcases(
         // :cherryh.freenode.net 435 kameloso^ kameloso^^ #d3d9 :Cannot change nickname while banned on channel
         event.target.nickname = slice.advancePast(' ');
         event.aux[0] = slice.advancePast(' ');
-        event.channel = slice.advancePast(" :");
+        event.channel.name = slice.advancePast(" :");
         event.content = slice;
         break;
 
@@ -1250,12 +1250,12 @@ void parseSpecialcases(
             if (slice.indexOf(" :") != -1)
             {
                 // Banned
-                event.channel = slice.advancePast(" :");
+                event.channel.name = slice.advancePast(" :");
                 event.target.nickname = slice;
             }
             else
             {
-                event.channel = slice;
+                event.channel.name = slice;
             }
             break;
     }
@@ -1364,7 +1364,7 @@ void parseSpecialcases(
         // :niven.freenode.net 324 kameloso^ ##linux +CLPcnprtf ##linux-overflow
         // :kornbluth.freenode.net 324 kameloso #flerrp +ns
         slice.advancePast(' '); // bot nickname
-        event.channel = slice.advancePast(' ');
+        event.channel.name = slice.advancePast(' ');
 
         if (slice.indexOf(' ') != -1)
         {
@@ -1381,7 +1381,7 @@ void parseSpecialcases(
     case RPL_CREATIONTIME: // 329
         // :kornbluth.freenode.net 329 kameloso #flerrp 1512995737
         slice.advancePast(' ');
-        event.channel = slice.advancePast(' ');
+        event.channel.name = slice.advancePast(' ');
         event.count[0] = slice.to!long;
         break;
 
@@ -1397,7 +1397,7 @@ void parseSpecialcases(
             milky | Other IRCd may do same because they are all derivatives
          */
         slice.advancePast(' '); // bot nickname
-        event.channel = slice.advancePast(' ');
+        event.channel.name = slice.advancePast(' ');
         event.count[0] = slice.advancePast(" :").to!long;
         event.content = slice;
         break;
@@ -1412,7 +1412,7 @@ void parseSpecialcases(
         // :niven.freenode.net 729 kameloso^ #hirrsteff q :End of Channel Quiet List
         // :irc.oftc.net 345 kameloso #garderoben :End of Channel Quiet List
         slice.advancePast(' ');
-        event.channel = (slice.indexOf(" q :") != -1) ?
+        event.channel.name = (slice.indexOf(" q :") != -1) ?
             slice.advancePast(" q :") :
             slice.advancePast(" :");
         event.content = slice;
@@ -1472,7 +1472,7 @@ void parseSpecialcases(
         // ":kornbluth.freenode.net 367 kameloso #flerrp harbl!harbl@snarbl.com zorael!~NaN@2001:41d0:2:80b4:: 1513899521"
         // :irc.run.net 367 kameloso #politics *!*@broadband-46-242-*.ip.moscow.rt.ru
         slice.advancePast(' '); // bot nickname
-        event.channel = slice.advancePast(' ');
+        event.channel.name = slice.advancePast(' ');
 
         if (slice.indexOf(' ') != -1)
         {
@@ -1615,14 +1615,14 @@ void parseGeneralCases(
                         // More than one target, first is bot
                         // Second target is more than one, first is channel
                         // assume third is content
-                        event.channel = targets.advancePast(' ');
+                        event.channel.name = targets.advancePast(' ');
                         event.content = targets;
                     }
                     else
                     {
                         // More than one target, first is bot
                         // Only one channel
-                        event.channel = targets;
+                        event.channel.name = targets;
                     }
                 }
                 else
@@ -1638,7 +1638,7 @@ void parseGeneralCases(
                     {
                         // Two extra targets; assume nickname and channel
                         event.target.nickname = targets.advancePast(' ');
-                        event.channel = targets;
+                        event.channel.name = targets;
                     }
                     else if (numSpaces > 1)
                     {
@@ -1652,7 +1652,7 @@ void parseGeneralCases(
                         if (parser.server.chantypes.indexOf(targets[0]) != -1)
                         {
                             // Second is a channel
-                            event.channel = targets;
+                            event.channel.name = targets;
                         }
                         else if (targets == event.sender.address)
                         {
@@ -1675,7 +1675,7 @@ void parseGeneralCases(
                 {
                     // First target is a channel
                     // Assume second is a nickname
-                    event.channel = firstTarget;
+                    event.channel.name = firstTarget;
                     event.target.nickname = targets;
                 }
                 else
@@ -1683,14 +1683,14 @@ void parseGeneralCases(
                     // First target is not channel, assume nick
                     // Assume second is channel
                     event.target.nickname = firstTarget;
-                    event.channel = targets;
+                    event.channel.name = targets;
                 }
             }
         }
         else if (parser.server.chantypes.indexOf(targets[0]) != -1)
         {
             // Only one target, it is a channel
-            event.channel = targets;
+            event.channel.name = targets;
         }
         else
         {
@@ -1715,7 +1715,7 @@ void parseGeneralCases(
             {
                 // More than one target, first is a channel
                 // Assume second is content
-                event.channel = target;
+                event.channel.name = target;
                 event.content = slice;
             }
             else
@@ -1736,7 +1736,7 @@ void parseGeneralCases(
                     if (parser.server.chantypes.indexOf(slice[0]) != -1)
                     {
                         // Second target is channel
-                        event.channel = slice.advancePast(' ');
+                        event.channel.name = slice.advancePast(' ');
 
                         if (slice.indexOf(' ') != -1)
                         {
@@ -1773,7 +1773,7 @@ void parseGeneralCases(
             if (parser.server.chantypes.indexOf(slice[0]) != -1)
             {
                 // Target is a channel
-                event.channel = slice;
+                event.channel.name = slice;
             }
             else
             {
@@ -1784,7 +1784,7 @@ void parseGeneralCases(
     }
 
     // If content is empty and slice hasn't already been used, assign it
-    if (!event.content.length && (slice != event.channel) &&
+    if (!event.content.length && (slice != event.channel.name) &&
         (slice != event.target.nickname))
     {
         import lu.string : strippedRight;
@@ -1822,7 +1822,7 @@ void postparseSanityCheck(
     }
 
     if ((event.target.nickname.indexOf(' ') != -1) ||
-        (event.channel.indexOf(' ') != -1))
+        (event.channel.name.indexOf(' ') != -1))
     {
         if (sink[].length) sink.put(" | ");
         sink.put("Spaces in target nickname or channel");
@@ -1841,8 +1841,8 @@ void postparseSanityCheck(
         sink.put("Target nickname is a channel");
     }
 
-    if (event.channel.length &&
-        (parser.server.chantypes.indexOf(event.channel[0]) == -1) &&
+    if (event.channel.name.length &&
+        (parser.server.chantypes.indexOf(event.channel.name[0]) == -1) &&
         (event.type != IRCEvent.Type.ERR_NOSUCHCHANNEL) &&
         (event.type != IRCEvent.Type.RPL_ENDOFWHO) &&
         (event.type != IRCEvent.Type.RPL_NAMREPLY) &&
@@ -1898,7 +1898,7 @@ in (slice.length, "Tried to process `onNotice` on an empty slice")
     if (channelOrNickname.length &&
         (parser.server.chantypes.indexOf(channelOrNickname[0]) != -1))
     {
-        event.channel = channelOrNickname;
+        event.channel.name = channelOrNickname;
     }
 
     if (!event.content.length) return;
@@ -2047,7 +2047,7 @@ in (slice.length, "Tried to process `IRCEvent.Type.PRIVMSG` on an empty slice")
         event.type = (event.sender.nickname == parser.client.nickname) ?
             IRCEvent.Type.SELFCHAN :
             IRCEvent.Type.CHAN;
-        event.channel = target;
+        event.channel.name = target;
     }
     else
     {
@@ -2155,7 +2155,7 @@ in (slice.length, "Tried to process `onMode` on an empty slice")
 
     if (target.isValidChannel(parser.server))
     {
-        event.channel = target;
+        event.channel.name = target;
 
         if (slice.indexOf(' ') != -1)
         {

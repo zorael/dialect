@@ -874,6 +874,98 @@ public:
      */
 
     /++
+        Represents a channel in terms of name and, if version `TwitchSupport` is
+        declared, also a string ID.
+     +/
+    static struct Channel
+    {
+        /++
+            The name of the channel.
+         +/
+        string name;
+
+        version(TwitchSupport)
+        {
+            /++
+                The Twitch ID of this channel.
+             +/
+            ulong id;
+        }
+
+        deprecated("Use `Channel.name` instead")
+        {
+            /++
+             +/
+            auto toString() const
+            {
+                return name;
+            }
+
+            /++
+             +/
+            void opAssign(const string name)
+            {
+                this.name = name;
+
+                version(TwitchSupport)
+                {
+                    this.id = 0UL;
+                }
+            }
+
+            /++
+             +/
+            auto opEquals(const Channel that) const
+            {
+                version(TwitchSupport)
+                {
+                    return
+                        (this.name == that.name) &&
+                        (this.id == that.id);
+                }
+                else
+                {
+                    return (this.name == that.name);
+                }
+            }
+
+            /++
+             +/
+            auto opEquals(const string name) const
+            {
+                return (this.name == name);
+            }
+        }
+    }
+
+    ///
+    version(none)
+    unittest
+    {
+        import std.format : format;
+
+        Channel c;
+        c = "#test";
+        assert((c.toString() == "#test"), c.name);
+
+        Channel c2;
+        c2.name = "#test2";
+        assert(c != c2);
+
+        c2.name = c.name;
+        assert(c == c2.name);
+
+        version(TwitchSupport)
+        {
+            c.id = 12345L;
+            assert(c != c2);
+        }
+
+        immutable s = format("%s", c2);
+        assert((s == c2.name), s);
+    }
+
+    /++
         The event type, signifying what *kind* of event this is.
      +/
     Type type;
@@ -891,17 +983,22 @@ public:
     /++
         The channel the event transpired in, or is otherwise related to.
      +/
-    string channel;
+    Channel channel;
 
     /++
         The secondary channel of this event, when there are two.
      +/
-    string subchannel;
+    Channel subchannel;
 
     /++
         The main body of text of the event.
      +/
     string content;
+
+    /++
+        The secondary body of text of the event, when there are two.
+     +/
+    string altcontent;
 
     /++
         Auxiliary string array.
@@ -1232,7 +1329,7 @@ struct IRCUser
         /++
             The Twitch ID of this user's account.
          +/
-        uint id;
+        ulong id;
     }
 
     /++
@@ -2591,7 +2688,7 @@ struct IRCChannel
         /++
             The Twitch user ID of the broadcaster of the channel.
          +/
-        uint id;
+        ulong id;
     }
 }
 

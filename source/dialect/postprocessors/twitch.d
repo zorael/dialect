@@ -171,44 +171,25 @@ auto parseTwitchTags(ref IRCParser parser, ref IRCEvent event) @safe
                 .strippedRight
                 .removeControlCharacters;  // Really necessary?
 
-            if (event.type == TWITCH_RITUAL)
+            if (!event.content.length && (event.type != TWITCH_RITUAL))
+            {
+                event.content = message;
+            }
+            else
             {
                 version(TwitchWarnings)
                 {
                     warnAboutOverwrittenString(
                         event: event,
-                        name: "event.aux[0]",
-                        oldValue: event.aux[0],
+                        name: "event.altcontent",
+                        oldValue: event.altcontent,
                         newValue: message,
                         key: key,
                         tagType: "tag",
                         printTagsOnExit: printTagsOnExit);
                 }
 
-                event.aux[0] = message;
-            }
-            else if (!event.content.length)
-            {
-                event.content = message;
-            }
-            else if (!event.aux[0].length)
-            {
-                // If event.content.length but no aux.length, store in aux
-                event.aux[0] = message;
-            }
-            else if (!event.aux[$-2].length)
-            {
-                // Seems like it should be empty
-                event.aux[$-2] = message;
-            }
-            else
-            {
-                version(TwitchWarnings)
-                {
-                    import std.conv : text;
-                    immutable errorMessage = text("No room in aux for ", key, ": \"", message, '"');
-                    appendToErrors(event, errorMessage);
-                }
+                event.altcontent = message;
             }
             break;
 
@@ -325,6 +306,31 @@ auto parseTwitchTags(ref IRCParser parser, ref IRCEvent event) @safe
             event.type = TWITCH_CHEER;
             goto case "ban-duration";  // set count[0]
 
+        case "reply-parent-msg-body":
+            // The body of the message that is being replied to
+            // reply-parent-msg-body = she's\sgonna\swin\s2truths\sand\sa\slie\severytime
+            import lu.string : removeControlCharacters, strippedRight;
+
+            immutable message = value
+                .decodeIRCv3String
+                .strippedRight
+                .removeControlCharacters;  // Really necessary?
+
+            version(TwitchWarnings)
+            {
+                warnAboutOverwrittenString(
+                    event: event,
+                    name: "event.altcontent",
+                    oldValue: event.altcontent,
+                    newValue: message,
+                    key: key,
+                    tagType: "tag",
+                    printTagsOnExit: printTagsOnExit);
+            }
+
+            event.altcontent = message;
+            break;
+
         case "msg-param-sub-plan":
             // The type of subscription plan being used.
             // Valid values: Prime, 1000, 2000, 3000.
@@ -350,9 +356,6 @@ auto parseTwitchTags(ref IRCParser parser, ref IRCEvent event) @safe
         case "message-id":
             // message-id = 3
             // WHISPER, rolling number enumerating messages
-        case "reply-parent-msg-body":
-            // The body of the message that is being replied to
-            // reply-parent-msg-body = she's\sgonna\swin\s2truths\sand\sa\slie\severytime
         case "msg-param-category":
             // Viewer milestone thing
         case "msg-param-charity-name":
@@ -962,7 +965,7 @@ auto parseTwitchTags(ref IRCParser parser, ref IRCEvent event) @safe
                         printTagsOnExit: printTagsOnExit);
                 }
 
-                event.sender.id = value.to!uint;
+                event.sender.id = value.to!ulong;
             }
             break;
 
@@ -987,7 +990,7 @@ auto parseTwitchTags(ref IRCParser parser, ref IRCEvent event) @safe
                         printTagsOnExit: printTagsOnExit);
                 }
 
-                event.target.id = value.to!uint;
+                event.target.id = value.to!ulong;
             }
             break;
 
@@ -997,17 +1000,17 @@ auto parseTwitchTags(ref IRCParser parser, ref IRCEvent event) @safe
             {
                 version(TwitchWarnings)
                 {
-                    warnAboutOverwrittenString(
+                    warnAboutOverwrittenNumber(
                         event: event,
-                        name: "event.aux[0]",
-                        oldValue: event.aux[0],
+                        name: "event.channel.id",
+                        oldValue: event.channel.id,
                         newValue: value,
                         key: key,
                         tagType: "tag",
                         printTagsOnExit: printTagsOnExit);
                 }
 
-                event.aux[0] = value;
+                event.channel.id = value.to!ulong;
             }
             break;
 
@@ -1023,17 +1026,17 @@ auto parseTwitchTags(ref IRCParser parser, ref IRCEvent event) @safe
         case "source-room-id":
             version(TwitchWarnings)
             {
-                warnAboutOverwrittenString(
+                warnAboutOverwrittenNumber(
                     event: event,
-                    name: "event.aux[$-4]",
-                    oldValue: event.aux[$-4],
+                    name: "event.subchannel.id",
+                    oldValue: event.subchannel.id,
                     newValue: value,
                     key: key,
                     tagType: "tag",
                     printTagsOnExit: printTagsOnExit);
             }
 
-            event.aux[$-4] = value;
+            event.subchannel.id = value.to!ulong;
             break;
 
         // We only need set cases for every known tag if we want to be alerted
