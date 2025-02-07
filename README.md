@@ -9,12 +9,15 @@ struct IRCEvent
 {
     enum Type { ... }  // IRC event types
 
+    static struct Channel { ... }
+
     Type type;
     IRCUser sender;
     IRCUser target;
-    string channel;
-    string subchannel;
+    Channel channel;
+    Channel subchannel;
     string content;
+    string altcontent;
     string[16] aux;
     Nullable!long[16] count;
     string tags;
@@ -52,7 +55,7 @@ struct IRCUser
         string displayName;
         string badges;
         string colour;
-        uint id;
+        ulong id;
     }
 }
 ```
@@ -69,6 +72,11 @@ struct IRCChannel
     bool[string] users;
     bool[string][char] mods;
     long created;
+
+    version(TwitchSupport)
+    {
+        ulong id;
+    }
 }
 ```
 
@@ -113,7 +121,7 @@ struct IRCParser
 * `bot` includes some code specifically useful for bot applications
 * `twitchbot` combines `twitch` and `bot`
 
-It is `pure` and `@safe` in the `library` and `bot` configurations.
+It is **pure** and **@safe** in the `library` and `bot` configurations.
 
 ### How to use
 
@@ -140,10 +148,10 @@ client.nickname = "...";
 IRCServer server;
 server.address = "...";
 
-IRCParser parser = IRCParser(client, server);
+auto parser = IRCParser(client, server);
 
 {
-    const fromServer = `:zorael!~NaN@address.tld MODE #channel +v nickname`;
+    const fromServer = ":zorael!~NaN@address.tld MODE #channel +v nickname";
     auto event = parser.toIRCEvent(fromServer);
 
     with (event)
@@ -152,28 +160,27 @@ IRCParser parser = IRCParser(client, server);
         assert(sender.nickname == "zorael");
         assert(sender.ident == "~NaN");
         assert(sender.address == "address.tld");
-        assert(channel == "#channel");
+        assert(channel.name == "#channel");
         assert(content == "nickname");
         assert(aux[0] == "+v");
     }
 }
 {
-    const fromServer = ":cherryh.freenode.net 435 oldnick newnick #d :Cannot change nickname while banned on channel";
+    const fromServer = ":silver.libera.chat 338 zorael livemarshal 2623:6400:11:5bf:6f37:249d:f6fe:2f8f :actually using host";
     auto event = parser.toIRCEvent(fromServer);
 
     with (event)
     {
-        assert(type == IRCEvent.Type.ERR_BANONCHAN);
-        assert(sender.address == "cherryh.freenode.net");
-        assert(target.nickname == "oldnick");
-        assert(channel == "#d");
-        assert(content == "Cannot change nickname while banned on channel");
-        assert(aux[0] == "newnick");
-        assert(num == 435);
+        assert(type == IRCEvent.Type.RPL_WHOISACTUALLY);
+        assert(num == 338);
+        assert(sender.address == "silver.libera.chat");
+        assert(target.nickname == "livemarshal");
+        assert(content == "actually using host");
+        assert(aux[0] == "2623:6400:11:5bf:6f37:249d:f6fe:2f8f");
     }
 }
 {
-    const fromServer = `@badge-info=;badges=;color=;display-name=AnAnonymousGifter;emotes=;flags=;id=01af180f-5efd-40c8-94fb-d0a346c7fg86;login=ananonymousgifter;mod=0;msg-id=subgift;msg-param-fun-string=FunStringFour;msg-param-gift-months=1;msg-param-goal-contribution-type=SUB_POINTS;msg-param-goal-current-contributions=15624;msg-param-goal-target-contributions=20000;msg-param-goal-user-contributions=1;msg-param-months=24;msg-param-origin-id=54\s41\s9a\s69\s6c\sb4\s3c\s8b\s0b\se4\sdf\s4c\sba\s5b\s9b\s23\s4c\sa7\s9b\sc4;msg-param-recipient-display-name=SomeoneOnTwitch;msg-param-recipient-id=547202201;msg-param-recipient-user-name=someoneontwitch;msg-param-sub-plan-name=Channel\sSubscription\s(some_streamer);msg-param-sub-plan=1000;room-id=4920718204;subscriber=0;system-msg=An\sanonymous\suser\sgifted\sa\sTier\s1\ssub\sto\sSomeoneOnTwitch!\s;tmi-sent-ts=1685982143345;user-id=274518607;user-type= :tmi.twitch.tv USERNOTICE #some_streamer`;
+    const fromServer = `@badge-info=;badges=;color=;display-name=AnAnonymousGifter;emotes=;flags=;id=01a3180f-53fd-20c8-54fb-d6a347c7fg36;login=ananonymousgifter;mod=0;msg-id=subgift;msg-param-fun-string=FunStringFour;msg-param-gift-months=1;msg-param-goal-contribution-type=SUB_POINTS;msg-param-goal-current-contributions=15624;msg-param-goal-target-contributions=20000;msg-param-goal-user-contributions=1;msg-param-months=24;msg-param-origin-id=54\s41\s9a\s69\s6c\sb4\s3c\s8b\s0b\se4\sdf\s4c\sba\s5b\s9b\s23\s4c\sa7\s9b\sc4;msg-param-recipient-display-name=SomeoneOnTwitch;msg-param-recipient-id=545226231;msg-param-recipient-user-name=someoneontwitch;msg-param-sub-plan-name=Channel\sSubscription\s(some_streamer);msg-param-sub-plan=1000;room-id=4726758404;subscriber=0;system-msg=An\sanonymous\suser\sgifted\sa\sTier\s1\ssub\sto\sSomeoneOnTwitch!\s;tmi-sent-ts=1685982143345;user-id=272558401;user-type= :tmi.twitch.tv USERNOTICE #some_streamer`;
     auto event = parser.toIRCEvent(fromServer);
 
     with (event)
@@ -184,12 +191,13 @@ IRCParser parser = IRCParser(client, server);
         assert(sender.account == "ananonymousgifter");
         assert(sender.displayName == "AnAnonymousGifter");
         assert(sender.badges == "*");
-        assert(sender.id == 274518607);
+        assert(sender.id == 272558401);
         assert(target.nickname == "someoneontwitch");
         assert(target.account == "someoneontwitch");
         assert(target.displayName == "SomeoneOnTwitch");
-        assert(target.id == 547202201);
-        assert(channel == "#some_streamer");
+        assert(target.id == 545226231);
+        assert(channel.name == "#some_streamer");
+        assert(channel.id == 4726758404);
         assert(content == "An anonymous user gifted a Tier 1 sub to SomeoneOnTwitch!");
         assert(aux[0] == "1000");
         assert(aux[1] == "FunStringFour");
@@ -199,10 +207,11 @@ IRCParser parser = IRCParser(client, server);
         assert(count[2] == 20000);
         assert(count[3] == 15624);
         assert(count[4] == 1);
-        assert(tags == "badge-info=;badges=;color=;display-name=AnAnonymousGifter;emotes=;flags=;id=01af180f-5efd-40c8-94fb-d0a346c7fg86;login=ananonymousgifter;mod=0;msg-id=subgift;msg-param-fun-string=FunStringFour;msg-param-gift-months=1;msg-param-goal-contribution-type=SUB_POINTS;msg-param-goal-current-contributions=15624;msg-param-goal-target-contributions=20000;msg-param-goal-user-contributions=1;msg-param-months=24;msg-param-origin-id=54\\s41\\s9a\\s69\\s6c\\sb4\\s3c\\s8b\\s0b\\se4\\sdf\\s4c\\sba\\s5b\\s9b\\s23\\s4c\\sa7\\s9b\\sc4;msg-param-recipient-display-name=SomeoneOnTwitch;msg-param-recipient-id=547202201;msg-param-recipient-user-name=someoneontwitch;msg-param-sub-plan-name=Channel\\sSubscription\\s(some_streamer);msg-param-sub-plan=1000;room-id=4920718204;subscriber=0;system-msg=An\\sanonymous\\suser\\sgifted\\sa\\sTier\\s1\\ssub\\sto\\sSomeoneOnTwitch!\\s;tmi-sent-ts=1685982143345;user-id=274518607;user-type=");
-        assert(id == "01af180f-5efd-40c8-94fb-d0a346c7fg86");
+        assert(tags == "badge-info=;badges=;color=;display-name=AnAnonymousGifter;emotes=;flags=;id=01a3180f-53fd-20c8-54fb-d6a347c7fg36;login=ananonymousgifter;mod=0;msg-id=subgift;msg-param-fun-string=FunStringFour;msg-param-gift-months=1;msg-param-goal-contribution-type=SUB_POINTS;msg-param-goal-current-contributions=15624;msg-param-goal-target-contributions=20000;msg-param-goal-user-contributions=1;msg-param-months=24;msg-param-origin-id=54\\s41\\s9a\\s69\\s6c\\sb4\\s3c\\s8b\\s0b\\se4\\sdf\\s4c\\sba\\s5b\\s9b\\s23\\s4c\\sa7\\s9b\\sc4;msg-param-recipient-display-name=SomeoneOnTwitch;msg-param-recipient-id=545226231;msg-param-recipient-user-name=someoneontwitch;msg-param-sub-plan-name=Channel\\sSubscription\\s(some_streamer);msg-param-sub-plan=1000;room-id=4726758404;subscriber=0;system-msg=An\\sanonymous\\suser\\sgifted\\sa\\sTier\\s1\\ssub\\sto\\sSomeoneOnTwitch!\\s;tmi-sent-ts=1685982143345;user-id=272558401;user-type=");
+        assert(id == "01a3180f-53fd-20c8-54fb-d6a347c7fg36");
     }
 }
+
 ```
 
 See the [`tests`](/tests) directory for more example parses.
@@ -234,7 +243,7 @@ Enter server address [irc.libera.chat]: irc.server.tld
     {
         assert(type == IRCEvent.Type.CHAN);
         assert(sender.address == "irc.server.tld");
-        assert(channel == "#channel");
+        assert(channel.name == "#channel");
         assert(content == "i am a fish");
     }
 }
@@ -242,7 +251,7 @@ Enter server address [irc.libera.chat]: irc.server.tld
 
 The output will by default also be saved to an `unittest.d` file in the current directory.
 
-See the `--help` listing for more flags, passed through `dub` with `dub run :assertgen -- --help`.
+See the `--help` listing for more flags, passed through **dub** with `dub run :assertgen -- --help`.
 
 ### Caveats
 
