@@ -240,7 +240,7 @@ Enter server address [irc.libera.chat]: irc.server.tld
 }
 ```
 
-The output will by default also be saved to an `assertgen.log` file in the current directory.
+The output will by default also be saved to an `unittest.d` file in the current directory.
 
 See the `--help` listing for more flags, passed through `dub` with `dub run :assertgen -- --help`.
 

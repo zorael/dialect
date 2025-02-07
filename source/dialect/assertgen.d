@@ -544,7 +544,7 @@ struct Configuration
     /++
         Default output filename.
      +/
-    enum defaultOutputFilename = "assertgen.log"; //"unittest.log";
+    enum defaultOutputFilename = "unittest.d";
 
     /++
         Default nickname.
