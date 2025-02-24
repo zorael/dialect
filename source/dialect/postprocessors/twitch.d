@@ -1224,10 +1224,14 @@ auto parseTwitchTags(ref IRCParser parser, ref IRCEvent event) @safe
             writeln();
             printTags(event);
             writeln("---");
-            writefln(quotedPattern, "event.content", event.content);
-            writefln(plainPattern, "event.aux", event.aux[]);
-            writefln(arrayPattern, "event.count", event.count[].map!underscoreNull);
             writefln(plainPattern, "event.type", event.type.toString());
+            writefln(plainPattern, "event.channel.name", event.channel.name);
+            writefln(plainPattern, "event.channel.id", event.channel.id);
+            writefln(plainPattern, "event.subchannel.name", event.subchannel.name);
+            writefln(plainPattern, "event.subchannel.id", event.subchannel.id);
+            writefln(quotedPattern, "event.content", event.content);
+            writefln(plainPattern, "event.aux", event.aux[]);  // plain is fine, same output as array
+            writefln(arrayPattern, "event.count", event.count[].map!underscoreNull);
             writeln();
         }
     }
