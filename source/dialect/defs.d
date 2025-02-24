@@ -2724,6 +2724,22 @@ struct IRCChannel
          +/
         ulong id;
     }
+
+    /++
+        Constructor inheriting name (and potentially Twitch ID) from an [IRCEvent.Channel].
+
+        Params:
+            that = [IRCEvent.Channel] to inherit from.
+     +/
+    this(const IRCEvent.Channel that)
+    {
+        this.name = that.name;
+
+        version(TwitchSupport)
+        {
+            this.id = that.id;
+        }
+    }
 }
 
 
