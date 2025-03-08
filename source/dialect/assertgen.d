@@ -18,7 +18,7 @@
 
         with (event)
         {
-            assert((type == IRCEvent.Type.RPL_WHOISACTUALLY), type.toString());
+            assert((type == IRCEvent.Type.RPL_WHOISACTUALLY), type.toString);
             assert((sender.address == "silver.libera.chat"), sender.address);
             assert((target.nickname == "livemarshal"), target.nickname);
             assert((content == "actually using host"), content);
@@ -48,7 +48,7 @@
 
         with (event)
         {
-            assert((type == IRCEvent.Type.GLOBALUSERSTATE), type.toString());
+            assert((type == IRCEvent.Type.GLOBALUSERSTATE), type.toString);
             assert((sender.address == "tmi.twitch.tv"), sender.address);
             assert((sender.id == 22216721), sender.id.to!string);
             assert((target.nickname == "dialect"), target.nickname);
@@ -88,7 +88,7 @@
 
         with (event)
         {
-            assert((type == IRCEvent.Type.TWITCH_BULKGIFT), type.toString());
+            assert((type == IRCEvent.Type.TWITCH_BULKGIFT), type.toString);
             assert((sender.nickname == "someoneontwitch"), sender.nickname);
             assert((sender.address == "tmi.twitch.tv"), sender.address);
             assert((sender.account == "someoneontwitch"), sender.account);
@@ -407,7 +407,7 @@ unittest
 
     with (event)
     {
-        assert((type == IRCEvent.Type.CHAN), type.toString());
+        assert((type == IRCEvent.Type.CHAN), type.toString);
         assert((sender.nickname == \"zorael\"), sender.nickname);
         assert((sender.ident == \"~NaN\"), sender.ident);
         assert((sender.address == \"2001:41d0:2:80b4::\"), sender.address);
@@ -445,7 +445,7 @@ void inputServerInformation(
     writefln("%(%(%-14s%)\n%)", EnumMembers!(IRCServer.Daemon).only.chunks(3));
     writeln();
 
-    write("Enter daemon (plus optional daemon literal) [", Configuration.defaultDaemon.toString(), "]: ");
+    write("Enter daemon (plus optional daemon literal) [", Configuration.defaultDaemon.toString, "]: ");
     stdout.flush();
 
     if (configuration.daemonLine.length)
@@ -953,7 +953,7 @@ auto callGetopt(string[] args)
             "Override initial ident",
             &configuration.ident,
         "d|daemon",
-            "IRC server daemon (plus optional daemon literal) [" ~ Configuration.defaultDaemon.toString() ~ "]",
+            "IRC server daemon (plus optional daemon literal) [" ~ Configuration.defaultDaemon.toString ~ "]",
             &configuration.daemonLine,
         "N|network",
             "IRC network (name) [" ~ Configuration.defaultNetwork ~ "]",
