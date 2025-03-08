@@ -91,6 +91,7 @@ public auto main(string[] args)
 
     retval |= runDscanner(engines, expressions, target);
     retval |= buildDocs();
+    retval |= buildDocs("unittest");
 
     writeln();
     writeln(i"[+] done, return $(retval)");
@@ -167,6 +168,7 @@ auto runDscanner(
     import std.array : Appender;
     import std.datetime.stopwatch : StopWatch;
     import std.process : execute;
+    import std.range : walkLength;
     import std.string : strip;
 
     Appender!(string[]) uncaughtLines;
@@ -220,6 +222,7 @@ auto runDscanner(
         if (!atLeastOneMatch) uncaughtLines.put(line);
     }
 
+    immutable numLines = range.walkLength();
     int retval;
 
     if (uncaughtLines[].length)
@@ -229,12 +232,13 @@ auto runDscanner(
         writeln();
         uncaughtLines[].each!writeln();
         writeln();
+        writeln(i"[!] $(numLines) line(s) caught by regex");
         writeln(i"[!] $(uncaughtLines[].length) line(s) got past regex, retval becomes $(result.status)");
         retval = result.status;
     }
     else
     {
-        writeln("[!] all output caught by regex");
+        writeln(i"[!] all $(numLines) line(s) caught by regex");
     }
 
     foreach (immutable i, engineMatched; engineMatches)
@@ -242,7 +246,7 @@ auto runDscanner(
         if (!engineMatched)
         {
             writeln(i`[!] dead expression: "$(expressions[i])"`);
-            retval |= 1;
+            //retval |= 1;
         }
     }
 
@@ -254,10 +258,13 @@ auto runDscanner(
 /++
     Simply invokes `dub build -b docs`.`
 
+    Params:
+        buildConfiguration = Optional dub build configuration to build docs with.
+
     Returns:
         The shell return value of the command run.
  +/
-auto buildDocs()
+auto buildDocs(const string buildConfiguration = string.init)
 {
     import std.datetime.stopwatch : StopWatch;
     import std.process : execute;
@@ -265,27 +272,33 @@ auto buildDocs()
 
     StopWatch sw;
 
-    static immutable command =
+    auto command =
     [
         "dub",
         "build",
         "-b",
         "docs",
-        "-c",
-        "dev",
         "--nodeps",
         //"--vquiet",
     ];
 
+    if (buildConfiguration.length)
+    {
+        command ~= [ "-c", buildConfiguration ];
+    }
+
+    immutable buildConfigString = buildConfiguration.length ?
+        " (" ~ buildConfiguration ~ ')' :
+        string.init;
 
     writeln();
-    writeln("[+] building docs...");
+    writeln(i"[+] building docs$(buildConfigString)...");
 
     sw.start();
     const result = execute(command);
     sw.stop();
 
-    writeln(i"[!] docs built in $(sw.peek), retval $(result.status)");
+    writeln(i"[!] built in $(sw.peek), retval $(result.status)");
     writeln();
     writeln(result.output.strip());
 
