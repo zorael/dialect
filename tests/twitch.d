@@ -2132,4 +2132,27 @@ unittest
             assert((id == "0f107d27-3281-4bf7-a9b9-db780142ce62"), id);
         }
     }
+    {
+        enum input = `@badge-info=;badges=premium/1;client-nonce=e95bfc4a5ab7fe606818bb1d6c989a39;color=#008000;display-name=tankyou1980;emotes=;flags=;id=6bfeb51f-f1e3-4035-84c1-b9f7e4e8ddb2;mod=0;room-id=37902545;source-badge-info=;source-badges=premium/1;source-id=d7ece4d0-ac36-4aa5-85e5-bc32837d8def;source-only=0;source-room-id=452124228;subscriber=0;tmi-sent-ts=1741432056994;turbo=0;user-id=84738857;user-type= :tankyou1980!tankyou1980@tankyou1980.tmi.twitch.tv PRIVMSG #ainrun :thnks hi chat0`;
+        immutable event = parser.toIRCEvent(input);
+
+        with (event)
+        {
+            assert((type == IRCEvent.Type.CHAN), type.toString);
+            assert((sender.nickname == "tankyou1980"), sender.nickname);
+            assert((sender.ident == "tankyou1980"), sender.ident);
+            assert((sender.address == "tankyou1980.tmi.twitch.tv"), sender.address);
+            assert((sender.account == "tankyou1980"), sender.account);
+            assert((sender.displayName == "tankyou1980"), sender.displayName);
+            assert((sender.badges == "premium/1"), sender.badges);
+            assert((sender.colour == "008000"), sender.colour);
+            assert((sender.id == 84738857), sender.id.to!string);
+            assert((channel.name == "#ainrun"), channel.name);
+            assert((channel.id == 37902545), channel.id.to!string);
+            assert((subchannel.id == 452124228), subchannel.id.to!string);
+            assert((content == "thnks hi chat0"), content);
+            assert((tags == "badge-info=;badges=premium/1;client-nonce=e95bfc4a5ab7fe606818bb1d6c989a39;color=#008000;display-name=tankyou1980;emotes=;flags=;id=6bfeb51f-f1e3-4035-84c1-b9f7e4e8ddb2;mod=0;room-id=37902545;source-badge-info=;source-badges=premium/1;source-id=d7ece4d0-ac36-4aa5-85e5-bc32837d8def;source-only=0;source-room-id=452124228;subscriber=0;tmi-sent-ts=1741432056994;turbo=0;user-id=84738857;user-type="), tags);
+            assert((id == "6bfeb51f-f1e3-4035-84c1-b9f7e4e8ddb2"), id);
+        }
+    }
 }

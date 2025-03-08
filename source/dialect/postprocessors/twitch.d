@@ -1178,6 +1178,7 @@ auto parseTwitchTags(ref IRCParser parser, ref IRCEvent event) @safe
             case "source-badge-info":
             case "source-badges":
             case "source-id":
+            case "source-only":
             //case "source-room-id":
             case "msg-param-exponent":
             // something with new midnightsquid direct cheers
