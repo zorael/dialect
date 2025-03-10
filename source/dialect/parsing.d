@@ -184,10 +184,9 @@ unittest
 {
     IRCParser parser;
 
-    /++
-        `parser.toIRCEvent` technically calls
-        [IRCParser.toIRCEvent|IRCParser.toIRCEvent], but it in turn just passes
-        on to this `.toIRCEvent`
+    /+
+        `parser.toIRCEvent` technically calls `IRCParser.toIRCEvent`, but it in
+        turn just passes on to this `.toIRCEvent`
      +/
 
     // See the files in `/tests` for more
@@ -2799,8 +2798,8 @@ struct IRCParser
     /++
         Parses an IRC string into an [dialect.defs.IRCEvent|IRCEvent].
 
-        The return type is kept as `auto` to infer purity. It will be `pure` if
-        there are no postprocessors available, and merely `@safe` if there are.
+        The return type is kept as `auto` to infer attributes. It will be `pure`
+        and `@safe` if version `Postprocessors` was not declared, and `@system` otherwise.
 
         Proxies the call to the top-level [dialect.parsing.toIRCEvent|.toIRCEvent].
 
@@ -2810,12 +2809,14 @@ struct IRCParser
         Returns:
             A complete [dialect.defs.IRCEvent|IRCEvent].
      +/
-    auto toIRCEvent(const string raw) // infer @safe-ness
+    auto toIRCEvent(const string raw)  // infer purity and @safety
     {
         IRCEvent event = .toIRCEvent(this, raw);
 
-        // Final pass: sanity check. This verifies some fields and gives
-        // meaningful error messages if something doesn't look right.
+        /+
+            This verifies some fields and gives meaningful error messages if
+            something doesn't look right.
+         +/
         postparseSanityCheck(this, event);
 
         version(Postprocessors)
@@ -2841,6 +2842,9 @@ struct IRCParser
             iff version `Postprocessors` is declared.
 
             If it is not declared, this constructor is `pure` and `@safe`.
+
+            See_Also:
+                [initPostprocessors]
          +/
         this(
             IRCClient client,
@@ -2937,6 +2941,11 @@ struct IRCParser
                 // parser.server now marked as updated
             }
             ---
+
+            See_Also:
+                [Update]
+                [clientUpdated]
+                [serverUpdated]
          +/
         Update updates;
 
