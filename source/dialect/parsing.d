@@ -2485,7 +2485,8 @@ void onMyInfo(
 in (slice.length, "Tried to process `onMyInfo` on an empty slice")
 {
     import dialect.common : typenumsOf;
-    import std.algorithm.searching : canFind;
+    import std.algorithm.searching : canFind, countUntil;
+    import std.meta : AliasSeq;
     import std.uni : toLower;
 
     /*
@@ -2575,64 +2576,54 @@ in (slice.length, "Tried to process `onMyInfo` on an empty slice")
 
     // https://upload.wikimedia.org/wikipedia/commons/d/d5/IRCd_software_implementations3.svg
 
-    IRCServer.Daemon daemon;
+    alias D = IRCServer.Daemon;
 
-    with (IRCServer.Daemon)
-    {
-        if (daemonstringLower.canFind("unreal"))
-        {
-            daemon = unreal;
-        }
-        else if (daemonstringLower.canFind("solanum"))
-        {
-            daemon = solanum;
-        }
-        else if (daemonstringLower.canFind("inspircd"))
-        {
-            daemon = inspircd;
-        }
-        else if (daemonstringLower.canFind("snircd"))
-        {
-            daemon = snircd;
-        }
-        else if (daemonstringLower.canFind("u2."))
-        {
-            daemon = u2;
-        }
-        else if (daemonstringLower.canFind("bahamut"))
-        {
-            daemon = bahamut;
-        }
-        else if (daemonstringLower.canFind("hybrid"))
-        {
-            daemon = hybrid;
-        }
-        else if (daemonstringLower.canFind("ratbox"))
-        {
-            daemon = ratbox;
-        }
-        else if (daemonstringLower.canFind("charybdis"))
-        {
-            daemon = charybdis;
-        }
-        else if (daemonstringLower.canFind("ircd-seven"))
-        {
-            daemon = ircdseven;
-        }
-        else if (daemonstring == "BSDUnix")
-        {
-            daemon = bsdunix;
-        }
-        else if (daemonstring.canFind("MFVX"))
-        {
-            daemon = mfvx;
-        }
-        else
-        {
-            daemon = unknown;
-        }
-    }
+    // Manual care has to be taken that these two stay in sync
+    static immutable D[13] daemonMap =
+    [
+        D.unknown,
+        D.unreal,
+        D.solanum,
+        D.inspircd,
+        D.snircd,
+        D.u2,
+        D.bahamut,
+        D.hybrid,
+        D.ratbox,
+        D.charybdis,
+        D.ircdseven,
+        D.bsdunix,
+        D.mfvx,
+    ];
 
+    alias daemonLowerSubstrings = AliasSeq!
+    (
+        //"unknown",  // should not be in here
+        "unreal",
+        "solanum",
+        "inspircd",
+        "snircd",
+        "u2.",
+        "bahamut",
+        "hybrid",
+        "ratbox",
+        "charybdis",
+        "ircd-seven",
+        "bsdunix",
+        "mfvx",
+    );
+
+    static assert(daemonLowerSubstrings.length == daemonMap.length +(-1));
+
+    /+
+        snircd is a special case because the full string is something like
+        "u2.10.12.10+snircd(1.3.4a)", which matches "u2." before it does "snircd".
+     +/
+    immutable index = daemonstringLower.canFind("snircd") ?
+        daemonMap[].countUntil(D.snircd) :
+        daemonstringLower.canFind(daemonLowerSubstrings);
+
+    immutable daemon = daemonMap[index];
     parser.typenums = typenumsOf(daemon);
     parser.server.daemon = daemon;
     parser.server.daemonstring = daemonstring;
