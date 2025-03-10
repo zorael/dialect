@@ -315,9 +315,6 @@ void parseBasic(
             event.type = UNSET;
             event.aux[0] = event.raw;
             event.errors = typestring;
-
-            /*enum message = "Unknown basic type: " ~ typestring ~ ": please report this";
-            throw new IRCParseException(message, event);*/
         }
     }
 
