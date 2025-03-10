@@ -2830,24 +2830,37 @@ struct IRCParser
         return event;
     }
 
-    // ctor
-    /++
-        Create a new [IRCParser] with the passed [dialect.defs.IRCClient|IRCClient]
-        and [dialect.defs.IRCServer|IRCServer] as base context for parsing.
-
-        Initialises any [dialect.common.Postprocessor|Postprocessor]s available
-        iff version `Postprocessors` is declared.
-     +/
-    auto this(
-        IRCClient client,
-        IRCServer server)  // infer attributes
+    version(Postprocessors)
     {
-        this.client = client;
-        this.server = server;
+        // ctor
+        /++
+            Create a new [IRCParser] with the passed [dialect.defs.IRCClient|IRCClient]
+            and [dialect.defs.IRCServer|IRCServer] as base context for parsing.
 
-        version(Postprocessors)
+            Initialises any [dialect.common.Postprocessor|Postprocessor]s available
+            iff version `Postprocessors` is declared.
+
+            If it is not declared, this constructor is `pure` and `@safe`.
+         +/
+        this(
+            IRCClient client,
+            IRCServer server) /*pure @safe*/
         {
+            this.client = client;
+            this.server = server;
             initPostprocessors();
+        }
+    }
+    else
+    {
+        /// Ditto
+        this(
+            IRCClient client,
+            IRCServer server) pure @safe
+        {
+            this.client = client;
+            this.server = server;
+            //initPostprocessors();
         }
     }
 
@@ -2983,6 +2996,7 @@ struct IRCParser
     }
 }
 
+///
 unittest
 {
     import lu.meld : MeldingStrategy, meldInto;
@@ -2996,4 +3010,18 @@ unittest
     assert(parser.typenums[344] == T.init);
     Typenums.hybrid[].meldInto!(MeldingStrategy.aggressive)(parser.typenums);
     assert(parser.typenums[344] != T.init);
+}
+
+///
+version(Postprocessors) {}
+else
+{
+    pure @safe unittest
+    {
+        // Test purity and @safety of IRCParser without postprocessors
+        IRCClient client;
+        IRCServer server;
+        auto parser = IRCParser(client, server);
+        parser.toIRCEvent("PING :hello");
+    }
 }
