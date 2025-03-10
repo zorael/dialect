@@ -1268,7 +1268,7 @@ struct IRCServer
     /++
         Constructor.
      +/
-    auto this(
+    this(
         const string address,
         const ushort port) pure @safe nothrow @nogc
     {
@@ -1406,7 +1406,7 @@ struct IRCUser
         Create a new [IRCUser] inheriting passed `nickname`, `ident`, and
         `address` strings.
      +/
-    auto this(
+    this(
         const string nickname,
         const string ident,
         const string address) pure @safe nothrow @nogc
@@ -2731,7 +2731,7 @@ struct IRCChannel
         Params:
             that = [IRCEvent.Channel] to inherit from.
      +/
-    this(const IRCEvent.Channel that)
+    this(const IRCEvent.Channel that) pure @safe nothrow @nogc
     {
         this.name = that.name;
 
