@@ -5,4 +5,4 @@ copyright "Copyright © 2016+, JR"
 license "BSL-1.0"
 
 targetType "executable"
-dependency "dialect" version="~>3.2.0"
+dependency "dialect" version="~>3.3.0"
