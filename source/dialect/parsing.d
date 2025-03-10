@@ -1961,14 +1961,20 @@ in (slice.length, "Tried to process `onNotice` on an empty slice")
 
         alias AF = AuthFailure;
 
-        if (event.content.among!(AF.rizon, AF.quakenet, AF.gamesurgeInvalid,
-                AF.gamesurgeRejected, AF.geekshedRejected) ||
-            event.content.canFind(cast(string)AF.freenodeInvalid) ||
-            event.content.startsWith(cast(string)AF.freenodeRejected) ||
-            event.content.canFind(cast(string)AF.dalnetInvalid) ||
-            event.content.startsWith(cast(string)AF.dalnetRejected) ||
-            event.content.canFind(cast(string)AF.unreal) ||
-            event.content.startsWith(cast(string)AF.oftcRejected))
+        if (event.content.among!
+                (AF.rizon,
+                AF.quakenet,
+                AF.gamesurgeInvalid,
+                AF.gamesurgeRejected,
+                AF.geekshedRejected) ||
+            event.content.canFind(
+                cast(string)AF.freenodeInvalid,
+                cast(string)AF.dalnetInvalid,
+                cast(string)AF.unreal) ||
+            event.content.startsWith(
+                cast(string)AF.freenodeRejected,
+                cast(string)AF.dalnetRejected,
+                cast(string)AF.oftcRejected))
         {
             event.type = IRCEvent.Type.AUTH_FAILURE;
         }
