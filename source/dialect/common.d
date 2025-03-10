@@ -518,7 +518,8 @@ auto isValidChannel(
     const string channelName,
     const IRCServer server) pure @safe
 {
-    import std.string : indexOf, representation;
+    import std.algorithm.searching : canFind;
+    import std.string : representation;
 
     /+
         Channels names are strings (beginning with a '&' or '#' character) of
@@ -536,24 +537,24 @@ auto isValidChannel(
         return false;
     }
 
-    if (server.chantypes.indexOf(channelName[0]) == -1) return false;
+    if (!server.chantypes.canFind(channelName[0])) return false;
 
-    if ((channelName.indexOf(' ') != -1) ||
-        (channelName.indexOf(',') != -1) ||
-        (channelName.indexOf(7) != -1))
+    if (channelName.canFind(' ') ||
+        channelName.canFind(',') ||
+        channelName.canFind(7))
     {
         // Contains spaces, commas or byte 7
         return false;
     }
 
-    if (channelName.length == 2) return (server.chantypes.indexOf(channelName[1]) == -1);
-    else if (channelName.length == 3) return (server.chantypes.indexOf(channelName[2]) == -1);
+    if (channelName.length == 2) return !server.chantypes.canFind(channelName[1]);
+    else if (channelName.length == 3) return !server.chantypes.canFind(channelName[2]);
     else if (channelName.length > 3)
     {
         // Allow for two ##s (or &&s) in the name but no more
         foreach (immutable chansign; server.chantypes.representation)
         {
-            if (channelName[2..$].indexOf(chansign) != -1) return false;
+            if (channelName[2..$].canFind(chansign)) return false;
         }
 
         version(TwitchSupport)
@@ -982,10 +983,10 @@ void setMode(
     const IRCServer server) pure @safe
 {
     import std.algorithm.iteration : splitter;
-    import std.algorithm.searching : startsWith;
+    import std.algorithm.searching : canFind, startsWith;
     import std.array : array;
     import std.range : StoppingPolicy, retro, zip;
-    import std.string : indexOf, representation;
+    import std.string : representation;
 
     if (!signedModestring.length) return;
 
@@ -1042,7 +1043,7 @@ void setMode(
         }
 
         if (!datastring.startsWith(server.extbanPrefix) &&
-            (datastring.indexOf('!') != -1) && (datastring.indexOf('@') != -1))
+            datastring.canFind('!', '@'))
         {
             // Looks like a user and not an extban
             newMode.user = IRCUser(datastring);
@@ -1078,12 +1079,12 @@ void setMode(
             case 'a':
             case 'R':
                 // Match account
-                if (slice.indexOf(':') != -1)
+                if (slice.canFind(':'))
                 {
                     // More than one field
                     slice.advancePast(':');
 
-                    if (slice.indexOf('$') != -1)
+                    if (slice.canFind('$'))
                     {
                         // More than one field, first is account
                         newMode.user.account = slice.advancePast('$');
@@ -1137,7 +1138,7 @@ void setMode(
 
         if (sign == '+')
         {
-            if (server.prefixes.indexOf(modechar) != -1)
+            if (server.prefixes.canFind(modechar))
             {
                 import std.algorithm.searching : canFind;
 
@@ -1151,7 +1152,7 @@ void setMode(
                 channel.mods[newMode.modechar][newMode.data] = true;
                 continue;
             }
-            else if (server.aModes.indexOf(modechar) != -1)
+            else if (server.aModes.canFind(modechar))
             {
                 /++
                     A = Mode that adds or removes a nick or address to a
@@ -1174,8 +1175,8 @@ void setMode(
                 carriedExceptions.length = 0;
             }
             else if (
-                (server.bModes.indexOf(modechar) != -1) ||
-                (server.cModes.indexOf(modechar) != -1))
+                server.bModes.canFind(modechar) ||
+                server.cModes.canFind(modechar))
             {
                 /++
                     B = Mode that changes a setting and always has a
@@ -1196,10 +1197,10 @@ void setMode(
                     }
                 }
             }
-            else /*if (server.dModes.indexOf(modechar) != -1)*/
+            else /*if (server.dModes.canFind(modechar))*/
             {
                 // Some clients assume that any mode not listed is of type D
-                if (channel.modechars.indexOf(modechar) == -1) channel.modechars ~= modechar;
+                if (!channel.modechars.canFind(modechar)) channel.modechars ~= modechar;
                 continue;
             }
 
@@ -1209,7 +1210,7 @@ void setMode(
         {
             import std.algorithm.mutation : SwapStrategy, remove;
 
-            if (server.prefixes.indexOf(modechar) != -1)
+            if (server.prefixes.canFind(modechar))
             {
                 import std.algorithm.searching : countUntil;
 
@@ -1219,7 +1220,7 @@ void setMode(
 
                 (*prefixedUsers).remove(newMode.data);
             }
-            else if (server.aModes.indexOf(modechar) != -1)
+            else if (server.aModes.canFind(modechar))
             {
                 /++
                     A = Mode that adds or removes a nick or address to a
@@ -1231,8 +1232,8 @@ void setMode(
                     .remove!((listed => listed == newMode), SwapStrategy.unstable);
             }
             else if (
-                (server.bModes.indexOf(modechar) != -1) ||
-                (server.cModes.indexOf(modechar) != -1))
+                server.bModes.canFind(modechar) ||
+                server.cModes.canFind(modechar))
             {
                 /++
                     B = Mode that changes a setting and always has a
@@ -1246,12 +1247,12 @@ void setMode(
                 channel.modes = channel.modes.remove!((listed =>
                     listed.modechar == newMode.modechar), SwapStrategy.unstable);
             }
-            else /*if (server.dModes.indexOf(modechar) != -1)*/
+            else /*if (server.dModes.canFind(modechar))*/
             {
                 // Some clients assume that any mode not listed is of type D
-                import std.string : indexOf;
+                import std.algorithm.searching : countUntil;
 
-                immutable modecharIndex = channel.modechars.indexOf(modechar);
+                immutable modecharIndex = channel.modechars.countUntil(modechar);
                 if (modecharIndex != -1)
                 {
                     import std.string : representation;
@@ -1989,6 +1990,7 @@ auto isValidHostmask(
     const IRCServer server) pure @safe nothrow @nogc
 {
     import std.string : indexOf, representation;
+    //import std.algorithm.searching : countUntil;  // is not @nogc nothrow
 
     string slice = hostmask;  // mutable
 
