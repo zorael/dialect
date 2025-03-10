@@ -254,12 +254,9 @@ void parseBasic(
 
     string slice = event.raw;  // mutable
 
-    immutable typestring =
-        (slice.indexOf(':') != -1) ?
-            slice.advancePast(" :") :
-            (slice.indexOf(' ') != -1) ?
-                slice.advancePast(' ') :
-                slice;
+    immutable typestring = (slice.indexOf(':') != -1) ?
+        slice.advancePast(" :") :
+        slice.advancePast(' ', inherit: true);
 
     with (IRCEvent.Type)
     switch (typestring)
