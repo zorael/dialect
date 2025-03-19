@@ -109,7 +109,7 @@ int main()
 
             case SELFJOIN:
                 // SELFJOINs are when the client itself joins a channel
-                if (event.channel == homeChannel)
+                if (event.channel.name == homeChannel)
                 {
                     echoAndSend("PRIVMSG " ~ homeChannel ~ " :Hello, world!");
                 }
@@ -117,7 +117,7 @@ int main()
 
             case CHAN:
                 // CHANs are channel messages
-                if (event.channel == homeChannel)
+                if (event.channel.name == homeChannel)
                 {
                     if (event.content.startsWith(username ~ ":"))
                     {
