@@ -55,6 +55,8 @@ int main()
         writefln("%s resolved to %s", serverAddress, address);
 
         // Connect
+        writeln();
+        writeln("Connecting...");
         socket.connect(address);
         writeln("Connected!");  // ...since it did not throw
         writeln();
