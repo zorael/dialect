@@ -19,15 +19,22 @@ import std.stdio;
 import std.string;
 import core.stdc.string : memmove;
 
+enum serverAddress = "irc.libera.chat";
+enum serverPort = 6667;
+enum socketBufferSize = 4096;
+enum username = "dialect-test";
+enum homeChannel = "#dialect-test";
+
 int main()
 {
-    enum serverAddress = "irc.libera.chat";
-    enum serverPort = 6667;
-    enum socketBufferSize = 4096;
-    enum username = "dialect-test";
-    enum homeChannel = "#dialect-test";
+    IRCClient client;
+    client.nickname = username;
 
-    IRCParser parser;
+    IRCServer server;
+    server.address = serverAddress;
+    server.port = serverPort;
+
+    auto parser = IRCParser(client, server);
 
     auto socket = new TcpSocket();
     auto buffer = new ubyte[socketBufferSize];
