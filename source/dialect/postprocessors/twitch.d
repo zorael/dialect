@@ -352,9 +352,6 @@ auto parseTwitchTags(ref IRCParser parser, ref IRCEvent event) @safe
             // seen in a TWITCH_ANNOUNCEMENT
         case "msg-param-currency":
             // New midnightsquid direct cheer currency
-        case "message-id":
-            // message-id = 3
-            // WHISPER, rolling number enumerating messages
         case "msg-param-category":
             // Viewer milestone thing
         case "msg-param-charity-name":
@@ -696,6 +693,9 @@ auto parseTwitchTags(ref IRCParser parser, ref IRCEvent event) @safe
         case "msg-param-donation-amount":
             // msg-param-donation-amount = 500
             // Real value is 1/100 the number, so here $5
+        case "message-id":
+            // message-id = 3
+            // WHISPER, rolling number enumerating messages
 
             /+
                 Count 0
