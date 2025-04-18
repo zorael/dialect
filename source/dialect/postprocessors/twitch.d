@@ -1621,6 +1621,11 @@ void switchOnMsgID(
         event.type = TWITCH_MILESTONE;
         break;
 
+    case "msg_warned":
+        // Unknown Twitch msg-id: warned
+        event.type = TWITCH_WARNED;
+        break;
+
     /*case "bad_ban_admin":
     case "bad_ban_anon":
     case "bad_ban_broadcaster":

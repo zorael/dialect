@@ -2177,4 +2177,17 @@ unittest
             assert((tags == "badges=;color=#5F9EA0;display-name=zorael;emotes=;message-id=219;thread-id=22216721_790938342;turbo=0;user-id=22216721;user-type="), tags);
         }
     }
+    {
+        enum input = `@msg-id=msg_warned :tmi.twitch.tv NOTICE #vedal987 :You received a Warning from a moderator in this channel. Acknowledge the Warning at https://www.twitch.tv/vedal987 in browser to continue chatting in this channel.`;
+        immutable event = parser.toIRCEvent(input);
+
+        with (event)
+        {
+            assert((type == IRCEvent.Type.TWITCH_WARNED), type.toString);
+            assert((sender.address == "tmi.twitch.tv"), sender.address);
+            assert((channel.name == "#vedal987"), channel.name);
+            assert((content == "You received a Warning from a moderator in this channel. Acknowledge the Warning at https://www.twitch.tv/vedal987 in browser to continue chatting in this channel."), content);
+            assert((tags == "msg-id=msg_warned"), tags);
+        }
+    }
 }

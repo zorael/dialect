@@ -170,6 +170,7 @@ public:
         TWITCH_INTRO,     /// Twitch, someone introducing themselves in a channel.
         TWITCH_MILESTONE, /// Twitch, viewer milestone.
         TWITCH_CHARITYDONATION, /// Twitch charity donation (new).
+        TWITCH_WARNED,    /// Received a warning on a Twitch channel.
 
         RPL_WELCOME, // = 001,          // ":Welcome to <server name> <user>"
         RPL_YOURHOST, // = 002,         // ":Your host is <servername>, running version <version>"
