@@ -1809,6 +1809,7 @@ void postparseSanityCheck(
     {
         sink.put("Unknown typestring: ");
         sink.put(event.errors);
+        event.errors = string.init;  // clear it, it will be set later below
     }
 
     if (event.target.nickname.canFind(' ') ||
