@@ -2161,7 +2161,7 @@ unittest
 
         with (event)
         {
-            assert((type == IRCEvent.Type.QUERY), type.toString);
+            assert((type == IRCEvent.Type.SELFQUERY), type.toString);
             assert((sender.nickname == "zorael"), sender.nickname);
             assert((sender.ident == "zorael"), sender.ident);
             assert((sender.address == "zorael.tmi.twitch.tv"), sender.address);
@@ -2175,6 +2175,28 @@ unittest
             assert((content == "sxasxasx"), content);
             assert((count[0] == 219), count[0].to!string);
             assert((tags == "badges=;color=#5F9EA0;display-name=zorael;emotes=;message-id=219;thread-id=22216721_790938342;turbo=0;user-id=22216721;user-type="), tags);
+        }
+    }
+    {
+        enum input = `@badges=;color=#5F9EA0;display-name=xorael;emotes=;message-id=219;thread-id=22216721_790938342;turbo=0;user-id=22216721;user-type= :xorael!xorael@xorael.tmi.twitch.tv WHISPER mechawob :sxasxasx`;
+        immutable event = parser.toIRCEvent(input);
+
+        with (event)
+        {
+            assert((type == IRCEvent.Type.QUERY), type.toString);
+            assert((sender.nickname == "xorael"), sender.nickname);
+            assert((sender.ident == "xorael"), sender.ident);
+            assert((sender.address == "xorael.tmi.twitch.tv"), sender.address);
+            assert((sender.account == "xorael"), sender.account);
+            assert((sender.displayName == "xorael"), sender.displayName);
+            assert((sender.badges == "*"), sender.badges);
+            assert((sender.colour == "5F9EA0"), sender.colour);
+            assert((sender.id == 22216721), sender.id.to!string);
+            assert((target.nickname == "mechawob"), target.nickname);
+            assert((target.account == "mechawob"), target.account);
+            assert((content == "sxasxasx"), content);
+            assert((count[0] == 219), count[0].to!string);
+            assert((tags == "badges=;color=#5F9EA0;display-name=xorael;emotes=;message-id=219;thread-id=22216721_790938342;turbo=0;user-id=22216721;user-type="), tags);
         }
     }
     {
