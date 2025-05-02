@@ -1626,6 +1626,10 @@ void switchOnMsgID(
         event.type = TWITCH_WARNED;
         break;
 
+    case "msg_banned":
+        event.type = ERR_BANNEDFROMCHAN;
+        break;
+
     /*case "bad_ban_admin":
     case "bad_ban_anon":
     case "bad_ban_broadcaster":
@@ -1694,7 +1698,6 @@ void switchOnMsgID(
     case "msg_slowmode":
     case "tos_ban":
     case "msg_channel_suspended":
-    case "msg_banned":
     case "msg_duplicate":
     case "msg_facebook":
     case "turbo_only_color":
