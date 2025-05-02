@@ -958,22 +958,21 @@ auto parseTwitchTags(ref IRCParser parser, ref IRCEvent event) @safe
         case "user-id":
         case "user-ID":
             // The sender's user ID.
-            if (value.length)
-            {
-                version(TwitchWarnings)
-                {
-                    warnAboutOverwrittenNumber(
-                        event: event,
-                        name: "event.sender.id",
-                        oldValue: event.sender.id,
-                        newValue: value,
-                        key: key,
-                        tagType: "tag",
-                        printTagsOnExit: printTagsOnExit);
-                }
+            if (!value.length) break;
 
-                event.sender.id = value.to!ulong;
+            version(TwitchWarnings)
+            {
+                warnAboutOverwrittenNumber(
+                    event: event,
+                    name: "event.sender.id",
+                    oldValue: event.sender.id,
+                    newValue: value,
+                    key: key,
+                    tagType: "tag",
+                    printTagsOnExit: printTagsOnExit);
             }
+
+            event.sender.id = value.to!ulong;
             break;
 
         case "target-user-id":
@@ -983,42 +982,40 @@ auto parseTwitchTags(ref IRCParser parser, ref IRCEvent event) @safe
         case "msg-param-recipient-id":
             // reply-parent-user-id = 50081302
             // sub gift target
-            if (value.length)
-            {
-                version(TwitchWarnings)
-                {
-                    warnAboutOverwrittenNumber(
-                        event: event,
-                        name: "event.target.id",
-                        oldValue: event.target.id,
-                        newValue: value,
-                        key: key,
-                        tagType: "tag",
-                        printTagsOnExit: printTagsOnExit);
-                }
+            if (!value.length) break;
 
-                event.target.id = value.to!ulong;
+            version(TwitchWarnings)
+            {
+                warnAboutOverwrittenNumber(
+                    event: event,
+                    name: "event.target.id",
+                    oldValue: event.target.id,
+                    newValue: value,
+                    key: key,
+                    tagType: "tag",
+                    printTagsOnExit: printTagsOnExit);
             }
+
+            event.target.id = value.to!ulong;
             break;
 
         case "room-id":
             // The channel ID.
-            if (value.length)
-            {
-                version(TwitchWarnings)
-                {
-                    warnAboutOverwrittenNumber(
-                        event: event,
-                        name: "event.channel.id",
-                        oldValue: event.channel.id,
-                        newValue: value,
-                        key: key,
-                        tagType: "tag",
-                        printTagsOnExit: printTagsOnExit);
-                }
+            if (!value.length) break;
 
-                event.channel.id = value.to!ulong;
+            version(TwitchWarnings)
+            {
+                warnAboutOverwrittenNumber(
+                    event: event,
+                    name: "event.channel.id",
+                    oldValue: event.channel.id,
+                    newValue: value,
+                    key: key,
+                    tagType: "tag",
+                    printTagsOnExit: printTagsOnExit);
             }
+
+            event.channel.id = value.to!ulong;
             break;
 
         case "source-msg-id":
