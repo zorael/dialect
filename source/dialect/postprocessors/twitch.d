@@ -382,17 +382,6 @@ auto parseTwitchTags(ref IRCParser parser, ref IRCEvent event) @safe
 
         case "msg-param-prior-gifter-id":
             // Numeric id of prior gifter when a user pays forward a gift
-            if (event.type == IRCEvent.Type.TWITCH_PAYFORWARD)
-            {
-                // Store it in event.aux[0]
-                goto case;
-            }
-            else
-            {
-                // Store it in event.target.id
-                goto case "target-user-id";
-            }
-
         case "msg-param-fun-string":
             // msg-param-fun-string = FunStringTwo
             // [subgift] [#waifugate] AnAnonymousGifter (Asdf): "An anonymous user gifted a Tier 1 sub to Asdf!" (1000) {1}
